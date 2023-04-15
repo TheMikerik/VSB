@@ -25,14 +25,22 @@ int main (){
     pepe.AddEmployee("Marek Zacek", true, false);
     pepe.AddEmployee("Rostislav Vrana", true, true);
     pepe.AddEmployee("David Vavra", true, false);
-    pepe.AddEmployee("Matej Chovanec", true, true);
+    pepe.AddEmployee("Matej Chovanec", false, true);
     pepe.AddEmployee("Vilem Zamboch", true, false);
-    pepe.AddEmployee("Ctibor Matlak", true, true);
+    pepe.AddEmployee("Ctibor Matlak", false, true);
     pepe.AddEmployee("Petr Novotny", false, false);
     pepe.AddEmployee("Lukas Stefek", false, true);
     pepe.AddEmployee("Simon Svarny", true, false);
     pepe.AddEmployee("David Dvorsky", true, true);
     pepe.IntroducePizzeria();
+//Employees print
+    std::cout << "Lets print all employees" << std::endl;
+    pepe.PrintEmployees();
+//Delivery and cook workers print
+    std::cout << "\nThose guys working in delivery for us:" << std::endl;
+    pepe.PrintDelivery();
+    std::cout << "\nThose guys working as cooks for us:" << std::endl;
+    pepe.PrintCook();
     
 
     

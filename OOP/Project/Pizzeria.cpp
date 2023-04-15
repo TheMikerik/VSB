@@ -44,7 +44,7 @@ float Pizzeria::GetPizzeriaProfit(){
     return this->profit;
 }
 int Pizzeria::GetEmployeesCount(){
-    return Employee::GetEmplCount();
+    return this->employee_count;
 }
 
 
@@ -52,26 +52,45 @@ int Pizzeria::GetEmployeesCount(){
 void Pizzeria::CloseOpenPizzeria(){
     is_open = !is_open;
 }
-void Pizzeria::AddEmployee(std::string nam, bool cook, bool drive){
-    int emp_index = Employee::GetEmplCount();
-    int emp_id = Employee::GetID();
+void Pizzeria::AddAsDelivery(std::string nam, bool cook, bool drive){
+    int empl_index = this->employee_count;
+    int deliv_index = this->delivery_count;
+    deliveries[deliv_index] = new Delivery(nam, cook, drive);
+    employees[empl_index] = deliveries[deliv_index];
+    std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
 
+    this->employees[empl_index]->SetID(ids_count);
+    
+    this->delivery_count++;
+    this->employee_count++;
+    this->ids_count++;
+}
+void Pizzeria::AddAsCook(std::string nam, bool cook, bool drive){
+    int empl_index = this->employee_count;
+    int cook_index = this->cook_count;
+    cooks[cook_index] = new Cook(nam, cook, drive);
+    employees[empl_index] = cooks[cook_index];
+    std::cout << "     Employee " << nam << " has been added. (cook)" << std::endl;
+
+    this->employees[empl_index]->SetID(ids_count);
+
+    this->cook_count++;
+    this->employee_count++;
+    this->ids_count++;
+}
+
+
+
+void Pizzeria::AddEmployee(std::string nam, bool cook, bool drive){
     if ( cook || drive ){
-       // employees[emp_index] = new Employee(nam, cook, drive);
         if (cook && drive){
-            int deliv_index = Delivery::GetEmplDeliveryCount();
-            deliveries[deliv_index] = new Delivery(nam, cook, drive);
-            std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
+            AddAsCook(nam, cook, drive);
         }
         else if (cook){
-            int cook_index = Cook::GetEmplCooksCount();
-            cooks[cook_index] = new Cook(nam, cook, drive);
-            std::cout << "     Employee " << nam << " has been added. (cook)" << std::endl;
+            AddAsCook(nam, cook, drive);
         }
         else if (drive){
-            int deliv_index = Delivery::GetEmplDeliveryCount();
-            deliveries[deliv_index] = new Delivery(nam, cook, drive);
-            std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
+            AddAsDelivery(nam, cook, drive);
         }
     }
     else {
@@ -85,4 +104,22 @@ void Pizzeria::IntroducePizzeria(){
     "\n     Its webiste is: " << this->GetPizzeriaWeb() <<
     "\n     It has currently " << this->GetEmployeesCount() <<
     " employees\n" << std::endl;
+}
+void Pizzeria::PrintEmployees(){
+    for (int i=0; i < this->employee_count; i++){
+        std::cout << "     Worker with ID: " << employees[i]->GetID() <<
+        " has name: " << employees[i]->GetName() << std::endl;
+    }
+}
+void Pizzeria::PrintDelivery(){
+    for (int i=0; i < delivery_count; i++){
+        std::cout << "     Delivery worker with ID: " << deliveries[i]->GetID() <<
+        " has name: " << deliveries[i]->GetName() << std::endl;
+    }
+}
+void Pizzeria::PrintCook(){
+    for (int i=0; i < cook_count; i++){
+        std::cout << "     Cook worker with ID: " << cooks[i]->GetID() <<
+        " has name: " << cooks[i]->GetName() << std::endl;
+    }
 }

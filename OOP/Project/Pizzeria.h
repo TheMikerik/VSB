@@ -5,6 +5,10 @@
 #include "Delivery.h"
 #include "Cook.h"
 
+#define E 15    // EMPLOYEES
+#define D 10    // DELIVERY
+#define C 10    // COOK
+
 class Pizzeria{
 private:
     std::string name;
@@ -15,10 +19,14 @@ private:
     float income;
     float outcome;
     float profit;
+    int employee_count=0;
+    int delivery_count=0;
+    int cook_count=0;
+    int ids_count=0;
 
-    Employee* employees[10];
-    Delivery* deliveries[6];
-    Cook* cooks[8];
+    Employee* employees[E];
+    Delivery* deliveries[D];
+    Cook* cooks[C];
 public:
     Pizzeria(std::string nam);
     Pizzeria(std::string nam, int tel);
@@ -38,8 +46,13 @@ public:
 
 
     void CloseOpenPizzeria();
+    void AddAsDelivery(std::string nam, bool cook, bool drive);
+    void AddAsCook(std::string nam, bool cook, bool drive);
     void AddEmployee(std::string nam, bool cook, bool drive);
     void IntroducePizzeria();
+    void PrintEmployees();
+    void PrintDelivery();
+    void PrintCook();
     /*
     void CalculateIncome();
     void CalculateOutcome();

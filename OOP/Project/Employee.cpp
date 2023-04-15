@@ -3,16 +3,16 @@
 
 #include "Employee.h"
 
-int Employee::empl_count = 0;
-int Employee::empl_ID = 0;
-
 Employee::Employee(std::string nam, bool cook, bool drive){
     this->name = nam;
     this->can_cook = cook;
     this->can_drive = drive;
+}
 
-    empl_count++;
-    empl_ID++;
+
+
+void Employee::SetID(int id){
+    this->empl_ID = id;
 }
 
 
@@ -20,19 +20,15 @@ Employee::Employee(std::string nam, bool cook, bool drive){
 std::string Employee::GetName(){
     return this->name;
 }
-
 int Employee::GetID(){
     return empl_ID;
 }
-
 int Employee::GetWorkedHours(){
     return this->hours_worked;
 }
-
 int Employee::GetWorkedYears(){
     return this->years_worked;
 }
-
 int Employee::GetSalary(){
     return this->salary;
 }
@@ -46,7 +42,6 @@ void Employee::CalculateSalary(){
 
     this->salary = (int)tmp_salary;
 }
-
 bool Employee::CanChangePosition(){
     if (this->can_cook && this->can_drive){
         return 1;
@@ -54,10 +49,4 @@ bool Employee::CanChangePosition(){
     else{
         return 0;
     }
-}
-
-
-
-int Employee::GetEmplCount(){
-    return empl_count;
 }
