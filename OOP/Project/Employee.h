@@ -18,7 +18,7 @@ public:
     Employee(std::string nam, bool cook, bool drive);
 
     std::string GetName();
-    int GetID();
+    static int GetID();
     int GetWorkedHours();
     int GetWorkedYears();
     int GetSalary();

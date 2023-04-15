@@ -28,6 +28,12 @@ int Delivery::GetOrdersDelivered(){
 
 
 
+int Delivery::GetEmplDeliveryCount(){
+    return empl_delivery_count;
+}
+
+
+
 void Delivery::CalculateGasMoney(){
     float tmp_gas_price = 0;
 

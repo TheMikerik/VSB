@@ -22,7 +22,7 @@ std::string Employee::GetName(){
 }
 
 int Employee::GetID(){
-    return this->empl_ID;
+    return empl_ID;
 }
 
 int Employee::GetWorkedHours(){

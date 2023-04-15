@@ -20,5 +20,5 @@ public:
 
     void CalculateGasMoney();
 
-    int GetEmplDeliveryCount();
+    static int GetEmplDeliveryCount();
 };

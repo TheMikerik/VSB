@@ -53,16 +53,29 @@ void Pizzeria::CloseOpenPizzeria(){
     is_open = !is_open;
 }
 void Pizzeria::AddEmployee(std::string nam, bool cook, bool drive){
-    int id = Employee::GetEmplCount();
+    int emp_index = Employee::GetEmplCount();
+    int emp_id = Employee::GetID();
+
     if ( cook || drive ){
-        employees[id] = new Employee(nam, cook, drive);
-        
-
-
-        std::cout << "     Employee " << nam << " has been added." << std::endl;
+       // employees[emp_index] = new Employee(nam, cook, drive);
+        if (cook && drive){
+            int deliv_index = Delivery::GetEmplDeliveryCount();
+            deliveries[deliv_index] = new Delivery(nam, cook, drive);
+            std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
+        }
+        else if (cook){
+            int cook_index = Cook::GetEmplCooksCount();
+            cooks[cook_index] = new Cook(nam, cook, drive);
+            std::cout << "     Employee " << nam << " has been added. (cook)" << std::endl;
+        }
+        else if (drive){
+            int deliv_index = Delivery::GetEmplDeliveryCount();
+            deliveries[deliv_index] = new Delivery(nam, cook, drive);
+            std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
+        }
     }
     else {
-        std::cout << "     Employee " << nam << " cannot be added. (useless)"<< std::endl;
+        std::cout << " (x) Employee " << nam << " cannot be added."<< std::endl;
     }
 }
 void Pizzeria::IntroducePizzeria(){

@@ -17,8 +17,8 @@ private:
     float profit;
 
     Employee* employees[10];
-    Delivery* deliveries[4];
-    Cook* cooks[6];
+    Delivery* deliveries[6];
+    Cook* cooks[8];
 public:
     Pizzeria(std::string nam);
     Pizzeria(std::string nam, int tel);
