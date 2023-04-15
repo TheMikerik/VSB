@@ -8,8 +8,8 @@ Employee::Employee(std::string nam, bool cook, bool drive){
     this->can_cook = cook;
     this->can_drive = drive;
 }
-
-
+Employee::~Employee(){
+}
 
 void Employee::SetID(int id){
     this->empl_ID = id;
@@ -32,7 +32,12 @@ int Employee::GetWorkedYears(){
 int Employee::GetSalary(){
     return this->salary;
 }
-
+bool Employee::CanCook(){
+    return can_cook;
+}
+bool Employee::CanDrive(){
+    return can_drive;
+}
 
 
 void Employee::CalculateSalary(){

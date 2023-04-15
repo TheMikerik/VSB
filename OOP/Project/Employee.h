@@ -23,6 +23,8 @@ public:
     int GetWorkedHours();
     int GetWorkedYears();
     int GetSalary();
+    bool CanCook();
+    bool CanDrive();
 
     void CalculateSalary();
     bool CanChangePosition();

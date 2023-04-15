@@ -7,7 +7,8 @@ Delivery::Delivery(std::string nam, bool cook, bool drive):Employee(nam, cook, d
     gas_money=0;
     orders_delivered=0;
 }
-
+Delivery::~Delivery(){
+}
 
 
 int Delivery::GetGasMoney(){

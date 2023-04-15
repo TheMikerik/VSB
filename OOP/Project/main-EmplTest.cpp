@@ -34,16 +34,33 @@ int main (){
     pepe.AddEmployee("David Dvorsky", true, true);
     pepe.IntroducePizzeria();
 //Employees print
-    std::cout << "Lets print all employees" << std::endl;
     pepe.PrintEmployees();
 //Delivery and cook workers print
-    std::cout << "\nThose guys working in delivery for us:" << std::endl;
     pepe.PrintDelivery();
-    std::cout << "\nThose guys working as cooks for us:" << std::endl;
     pepe.PrintCook();
-    
-
-    
+//Destructor test
+    pepe.Deletion();
+    pepe.PrintCook();
+    pepe.PrintDelivery();
+    pepe.IntroducePizzeria();
+//Add more employees
+    std::cout << "Lets add more employees" << std::endl;
+    pepe.AddEmployee("David Spurek", false, true);
+    pepe.AddEmployee("Simon Rodek", false, false);
+    pepe.AddEmployee("Ondrej Slama", true, false);
+    pepe.AddEmployee("David Koneny", true, true);
+    pepe.AddEmployee("Ondrej Buzga", true, false);
+    pepe.AddEmployee("Antonin Pustejovsky", false, true);
+    pepe.AddEmployee("Frantisek Rucka", true, false);
+    pepe.AddEmployee("Tomas Mer", true, false);
+    pepe.AddEmployee("Jiri Prokel", false, true);
+    pepe.AddEmployee("Vojtech Kicom", false, false);
+    pepe.AddEmployee("Petr Brzobohaty", false, true);
+    pepe.AddEmployee("Jonas Hlosta", true, false);
+    pepe.AddEmployee("Michal Novak", true, true);
+    pepe.PrintCook();
+    pepe.PrintDelivery();
+    pepe.IntroducePizzeria();
 
 
 

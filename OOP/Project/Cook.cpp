@@ -7,6 +7,8 @@
 Cook::Cook(std::string nam, bool cook, bool drive):Employee(nam, cook, drive){
     this->pizzas_made = 0;
 }
+Cook::~Cook(){
+}
 
 int Cook::GetPizzasMade(){
     return this->pizzas_made;

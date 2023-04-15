@@ -5,9 +5,9 @@
 #include "Delivery.h"
 #include "Cook.h"
 
-#define E 15    // EMPLOYEES
-#define D 10    // DELIVERY
-#define C 10    // COOK
+#define E 30    // EMPLOYEES
+#define D 15    // DELIVERY
+#define C 15    // COOK
 
 class Pizzeria{
 private:
@@ -43,7 +43,12 @@ public:
     float GetPizzeriaOutcome();
     float GetPizzeriaProfit();
     int GetEmployeesCount();
-
+    Employee* GetEmployee(int empl_id);
+    Cook* GetCook(int empl_id);
+    Delivery* GetDelivery(int empl_id);
+    int GetEmployeeIndex(int empl_id);
+    int GetDeliveryIndex(int empl_id);
+    int GetCookIndex(int empl_id);
 
     void CloseOpenPizzeria();
     void AddAsDelivery(std::string nam, bool cook, bool drive);
@@ -53,9 +58,9 @@ public:
     void PrintEmployees();
     void PrintDelivery();
     void PrintCook();
-    /*
-    void CalculateIncome();
-    void CalculateOutcome();
-    void CalculateProfits();
-    */
+    void ShiftOrderEmplo(int empl_id);
+    void ShiftOrderCook(int empl_id);
+    void ShiftOrderDeliv(int empl_id);
+    void DeleteEmployee(int empl_id);
+    void Deletion();
 };
