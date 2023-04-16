@@ -1,9 +1,12 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include "Employee.h"
+
+//#include "Employee.h"
 #include "Delivery.h"
 #include "Cook.h"
+#include "Customer.h"
+#include "Menu.h"
 
 #define E 30    // EMPLOYEES
 #define D 15    // DELIVERY
@@ -23,7 +26,7 @@ private:
     int delivery_count=0;
     int cook_count=0;
     int ids_count=0;
-
+ 
     Employee* employees[E];
     Delivery* deliveries[D];
     Cook* cooks[C];
