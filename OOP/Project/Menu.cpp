@@ -4,7 +4,10 @@
 #include "Drink.h"
 #include "Pizza.h"
 #include "Menu.h"
-
+/*
+Menu::Menu(){
+    nullptr;
+}*/
 Menu::Menu(){
     this->stuff_in_menu = 0;
     this->drinks_count = 0;
@@ -16,11 +19,11 @@ Menu::~Menu(){
 
 
 void Menu::AddDrink(std::string nam, int cst, int prof){
-    drinks[drinks_count] = new Drink(nam, cst, prof);
+    this->drinks[drinks_count] = new Drink(nam, cst, prof);
     this->drinks_count++;
 }
 void Menu::AddPizza(std::string nam, int cst, int prof){
-    pizzas[pizzas_count] = new Pizza(nam, cst, prof);
+    this->pizzas[pizzas_count] = new Pizza(nam, cst, prof);
     this->pizzas_count++;
 }
 void Menu::RemoveDrink(int id){

@@ -7,7 +7,7 @@
 #include "Drink.h"
 
 #define DRI 10
-#define PIZ 10
+#define PIZ 20
 
 class Menu{
 protected:

@@ -17,10 +17,8 @@ Pizzeria::Pizzeria(std::string nam, std::string web){
 Pizzeria::Pizzeria(std::string nam, int tel, std::string web){
     this->name = nam;
     this->telephone = tel;
-    this->website = web;
+    this->website = web; 
 }
-
-
 
 std::string Pizzeria::GetPizzeriaName(){
     return this->name;

@@ -11,6 +11,7 @@
 #define E 30    // EMPLOYEES
 #define D 15    // DELIVERY
 #define C 15    // COOK
+#define CUST 15 // CUSTOMERS
 
 class Pizzeria{
 private:
@@ -19,14 +20,15 @@ private:
     std::string website;
 
     bool is_open;
-    float income;
-    float outcome;
-    float profit;
+    float income=0;
+    float outcome=0;
+    float profit=0;
     int employee_count=0;
     int delivery_count=0;
     int cook_count=0;
     int ids_count=0;
- 
+    
+    Customer* customers[CUST];
     Employee* employees[E];
     Delivery* deliveries[D];
     Cook* cooks[C];
@@ -36,8 +38,10 @@ public:
     Pizzeria(std::string nam, std::string web);
     Pizzeria(std::string nam, int tel, std::string web);
 
+    Menu menu;
 
-
+    void SetMenu();
+    Menu* GetMenu();
     std::string GetPizzeriaName();
     int GetPizzeriaTel();
     std::string GetPizzeriaWeb();
