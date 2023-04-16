@@ -19,7 +19,7 @@ private:
     int telephone;
     std::string website;
 
-    bool is_open;
+    bool is_open=true;
     float income=0;
     float outcome=0;
     float profit=0;

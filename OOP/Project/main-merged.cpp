@@ -69,13 +69,16 @@ int main (){
     pepe.PrintDelivery();
     pepe.IntroducePizzeria();
 
-
+//Add stuff into menu
+    std::cout << "Lets add stuff into menu" << std::endl;
+    std::cout << "  Pizzas:" << std::endl;
     pepe.menu.AddPizza("Chilli", 50, 30);
     pepe.menu.AddPizza("Sunkova", 60, 80);
     pepe.menu.AddPizza("Syrova", 80, 50);
     pepe.menu.AddPizza("Tvaruzkova", 90, 10);
     pepe.menu.AddPizza("Spenatova", 80, 50);
     pepe.menu.AddPizza("Smetanova", 90, 10);
+    std::cout << "  Drinks:" << std::endl;
     pepe.menu.AddDrink("Fanta", 10, 5);
     pepe.menu.AddDrink("Cocacola", 20, 15);
     pepe.menu.AddDrink("Pepsi", 15, 2);
@@ -83,6 +86,24 @@ int main (){
     pepe.menu.PrintWholeMenu();
     pepe.menu.DeletionDrinks();
     pepe.menu.DeletionPizzas();
+    pepe.menu.PrintWholeMenu();
+    std::cout << "\nLets test if the ID doesnt repeat" << std::endl;
+    std::cout << "  Pizzas:" << std::endl;
+    pepe.menu.AddPizza("Chilli", 50, 30);
+    pepe.menu.AddPizza("Sunkovaa", 60, 80);
+    pepe.menu.AddPizza("Syrovaa", 80, 50);
+    pepe.menu.AddPizza("Tvaruzkova", 90, 10);
+    pepe.menu.AddPizza("Spenatovea", 80, 50);
+    pepe.menu.AddPizza("Smetanova", 90, 10);
+    std::cout << "  Drinks:" << std::endl;
+    pepe.menu.AddDrink("Fanta", 10, 5);
+    pepe.menu.AddDrink("Cocsacola", 20, 15);
+    pepe.menu.AddDrink("Pepsi", 15, 2);
+    pepe.menu.AddDrink("Malinovka", 11, 9);
+    pepe.menu.AddDrink("Fantaaa", 10, 5);
+    pepe.menu.AddDrink("Cocsacola", 20, 15);
+    pepe.menu.AddDrink("Pepsi", 15, 2);
+    pepe.menu.AddDrink("Malinovka", 11, 9);
     pepe.menu.PrintWholeMenu();
 
 

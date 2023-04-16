@@ -107,19 +107,28 @@ void Pizzeria::CloseOpenPizzeria(){
 
 void Pizzeria::AddAsDelivery(std::string nam, bool cook, bool drive)
 {
-    int empl_index = this->employee_count;
-    int deliv_index = this->delivery_count;
-    deliveries[deliv_index] = new Delivery(nam, cook, drive);
-    employees[empl_index] = deliveries[deliv_index];
-    std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
+    if ( this->delivery_count > D || ( this->cook_count + this->delivery_count ) >= E){
+        std::cout << " (x) Cannot add more employees as delivery" << std::endl;
+    }
+    else{
+        int empl_index = this->employee_count;
+        int deliv_index = this->delivery_count;
+        deliveries[deliv_index] = new Delivery(nam, cook, drive);
+        employees[empl_index] = deliveries[deliv_index];
+        std::cout << "     Employee " << nam << " has been added. (delivery)" << std::endl;
 
-    this->employees[empl_index]->SetID(ids_count);
-    
-    this->delivery_count++;
-    this->employee_count++;
-    this->ids_count++;
+        this->employees[empl_index]->SetID(ids_count);
+        
+        this->delivery_count++;
+        this->employee_count++;
+        this->ids_count++;
+    }
 }
 void Pizzeria::AddAsCook(std::string nam, bool cook, bool drive){
+    if ( this->cook_count > C || ( this->cook_count + this->delivery_count ) >= E){
+        std::cout << " (x) Cannot add more employees as cook" << std::endl;
+    }
+    else{
     int empl_index = this->employee_count;
     int cook_index = this->cook_count;
     cooks[cook_index] = new Cook(nam, cook, drive);
@@ -131,6 +140,7 @@ void Pizzeria::AddAsCook(std::string nam, bool cook, bool drive){
     this->cook_count++;
     this->employee_count++;
     this->ids_count++;
+    }
 }
 void Pizzeria::AddEmployee(std::string nam, bool cook, bool drive){
     if ( cook || drive ){
@@ -145,7 +155,7 @@ void Pizzeria::AddEmployee(std::string nam, bool cook, bool drive){
         }
     }
     else {
-        std::cout << " (x) Employee " << nam << " cannot be added."<< std::endl;
+        std::cout << " (x) Employee " << nam << " cannot cook or drive - not added."<< std::endl;
     }
 }
 void Pizzeria::IntroducePizzeria(){
