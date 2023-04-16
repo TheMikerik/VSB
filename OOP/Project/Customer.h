@@ -8,11 +8,6 @@
 
 
 class Customer{
-public:
-    virtual void NewOrder()=0;
-};
-
-class NewCustomer : public Customer{
 private:
     std::string name;
     std::string address;
@@ -23,13 +18,16 @@ private:
 
     static int customer_counter;
 public:
-    NewCustomer(std::string nam, std::string addrs);
-    ~NewCustomer();
+    static int overall_orders_count;
+    Customer(std::string nam, std::string addrs);
+    ~Customer();
 
     int GetCustID();
     std::string GetCustAddress();
     std::string GetCustName();
     int GetOrdersCount();
+    void CreateOrder();
+    Order* GetOrder(int index);
 
-    void NewOrder(Menu* menu);
+
 };

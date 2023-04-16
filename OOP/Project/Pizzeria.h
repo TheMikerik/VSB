@@ -26,7 +26,9 @@ private:
     int employee_count=0;
     int delivery_count=0;
     int cook_count=0;
+    int customer_count=0;
     int ids_count=0;
+    int total_orders=0;
     
     Customer* customers[CUST];
     Employee* employees[E];
@@ -40,8 +42,6 @@ public:
 
     Menu menu;
 
-    void SetMenu();
-    Menu* GetMenu();
     std::string GetPizzeriaName();
     int GetPizzeriaTel();
     std::string GetPizzeriaWeb();
@@ -53,10 +53,13 @@ public:
     Employee* GetEmployee(int empl_id);
     Cook* GetCook(int empl_id);
     Delivery* GetDelivery(int empl_id);
+    Customer* GetCustomer(int id);
     int GetEmployeeIndex(int empl_id);
     int GetDeliveryIndex(int empl_id);
     int GetCookIndex(int empl_id);
 
+    void OrderForCustomer(int cust_id);
+    void AddCustomer(std::string nam, std::string addrs);
     void CloseOpenPizzeria();
     void AddAsDelivery(std::string nam, bool cook, bool drive);
     void AddAsCook(std::string nam, bool cook, bool drive);
@@ -65,6 +68,7 @@ public:
     void PrintEmployees();
     void PrintDelivery();
     void PrintCook();
+    void PrintCustomers();
     void ShiftOrderEmplo(int empl_id);
     void ShiftOrderCook(int empl_id);
     void ShiftOrderDeliv(int empl_id);

@@ -71,7 +71,15 @@ Delivery* Pizzeria::GetDelivery(int empl_id){
     std::cout << "     This employee was already deleted." << std::endl;
     return nullptr;
 }
-
+Customer* Pizzeria::GetCustomer(int id){
+    for (int i=0; i<this->customer_count; i++){
+        if ( customers[i]->GetCustID() == id ){
+            return customers[i];
+        }
+    }
+    std::cout << "     This employee was already deleted." << std::endl;
+    return nullptr;
+}
 int Pizzeria::GetEmployeeIndex(int empl_id){
     for (int i=0; i<this->employee_count; i++){
         if ( employees[i]->GetID() == empl_id ){
@@ -100,11 +108,45 @@ int Pizzeria::GetCookIndex(int empl_id){
     return -1;
 }
 
+void Pizzeria::OrderForCustomer(int cust_id){
+    this->menu.PrintWholeMenu();
 
+    std::cout << "Creating order for customer with ID " << this->GetCustomer(cust_id)->GetCustID() << std::endl;
+    int input = 0;
+    int index;
+    this->GetCustomer(cust_id)->CreateOrder();
+
+    std::cout << "Type pizzas ID that you want to put into order ('-1' for exit)" << std::endl;
+    std::cout <<"     ";
+    std::cin >> input;
+    while (input != -1){
+        index = ((this->GetCustomer(cust_id)->GetOrdersCount()) - 1 );
+        std::cout <<"     ";
+        this->GetCustomer(cust_id)->GetOrder(index)->AddPizza(this->menu.GetPizza(input));
+        std::cout <<"     ";
+        std::cin >> input;     
+    }
+    input = 0;
+    std::cout << "Type drinks ID that you want to put into order ('-1' for exit)" << std::endl;
+    std::cout <<"     ";
+    std::cin >> input;
+    while (input != -1){
+        std::cout <<"     ";
+        this->GetCustomer(cust_id)->GetOrder(index)->AddDrink(this->menu.GetDrink(input));
+        std::cout <<"     ";
+        std::cin >> input;
+    }
+}
+void Pizzeria::AddCustomer(std::string nam, std::string addrs){
+    int tmp_customer_index = this->customer_count;
+    customers[tmp_customer_index] = new Customer(nam, addrs);
+    std::cout << "     Customer " << nam << " has been added. " << std::endl;
+
+    this->customer_count++;
+}
 void Pizzeria::CloseOpenPizzeria(){
     is_open = !is_open;
 }
-
 void Pizzeria::AddAsDelivery(std::string nam, bool cook, bool drive)
 {
     if ( this->delivery_count > D || ( this->cook_count + this->delivery_count ) >= E){
@@ -163,8 +205,13 @@ void Pizzeria::IntroducePizzeria(){
     std::cout << "     Its name is: " << this->GetPizzeriaName() <<
     "\n     Its telephone number is: " << this->GetPizzeriaTel() <<
     "\n     Its webiste is: " << this->GetPizzeriaWeb() <<
-    "\n     It has currently " << this->GetEmployeesCount() <<
-    " employees\n" << std::endl;
+    "\n     It has currently " << this->GetEmployeesCount() <<" employees" <<
+    "\n                      " << this->delivery_count <<" working as delivery" <<
+    "\n                      " << this->cook_count <<" working as cooks" <<
+    "\n     It has currently " << this->menu.GetDrinksCount() << " drinks in menu" << 
+    "\n     It has currently " << this->menu.GetPizzasCount() << " pizzas in menu" <<
+    "\n     It has currently " << this->customer_count << " customers" <<
+    "\n     And " << Customer::overall_orders_count << " orders in total\n" << std::endl;
 }
 void Pizzeria::PrintEmployees(){
     std::cout << "Lets print all employees" << std::endl;
@@ -185,6 +232,14 @@ void Pizzeria::PrintCook(){
     for (int i=0; i < cook_count; i++){
         std::cout << "     Cook worker with ID: " << cooks[i]->GetID() <<
         " has name: " << cooks[i]->GetName() << std::endl;
+    }
+}
+void Pizzeria::PrintCustomers(){
+    std::cout << "\nThose guys are ours customers:" << std::endl;
+    for (int i=0; i < customer_count; i++){
+        std::cout << "     Customer with ID: " << customers[i]->GetCustID() <<
+        " has name: " << customers[i]->GetCustName() << " and address: " <<
+        customers[i]->GetCustAddress() << std::endl;
     }
 }
 void Pizzeria::ShiftOrderEmplo(int empl_id){
@@ -253,9 +308,11 @@ void Pizzeria::DeleteEmployee(int empl_id){
 void Pizzeria::Deletion(){
     int input;
     std::cout << "\nLets delete some workers\nType ID of the worker that you wanna delete:     (type '-1' to stop)" << std::endl;
+    std::cout <<"     ";
     std::cin >> input;
     while ( input != -1){
         this->DeleteEmployee(input);
+        std::cout <<"     ";
         std::cin >> input;
     }
 }

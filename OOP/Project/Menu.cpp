@@ -168,18 +168,22 @@ void Menu::PrintWholeMenu(){
 void Menu::DeletionDrinks(){
     int input;
     std::cout << "\nLets delete some drinks\nType ID of the drink that you wanna delete:     (type '-1' to stop)" << std::endl;
+    std::cout <<"     ";
     std::cin >> input;
     while ( input != -1){
         this->RemoveDrink(input);
+        std::cout <<"     ";
         std::cin >> input;
     }
 }
 void Menu::DeletionPizzas(){
     int input;
     std::cout << "\nLets delete some pizzas\nType ID of the pizza that you wanna delete:     (type '-1' to stop)" << std::endl;
+    std::cout <<"     ";
     std::cin >> input;
     while ( input != -1){
         this->RemovePizza(input);
+        std::cout <<"     ";
         std::cin >> input;
     }
 }

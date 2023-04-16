@@ -15,6 +15,10 @@
 #include "Delivery.cpp"
 #include "Cook.h"
 #include "Cook.cpp"
+#include "Customer.h"
+#include "Customer.cpp"
+#include "Order.h"
+#include "Order.cpp"
 
 int main (){
     std::cout << "----=== SEMESTRAL PROJECT ===-----" << std::endl;
@@ -26,7 +30,7 @@ int main (){
     Pizzeria pepe("Pepe Pizza", 604505606, "www.pepepizza.cz");
     pepe.IntroducePizzeria();
 //Employees added
-    std::cout << "Lets now add some employees" << std::endl;
+    std::cout << "\nLets now add some employees" << std::endl;
     pepe.AddEmployee("Michal Rucka", false, true);
     pepe.AddEmployee("Jan Novak", false, false);
     pepe.AddEmployee("Marek Zacek", true, false);
@@ -51,7 +55,7 @@ int main (){
     pepe.PrintDelivery();
     pepe.IntroducePizzeria();
 //Add more employees
-    std::cout << "Lets add more employees" << std::endl;
+    std::cout << "\nLets add more employees" << std::endl;
     pepe.AddEmployee("David Spurek", false, true);
     pepe.AddEmployee("Simon Rodek", false, false);
     pepe.AddEmployee("Ondrej Slama", true, false);
@@ -70,7 +74,7 @@ int main (){
     pepe.IntroducePizzeria();
 
 //Add stuff into menu
-    std::cout << "Lets add stuff into menu" << std::endl;
+    std::cout << "\nLets add stuff into menu" << std::endl;
     std::cout << "  Pizzas:" << std::endl;
     pepe.menu.AddPizza("Chilli", 50, 30);
     pepe.menu.AddPizza("Sunkova", 60, 80);
@@ -105,6 +109,23 @@ int main (){
     pepe.menu.AddDrink("Pepsi", 15, 2);
     pepe.menu.AddDrink("Malinovka", 11, 9);
     pepe.menu.PrintWholeMenu();
+
+
+//Add customers
+    std::cout << "\nLets add some customers" << std::endl;
+    pepe.AddCustomer("Monika Ulrichova", "Standl 42");
+    pepe.AddCustomer("Barbora Adamcova", "Frydek 89");
+    pepe.AddCustomer("Anna Bilska", "Sviadnov 403");
+    pepe.AddCustomer("Dorota Krecmerova", "Paskov 5");
+    pepe.AddCustomer("Petra Novotna", "Ostrava 16");
+    pepe.AddCustomer("Natalie Jurickova", "Zlin 87");
+    pepe.AddCustomer("Denisa Mackova", "Praha 456");
+    pepe.PrintCustomers();
+    pepe.IntroducePizzeria();
+    pepe.OrderForCustomer(3);
+    pepe.OrderForCustomer(2);
+    pepe.OrderForCustomer(1);
+    pepe.OrderForCustomer(2);
 
 
     std::cout << "\n\n" << std::endl;
