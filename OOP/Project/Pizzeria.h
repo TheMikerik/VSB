@@ -19,10 +19,6 @@ private:
     int telephone;
     std::string website;
 
-    bool is_open;
-    float income;
-    float outcome;
-    float profit;
     int employee_count;
     int delivery_count;
     int cook_count;
@@ -45,10 +41,6 @@ public:
     std::string GetPizzeriaName();
     int GetPizzeriaTel();
     std::string GetPizzeriaWeb();
-    bool IsPizzeriaOpen();
-    float GetPizzeriaIncome();
-    float GetPizzeriaOutcome();
-    float GetPizzeriaProfit();
     int GetEmployeesCount();
     Employee* GetEmployee(int empl_id);
     Cook* GetCook(int empl_id);
@@ -60,7 +52,6 @@ public:
 
     void OrderForCustomer(int cust_id);
     void AddCustomer(std::string nam, std::string addrs);
-    void CloseOpenPizzeria();
     void AddAsDelivery(std::string nam, bool cook, bool drive);
     void AddAsCook(std::string nam, bool cook, bool drive);
     void AddEmployee(std::string nam, bool cook, bool drive);
@@ -74,4 +65,6 @@ public:
     void ShiftOrderDeliv(int empl_id);
     void DeleteEmployee(int empl_id);
     void Deletion();
+    void StopProgram();
+    void MakeSpace();
 };

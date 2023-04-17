@@ -21,14 +21,15 @@
 #include "Order.cpp"
 
 int main (){
-    std::cout << "----=== SEMESTRAL PROJECT ===-----" << std::endl;
-    std::cout << "             PIZZERIA" << std::endl;
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n----=== SEMESTRAL PROJECT ===-----" << std::endl;
+    std::cout << "             PIZZERIA\n\n\n\n\n\n\n\n\n" << std::endl;
 
 
 
 //Pizzeria creation
     Pizzeria pepe("Pepe Pizza", 604505606, "www.pepepizza.cz");
     pepe.IntroducePizzeria();
+    pepe.StopProgram();
 //Employees added
     std::cout << "\nLets now add some employees" << std::endl;
     pepe.AddEmployee("Michal Rucka", false, true);
@@ -44,6 +45,7 @@ int main (){
     pepe.AddEmployee("Simon Svarny", true, false);
     pepe.AddEmployee("David Dvorsky", true, true);
     pepe.IntroducePizzeria();
+    pepe.StopProgram();
 //Employees print
     pepe.PrintEmployees();
 //Delivery and cook workers print
@@ -51,20 +53,22 @@ int main (){
     pepe.PrintCook();
 //Destructor test
     pepe.Deletion();
+    pepe.MakeSpace();
     pepe.PrintCook();
     pepe.PrintDelivery();
     pepe.IntroducePizzeria();
+    pepe.StopProgram();
 //Add more employees
     std::cout << "\nLets add more employees" << std::endl;
     pepe.AddEmployee("David Spurek", false, true);
     pepe.AddEmployee("Simon Rodek", false, false);
     pepe.AddEmployee("Ondrej Slama", true, false);
     pepe.AddEmployee("David Koneny", true, true);
-    pepe.AddEmployee("Ondrej Buzga", true, false);
+    pepe.AddEmployee("Ondrej Buzga", false, false);
     pepe.AddEmployee("Antonin Pustejovsky", false, true);
     pepe.AddEmployee("Frantisek Rucka", true, false);
     pepe.AddEmployee("Tomas Mer", true, false);
-    pepe.AddEmployee("Jiri Prokel", false, true);
+    pepe.AddEmployee("Jiri Prokel", false, false);
     pepe.AddEmployee("Vojtech Kicom", false, false);
     pepe.AddEmployee("Petr Brzobohaty", false, true);
     pepe.AddEmployee("Jonas Hlosta", true, false);
@@ -72,7 +76,7 @@ int main (){
     pepe.PrintCook();
     pepe.PrintDelivery();
     pepe.IntroducePizzeria();
-
+    pepe.StopProgram();
 //Add stuff into menu
     std::cout << "\nLets add stuff into menu" << std::endl;
     std::cout << "  Pizzas:" << std::endl;
@@ -88,31 +92,37 @@ int main (){
     pepe.menu.AddDrink("Pepsi", 15, 2);
     pepe.menu.AddDrink("Malinovka", 11, 9);
     pepe.menu.PrintWholeMenu();
+
+
+
+//Delete drinks and pizzas from menu
     pepe.menu.DeletionDrinks();
     pepe.menu.DeletionPizzas();
     pepe.menu.PrintWholeMenu();
-    std::cout << "\nLets test if the ID doesnt repeat" << std::endl;
+    pepe.StopProgram();
+//Adding stuff into menu
+    std::cout << "\nLets add more stuff into menu:" << std::endl;
     std::cout << "  Pizzas:" << std::endl;
     pepe.menu.AddPizza("Chilli", 50, 30);
-    pepe.menu.AddPizza("Sunkovaa", 60, 80);
-    pepe.menu.AddPizza("Syrovaa", 80, 50);
-    pepe.menu.AddPizza("Tvaruzkova", 90, 10);
-    pepe.menu.AddPizza("Spenatovea", 80, 50);
-    pepe.menu.AddPizza("Smetanova", 90, 10);
+    pepe.menu.AddPizza("Vegetarianska", 60, 80);
+    pepe.menu.AddPizza("Hermelinova", 80, 50);
+    pepe.menu.AddPizza("Kureci", 90, 10);
+    pepe.menu.AddPizza("Spenatova", 80, 50);
+    pepe.menu.AddPizza("Kureci - special", 90, 10);
     std::cout << "  Drinks:" << std::endl;
     pepe.menu.AddDrink("Fanta", 10, 5);
-    pepe.menu.AddDrink("Cocsacola", 20, 15);
+    pepe.menu.AddDrink("Cocacola", 20, 15);
     pepe.menu.AddDrink("Pepsi", 15, 2);
     pepe.menu.AddDrink("Malinovka", 11, 9);
-    pepe.menu.AddDrink("Fantaaa", 10, 5);
-    pepe.menu.AddDrink("Cocsacola", 20, 15);
+    pepe.menu.AddDrink("Mirinda", 10, 5);
+    pepe.menu.AddDrink("Sprite", 20, 15);
     pepe.menu.AddDrink("Pepsi", 15, 2);
     pepe.menu.AddDrink("Malinovka", 11, 9);
     pepe.menu.PrintWholeMenu();
-
+    pepe.StopProgram();
 
 //Add customers
-    std::cout << "\nLets add some customers" << std::endl;
+    std::cout << "\nLets add some customers:" << std::endl;
     pepe.AddCustomer("Monika Ulrichova", "Standl 42");
     pepe.AddCustomer("Barbora Adamcova", "Frydek 89");
     pepe.AddCustomer("Anna Bilska", "Sviadnov 403");
@@ -122,12 +132,18 @@ int main (){
     pepe.AddCustomer("Denisa Mackova", "Praha 456");
     pepe.PrintCustomers();
     pepe.IntroducePizzeria();
+    pepe.StopProgram();
+//Orders for customer
+    std::cout << "\n\nLets add orders to customers:";
     pepe.OrderForCustomer(3);
     pepe.OrderForCustomer(2);
     pepe.OrderForCustomer(1);
     pepe.OrderForCustomer(2);
+    pepe.IntroducePizzeria();
+    pepe.menu.PrintWholeMenu();
+    pepe.StopProgram();
 
 
-    std::cout << "\n\n" << std::endl;
+    std::cout << "Thats the very end of this project.\n\n" << std::endl;
     return 0;
 }

@@ -6,10 +6,6 @@
 Pizzeria::Pizzeria(std::string nam){
     this->name = nam;
 
-    this->is_open = true;
-    this->income = 0;
-    this->outcome = 0;
-    this->profit = 0;
     this->employee_count = 0;
     this->delivery_count = 0;
     this->cook_count = 0;
@@ -21,10 +17,6 @@ Pizzeria::Pizzeria(std::string nam, int tel){
     this->name = nam;
     this->telephone = tel;
 
-    this->is_open = true;
-    this->income = 0;
-    this->outcome = 0;
-    this->profit = 0;
     this->employee_count = 0;
     this->delivery_count = 0;
     this->cook_count = 0;
@@ -36,10 +28,6 @@ Pizzeria::Pizzeria(std::string nam, std::string web){
     this->name = nam;
     this->website = web;
 
-    this->is_open = true;
-    this->income = 0;
-    this->outcome = 0;
-    this->profit = 0;
     this->employee_count = 0;
     this->delivery_count = 0;
     this->cook_count = 0;
@@ -52,10 +40,6 @@ Pizzeria::Pizzeria(std::string nam, int tel, std::string web){
     this->telephone = tel;
     this->website = web;
 
-    this->is_open = true;
-    this->income = 0;
-    this->outcome = 0;
-    this->profit = 0;
     this->employee_count = 0;
     this->delivery_count = 0;
     this->cook_count = 0;
@@ -72,18 +56,6 @@ int Pizzeria::GetPizzeriaTel(){
 }
 std::string Pizzeria::GetPizzeriaWeb(){
     return this->website;
-}
-bool Pizzeria::IsPizzeriaOpen(){
-    return this->is_open;
-}
-float Pizzeria::GetPizzeriaIncome(){
-    return this->income;
-}
-float Pizzeria::GetPizzeriaOutcome(){
-    return this->outcome;
-}
-float Pizzeria::GetPizzeriaProfit(){
-    return this->profit;
 }
 int Pizzeria::GetEmployeesCount(){
     return this->employee_count;
@@ -153,12 +125,13 @@ int Pizzeria::GetCookIndex(int empl_id){
 }
 
 void Pizzeria::OrderForCustomer(int cust_id){
-    this->menu.PrintWholeMenu();
 
     std::cout << "Creating order for customer with ID " << this->GetCustomer(cust_id)->GetCustID() << std::endl;
     int input = 0;
     int index;
     this->GetCustomer(cust_id)->CreateOrder();
+
+    this->menu.PrintWholeMenu();
 
     std::cout << "Type pizzas ID that you want to put into order ('-1' for exit)" << std::endl;
     std::cout <<"     ";
@@ -180,6 +153,7 @@ void Pizzeria::OrderForCustomer(int cust_id){
         std::cout <<"     ";
         std::cin >> input;
     }
+    this->MakeSpace();
 }
 void Pizzeria::AddCustomer(std::string nam, std::string addrs){
     int tmp_customer_index = this->customer_count;
@@ -187,9 +161,6 @@ void Pizzeria::AddCustomer(std::string nam, std::string addrs){
     std::cout << "     Customer " << nam << " has been added. " << std::endl;
 
     this->customer_count++;
-}
-void Pizzeria::CloseOpenPizzeria(){
-    is_open = !is_open;
 }
 void Pizzeria::AddAsDelivery(std::string nam, bool cook, bool drive)
 {
@@ -252,8 +223,8 @@ void Pizzeria::IntroducePizzeria(){
     "\n     It has currently " << this->GetEmployeesCount() <<" employees" <<
     "\n                      " << this->delivery_count <<" working as delivery" <<
     "\n                      " << this->cook_count <<" working as cooks" <<
-    "\n     It has currently " << this->menu.GetDrinksCount() << " drinks in menu" << 
     "\n     It has currently " << this->menu.GetPizzasCount() << " pizzas in menu" <<
+    "\n     It has currently " << this->menu.GetDrinksCount() << " drinks in menu" << 
     "\n     It has currently " << this->customer_count << " customers" <<
     "\n     And " << Customer::overall_orders_count << " orders in total\n" << std::endl;
 }
@@ -359,4 +330,21 @@ void Pizzeria::Deletion(){
         std::cout <<"     ";
         std::cin >> input;
     }
+}
+void Pizzeria::StopProgram(){
+    int input;
+    std::cout << "\n-----------------------------";
+    std::cout << "\n-------PROGRAM STOPPED-------";
+    std::cout << "\n-----------------------------     (type '-1' to run)";
+    std::cout <<"     ";
+    std::cin >> input;
+    while ( input != -1){
+        std::cout << "Type '-1' to run program" << std::endl;
+        std::cout <<"     ";
+        std::cin >> input;
+    }
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
+void Pizzeria::MakeSpace(){
+    std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
