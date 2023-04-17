@@ -60,18 +60,18 @@ int main (){
     pepe.StopProgram();
 //Add more employees
     std::cout << "\nLets add more employees" << std::endl;
-    pepe.AddEmployee("David Spurek", false, true);
-    pepe.AddEmployee("Simon Rodek", false, false);
-    pepe.AddEmployee("Ondrej Slama", true, false);
-    pepe.AddEmployee("David Koneny", true, true);
-    pepe.AddEmployee("Ondrej Buzga", false, false);
-    pepe.AddEmployee("Antonin Pustejovsky", false, true);
-    pepe.AddEmployee("Frantisek Rucka", true, false);
-    pepe.AddEmployee("Tomas Mer", true, false);
-    pepe.AddEmployee("Jiri Prokel", false, false);
-    pepe.AddEmployee("Vojtech Kicom", false, false);
+    pepe.AddEmployee("Petr Novak", false, true);
+    pepe.AddEmployee("Simon Novotny", false, false);
+    pepe.AddEmployee("Ondrej Adamek", true, false);
+    pepe.AddEmployee("David Nekonecny", true, true);
+    pepe.AddEmployee("Ondrej Stein", false, false);
+    pepe.AddEmployee("Antonin Horka", false, true);
+    pepe.AddEmployee("Frantisek Pavel", true, false);
+    pepe.AddEmployee("Tomas Smutny", true, false);
+    pepe.AddEmployee("Jiri Vesely", false, false);
+    pepe.AddEmployee("Vojtech Nord", false, false);
     pepe.AddEmployee("Petr Brzobohaty", false, true);
-    pepe.AddEmployee("Jonas Hlosta", true, false);
+    pepe.AddEmployee("Jonas Pavlasek", true, false);
     pepe.AddEmployee("Michal Novak", true, true);
     pepe.PrintCook();
     pepe.PrintDelivery();
@@ -123,13 +123,13 @@ int main (){
 
 //Add customers
     std::cout << "\nLets add some customers:" << std::endl;
-    pepe.AddCustomer("Monika Ulrichova", "Standl 42");
-    pepe.AddCustomer("Barbora Adamcova", "Frydek 89");
-    pepe.AddCustomer("Anna Bilska", "Sviadnov 403");
-    pepe.AddCustomer("Dorota Krecmerova", "Paskov 5");
+    pepe.AddCustomer("Pavla Novotna", "Standl 42");
+    pepe.AddCustomer("Eliska Adamkova", "Frydek 89");
+    pepe.AddCustomer("Petra Kocichova", "Sviadnov 403");
+    pepe.AddCustomer("Ema Zla", "Paskov 5");
     pepe.AddCustomer("Petra Novotna", "Ostrava 16");
     pepe.AddCustomer("Natalie Jurickova", "Zlin 87");
-    pepe.AddCustomer("Denisa Mackova", "Praha 456");
+    pepe.AddCustomer("Denisa Linhart", "Praha 456");
     pepe.PrintCustomers();
     pepe.IntroducePizzeria();
     pepe.StopProgram();
