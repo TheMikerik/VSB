@@ -5,19 +5,63 @@
 
 Pizzeria::Pizzeria(std::string nam){
     this->name = nam;
+
+    this->is_open = true;
+    this->income = 0;
+    this->outcome = 0;
+    this->profit = 0;
+    this->employee_count = 0;
+    this->delivery_count = 0;
+    this->cook_count = 0;
+    this->customer_count = 0;
+    this->ids_count = 0;
+    this->total_orders = 0;
 }
 Pizzeria::Pizzeria(std::string nam, int tel){
     this->name = nam;
     this->telephone = tel;
+
+    this->is_open = true;
+    this->income = 0;
+    this->outcome = 0;
+    this->profit = 0;
+    this->employee_count = 0;
+    this->delivery_count = 0;
+    this->cook_count = 0;
+    this->customer_count = 0;
+    this->ids_count = 0;
+    this->total_orders = 0;
 }
 Pizzeria::Pizzeria(std::string nam, std::string web){
     this->name = nam;
     this->website = web;
+
+    this->is_open = true;
+    this->income = 0;
+    this->outcome = 0;
+    this->profit = 0;
+    this->employee_count = 0;
+    this->delivery_count = 0;
+    this->cook_count = 0;
+    this->customer_count = 0;
+    this->ids_count = 0;
+    this->total_orders = 0;
 }
 Pizzeria::Pizzeria(std::string nam, int tel, std::string web){
     this->name = nam;
     this->telephone = tel;
-    this->website = web; 
+    this->website = web;
+
+    this->is_open = true;
+    this->income = 0;
+    this->outcome = 0;
+    this->profit = 0;
+    this->employee_count = 0;
+    this->delivery_count = 0;
+    this->cook_count = 0;
+    this->customer_count = 0;
+    this->ids_count = 0;
+    this->total_orders = 0;
 }
 
 std::string Pizzeria::GetPizzeriaName(){

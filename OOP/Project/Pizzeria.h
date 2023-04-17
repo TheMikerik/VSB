@@ -19,16 +19,16 @@ private:
     int telephone;
     std::string website;
 
-    bool is_open=true;
-    float income=0;
-    float outcome=0;
-    float profit=0;
-    int employee_count=0;
-    int delivery_count=0;
-    int cook_count=0;
-    int customer_count=0;
-    int ids_count=0;
-    int total_orders=0;
+    bool is_open;
+    float income;
+    float outcome;
+    float profit;
+    int employee_count;
+    int delivery_count;
+    int cook_count;
+    int customer_count;
+    int ids_count;
+    int total_orders;
     
     Customer* customers[CUST];
     Employee* employees[E];
