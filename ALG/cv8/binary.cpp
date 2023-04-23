@@ -135,21 +135,21 @@ void CreateLeafs(Item currentItem, Tree* tree){
     int intree = tree->item.key;
 
     if (currentItem.key > intree ){         // vetsi
-        if (tree->higher != NULL){
-            CreateLeafs(currentItem, tree->higher);
+        if (tree->higher == NULL){
+            tree->higher = new Tree();
+            tree->higher->item = currentItem;
         }
         else {
-            tree->higher->item = currentItem;
-            return;
+            CreateLeafs(currentItem, tree->higher);
         }
     }
     else if( currentItem.key < intree ){    // mensi
-        if (tree->lower != NULL){
-            CreateLeafs(currentItem, tree->lower);
+        if (tree->lower == NULL){
+            tree->lower = new Tree();
+            tree->lower->item = currentItem;
         }
         else {
-            tree->lower->item = currentItem;
-            return;
+            CreateLeafs(currentItem, tree->lower);
         }
     }
 }
@@ -159,7 +159,7 @@ void CreateBinaryTree(vector<Item> &items, Tree* tree){
         return;
     }
     
-    int i = 1;
+    int i = 0;
     tree->item = items[i];
     i++;
     while ( i < items.size() ){
@@ -176,7 +176,7 @@ string SearchItem(int index, Tree* tree){
     }
     else if (index > intree ){         // vetsi
         if (tree->higher != NULL){
-            SearchItem(index, tree->higher);
+            return SearchItem(index, tree->higher);
         }
         else {
             return NOT_FOUND;
@@ -184,7 +184,7 @@ string SearchItem(int index, Tree* tree){
     }
     else if( index < intree ){    // mensi
         if (tree->lower != NULL){
-            SearchItem(index, tree->lower);
+            return SearchItem(index, tree->lower);
         }
         else {
             return NOT_FOUND;
@@ -211,7 +211,7 @@ int main(int argc, char** argv){
      * nasledujici radek
      */
 
-    Tree* t;
+    Tree* t = new Tree();
     CreateBinaryTree(items, t);
     cout<<"Binarni vyhledavaci strom"<<endl;
     cout<<"-------------------------"<<endl;
@@ -222,14 +222,13 @@ int main(int argc, char** argv){
          */
         cout << x << " - " << SearchItem(x, t) << endl;
     }
-/*
     sort(items.begin(), items.end());
     cout<<endl;
     cout<<"Vyhledavani pulenim intervalu"<<endl;
     cout<<"-----------------------------"<<endl;
     for (int x:queries) {
         cout << x << " - " << findItem(items, x) << endl;
-    }*/
+    }
     return 1;
 }
 
