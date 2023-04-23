@@ -131,12 +131,12 @@ string findItem(vector<Item> &items, int k) {
     return NOT_FOUND;
 }
 
-void SearchTree(Item currentItem, Tree* tree){
+void CreateLeafs(Item currentItem, Tree* tree){
     int intree = tree->item.key;
 
     if (currentItem.key > intree ){         // vetsi
         if (tree->higher != NULL){
-            SearchTree(currentItem, tree->higher);
+            CreateLeafs(currentItem, tree->higher);
         }
         else {
             tree->higher->item = currentItem;
@@ -145,7 +145,7 @@ void SearchTree(Item currentItem, Tree* tree){
     }
     else if( currentItem.key < intree ){    // mensi
         if (tree->lower != NULL){
-            SearchTree(currentItem, tree->lower);
+            CreateLeafs(currentItem, tree->lower);
         }
         else {
             tree->lower->item = currentItem;
@@ -154,24 +154,46 @@ void SearchTree(Item currentItem, Tree* tree){
     }
 }
 
-void CreateSearchTree(vector<Item> &items, Tree* tree){
+void CreateBinaryTree(vector<Item> &items, Tree* tree){
     if ( items.empty() ){
         return;
     }
     
-    int i = 0;
+    int i = 1;
     tree->item = items[i];
     i++;
     while ( i < items.size() ){
-        SearchTree(items[i], tree);
+        CreateLeafs(items[i], tree);
         i++;
     }
-
-
 };
 
-int main(int argc, char** argv)
-{
+string SearchItem(int index, Tree* tree){
+    int intree = tree->item.key;
+
+    if (index == intree){
+        return tree->item.value;
+    }
+    else if (index > intree ){         // vetsi
+        if (tree->higher != NULL){
+            SearchItem(index, tree->higher);
+        }
+        else {
+            return NOT_FOUND;
+        }
+    }
+    else if( index < intree ){    // mensi
+        if (tree->lower != NULL){
+            SearchItem(index, tree->lower);
+        }
+        else {
+            return NOT_FOUND;
+        }
+    }
+    return NOT_FOUND;
+}
+
+int main(int argc, char** argv){
     
     if(argc < 3){
         cerr << "Missing arguments" << endl;
@@ -189,24 +211,25 @@ int main(int argc, char** argv)
      * nasledujici radek
      */
 
-    // Tree t(items); 
-    // cout<<"Binarni vyhledavaci strom"<<endl;
-    // cout<<"-------------------------"<<endl;
-    // for (int x:queries) {
-    //     /* Misto t.search(x) na nasledujicim radku dejte volani
-    //      * vami vytvorene funkce pro vyhledavani v binarnim stromu,
-    //      * predejte ji parametr x obsahujici cele cislo k vyhledani.
-    //      */
-    //     cout << x << " - " << t.search(x) << endl;
-    // }
-
+    Tree* t;
+    CreateBinaryTree(items, t);
+    cout<<"Binarni vyhledavaci strom"<<endl;
+    cout<<"-------------------------"<<endl;
+    for (int x:queries) {
+        /* Misto t.search(x) na nasledujicim radku dejte volani
+         * vami vytvorene funkce pro vyhledavani v binarnim stromu,
+         * predejte ji parametr x obsahujici cele cislo k vyhledani.
+         */
+        cout << x << " - " << SearchItem(x, t) << endl;
+    }
+/*
     sort(items.begin(), items.end());
     cout<<endl;
     cout<<"Vyhledavani pulenim intervalu"<<endl;
     cout<<"-----------------------------"<<endl;
     for (int x:queries) {
         cout << x << " - " << findItem(items, x) << endl;
-    }
+    }*/
     return 1;
 }
 
