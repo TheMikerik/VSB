@@ -25,11 +25,78 @@ struct Item {
     }
 };
 
-struct Tree{
+class Tree{
+public:
     Item item;
+    Tree* lower;
+    Tree* higher;
 
-    Tree* lower = NULL;
-    Tree* higher = NULL;
+    Tree(Item itm){
+        this->item = itm;
+    }
+    ~Tree() {
+        delete lower;
+        delete higher;
+    }
+
+    void CreateLeafs(Item currentItem, Tree* tree){
+        int intree = tree->item.key;
+
+        if (currentItem.key > intree ){         // vetsi
+            if (tree->higher == nullptr){
+                tree->higher = new Tree(currentItem);
+            }
+            else {
+                this->CreateLeafs(currentItem, tree->higher);
+            }
+        }
+        else if( currentItem.key < intree ){    // mensi
+            if (tree->lower == nullptr){
+                tree->lower = new Tree(currentItem);
+            }
+            else {
+                this->CreateLeafs(currentItem, tree->lower);
+            }
+        }
+    }
+
+    void CreateBinaryTree(vector<Item> &items, Tree* tree){
+        if ( items.empty() ){
+            return;
+        }
+        long unsigned int i = 1;
+        while (i < items.size() ){
+            this->CreateLeafs(items[i], tree);
+            i++;
+        }
+    }
+
+    string SearchItem(int index, Tree* tree){
+        int intree = tree->item.key;
+
+        if (index == intree){
+            return tree->item.value;
+        }
+        else if (index > intree ){         // vetsi
+            if (tree->higher != nullptr){
+                return SearchItem(index, tree->higher);
+            }
+            else {
+                return NOT_FOUND;
+            }
+        }
+        else if( index < intree ){    // mensi
+            if (tree->lower != nullptr){
+                return SearchItem(index, tree->lower);
+            }
+            else {
+                return NOT_FOUND;
+            }
+        }
+        return NOT_FOUND;
+    }
+
+
 };
 
 /**
@@ -131,68 +198,6 @@ string findItem(vector<Item> &items, int k) {
     return NOT_FOUND;
 }
 
-void CreateLeafs(Item currentItem, Tree* tree){
-    int intree = tree->item.key;
-
-    if (currentItem.key > intree ){         // vetsi
-        if (tree->higher == NULL){
-            tree->higher = new Tree();
-            tree->higher->item = currentItem;
-        }
-        else {
-            CreateLeafs(currentItem, tree->higher);
-        }
-    }
-    else if( currentItem.key < intree ){    // mensi
-        if (tree->lower == NULL){
-            tree->lower = new Tree();
-            tree->lower->item = currentItem;
-        }
-        else {
-            CreateLeafs(currentItem, tree->lower);
-        }
-    }
-}
-
-void CreateBinaryTree(vector<Item> &items, Tree* tree){
-    if ( items.empty() ){
-        return;
-    }
-    
-    int i = 0;
-    tree->item = items[i];
-    i++;
-    while ( i < items.size() ){
-        CreateLeafs(items[i], tree);
-        i++;
-    }
-};
-
-string SearchItem(int index, Tree* tree){
-    int intree = tree->item.key;
-
-    if (index == intree){
-        return tree->item.value;
-    }
-    else if (index > intree ){         // vetsi
-        if (tree->higher != NULL){
-            return SearchItem(index, tree->higher);
-        }
-        else {
-            return NOT_FOUND;
-        }
-    }
-    else if( index < intree ){    // mensi
-        if (tree->lower != NULL){
-            return SearchItem(index, tree->lower);
-        }
-        else {
-            return NOT_FOUND;
-        }
-    }
-    return NOT_FOUND;
-}
-
 int main(int argc, char** argv){
     
     if(argc < 3){
@@ -211,8 +216,8 @@ int main(int argc, char** argv){
      * nasledujici radek
      */
 
-    Tree* t = new Tree();
-    CreateBinaryTree(items, t);
+    Tree* t = new Tree(items[0]);
+    t->CreateBinaryTree(items, t);
     cout<<"Binarni vyhledavaci strom"<<endl;
     cout<<"-------------------------"<<endl;
     for (int x:queries) {
@@ -220,7 +225,7 @@ int main(int argc, char** argv){
          * vami vytvorene funkce pro vyhledavani v binarnim stromu,
          * predejte ji parametr x obsahujici cele cislo k vyhledani.
          */
-        cout << x << " - " << SearchItem(x, t) << endl;
+        cout << x << " - " << t->SearchItem(x, t) << endl;
     }
     sort(items.begin(), items.end());
     cout<<endl;
