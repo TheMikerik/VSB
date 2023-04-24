@@ -50,6 +50,30 @@ public:
         }
     }
 
+    void CreateLeafs( Item currentItem, Tree* intree){
+        do{            
+            if (currentItem.key > intree->item.key ){         // vetsi
+                if (intree->higher == nullptr){
+                    intree->higher = new Tree();
+                    intree->higher->item = currentItem;
+                    return;
+                }
+                else {
+                    intree = intree->higher;
+                }
+            }
+            else if( currentItem.key < intree->item.key ){    // mensi
+                if (intree->lower == nullptr){
+                    intree->lower = new Tree();
+                    intree->lower->item = currentItem;
+                    return;
+                }
+                else {
+                    intree = intree->lower;
+                }
+            }
+        } while (1);
+    }
     void CreateBinaryTree(vector<Item> items){
         if ( items.empty() ){
             return;
@@ -58,37 +82,18 @@ public:
         for (long unsigned int i = 0; i < items.size(); i++ ){
             Item currentItem = items[i];
             Tree* intree = this;
-            bool stop = false;
-
-            while (!stop){            
-                if (currentItem.key > intree->item.key ){         // vetsi
-                    if (intree->higher == nullptr){
-                        intree->higher = new Tree();
-                        intree->higher->item = currentItem;
-                        stop = true;
-                    }
-                    else {
-                        intree = intree->higher;
-                    }
-                }
-                else if( currentItem.key < intree->item.key ){    // mensi
-                    if (intree->lower == nullptr){
-                        intree->lower = new Tree();
-                        intree->lower->item = currentItem;
-                        stop = true;
-                    }
-                    else {
-                        intree = intree->lower;
-                    }
-                }
-            }
+            CreateLeafs( currentItem, intree);
+            
         }
     }
 
-    string SearchItem(int index){
+    string SearchItem(int index, bool YoN){
+        if (!YoN){
+            return NOT_FOUND;
+        }
         Tree* next = this;
 
-        while (true){
+        do{
             if (index == next->item.key){
                 return next->item.value;
             }
@@ -100,7 +105,7 @@ public:
                     return NOT_FOUND;
                 }
             }
-            else {    // mensi
+            else{        // mensi
                 if (next->lower != nullptr){
                     next = next->lower;
                 }
@@ -108,7 +113,7 @@ public:
                     return NOT_FOUND;
                 }
             }
-        }
+        } while (1);
     }
 };
 
@@ -229,6 +234,13 @@ int main(int argc, char** argv){
      * nasledujici radek
      */
     Tree t(items);
+    bool yon;
+    if (items.empty()){
+        yon = false;
+    }
+    else {
+        yon = true;
+    }
    // t.CreateBinaryTree(items);
     cout<<"Binarni vyhledavaci strom"<<endl;
     cout<<"-------------------------"<<endl;
@@ -237,7 +249,7 @@ int main(int argc, char** argv){
          * vami vytvorene funkce pro vyhledavani v binarnim stromu,
          * predejte ji parametr x obsahujici cele cislo k vyhledani.
          */
-        cout << x << " - " << t.SearchItem(x) << endl;
+        cout << x << " - " << t.SearchItem(x, yon) << endl;
     }
     sort(items.begin(), items.end());
     cout<<endl;

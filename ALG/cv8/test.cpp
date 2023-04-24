@@ -3,9 +3,12 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+
 using namespace std;
+
 ///Konstanta s retezcem vypisovanym, pokud polozka nebyla v ciselniku
 const string NOT_FOUND = "Neexistujici polozka";
+
 /**
  * Reprezentace jedne polozky v ciselniku
  */
@@ -21,16 +24,29 @@ struct Item {
         return (key<a.key);
     }
 };
+
 class Tree{
 public:
     Item item;
     Tree* lower = NULL;
     Tree* higher = NULL;
+
     Tree(Item itm){
         this->item = itm;
     }
+    ~Tree() {
+        // Delete child nodes recursively
+        if (lower != nullptr) {
+            delete lower;
+        }
+        if (higher != nullptr) {
+            delete higher;
+        }
+    }
+
     void CreateLeafs(Item currentItem, Tree* tree){
         int intree = tree->item.key;
+
         if (currentItem.key > intree ){         // vetsi
             if (tree->higher == NULL){
                 Tree* higher_child = new Tree( currentItem );
@@ -50,33 +66,36 @@ public:
             }
         }
     }
-    void CreateBinaryTree(vector<Item> &items){
+
+    void CreateBinaryTree(vector<Item> &items, Tree* tree){
         if ( items.empty() ){
             return;
         }
         long unsigned int i = 1;
         while (i < items.size() ){
-            this->CreateLeafs(items[i], this);
+            Item current = items[i];
+            this->CreateLeafs(current, tree);
             i++;
         }
     }
+
     string SearchItem(int index, Tree* tree){
-        if (index == tree->item.key){
+        int intree = tree->item.key;
+
+        if (index == intree){
             return tree->item.value;
         }
-        else if (index > tree->item.key ){         // vetsi
+        else if (index > intree ){         // vetsi
             if (tree->higher != NULL){
-                Tree* hiTree = this->higher;
-                return SearchItem(index, hiTree);
+                return SearchItem(index, tree->higher);
             }
             else {
                 return NOT_FOUND;
             }
         }
-        else if( index < tree->item.key ){    // mensi
+        else if( index < intree ){    // mensi
             if (tree->lower != NULL){
-                Tree* loTree = this->lower;
-                return SearchItem(index, loTree);
+                return SearchItem(index, tree->lower);
             }
             else {
                 return NOT_FOUND;
@@ -84,7 +103,10 @@ public:
         }
         return NOT_FOUND;
     }
+
+
 };
+
 /**
  * Nacteni vstupniho souboru ciselniku do vektoru polozek reprezentovanych
  * strukturami Item, kazda polozka ma celociselny klic (identifikator) 
@@ -101,6 +123,7 @@ vector<Item> read_items(string name){
     infile.open(name); 
     vector<Item> items;
     Item it;
+
     if(!infile.is_open()){
         cerr << "File could not be opened" << endl;
         exit(-1);
@@ -116,6 +139,7 @@ vector<Item> read_items(string name){
     return items;
     
 }    
+
 /**
  * Nacteni seznamu klicu ze souboru do vektoru celociselnych hodnot.
  * V souboru mohou byt cisla oddelena libovolnymi bilymi znaky.
@@ -129,6 +153,7 @@ vector<int> read_queries(string name){
     infile.open(name); 
     vector<int> queries;
     int i;
+
     if(!infile.is_open()){
         cerr << "File could not be opened" << endl;
         exit(-1);
@@ -142,6 +167,7 @@ vector<int> read_queries(string name){
     return queries;
     
 }    
+
 /**
  * Funkce, ktera pomoci binarniho vyhledavaní (neboli
  * vyhledavani pulenim intervalu) najde v ciselniku nactenem
@@ -158,11 +184,13 @@ string findItem(vector<Item> &items, int k) {
     int min = 0;                // min                  12
     int max = items.size();     // max             0 18 9, 10 18 14, 10 13 12
     int middle;                 // middle
+
     if ( items.empty() ){
         return NOT_FOUND;
     }
     while ( min <= max ){
         middle = (min+max)/2;
+
         if ( items[middle].key == k){
                 return items[middle].value;
         }
@@ -180,6 +208,7 @@ string findItem(vector<Item> &items, int k) {
 /*
 void CreateLeafs(Item currentItem, Tree* tree){
     int intree = tree->item.key;
+
     if (currentItem.key > intree ){         // vetsi
         if (tree->higher == NULL){
             tree->higher = new Tree();
@@ -199,6 +228,7 @@ void CreateLeafs(Item currentItem, Tree* tree){
         }
     }
 }
+
 void CreateBinaryTree(vector<Item> &items, Tree* tree){
     if ( items.empty() ){
         return;
@@ -212,8 +242,10 @@ void CreateBinaryTree(vector<Item> &items, Tree* tree){
         i++;
     }
 };
+
 string SearchItem(int index, Tree* tree){
     int intree = tree->item.key;
+
     if (index == intree){
         return tree->item.value;
     }
@@ -247,13 +279,15 @@ int main(int argc, char** argv){
     vector<int> queries;
     items = read_items(argv[1]);
     queries = read_queries(argv[2]);
+
     /* Nadefinujte si vlastni typ Tree, pokud to nebude trida
      * nebo nebudete mit konstruovani celeho stromu z vektrou 
      * items reseno pomoci konstruktoru dane tridy, upravte
      * nasledujici radek
      */
+
     Tree* t = new Tree(items[0]);
-    t->CreateBinaryTree(items);
+    t->CreateBinaryTree(items, t);
     cout<<"Binarni vyhledavaci strom"<<endl;
     cout<<"-------------------------"<<endl;
     for (int x:queries) {
