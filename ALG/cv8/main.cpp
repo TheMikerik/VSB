@@ -62,7 +62,7 @@ public:
                     intree = intree->higher;
                 }
             }
-            else if( currentItem.key < intree->item.key ){    // mensi
+            else {    // mensi
                 if (intree->lower == nullptr){
                     intree->lower = new Tree();
                     intree->lower->item = currentItem;
@@ -113,7 +113,8 @@ public:
                     return NOT_FOUND;
                 }
             }
-        } while (1);
+        } while (next != nullptr);
+        return NOT_FOUND;
     }
 };
 
@@ -195,9 +196,9 @@ string findItem(vector<Item> &items, int k) {
         return NOT_FOUND;
     }
 
-    int min = 0;                // min                  12
-    int max = items.size();     // max             0 18 9, 10 18 14, 10 13 12
-    int middle;                 // middle
+    int min = 0;                  // min             0  
+    int max = items.size()-1;     // max             1
+    int middle;                   // middle
 
     while ( min <= max ){
         middle = (min+max)/2;
@@ -209,7 +210,7 @@ string findItem(vector<Item> &items, int k) {
             if ( items[middle].key > k ){
                 max = middle-1;
             }
-            else if ( items[middle].key < k ){
+            else{
                 min = middle+1;
             }
         }
