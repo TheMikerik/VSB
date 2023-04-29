@@ -2,13 +2,14 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <algorithm> 
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
-struct Item {
+struct Item
+{
     int key;
     string value;
 };
@@ -18,162 +19,175 @@ int swapCount;
 
 /**
  * Nacteni vstupniho souboru ciselniku do vektoru polozek reprezentovanych
- * strukturami Item, kazda polozka ma celociselny klic (identifikator) 
+ * strukturami Item, kazda polozka ma celociselny klic (identifikator)
  * a retezcovou hodnotu (nazev)
- * V souboru se ceka kazda polozka na samostatnem radku, na zacatku je 
+ * V souboru se ceka kazda polozka na samostatnem radku, na zacatku je
  * klic mezerou oddeleny od hodnoty, ta je potom az do konce radku.
  *
  * @param name Jmeno souboru, ze ktereho se polozky budou nacitat
  * @return Vektor vsech polozek nactenych ze souboru
  */
-vector<Item> read_items(string name){
-    
-    ifstream infile; 
-    infile.open(name); 
+vector<Item> read_items(string name)
+{
+
+    ifstream infile;
+    infile.open(name);
     vector<Item> items;
     Item it;
 
-    if(!infile.is_open()){
+    if (!infile.is_open())
+    {
         cerr << "File could not be opened" << endl;
         exit(-1);
     }
-    
-    while (!infile.eof()) {
+
+    while (!infile.eof())
+    {
         infile >> it.key;
-        if ( (infile.rdstate() & std::ifstream::failbit ) != 0 )
+        if ((infile.rdstate() & std::ifstream::failbit) != 0)
             continue;
         infile.ignore(256, ' ');
-        getline(infile,it.value);
+        getline(infile, it.value);
         items.push_back(it);
     }
     infile.close();
     return items;
-    
-}    
+}
 
-
-
-void SwapItems(vector<Item> &items, int from, int to){
+void SwapItems(vector<Item> &items, int from, int to)
+{
     Item tmp = items[to];
     items[to] = items[from];
     items[from] = tmp;
+
+    swapCount++;
 }
-/*
-    Pivot(A[l..r])
-    s := l
-    pivot := A[l]
+int FindMedian(vector<Item> &items, int l, int r){
+    if (r - l < 3){
+        return l;
+    }
+    else{
+        int first = items[l].key;
+        int middle = items[(l + r) / 2].key;
+        int last = items[r].key;
 
-    pro hodnoty i od l+1 do r
-        pokud A[i] < pivot
-        s:=s+1
-        prehod items[s] a items[i]
-    prehod items[s] a items[l]
-    vrat s
-*/
-int First(vector<Item> &items, int l, int r) {
-    int s = l; 
-    int pivot = items[l].key;
-
-    for (int i = l; i < r; i++ ){
-        if (items[i].key < pivot){
-            s++;
-            SwapItems(items, s, i);
+        if ((first < middle && middle < last) || (last < middle && middle < first)){
+            return (l + r) / 2;
+        }
+        else if ((middle < first && first < last) || (last < first && first < middle)){
+            return l;
+        }
+        else{
+            return r;
         }
     }
-    SwapItems(items, s+1, r);
-    return s+1;
 }
 
-int Random(vector<Item> &items, int l, int r) {
-    int s = l; 
-    int pivot = l +(rand() % r);
-
-    for (int i = l; i < r; i++ ){
-        if (items[i].key < pivot){
-            s++;
-            SwapItems(items, s, i);
-        }
-    }
-    SwapItems(items, s+1, r);
-    return s+1;
-}
-
-int Median(vector<Item> &items, int l, int r) {
-    int s = l;
-    int pivot;
-    int first = items[l].key;
-    int middle = items[(l+r)/2].key;
-    int last = items[r].key;
-    if (first < middle && middle < last){
-        pivot = middle;
-    }
-    if (middle < last && last < first){
-        pivot = last;
-    }
-    if (last < first && first < middle){
-        pivot = first;
-    }
-
-
-    for (int i = l; i < r; i++ ){
-        if (items[i].key < pivot){
-            s++;
-            SwapItems(items, s, i);
-        }
-    }
-    SwapItems(items, s+1, r);
-    return s+1;
-}
-
-
-void Quicksort(vector<Item> &items, int l, int r, int (* pivot)(vector<Item>&, int, int)) {
-    if ( items.size() < 2){
-        return;
-    }
-    if ( l < r ){
-        int pozice = pivot(items, l, r);
-        Quicksort(items, l, pozice+1, pivot);
-        Quicksort(items, pozice-1, r, pivot);
-    }
-    return;
-}
-
-
-
-int main(int argc, char** argv)
+int First(vector<Item> &items, int l, int r)
 {
-    if(argc < 2){
+    int pivot = items[l].key;
+    int i = l;
+
+    for (int j = l+1; j <= r; j++ )
+    {
+        if (items[j].key < pivot){
+            i++;
+            SwapItems(items, j, i);
+        }
+        comparisonCount++;
+    }
+    SwapItems(items, i, l);
+    return i;
+}
+
+int Random(vector<Item> &items, int l, int r)
+{
+    int random = l + (rand() % (r - l + 1));
+    int pivot = items[random].key;
+    SwapItems(items, l, random);
+    int i = l;
+
+    for (int j = l+1; j <= r; j++ )
+    {
+        if (items[j].key < pivot){
+            i++;
+            SwapItems(items, j, i);
+        }
+        comparisonCount++;
+    }
+    SwapItems(items, i, l);
+    return i;
+}
+
+int Median(vector<Item> &items, int l, int r)
+{
+    int median = FindMedian(items, l, r); 
+    int pivot = items[median].key;
+    
+    SwapItems(items, l, median);
+    int i = l;
+
+    for (int j = l+1; j <= r; j++ )
+    {
+        if (items[j].key < pivot){
+            i++;
+            SwapItems(items, j, i);
+        }
+        comparisonCount++;
+    }
+    SwapItems(items, i, l);
+    return i;
+}
+
+void Quicksort(vector<Item> &items, int l, int r, int (*pivot)(vector<Item> &, int, int))
+{
+    if (l < r)
+    {
+        int mid = pivot(items, l, r);
+        Quicksort(items, l, mid - 1, pivot);
+        Quicksort(items, mid + 1, r, pivot);
+    }
+}
+
+
+int main(int argc, char **argv)
+{
+    if (argc < 2)
+    {
         cerr << "Missing arguments" << endl;
         exit(-1);
     }
     std::srand(std::time(nullptr));
-    
+
     vector<Item> items;
     items = read_items(argv[1]);
     vector<Item> items2 = items;
     vector<Item> items3 = items;
-    
+
     comparisonCount = swapCount = 0;
-    Quicksort(items, 0, items.size()-1, First);
-    cerr << "First: " << comparisonCount << " porovnani, " << swapCount << " prohozeni"<<endl;
-    
+    Quicksort(items, 0, items.size() - 1, First);
+    cerr << "First: " << comparisonCount << " porovnani, " << swapCount << " prohozeni" << endl;
+
     comparisonCount = swapCount = 0;
-    Quicksort(items2, 0, items2.size()-1, Random);
-    cerr << "Random: " << comparisonCount << " porovnani, " << swapCount << " prohozeni"<<endl;
-    
+    Quicksort(items2, 0, items2.size() - 1, Random);
+    cerr << "Random: " << comparisonCount << " porovnani, " << swapCount << " prohozeni" << endl;
+
     comparisonCount = swapCount = 0;
-    Quicksort(items3, 0, items2.size()-1, Median);
-    cerr << "Median: " << comparisonCount << " porovnani, " << swapCount << " prohozeni"<<endl;
-    
-    for (unsigned long i = 0; i < items.size(); i++) {
-        if(items[i].key == items2[i].key && items[i].key == items3[i].key){
+    Quicksort(items3, 0, items3.size() - 1, Median);
+    cerr << "Median: " << comparisonCount << " porovnani, " << swapCount << " prohozeni" << endl;
+
+    for (unsigned long i = 0; i < items.size(); i++)
+    {
+        if (items[i].key == items2[i].key && items[i].key == items3[i].key)
+        {
             cout << items[i].key << " " << items[i].value << endl;
         }
-        else {
-            cout << "Vysledky serazeni se lisi"<<endl;
+        else
+        {
+            cout << "Vysledky serazeni se lisi" << endl;
             return 0;
         }
     }
-    
+
     return 1;
 }
