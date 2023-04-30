@@ -1,18 +1,19 @@
 #pragma once
-
-#include "graph.h"
+#include "loadGraph.h"
 
 class DFS{
+    private:
         Graph graph;
-
-        int noNodes;
+        int numberOfComponents;
+        std::vector<Node *> startingComponents;
+        bool isEnd;
     public:
         DFS(Graph gra);
-        ~DFS();
-
-        std::vector<int> Reset(Graph testGraph);   //Vrati pocatecni hodnoty v kazde komponente
-        /*
-        void Next();
-        void IsEnd();
-        void CurrentKey();*/
+        void PrintInfo();
+        void ResetStatuses();
+        
+        void Reset(Graph testGrap);
+        void CurrentKey(int id);
+        bool IsEnd(std::stack<Node *> st);
+        void DoDFS();
 };
