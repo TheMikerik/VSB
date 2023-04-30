@@ -26,7 +26,7 @@ int GetNodeCount(std::string filename){
     for(int i=0; i<lines; i++){
         infile >> from >> to;
         
-        for (int j=0; j<isPart.size(); j++){
+        for (std::vector<int>::size_type j=0; j<isPart.size(); j++){
             if ( isPart[j] == from ){
                 checkFrom = true;
             }

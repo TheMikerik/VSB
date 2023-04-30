@@ -18,8 +18,11 @@ using namespace std;
  */
 struct Node {
     vector<Node *> neighbors;  ///< Vektor ukazetelu na sousedni vrcholy
-    int id;
-
+    int id; ///< Identifikacni cislo vrcholu
+    
+	// Muzete si pridat dalsi polozky, ktere se budou hodit pro reseni ulohy
+	// Pokud je chcete mit inicializovane na stejnou hodnotu, staci inicializovat zde, napr.:
+	// int tmp = -1;
     string isChecked = N;
     int distance = 0;
 };
