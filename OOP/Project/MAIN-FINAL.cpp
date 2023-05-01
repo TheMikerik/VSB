@@ -9,6 +9,7 @@
 #include "Menu.cpp"
 #include "Pizzeria.h"
 #include "Pizzeria.cpp"
+#include "AbstractEmoloyee.h"
 #include "Employee.h"
 #include "Employee.cpp"
 #include "Delivery.h"
@@ -48,6 +49,7 @@ int main (){
     pepe.StopProgram();
 //Employees print
     pepe.PrintEmployees();
+    pepe.TestVirtual();
 //Delivery and cook workers print
     pepe.PrintDelivery();
     pepe.PrintCook();
@@ -138,11 +140,9 @@ int main (){
     pepe.OrderForCustomer(3);
     pepe.OrderForCustomer(2);
     pepe.OrderForCustomer(1);
-    pepe.OrderForCustomer(2);
     pepe.IntroducePizzeria();
     pepe.menu.PrintWholeMenu();
     pepe.StopProgram();
-
 
     std::cout << "Thats the very end of this project.\n\n" << std::endl;
     return 0;

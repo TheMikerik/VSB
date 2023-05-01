@@ -1,12 +1,12 @@
-#include <string>
-#include <iostream>
-
 #include "Employee.h"
+#include "AbstractEmoloyee.h"
 
 Employee::Employee(std::string nam, bool cook, bool drive){
     this->name = nam;
     this->can_cook = cook;
     this->can_drive = drive;
+
+    this->position = "Unselected";
 }
 Employee::~Employee(){
 }
@@ -39,6 +39,9 @@ bool Employee::CanDrive(){
     return can_drive;
 }
 
+void Employee::EmployeeInfo(){
+    std::cout << "This employee's name is " << this->name << " and his position is " << this->position << "." << std::endl;
+}
 
 void Employee::CalculateSalary(){
     float tmp_salary = this->salary;

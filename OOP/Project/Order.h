@@ -25,5 +25,9 @@ public:
 
     void AddPizza(Pizza* pizza);
     void AddDrink(Drink* drink);
+    int GetPizzasInOrder();
+    int GetDrinksInOrder();
+    Pizza* GetPizza(int index);
+    Drink* GetDrink(int index);
     int GetOrderID();
 };

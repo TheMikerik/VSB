@@ -113,6 +113,24 @@ Pizza* Menu::GetPizza(int id){
     std::cout << "     This pizza was already deleted" << std::endl;
     return nullptr;
 }
+bool Menu::DrinkExist(int id){
+    bool existence = false;
+    for (int i=0; i<this->drinks_count; i++){
+        if ( drinks[i]->GetDrinkID() == id ){
+            existence = true;
+        }
+    }
+    return existence;
+}
+bool Menu::PizzaExist(int id){
+    bool existence = false;
+    for (int i=0; i<this->pizzas_count; i++){
+        if ( pizzas[i]->GetPizzaID() == id ){
+            existence = true;
+        }
+    }
+    return existence;
+}
 bool Menu::SeekDrinkName(std::string nam){
     for (int i=0; i<this->drinks_count; i++){
         if ( drinks[i]->GetDrinkName() == nam ){

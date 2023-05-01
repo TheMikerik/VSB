@@ -29,6 +29,8 @@ public:
 
     Drink* GetDrink(int id);
     Pizza* GetPizza(int id);
+    bool DrinkExist(int id);
+    bool PizzaExist(int id);
     bool SeekDrinkName(std::string nam);
     bool SeekPizzaName(std::string nam);
     int GetDrinksCount();

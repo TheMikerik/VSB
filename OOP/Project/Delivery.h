@@ -1,9 +1,7 @@
 #pragma once
-#include <string>
-#include <iostream>
 #include "Employee.h"
 
-class Delivery : public Employee {
+class Delivery : public Employee{
 private:
     int gas_money;
     int orders_delivered;
@@ -13,6 +11,8 @@ public:
 
     int GetGasMoney();
     int GetOrdersDelivered();
+
+    virtual void EmployeeInfo();
 
     void CalculateGasMoney();
 };

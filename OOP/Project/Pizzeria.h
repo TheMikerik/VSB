@@ -67,4 +67,9 @@ public:
     void Deletion();
     void StopProgram();
     void MakeSpace();
+
+    bool EmplExist(int ID);
+    bool DrinkExist(int ID);
+    bool PizzaExist(int ID);
+    void TestVirtual();
 };

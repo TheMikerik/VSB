@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include <iostream>
+
 #include "Employee.h"
 
 class Cook : public Employee{
@@ -9,6 +8,8 @@ private:
 public:
     Cook(std::string nam, bool cook, bool drive);
     ~Cook();
+
+    virtual void EmployeeInfo();
 
     int GetPizzasMade();
 };  

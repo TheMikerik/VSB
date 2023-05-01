@@ -137,22 +137,50 @@ void Pizzeria::OrderForCustomer(int cust_id){
     std::cout <<"     ";
     std::cin >> input;
     while (input != -1){
-        index = ((this->GetCustomer(cust_id)->GetOrdersCount()) - 1 );
+        if (!this->menu.PizzaExist(input)){
+            std::cout << "     This pizza doesnt exist!" << std::endl;
+        }
+        else{
+            index = ((this->GetCustomer(cust_id)->GetOrdersCount()) -1);
+            std::cout <<"     ";
+            this->GetCustomer(cust_id)->GetOrder(index)->AddPizza(this->menu.GetPizza(input));
+        }
         std::cout <<"     ";
-        this->GetCustomer(cust_id)->GetOrder(index)->AddPizza(this->menu.GetPizza(input));
-        std::cout <<"     ";
-        std::cin >> input;     
+        std::cin >> input;
     }
     input = 0;
     std::cout << "Type drinks ID that you want to put into order ('-1' for exit)" << std::endl;
     std::cout <<"     ";
     std::cin >> input;
     while (input != -1){
-        std::cout <<"     ";
-        this->GetCustomer(cust_id)->GetOrder(index)->AddDrink(this->menu.GetDrink(input));
+        if (!this->menu.DrinkExist(input)){
+            std::cout << "     This drink doesnt exist!" << std::endl;
+        }
+        else{
+            std::cout <<"     ";
+            this->GetCustomer(cust_id)->GetOrder(index)->AddDrink(this->menu.GetDrink(input));
+        }
         std::cout <<"     ";
         std::cin >> input;
     }
+
+    index = this->GetCustomer(cust_id)->GetOrdersCount() - 1;
+
+    Order* current = this->GetCustomer(cust_id)->GetOrder(index);
+    if ( current->GetDrinksInOrder() >= 0 && current->GetPizzasInOrder() >= 0){
+        std::cout << "\nOrder owerview:" <<std::endl;
+        if (current->GetPizzasInOrder() > 0){
+            for (int i=1; i<current->GetPizzasInOrder()+1; i++){
+                std::cout << "     "<< i << ". pizza is: " << current->GetPizza(i-1)->GetPizzaName() << std::endl;
+            }
+        }
+        if (current->GetDrinksInOrder() > 0){
+            for (int i=1; i<current->GetDrinksInOrder()+1; i++){
+                std::cout << "     "<< i << ". drink is: " << current->GetDrink(i-1)->GetDrinkName() << std::endl;
+            }
+        }
+    }
+
     this->MakeSpace();
 }
 void Pizzeria::AddCustomer(std::string nam, std::string addrs){
@@ -347,4 +375,32 @@ void Pizzeria::StopProgram(){
 }
 void Pizzeria::MakeSpace(){
     std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+}
+
+bool Pizzeria::EmplExist(int ID){
+    bool existence = false;
+
+    for (int i=0; i<employee_count; i++){
+        if (employees[i]->GetID() == ID){
+            existence = true;
+        }
+    }
+
+    return existence;
+}
+void Pizzeria::TestVirtual(){
+    int input;
+    std::cout << "\nLets print basic info of some workers\nType ID of the worker that you wanna check:     (type '-1' to stop)" << std::endl;
+    std::cout <<"     ";
+    std::cin >> input;
+    while ( input != -1){
+        if (!this->EmplExist(input)){
+            std::cout << "     This employee doesnt exist!" << std::endl;
+        }
+        else {
+            this->GetEmployee(input)->EmployeeInfo();
+        }
+        std::cout <<"     ";
+        std::cin >> input;
+    }
 }

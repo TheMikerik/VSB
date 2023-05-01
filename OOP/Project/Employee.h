@@ -1,10 +1,9 @@
 #pragma once
-#include <string>
-#include <iostream>
 
-class Employee{
+#include "AbstractEmoloyee.h"
+
+class Employee : public AbstractEmployee{
 private:
-    std::string name;
     bool can_cook;
     bool can_drive;
     int empl_ID;
@@ -12,6 +11,8 @@ private:
     int hours_worked;
     int years_worked;
     int salary;
+protected:
+    std::string position;
 public:
     Employee(std::string nam, bool cook, bool drive);
     ~Employee();
@@ -25,6 +26,8 @@ public:
     int GetSalary();
     bool CanCook();
     bool CanDrive();
+
+    virtual void EmployeeInfo();
 
     void CalculateSalary();
     bool CanChangePosition();
