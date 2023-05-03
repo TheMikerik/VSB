@@ -47,6 +47,20 @@ Pizzeria::Pizzeria(std::string nam, int tel, std::string web){
     this->ids_count = 0;
     this->total_orders = 0;
 }
+Pizzeria::~Pizzeria(){
+    for (int i=0; i<this->customer_count; i++){
+        delete customers[i];
+    }
+    for (int i=0; i<this->delivery_count; i++){
+        delete deliveries[i];
+    }
+    for (int i=0; i<this->cook_count; i++){
+        delete cooks[i];
+    }
+    for (int i=0; i<this->employee_count; i++){
+        delete employees[i];
+    }
+}
 
 std::string Pizzeria::GetPizzeriaName(){
     return this->name;

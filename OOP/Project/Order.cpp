@@ -13,6 +13,12 @@ Order::Order(){
     static_order_ID++;
 }
 Order::~Order(){
+    for (int i=0; i<this->pizzas_in_order; i++){
+        delete ordered_pizzas[i];
+    }
+    for (int i=0; i<this->drinks_in_order; i++){
+        delete ordered_drinks[i];
+    }
 }
 
 void Order::AddPizza(Pizza* pizza){

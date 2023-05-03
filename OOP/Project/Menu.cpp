@@ -11,6 +11,12 @@ Menu::Menu(){
     this->pizzas_count = 0;
 }
 Menu::~Menu(){
+    for (int i=0; i<this->drinks_count; i++){
+        delete drinks[i];
+    }
+    for (int i=0; i<this->pizzas_count; i++){
+        delete pizzas[i];
+    }
 }
 
 

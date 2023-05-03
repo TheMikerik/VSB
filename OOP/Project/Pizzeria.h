@@ -35,6 +35,7 @@ public:
     Pizzeria(std::string nam, int tel);
     Pizzeria(std::string nam, std::string web);
     Pizzeria(std::string nam, int tel, std::string web);
+    ~Pizzeria();
 
     Menu menu;
 
