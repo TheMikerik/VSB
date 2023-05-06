@@ -10,11 +10,11 @@ Cook::Cook(std::string nam, bool cook, bool drive):Employee(nam, cook, drive){
 Cook::~Cook(){
 }
 
-int Cook::GetPizzasMade(){
-    return this->pizzas_made;
-}
-
 void Cook::EmployeeInfo(){
     std::cout << "This employee's name is " << this->name << " and his position is " << this->position << "." << std::endl;
     std::cout << "This employee made " << this->pizzas_made << " pizzas this month" << std::endl;
+}
+
+int Cook::GetPizzasMade(){
+    return this->pizzas_made;
 }
