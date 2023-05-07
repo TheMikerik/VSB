@@ -17,6 +17,7 @@ struct Point {
     string name; ///< Nazev
 };
 
+
 /**
  * Operator porovnani dvou bodu
  * 
@@ -30,6 +31,7 @@ inline bool operator==(const Point& lhs, const Point& rhs)
     return lhs.x == rhs.x &&
         lhs.y == rhs.y;
 }
+
 
 /**
  * Rozdil dvou bodu (lze pouzit pro vypocet vektoru v rovine)
@@ -48,6 +50,7 @@ Point operator-(const Point& lhs, const Point& rhs)
     return ret;
 }
 
+
 /**
  * Porovnani dvou bodu. Za mensi je povazovan ten s mensi x-ovou souradnici.
  * Je-li x-ova souradnice stejna, je mensi ten s mensi y-ovou souradnici.
@@ -62,6 +65,7 @@ bool compare(Point a, Point b) {
     return (a.x < b.x);
 }
 
+
 /**
  * Funkce pocitajici vzdalenost dvou bodu v rovine
  *
@@ -70,8 +74,13 @@ bool compare(Point a, Point b) {
  * @return Vzdalenost mezi body a,b
  */
 double dist2(Point a, Point b) {
-    double dist = pow(a.x, 2) + pow (a.y, 2);
+    double dist = pow(a.x - b.x, 2) + pow (a.y - b.y, 2);
+    dist = sqrt(dist);
+
+    return dist;
 }
+
+
 
 /**
  * Funkce pocitajici determinant matice
@@ -93,6 +102,8 @@ int det(Point a, Point b, Point c) {
     return a.x*b.y + c.x*a.y + b.x*c.y - c.x*b.y - b.x*a.y - a.x*c.y;
 }
 
+
+
 /**
  * Funkce pocitajici vzdalenost bodu c od primky prochazejici body a,b.
  * 
@@ -102,9 +113,16 @@ int det(Point a, Point b, Point c) {
  * @return Vzdalenost bodu c od primky spojujici body a,b
  */
 double dist3(Point a, Point b, Point c) {
-  //V případě použití doplnit kód
-}
+    double distance = det(a, b, c) / dist2(a, b);
+
+    if (distance < 0){
+        distance *= -1;
+    }
     
+    return distance;
+}
+
+
 /**
  * Nacteni vstupniho souboru se souradnicemi bodu do vektoru polozek 
  * reprezentovanych strukturami Point. Kazdy bod ma krome dvou celociselnych
@@ -136,6 +154,7 @@ vector<Point> readItems(string fileName) {
     return points;
 }
 
+
 /*
 FindHull(S, P, Q)
     ConvexHull := {}
@@ -150,7 +169,46 @@ FindHull(S, P, Q)
     Vrať ConvexHull
 */
 vector<Point> Findhull(vector<Point> points, Point A, Point B){
+    vector<Point> convexHull;
 
+    if (points.empty()) {
+        return convexHull;
+    }
+
+    double maxDist = -1;
+    Point C;
+
+    for (vector<Point>::size_type i=0; i<points.size(); i++){
+        double dist = dist3(A, B, points[i]);
+        if (dist > maxDist){
+            maxDist = dist;
+            C = points[i];
+        }
+    }
+
+    vector<Point> pointsL;
+    vector<Point> pointsR;
+
+    for (vector<Point>::size_type i=0; i<points.size(); i++){
+        int determinant = det(A, C, points[i]);
+        if (determinant > 0) {
+            pointsL.push_back(points[i]);
+        } else {
+            determinant = det(C, B, points[i]);
+            if (determinant > 0) {
+                pointsR.push_back(points[i]);
+            }
+        }
+    }
+
+    vector<Point> convLeft = Findhull(pointsL, A, C);
+    vector<Point> convRight = Findhull(pointsR, C, B);
+
+    convexHull.insert(convexHull.end(), convLeft.begin(), convLeft.end());
+    convexHull.insert(convexHull.end(), convRight.begin(), convRight.end());
+    convexHull.push_back(C);
+
+    return convexHull;
 }
 
 
@@ -179,8 +237,8 @@ vector<Point> Findhull(vector<Point> points, Point A, Point B){
     Vrať ConvexHull
 */
 vector<Point> QuickHull(vector<Point> points) {
-  //Doplnit kód
     vector<Point> convexHull;
+
     Point leftmost = points[0];
     Point rightmost = points[points.size()-1];
     convexHull.push_back(leftmost);
@@ -188,11 +246,24 @@ vector<Point> QuickHull(vector<Point> points) {
 
     vector<Point> pointsL;
     vector<Point> pointsR;
+    for (vector<Point>::size_type i=0; i<points.size(); i++){
+        int determinant = det(leftmost, rightmost, points[i]);
+        if (determinant > 0) {
+            pointsL.push_back(points[i]);
+        } else if (determinant < 0) {
+            pointsR.push_back(points[i]);
+        }
+    }
 
+    vector<Point> convLeft = Findhull(pointsL, leftmost, rightmost);
+    vector<Point> convRight = Findhull(pointsR, rightmost, leftmost);
+
+    convexHull.insert(convexHull.end(), convLeft.begin(), convLeft.end());
+    convexHull.insert(convexHull.end(), convRight.begin(), convRight.end());
     
-
     return convexHull;
 }
+
 
 int main(int argc, char** argv)
 {
