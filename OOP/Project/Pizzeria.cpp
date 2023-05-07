@@ -47,6 +47,7 @@ Pizzeria::Pizzeria(std::string nam, int tel, std::string web){
     this->ids_count = 0;
     this->total_orders = 0;
 }
+Pizzeria::~Pizzeria(){}
 
 std::string Pizzeria::GetPizzeriaName(){
     return this->name;
@@ -294,7 +295,6 @@ void Pizzeria::ShiftOrderEmplo(int empl_id){
     }
 }
 void Pizzeria::ShiftOrderCook(int empl_id){
-    //this->ShiftOrderEmplo(empl_id);
 
     int i = this->GetCookIndex(empl_id);   
     this->GetCook(empl_id)->~Cook();
@@ -309,7 +309,6 @@ void Pizzeria::ShiftOrderCook(int empl_id){
     this->cook_count--;
 }
 void Pizzeria::ShiftOrderDeliv(int empl_id){
-    //this->ShiftOrderEmplo(empl_id);
 
     int i = this->GetDeliveryIndex(empl_id);   
     this->GetDelivery(empl_id)->~Delivery();
@@ -402,5 +401,29 @@ void Pizzeria::TestVirtual(){
         }
         std::cout <<"     ";
         std::cin >> input;
+    }
+}
+
+void Pizzeria::TestPolym(){
+    int count = this->employee_count;
+    Employee* polymorphism[count];
+
+    std::cout << "Lets test polymorphism:" << std::endl;
+
+    int i = 0;
+    for (i; i<this->delivery_count; i++){
+        polymorphism[i] = this->deliveries[i];
+    }
+    std::cout << "     " << i << ". deliveries were added into polymorphism variable." << std::endl;
+    int j=0;
+    for (j; j<this->cook_count; j++){
+        polymorphism[i] = this->cooks[j];
+        i++;
+    }
+    std::cout << "     " << j << ". cooks were added into polymorphism variable.\n\n" << std::endl;
+
+    std::cout << "Lets test print every employee stored in polymorphism array:\n\n" << std::endl;
+    for (i=0; i<this->employee_count; i++){
+        polymorphism[i]->EmployeeInfo();
     }
 }

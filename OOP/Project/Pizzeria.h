@@ -57,6 +57,7 @@ public:
      * @param web Website of the pizzeria
     */
     Pizzeria(std::string nam, int tel, std::string web);
+    ~Pizzeria();
 
     /**
      * @return Pizzeria's name
@@ -234,4 +235,9 @@ public:
      * @brief Tests of the virtual methods
     */
     void TestVirtual();
+
+    /**
+     * @brief Testing of the polymorphism
+    */
+    void TestPolym();
 };

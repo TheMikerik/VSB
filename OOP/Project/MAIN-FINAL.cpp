@@ -143,6 +143,8 @@ int main (){
     pepe.IntroducePizzeria();
     pepe.menu.PrintWholeMenu();
     pepe.StopProgram();
+    pepe.TestPolym();
+    pepe.StopProgram();
 
     std::cout << "Thats the very end of this project.\n\n" << std::endl;
     return 0;

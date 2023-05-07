@@ -70,6 +70,7 @@
         "random": "cpp",
         "utility": "cpp",
         "numbers": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "iomanip": "cpp"
     }
 }
