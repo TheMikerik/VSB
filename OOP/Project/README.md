@@ -1,4 +1,4 @@
-# Pizzeria: Semestral Project (OOP)
+# Pizzeria: Semestral Project (OOP) - 2023
 ![Assignment](./src/assignment.png)
 
 
