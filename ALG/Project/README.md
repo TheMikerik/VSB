@@ -21,3 +21,6 @@ There is the graph visualization of the graphs used in this project:
 ![5th graph](/ALG/Project/Graphs_Visual/Graph5-visual.png)
 ![6th graph](/ALG/Project/Graphs_Visual/Graph6-visual.png)
 ![7th graph](/ALG/Project/Graphs_Visual/Graph7-visual.png)
+
+## Grading
+I managed to get 24 out of 30 pints for this after exhausting 15 misn intense code review.
