@@ -1,0 +1,16 @@
+5 + 8 -- Num a => a
+3 * 5 + 8 -- Num a => a
+2 + 4 -- Num a => a
+sqrt 16 -- Floating a => a -> a
+succ 6 -- Enum a => a -> a
+succ 7 -- Enum a => a -> a
+pred 9 -- Enum a => a -> a
+pred 8 -- Enum a => a -> a
+sin (pi / 2) -- Floating a => a -> a
+truncate pi -- (RealFrac a, Integral b) => a -> b
+round 3.5 -- (RealFrac a, Integral b) => a -> b
+round 3.4 -- (RealFrac a, Integral b) => a -> b
+floor 3.7 -- (RealFrac a, Integral b) => a -> b
+ceiling 3.3 -- (RealFrac a, Integral b) => a -> b
+mod 10 3 -- Integral a => a -> a -> a
+odd 3 -- Integral a => a -> bool
