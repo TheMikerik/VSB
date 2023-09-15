@@ -1,5 +1,5 @@
 # 3rd semester
 
 ## Pics
-![table](table-2.png)
-![info](info.png)
+![table](/3_semester/z_misc/table-2.png)
+![info](/3_semester/z_misc/info.png)
