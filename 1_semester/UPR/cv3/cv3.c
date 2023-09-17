@@ -1,14 +1,13 @@
 #include <stdio.h>
 
-void vypis() // Na začátku s můžu vypsat definice všech fcí
-void hvezdy()
+void vypis(); // Na začátku s můžu vypsat definice všech fcí
+void hvezdy();
 
 int main() // Definice bezparametrická fce -> parametrická je když má něco za ()
 {              // {} fce main je její deklarace
-    for (int i = 10; i > 0, i--)
-    {
+    for (int i = 10; i > 0; i--){
         hvezdy();
-    }
+     }
 }
 
 void vypis()
