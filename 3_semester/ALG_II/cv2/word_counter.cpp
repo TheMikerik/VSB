@@ -84,7 +84,7 @@ void print_final(vector<Word_Count> input){
 
 int main(){
     string path = "./words.txt";
-    
+
     CheckFile(path);
     vector<string> words = ScanWords(path);
     vector<Word_Count> counter;
