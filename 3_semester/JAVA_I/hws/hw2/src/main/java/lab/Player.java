@@ -8,12 +8,18 @@ import javafx.scene.transform.Transform;
 
 public class Player {
 
-	private static final double WIDTH = 15;
+	private static final double WIDTH = 20;
 	private static final double HEIGHT = 120;
-	private Point2D position;
+
+	protected Point2D position;
+	protected short direction = -1;
 	
 	public Player(Point2D position) {
 		this.position = position;
+	}
+
+	public void swap_direction(){
+		this.direction *= -1;
 	}
 
 	public void draw(GraphicsContext gc) {
@@ -26,6 +32,6 @@ public class Player {
 	
 	public void simulate(double deltaT) {
 		//do nothing yet
-		this.position = new Point2D(position.getX(), position.getY() + 1);
+		this.position = new Point2D(position.getX(), position.getY() + (direction * 2));
 	}
 }
