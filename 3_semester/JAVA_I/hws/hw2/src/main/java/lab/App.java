@@ -5,8 +5,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -14,11 +12,8 @@ import javafx.stage.WindowEvent;
  *  Class <b>App</b> - extends class Application and it is an entry point of the program
  * @author     Java I
  */
-
 public class App extends Application {
 
-	double x = 900;
-	double y = 500;
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -31,13 +26,13 @@ public class App extends Application {
 		try {
 			//Construct a main window with a canvas.  
 			Group root = new Group();
-			canvas = new Canvas(x, y);
+			canvas = new Canvas(800, 400);
 			root.getChildren().add(canvas);
-			Scene scene = new Scene(root, x, y, Color.BLACK);
+			Scene scene = new Scene(root, 800, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.resizableProperty().set(false);
-			primaryStage.setTitle("Java 1 - 1th laboratory");
+			primaryStage.setTitle("Java 1 - 2nd laboratory");
 			primaryStage.show();
 			
 			//Exit program when main window is closed
@@ -48,7 +43,6 @@ public class App extends Application {
 			e.printStackTrace();
 		}
 	}
-
 	@Override
 	public void stop() throws Exception {
 		timer.stop();
