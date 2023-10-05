@@ -49,10 +49,10 @@ vector<vector<double>> SwapMatrix(vector<vector<double>> matrix, vector<double> 
                 if(i == max_row_index || j<column){
                 }
                 else{
-                    matrix[i][j] -= ( matrix[max_row_index][column]*subtractor);
+                    matrix[i][j] -= (matrix[max_row_index][column]*subtractor);
                 }
-
                 cout << matrix[i][j] << "\t";
+
             }
             cout << endl;
         }
