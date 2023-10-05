@@ -32,6 +32,6 @@ public class Player {
 	
 	public void simulate(double deltaT) {
 		//do nothing yet
-		this.position = new Point2D(position.getX(), position.getY() + (direction * 2));
+		this.position = new Point2D(position.getX(), position.getY() + (direction * 0.5));
 	}
 }
