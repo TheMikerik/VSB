@@ -16,7 +16,6 @@ public class World {
 	public final double height;
 
 	private final int offset = 20;
-	private final double ball_size = 20;
 
 	private final Player player1;
 	private final Player player2;
@@ -31,9 +30,10 @@ public class World {
 
 		double player_height = 120;
 		double player_width = 20;
+		double ball_size = 20;
 
 		this.player1 = new Player(new Point2D(20, floor(height/3)), player_width, player_height);
-		this.player2 = new Player(new Point2D(width - 40, floor(height/3) * 2), player_width, player_height);
+		this.player2 = new Player(new Point2D(width - 40, offset+20), player_width, player_height);
 		this.ball = new Ball(new Point2D(40, 40), ball_size);
 
 		upper_barrier = new Rectangle2D(0,0, width, offset);
