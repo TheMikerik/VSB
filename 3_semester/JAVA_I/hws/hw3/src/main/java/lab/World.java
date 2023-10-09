@@ -14,8 +14,7 @@ public class World {
 
 	public final double width;
 	public final double height;
-
-	private final int offset = 20;
+	private final int offset;
 
 	private final Player player1;
 	private final Player player2;
@@ -23,10 +22,15 @@ public class World {
 
 	private final Rectangle2D upper_barrier;
 	private final Rectangle2D bottom_barrier;
+	private Rectangle2D player1_top;
+	private Rectangle2D player1_bottom;
+	private Rectangle2D player2_top;
+	private Rectangle2D player2_bottom;
 
 	public World(double width, double height) {
 		this.width = width;
 		this.height = height;
+		this.offset  = 20;
 
 		double player_height = 120;
 		double player_width = 20;
@@ -38,6 +42,12 @@ public class World {
 
 		upper_barrier = new Rectangle2D(0,0, width, offset);
 		bottom_barrier = new Rectangle2D(0,height-offset, width, offset);
+
+		player1_top = new Rectangle2D(player1.position.getX(), player1.position.getY(), 20, 5);
+		player1_bottom = new Rectangle2D(player1.position.getX(), player1.position.getY() + player_height, 20, 5);
+		player2_top = new Rectangle2D(player2.position.getX(), player2.position.getY(), 20, 5);
+		player2_bottom = new Rectangle2D(player2.position.getX(), player2.position.getY() + player_height, 20, 5);
+
 	}
 
 	public void generate_playboard(GraphicsContext gc, int score1, int score2){
@@ -89,10 +99,17 @@ public class World {
 		Rectangle2D player1_bb = this.player1.getBounding();
 		Rectangle2D player2_bb = this.player2.getBounding();
 
-		if ( ball.getBoundingBox().intersects(player1_bb) ){
+		if (ball.getBoundingBox().intersects(player1_top) ||
+				ball.getBoundingBox().intersects(player1_bottom) ||
+				ball.getBoundingBox().intersects(player2_top) ||
+				ball.getBoundingBox().intersects((player2_bottom))
+			) {
+			ball.swap_directionY();
+		}
+		else if ( ball.getBoundingBox().intersects(player1_bb) ){
 			ball.hit();
 		}
-		if ( ball.getBoundingBox().intersects(player2_bb) ){
+		else if ( ball.getBoundingBox().intersects(player2_bb) ){
 			ball.hit();
 		}
 	}
