@@ -30,6 +30,9 @@ Node* LeftRotate(Node* tree){       //  tree.left.left || tree.left.right
 
 Node* InsertValue(Node* tree, int val){
     if(tree == nullptr){
+        
+        // Tady rotace
+
         return new Node(val);
     }
 
@@ -40,6 +43,7 @@ Node* InsertValue(Node* tree, int val){
         tree->right = InsertValue(tree->right, val);
     }
 
+    
     return tree;
 }
 
