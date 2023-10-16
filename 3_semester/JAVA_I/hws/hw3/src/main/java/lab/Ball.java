@@ -9,7 +9,7 @@ public class Ball {
 	protected Point2D position;
 	protected short directionY = -1;
 	protected short directionX = 1;
-	protected double velocity = 1;
+	protected double velocity = 3;
 	protected double size;
 
 	public Ball(Point2D position, double sz) {
@@ -37,6 +37,7 @@ public class Ball {
 		position = new Point2D(
 				(x + world.width) % world.width,
 				(y + world.height) % world.height);
+		System.out.println(velocity);
 	}
 
 	protected Point2D getPosition() {
