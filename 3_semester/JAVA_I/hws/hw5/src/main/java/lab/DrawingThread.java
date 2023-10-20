@@ -11,9 +11,9 @@ public class DrawingThread extends AnimationTimer {
 	
 	private long lastTime;
 
-	public DrawingThread(Canvas canvas) {
+	public DrawingThread(Canvas canvas, World world) {
 		this.gc = canvas.getGraphicsContext2D();
-		this.world = new World(canvas.getWidth(), canvas.getHeight());
+		this.world = world;
 	}
 
 	/**

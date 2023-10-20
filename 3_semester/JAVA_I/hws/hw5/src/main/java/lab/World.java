@@ -26,10 +26,10 @@ public class World {
 		double ball_size = 20;
 
 		entities = new DrawableSimulable[]{
-				new Player(new Point2D(20, floor(height / 3)), player_width, player_height, this),
-				new Player(new Point2D(width - 40, offset + 20), player_width, player_height, this),
-                new Ball(new Point2D(40, 40), ball_size, this),
-				new Playground(this)
+		/*0*/		new Player(new Point2D(20, floor(height / 3)), player_width, player_height, this),
+		/*1*/		new Player(new Point2D(width - 40, offset + 20), player_width, player_height, this),
+		/*2*/       new Ball(new Point2D(40, 40), ball_size, this),
+		/*3*/		new Playground(this)
         };
 
 		upper_barrier = new Rectangle2D(0,0, width, offset);
@@ -49,6 +49,17 @@ public class World {
 
 	public void drawInternal(GraphicsContext gc){
 
+	}
+
+	public void move_player(int index, int dir){
+		for (DrawableSimulable entity : entities){
+			if(entity instanceof Player player){
+				if (player.player_index == index){
+					player.move(dir);
+				}
+
+			}
+		}
 	}
 
 	public void simulate(double deltaT) {

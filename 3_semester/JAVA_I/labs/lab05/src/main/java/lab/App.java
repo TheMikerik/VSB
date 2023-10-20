@@ -27,8 +27,7 @@ public class App extends Application {
 		try {
 			//Construct a main window with a canvas.
 
-			FXMLLoader loader = new FXMLLoader(
-					getClass().getResource("GameView.fxml")
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameView.fxml")
 			);
 			BorderPane pane = loader.load();
 //			loader.load();

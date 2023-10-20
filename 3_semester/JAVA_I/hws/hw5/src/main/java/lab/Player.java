@@ -12,6 +12,8 @@ public class Player implements Collisionable, DrawableSimulable {
 	double width;
 	double height;
 	protected Point2D position;
+	private static int player_counter = 0;
+	public int player_index;
 	protected short direction = -1;
 	private final World world;
 	
@@ -20,10 +22,17 @@ public class Player implements Collisionable, DrawableSimulable {
 		this.width = wdth;
 		this.height = hght;
 		this.world = wrld;
+		this.player_index = player_counter;
+
+		player_index++;
 	}
 
 	public void swap_direction(){
 		this.direction *= -1;
+	}
+
+	public void move(int dir){
+		this.position = new Point2D(position.getX(), position.getY() + (dir * 3));
 	}
 
 	@Override
@@ -40,7 +49,7 @@ public class Player implements Collisionable, DrawableSimulable {
 
 	@Override
 	public void simulate(double deltaT) {
-		this.position = new Point2D(position.getX(), position.getY() + (direction * 2));
+//		this.position = new Point2D(position.getX(), position.getY());
 	}
 
 	@Override
