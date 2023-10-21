@@ -12,28 +12,36 @@ public class Player implements Collisionable, DrawableSimulable {
 	double width;
 	double height;
 	protected Point2D position;
-	private static int player_counter = 0;
 	public int player_index;
 	protected short direction = -1;
 	private final World world;
 	
-	public Player(Point2D position, double wdth, double hght, World wrld) {
+	public Player(Point2D position, double wdth, double hght, World wrld, int index) {
 		this.position = position;
 		this.width = wdth;
 		this.height = hght;
 		this.world = wrld;
-		this.player_index = player_counter;
-
-		player_index++;
+		this.player_index = index;
 	}
 
 	public void swap_direction(){
 		this.direction *= -1;
 	}
 
-	public void move(int dir){
-		this.position = new Point2D(position.getX(), position.getY() + (dir * 3));
+	public void move(int dir) {
+		System.out.println("Player " + player_index + " is moving with direction: " + dir);
+
+		if(this.nextBoundingBox(dir).intersects(world.upper_barrier)){
+			this.position = new Point2D(position.getX(), world.offset);
+		}
+		else if(this.nextBoundingBox(dir).intersects(world.bottom_barrier)){
+			this.position = new Point2D(position.getX(), world.height - world.offset - world.player_height);
+		}
+		else {
+			this.position = new Point2D(position.getX(), position.getY() + (dir * 10));
+		}
 	}
+
 
 	@Override
 	public void draw(GraphicsContext gc) {
@@ -55,6 +63,10 @@ public class Player implements Collisionable, DrawableSimulable {
 	@Override
 	public Rectangle2D getBoundingBox(){
 		return new Rectangle2D(this.position.getX(), this.position.getY(), width, height);
+	}
+
+	public Rectangle2D nextBoundingBox(int dir){
+		return new Rectangle2D(this.position.getX(), this.position.getY() + (dir * 10), width, height);
 	}
 
 	@Override

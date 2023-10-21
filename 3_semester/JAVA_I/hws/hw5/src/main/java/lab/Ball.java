@@ -13,6 +13,7 @@ public class Ball implements DrawableSimulable, Collisionable  {
 	protected double size;
 	private final World world;
 
+
 	public Ball(Point2D position, double sz, World wrld) {
 		this.position = position;
 		this.size = sz;
@@ -39,7 +40,7 @@ public class Ball implements DrawableSimulable, Collisionable  {
 	public void simulate(double deltaT) {
 		double x = position.getX() + (directionX * 4) * velocity;
 		double y = position.getY() + (directionY * 5) * velocity;
-		position = new Point2D((x + 1200) % 1200, (y + 600) % 600);
+		position = new Point2D((x + this.world.width) % this.world.width, (y + this.world.height) % this.world.height);
 	}
 
 	@Override

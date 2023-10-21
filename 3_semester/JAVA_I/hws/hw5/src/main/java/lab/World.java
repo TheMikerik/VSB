@@ -10,6 +10,7 @@ public class World {
 	public final double width;
 	public final double height;
 	public final int offset;
+	public final double player_height;
 
 	private final DrawableSimulable[] entities;
 
@@ -21,19 +22,19 @@ public class World {
 		this.height = height;
 		this.offset = 20;
 
-		double player_height = 120;
+		this.player_height = 120;
 		double player_width = 20;
 		double ball_size = 20;
 
 		entities = new DrawableSimulable[]{
-		/*0*/		new Player(new Point2D(20, floor(height / 3)), player_width, player_height, this),
-		/*1*/		new Player(new Point2D(width - 40, offset + 20), player_width, player_height, this),
+		/*0*/		new Player(new Point2D(20, floor(height / 3)), player_width, player_height, this, 0),
+		/*1*/		new Player(new Point2D(width - 40, offset + 20), player_width, player_height, this, 1),
 		/*2*/       new Ball(new Point2D(40, 40), ball_size, this),
 		/*3*/		new Playground(this)
         };
 
 		upper_barrier = new Rectangle2D(0,0, width, offset);
-		bottom_barrier = new Rectangle2D(0,height- offset, width, offset);
+		bottom_barrier = new Rectangle2D(0,height - offset, width, offset);
 
 	}
 
@@ -51,16 +52,18 @@ public class World {
 
 	}
 
-	public void move_player(int index, int dir){
-		for (DrawableSimulable entity : entities){
-			if(entity instanceof Player player){
-				if (player.player_index == index){
+	public void move_player(int index, int dir) {
+		System.out.println("move_player called with index: " + index + ", dir: " + dir);
+		for (DrawableSimulable entity : entities) {
+			if (entity instanceof Player player) {
+				if (player.player_index == index) {
 					player.move(dir);
+					System.out.println("Player " + index + " moved.\n");
 				}
-
 			}
 		}
 	}
+
 
 	public void simulate(double deltaT) {
 		for(DrawableSimulable entity : entities){
