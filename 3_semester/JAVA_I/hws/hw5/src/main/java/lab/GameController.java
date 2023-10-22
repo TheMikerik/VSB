@@ -71,5 +71,6 @@ public class GameController {
 
 
     public void start_play() {
+        world.getBall().start_moving();
     }
 }

@@ -48,8 +48,13 @@ public class World {
 		gc.restore();
 	}
 
-	public void drawInternal(GraphicsContext gc){
-
+	public Ball getBall(){
+		for(DrawableSimulable entity : entities){
+			if(entity instanceof Ball){
+				return (Ball) entity;
+			}
+		}
+		return null;
 	}
 
 	public void move_player(int index, int dir) {

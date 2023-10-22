@@ -10,6 +10,7 @@ public class Ball implements DrawableSimulable, Collisionable  {
 	protected short directionY = -1;
 	protected short directionX = 1;
 	protected double velocity = 1;
+	protected boolean moving = false;
 	protected double size;
 	private final World world;
 
@@ -38,9 +39,11 @@ public class Ball implements DrawableSimulable, Collisionable  {
 
 	@Override
 	public void simulate(double deltaT) {
-		double x = position.getX() + (directionX * 4) * velocity;
-		double y = position.getY() + (directionY * 5) * velocity;
-		position = new Point2D((x + this.world.width) % this.world.width, (y + this.world.height) % this.world.height);
+		if(moving) {
+			double x = position.getX() + (directionX * 4) * velocity;
+			double y = position.getY() + (directionY * 5) * velocity;
+			position = new Point2D((x + this.world.width) % this.world.width, (y + this.world.height) % this.world.height);
+		}
 	}
 
 	@Override
@@ -56,6 +59,10 @@ public class Ball implements DrawableSimulable, Collisionable  {
 	public void hit(){
 		this.velocity *= -1;
 		this.swap_directionY();
+	}
+
+	public void start_moving(){
+		this.moving = true;
 	}
 }
 
