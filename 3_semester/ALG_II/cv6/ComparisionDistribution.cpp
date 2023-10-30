@@ -59,46 +59,47 @@ class Comparision{
         }
 };
 
-class Distribution{
-    private:
-        int min, max;
-        vector<int> freq;
-        vector<int> result;
+#include <vector>
+#include <iostream>
+#include <algorithm>
 
-    public:
-        Distribution(vector<int> input){
-            this->min = *min_element(input.begin(), input.end());
-            this->max = *max_element(input.begin(), input.end());
+class Distribution {
+private:
+    int min, max;
+    std::vector<int> freq;
+    std::vector<int> result;
 
-            int arr_size = max-min+1;
-            this->freq.resize(arr_size, 0);
-            this->result.resize(arr_size, 0);
+public:
+    Distribution(std::vector<int> input) {
+        this->min = *min_element(input.begin(), input.end());
+        this->max = *max_element(input.begin(), input.end());
 
-            for(int i=0; i<freq.size(); i++){
+        int arr_size = max - min + 1;
+        this->freq.resize(arr_size, 0);
+        this->result.resize(input.size(), 0);
 
-                for(int j=0; j<freq.size()-1; j++){
-                    int current = input.at(j);
-                    if(i+1 == current){
-                        freq[i]++;
-                    }
-                }
-            }
-
-            for(int i=1; i<freq.size(); i++){
-                freq[i] = freq[i-1] + freq[i];
-            }
-
-            for(int i=0; i<input.size(); i++){
-                int current = input.back();
-                input.pop_back();
-
-                freq[current-1] -= 1;
-                
-            }
+        // Freq count
+        for (int i = 0; i < input.size(); i++) {
+            freq[input[i] - min]++;
+        }
+        for (int i = 1; i < freq.size(); i++) {
+            freq[i] += freq[i - 1];
         }
 
+        // Sort the array based on freqs
+        for (int i = input.size() - 1; i >= 0; i--) {
+            int current = input[i];
+            result[freq[current - min] - 1] = current;
+            freq[current - min]--;
+        }
 
+        // Print
+        for (int i = 0; i < result.size(); i++) {
+            std::cout << result[i] << std::endl;
+        }
+    }
 };
+
 
 int main(){
     Comparision c(arrComp);
