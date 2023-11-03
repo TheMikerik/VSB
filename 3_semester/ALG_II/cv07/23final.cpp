@@ -160,7 +160,7 @@ public:
 				}
 				//There is max
 				else if(inp < n_inp->min){
-					int tmp = n_inp->min;
+					int tmp = n_inp->min;//--------------------------------------------------------- here edit this
 					n_inp->min = inp;
 
 					n_inp->left = new Node(n_inp->min, n_inp);
@@ -176,9 +176,15 @@ public:
 				}
 				else if(inp > n_inp->max){
 					int tmp = n_inp->max;
-                    n_inp->max = inp;
+					int tmp_min = n_inp->min;
 
-                    this->Insert(tmp, n_inp->parent);
+                    n_inp->max = -1;
+					n_inp->min = tmp;
+
+                    n_inp->left = new Node(tmp_min, n_inp);
+					n_inp->right = new Node(inp, n_inp);
+
+					this->Insert(n_inp->min, n_inp->parent);
 				}
 			}
 		}
