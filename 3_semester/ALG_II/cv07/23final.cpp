@@ -26,7 +26,6 @@ struct Node {
 	Node* left;
 	Node* mid;
 	Node* right;
-
 	Node* parent;
 	
 	bool is_leaf;
@@ -34,17 +33,24 @@ struct Node {
 	Node() : min(-1), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
 	Node(int key) : min(key), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
 	Node(int key, Node* p) : min(key), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(p), is_leaf(true) {}
+	Node(int k2, Node* l, Node* r) : min(k2), max(-1), left(l), mid(nullptr), right(r), parent(nullptr), is_leaf(false) {}
+	Node(int k2, Node* l, Node* m, Node* r) : min(k2), left(l), mid(m), parent(nullptr), right(r) {}
+	Node(int k2, Node* l, Node* r, Node* p, bool leaf) : min(k2), max(-1), left(l), mid(nullptr), right(r), parent(p), is_leaf(leaf) {}
 
 	void MinMax(int inp){
-		if(inp < min){
-			max = min;
-			min = inp;
+		if(max == -1){
+			if(inp < min){
+				max = min;
+				min = inp;
+			}
+			else{
+				max = inp;
+			}
 		}
 		else{
-			max = inp;
+
 		}
 	}
-	//Node(int k2, int k3, Node* l, Node* m, Node* r) : min(k2), max(k3), left(l), mid(m), right(r), is_leaf(false) {}
 };
 
 
@@ -97,14 +103,17 @@ public:
 			}
 		}
 		else{ //fill child
+		//Parent node has only one number
 			//left = inp < min
-			if (inp < tree->min && tree->max == -1){
+			if (inp < tree->min){
 				this->Insert(inp, tree->left);
 			}
 			//right = inp > min
-			else if (inp > tree->min && tree->max == -1){
+			else if (inp > tree->min){
 				this->Insert(inp, tree->right);
 			}
+		//Parent node has more two numbers
+			//left = inp < min
 		}
 	}
 
@@ -121,8 +130,9 @@ public:
 					n_inp->min = inp;
 					
 					//MID TO DO
-
-					n_inp->max = -1;										
+					n_inp->parent->mid = new Node(n_inp->max, n_inp->parent);
+					n_inp->max = -1;
+									
 				}
 				//input == middle
 				else if (inp > n_inp->min && inp < n_inp->max){
@@ -135,19 +145,73 @@ public:
 					
 				}
 
-				n_inp->is_leaf = false;
+				if (n_inp->left != nullptr || n_inp->right != nullptr){
+					n_inp->is_leaf = false;
+				}
 			}
-			else{ //There is no max
-				if(inp < n_inp->min){
+			else{ 
+				//There is no max
+				if(inp < n_inp->min && n_inp->max == -1){
 					n_inp->max = n_inp->min;
 					n_inp->min = inp;		
 				}
-				else{
+				else if(inp > n_inp->min && n_inp->max == -1){
 					n_inp->max = inp;
+				}
+				//There is max
+				else if(inp < n_inp->min){
+					int tmp = n_inp->min;
+					n_inp->min = inp;
+
+					n_inp->left = new Node(n_inp->min, n_inp);
+					n_inp->right = new Node(n_inp->max, n_inp);
+
+					n_inp->min = tmp;
+					n_inp->max = -1;
+
+					this->Insert(n_inp->min, n_inp->parent);
+				}
+				else if(inp > n_inp->min && inp < n_inp->max){
+					this->Insert(inp, n_inp->parent);
+				}
+				else if(inp > n_inp->max){
+					int tmp = n_inp->max;
+                    n_inp->max = inp;
+
+                    this->Insert(tmp, n_inp->parent);
 				}
 			}
 		}
-		else{ //fill child
+		//When inp (child key) should shift into parent, but there is no space for it
+		else if (n_inp->max != -1){
+			if(inp < n_inp->min){
+				int tmp = n_inp->min;
+				Node* tmp_node = new Node(n_inp->max, n_inp->mid, n_inp->right);
+
+				n_inp->parent = new Node(tmp, n_inp->left, tmp_node);
+				n_inp = n_inp->parent;
+				this->tree = n_inp;
+			}
+			else if(inp > n_inp->min && inp < n_inp->max){
+
+				Node* tmp_node_left = new Node(n_inp->min, n_inp->right);
+				Node* tmp_node_right = new Node(n_inp->max, n_inp->right);
+
+				n_inp->parent = new Node(inp, tmp_node_left, tmp_node_right);
+				n_inp = n_inp->parent;
+				this->tree = n_inp;
+            }
+			else if(inp > n_inp->max){
+				int tmp = n_inp->max;
+				Node* tmp_node = new Node(n_inp->min, n_inp->left, n_inp->mid);
+
+				n_inp->parent = new Node(tmp, tmp_node, n_inp->right);
+				n_inp = n_inp->parent;
+				this->tree = n_inp;
+            }
+		}
+		else{
+			//fill child (if emplty)
 			//left = inp < min
 			if (inp < n_inp->min && n_inp->max == -1){
 				this->Insert(inp, n_inp->left);
@@ -156,6 +220,20 @@ public:
 			else if (inp > n_inp->min && n_inp->max == -1){
 				this->Insert(inp, n_inp->right);
 			}
+
+			//child is not empty
+			// else if (inp < n_inp->min){
+			// 	if(n_inp->parent == nullptr){
+					
+			// 		n_inp->parent = new Node(n_inp->min, n_inp->left, n_inp->mid, n_inp->right);
+
+					
+			// 	}
+			// }
+			// else if(inp > n_inp->min && inp < n_inp->max){
+			// }
+			// else if(inp > n_inp->max){
+			// }
 		}
 	}
 };
