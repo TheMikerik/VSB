@@ -156,7 +156,9 @@ public:
 					int tmp = n_inp->min;
 					n_inp->min = inp;
 					n_inp->max = -1;
-					n_inp->parent->left = n_inp->parent->mid;
+					if (n_inp->parent->mid != nullptr){
+						n_inp->parent->left = n_inp->parent->mid;
+					}
 					n_inp->parent->mid = new Node(tmp, n_inp->parent);				
 				}
 
@@ -171,7 +173,12 @@ public:
 					n_inp->min = inp;		
 				}
 				else if(inp > n_inp->min && n_inp->max == -1){
-					n_inp->max = inp;
+					if(n_inp->right != nullptr ){
+						this->Insert(inp, n_inp->right);
+					}
+					else{
+						n_inp->max = inp;
+					}
 				}
 				//There is max
 				else if(inp < n_inp->min){
@@ -211,18 +218,21 @@ public:
 			//min is middle value
 			//-------------------------------------------------------------------MISTAKE HERE - cannot create new node, insertion needed
 			if(inp < n_inp->min){
-				int tmp = n_inp->min;
-				n_inp->min = n_inp->max;
+				int tmp = n_inp->max;
 				n_inp->max = -1;
-				n_inp->parent = n_inp->mid->parent;
+				Node* new_left = new Node(n_inp->mid->min);
+				Node* new_right = new Node(n_inp->right->min);
 
-				//all works before this. Idea - dont copy directly the ninp but instead of that create new left and right nodes
+				n_inp->mid = nullptr;
+				n_inp->right = nullptr;
 
-				Node* tmp_node = new Node(n_inp->min, n_inp->mid, n_inp->right);
-				n_inp = new Node(tmp, n_inp->left, tmp_node);
-				// n_inp->parent = new Node(tmp, n_inp->left, tmp_node);
+				n_inp->right = new Node(tmp, n_inp);
+				n_inp->right->left = new_left;
+				n_inp->right->left->parent = n_inp->right;
 
-				this->tree = n_inp;
+				n_inp->right->right = new_right;
+				n_inp->right->right->parent = n_inp->right;
+
 			}
 			//input is middle value
 			else if(inp > n_inp->min && inp < n_inp->max){
@@ -238,12 +248,18 @@ public:
 			else if(inp > n_inp->max){
 				int tmp = n_inp->max;
 				n_inp->max = -1;
+				Node* new_left = new Node(n_inp->mid->min);
+				Node* new_right = new Node(n_inp->left->min);
 
-				Node* tmp_node = new Node(n_inp->min, n_inp->left, n_inp->mid);
-				n_inp->parent = new Node(tmp, n_inp->left, tmp_node);
-				
-				n_inp = n_inp->parent;
-				this->tree = n_inp;
+				n_inp->mid = nullptr;
+				n_inp->left = nullptr;
+
+				n_inp->left = new Node(tmp, n_inp);
+				n_inp->left->right = new_left;
+				n_inp->left->right->parent = n_inp->left;
+
+				n_inp->left->left = new_left;
+				n_inp->left->left->parent = n_inp->left;
             }
 		}
 		else{
@@ -269,11 +285,10 @@ int main(){
 	t.Insert(700);
 	t.Insert(400);
 	t.Insert(300);
-	t.Insert(200); // works fine
+	t.Insert(200);
 	t.Insert(100);
 	t.Insert(800);
 	t.Insert(900);
-	t.Insert(1000);
 
     return 0;
 }
