@@ -18,7 +18,16 @@ Odevzdávejte pouze zdrojové a hlavičkové kódy. Binárku(.exe) nebo celé pr
 */
 
 #include <iostream>
+#include <queue>
 using namespace std;
+
+enum{
+	UNCHECKED = 0,
+	PROCESSING = 1,
+	CHECKED = 2,
+
+	NOT_EXISTS = -1,
+};
 
 struct Node {
 	int min;
@@ -29,6 +38,8 @@ struct Node {
 	Node* parent;
 	
 	bool is_leaf;
+	int status = UNCHECKED;
+
 
 	Node() : min(-1), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
 	Node(int key) : min(key), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
@@ -119,8 +130,6 @@ public:
 			else if (inp > tree->min){
 				this->Insert(inp, tree->right);
 			}
-		//Parent node has more two numbers
-			//left = inp < min
 		}
 	}
 
@@ -272,6 +281,19 @@ public:
 			else if (inp > n_inp->min && n_inp->max == -1){
 				this->Insert(inp, n_inp->right);
 			}
+		}
+	}
+
+	void Search(int inp){
+		queue<int> q;
+
+		q.push(this->tree->min);
+		if(this->tree->max != NOT_EXISTS){
+			q.push(this->tree->max);
+		}
+
+		while(!q.empty()){
+			
 		}
 	}
 };
