@@ -22,10 +22,6 @@ Odevzdávejte pouze zdrojové a hlavičkové kódy. Binárku(.exe) nebo celé pr
 using namespace std;
 
 enum{
-	UNCHECKED = 0,
-	PROCESSING = 1,
-	CHECKED = 2,
-
 	NOT_EXISTS = -1,
 };
 
@@ -38,18 +34,16 @@ struct Node {
 	Node* parent;
 	
 	bool is_leaf;
-	int status = UNCHECKED;
 
-
-	Node() : min(-1), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
-	Node(int key) : min(key), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
-	Node(int key, Node* p) : min(key), max(-1), left(nullptr), mid(nullptr), right(nullptr), parent(p), is_leaf(true) {}
-	Node(int k2, Node* l, Node* r) : min(k2), max(-1), left(l), mid(nullptr), right(r), parent(nullptr), is_leaf(false) {}
+	Node() : min(NOT_EXISTS), max(NOT_EXISTS), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
+	Node(int key) : min(key), max(NOT_EXISTS), left(nullptr), mid(nullptr), right(nullptr), parent(nullptr), is_leaf(true) {}
+	Node(int key, Node* p) : min(key), max(NOT_EXISTS), left(nullptr), mid(nullptr), right(nullptr), parent(p), is_leaf(true) {}
+	Node(int k2, Node* l, Node* r) : min(k2), max(NOT_EXISTS), left(l), mid(nullptr), right(r), parent(nullptr), is_leaf(false) {}
 	Node(int k2, Node* l, Node* m, Node* r) : min(k2), left(l), mid(m), parent(nullptr), right(r) {}
-	Node(int k2, Node* l, Node* r, Node* p, bool leaf) : min(k2), max(-1), left(l), mid(nullptr), right(r), parent(p), is_leaf(leaf) {}
+	Node(int k2, Node* l, Node* r, Node* p, bool leaf) : min(k2), max(NOT_EXISTS), left(l), mid(nullptr), right(r), parent(p), is_leaf(leaf) {}
 
 	void MinMax(int inp){
-		if(max == -1){
+		if(max == NOT_EXISTS){
 			if(inp < min){
 				max = min;
 				min = inp;
@@ -76,14 +70,14 @@ public:
 
 	void Insert(int inp){
 		if(tree->is_leaf){
-			if(tree->min == -1){
+			if(tree->min == NOT_EXISTS){
 				tree->min = inp;
 			}
-			else if(tree->max != -1){
+			else if(tree->max != NOT_EXISTS){
 				//min == middle
 				if(inp < tree->min){
 					int tmp = tree->max;
-					tree->max = -1;
+					tree->max = NOT_EXISTS;
 
 					tree->left = new Node(inp, tree);
 					tree->right = new Node(tmp, tree);
@@ -93,7 +87,7 @@ public:
 					int tmp_min = tree->min;
 					int tmp_max = tree->max;
 					tree->min = inp;
-					tree->max = -1;
+					tree->max = NOT_EXISTS;
 
 					tree->left = new Node(tmp_min, tree);
 					tree->right = new Node(tmp_max, tree);
@@ -102,7 +96,7 @@ public:
 				else{
 					int tmp = tree->min;
 					tree->min = tree->max;
-					tree->max = -1;
+					tree->max = NOT_EXISTS;
 
 					tree->left = new Node(tmp, tree);
 					tree->right = new Node(inp, tree);
@@ -135,18 +129,18 @@ public:
 
 	void Insert(int inp, Node* n_inp){
 		if(n_inp->is_leaf){
-			if(n_inp->min == -1){
+			if(n_inp->min == NOT_EXISTS){
 				n_inp->min = inp;
 			}
 			//When input (child) is fully filled and parent is not
-			else if(n_inp->max != -1 && n_inp->parent->max == -1){
+			else if(n_inp->max != NOT_EXISTS && n_inp->parent->max == NOT_EXISTS){
 				//min == middle
 				if(inp < n_inp->min){
 					n_inp->parent->MinMax(n_inp->min);
 					
 					n_inp->min = inp;
 					int tmp = n_inp->max;
-					n_inp->max = -1;
+					n_inp->max = NOT_EXISTS;
 					n_inp->parent->mid = new Node(tmp, n_inp->parent);
 				}
 				//input == middle
@@ -155,7 +149,7 @@ public:
 
 					int tmp = n_inp->min;
 					n_inp->min = n_inp->max;
-					n_inp->max = -1;
+					n_inp->max = NOT_EXISTS;
 					n_inp->parent->mid = new Node(tmp, n_inp->parent);					
 				}
 				//max == middle
@@ -164,7 +158,7 @@ public:
 
 					int tmp = n_inp->min;
 					n_inp->min = inp;
-					n_inp->max = -1;
+					n_inp->max = NOT_EXISTS;
 					if (n_inp->parent->mid != nullptr){
 						n_inp->parent->left = n_inp->parent->mid;
 					}
@@ -177,11 +171,11 @@ public:
 			}
 			else{ 
 				//There is no max
-				if(inp < n_inp->min && n_inp->max == -1){
+				if(inp < n_inp->min && n_inp->max == NOT_EXISTS){
 					n_inp->max = n_inp->min;
 					n_inp->min = inp;		
 				}
-				else if(inp > n_inp->min && n_inp->max == -1){
+				else if(inp > n_inp->min && n_inp->max == NOT_EXISTS){
 					if(n_inp->right != nullptr ){
 						this->Insert(inp, n_inp->right);
 					}
@@ -192,7 +186,7 @@ public:
 				//There is max
 				else if(inp < n_inp->min){
 					int tmp = n_inp->max;
-					n_inp->max = -1;
+					n_inp->max = NOT_EXISTS;
 
 					n_inp->left = new Node(inp, n_inp);
 					n_inp->right = new Node(tmp, n_inp);
@@ -203,7 +197,7 @@ public:
 					int tmp_min = n_inp->min;
 					int tmp_max = n_inp->max;
 					n_inp->min = inp;
-					n_inp->max = -1;
+					n_inp->max = NOT_EXISTS;
 
 					n_inp->left = new Node(tmp_min, n_inp);
 					n_inp->right = new Node(tmp_max, n_inp);
@@ -213,7 +207,7 @@ public:
 				else if(inp > n_inp->max){
 					int tmp = n_inp->min;
 					n_inp->min = n_inp->max;
-					n_inp->max = -1;
+					n_inp->max = NOT_EXISTS;
 
 					n_inp->left = new Node(tmp, n_inp);
 					n_inp->right = new Node(inp, n_inp);
@@ -223,12 +217,11 @@ public:
 			}
 		}
 		//When inp (child key) should shift into parent, but there is no space for it
-		else if (n_inp->max != -1){
+		else if (n_inp->max != NOT_EXISTS){
 			//min is middle value
-			//-------------------------------------------------------------------MISTAKE HERE - cannot create new node, insertion needed
 			if(inp < n_inp->min){
 				int tmp = n_inp->max;
-				n_inp->max = -1;
+				n_inp->max = NOT_EXISTS;
 				Node* new_left = new Node(n_inp->mid->min);
 				Node* new_right = new Node(n_inp->right->min);
 
@@ -256,7 +249,7 @@ public:
 			//max is middle value
 			else if(inp > n_inp->max){
 				int tmp = n_inp->max;
-				n_inp->max = -1;
+				n_inp->max = NOT_EXISTS;
 				Node* new_left = new Node(n_inp->mid->min);
 				Node* new_right = new Node(n_inp->left->min);
 
@@ -274,28 +267,44 @@ public:
 		else{
 			//fill child (if empty)
 			//left = inp < min
-			if (inp < n_inp->min && n_inp->max == -1){
+			if (inp < n_inp->min && n_inp->max == NOT_EXISTS){
 				this->Insert(inp, n_inp->left);
 			}
 			//right = inp > min
-			else if (inp > n_inp->min && n_inp->max == -1){
+			else if (inp > n_inp->min && n_inp->max == NOT_EXISTS){
 				this->Insert(inp, n_inp->right);
 			}
 		}
 	}
 
 	void Search(int inp){
-		queue<int> q;
+		queue<Node*> q;
 
-		q.push(this->tree->min);
-		if(this->tree->max != NOT_EXISTS){
-			q.push(this->tree->max);
-		}
-
+		q.push(this->tree);
 		while(!q.empty()){
-			
+			Node* tmp = q.front();
+			q.pop();
+
+			if (tmp->min == inp || tmp->max == inp){
+				cout << "Seeked input (" << inp << ") is in the 2-3 tree" << endl;
+				return;
+			}
+
+			if (tmp->right != nullptr){
+				q.push(tmp->right);
+			}
+			if (tmp->mid != nullptr){
+				q.push(tmp->mid);
+			}
+			if (tmp->left != nullptr){
+				q.push(tmp->left);
+            }		
 		}
+
+		cout << "Input (" << inp << ") is not in the 2-3 tree" << endl;
+		return;
 	}
+	
 };
 
 
@@ -311,6 +320,11 @@ int main(){
 	t.Insert(100);
 	t.Insert(800);
 	t.Insert(900);
+
+	t.Search(900);
+	t.Search(500);
+	t.Search(2);
+	t.Search(8);
 
     return 0;
 }

@@ -1,96 +1,183 @@
 #include <iostream>
+#include <vector>
+#include "Node.cpp"
 
-// Definition of a Node in a 2-3 Tree
-struct Node {
-    int key1;
-    int key2;
-    Node* left;
-    Node* middle;
-    Node* right;
+class TwoThreeTree {
+private:
+    Node* root;
 
-    Node(int k1, int k2 = -1, Node* l = nullptr, Node* m = nullptr, Node* r = nullptr)
-        : key1(k1), key2(k2), left(l), middle(m), right(r) {}
-};
+    void splitNode(Node* parent, int index) {
+        Node* leftChild = parent->children[index];
+        Node* rightChild = new Node();
 
-// Function to insert a key into a 2-3 Tree
-Node* insert(Node* root, int key) {
-    if (root == nullptr) {
-        return new Node(key);
+        rightChild->isLeaf = leftChild->isLeaf;
+        rightChild->keyCount = 1;
+
+        rightChild->keys[0] = leftChild->keys[2];
+
+        if (!leftChild->isLeaf) {
+            rightChild->children[1] = leftChild->children[2];
+            rightChild->children[2] = leftChild->children[3];
+        }
+
+        leftChild->keyCount = 1;
+
+        parent->children[index] = leftChild;
+        parent->children[index + 1] = rightChild;
+
+        for (int i = parent->keyCount; i > index; --i) {
+            parent->keys[i] = parent->keys[i - 1];
+        }
+
+        parent->keys[index] = leftChild->keys[1];
+        parent->keyCount++;
     }
 
-    // If the node is a leaf node
-    if (root->left == nullptr) {
-        // Case 1: The node has only one key
-        if (root->key2 == -1) {
-            if (key < root->key1) {
-                root->key2 = root->key1;
-                root->key1 = key;
-            } else {
-                root->key2 = key;
+    void insertNonFull(Node* node, int value) {
+        int i = node->keyCount;
+
+        if (node->isLeaf) {
+            while (i > 0 && value < node->keys[i - 1]) {
+                node->keys[i] = node->keys[i - 1];
+                i--;
             }
+
+            node->keys[i] = value;
+            node->keyCount++;
         }
-        // Case 2: The node has two keys
         else {
-            if (key < root->key1) {
-                // Insert key to the left
-                Node* newRoot = new Node(key);
-                newRoot->left = new Node(key);
-                newRoot->middle = root;
-                return newRoot;
-            } else if (key > root->key2) {
-                // Insert key to the right
-                Node* newRoot = new Node(key);
-                newRoot->left = root;
-                newRoot->middle = new Node(key);
-                return newRoot;
-            } else {
-                // Insert key in the middle
-                Node* newRoot = new Node(root->key1);
-                newRoot->left = new Node(key);
-                newRoot->middle = new Node(root->key2);
-                return newRoot;
+            while (i > 0 && value < node->keys[i - 1]) {
+                i--;
+            }
+
+            if (node->children[i]->keyCount == 3) {
+                splitNode(node, i);
+
+                if (value > node->keys[i]) {
+                    i++;
+                }
+            }
+
+            insertNonFull(node->children[i], value);
+        }
+    }
+
+    void printInOrder(Node* node) {
+        if (node == nullptr) {
+            return;
+        }
+
+        if (!node->isLeaf) {
+            printInOrder(node->children[0]);
+        }
+
+        for (int i = 0; i < node->keyCount; ++i) {
+            cout << node->keys[i] << " ";
+            if (!node->isLeaf) {
+                printInOrder(node->children[i + 1]);
             }
         }
     }
-    // Recursively insert into appropriate subtree
-    if (key < root->key1) {
-        root->left = insert(root->left, key);
-    } else if (key > root->key2) {
-        root->right = insert(root->right, key);
-    } else {
-        root->middle = insert(root->middle, key);
-    }
-    return root;
-}
 
-// Function to print the 2-3 Tree in-order
-void inOrderTraversal(Node* root) {
-    if (root) {
-        inOrderTraversal(root->left);
-        if (root->key2 == -1) {
-            std::cout << root->key1 << " ";
-        } else {
-            std::cout << root->key1 << " " << root->key2 << " ";
+    void deleteValue(Node* node, int value) {
+        int i = 0;
+        while (i < node->keyCount && value > node->keys[i]) {
+            i++;
         }
-        inOrderTraversal(root->middle);
-        inOrderTraversal(root->right);
+
+        if (node->isLeaf) {
+            if (i < node->keyCount && value == node->keys[i]) {
+                for (int j = i; j < node->keyCount - 1; j++) {
+                    node->keys[j] = node->keys[j + 1];
+                }
+                node->keyCount--;
+            }
+        }
+        else {
+            if (i < node->keyCount && value == node->keys[i]) {
+                Node* maxLeft = node->children[i];
+                while (!maxLeft->isLeaf) {
+                    maxLeft = maxLeft->children[maxLeft->keyCount];
+                }
+                int maxLeftValue = maxLeft->keys[maxLeft->keyCount - 1];
+                node->keys[i] = maxLeftValue;
+                deleteValue(maxLeft, maxLeftValue);
+            }
+            else {
+                deleteValue(node->children[i], value);
+            }
+        }
     }
-}
 
-int main() {
-    Node* root = nullptr;
+    bool searchValue(Node* node, int value) {
+        int i = 0;
+        while (i < node->keyCount && value > node->keys[i]) {
+            i++;
+        }
 
-    // Insert elements into the 2-3 Tree
-    root = insert(root, 10);
-    root = insert(root, 5);
-    root = insert(root, 15);
-    root = insert(root, 20);
-    root = insert(root, 25);
-    root = insert(root, 1);
-    root = insert(root, 7);
+        if (i < node->keyCount && value == node->keys[i]) {
+            return true;
+        }
 
-    // Print the 2-3 Tree in-order
-    inOrderTraversal(root);
+        if (node->isLeaf) {
+            return false;
+        }
 
-    return 0;
-}
+        return searchValue(node->children[i], value);
+    }
+
+
+public:
+    TwoThreeTree() : root(nullptr) {}
+
+    void insert(int value) {
+        if (root == nullptr) {
+            root = new Node();
+            root->keys[0] = value;
+            root->keyCount = 1;
+        }
+        else {
+            if (root->keyCount == 3) {
+                Node* newRoot = new Node();
+                newRoot->isLeaf = false;
+                newRoot->children[0] = root;
+
+                splitNode(newRoot, 0);
+
+                int i = (value < newRoot->keys[0]) ? 0 : 1;
+                insertNonFull(newRoot->children[i], value);
+
+                root = newRoot;
+            }
+            else {
+                insertNonFull(root, value);
+            }
+        }
+    }
+
+    void deleteValue(int value) {
+        if (root) {
+            deleteValue(root, value);
+            if (root->keyCount == 0) {
+                Node* newRoot = root->children[0];
+                delete root;
+                root = newRoot;
+            }
+        }
+    }
+
+    bool searchValue(int value) {
+        if (root) {
+            return searchValue(root, value);
+        }
+        return false;
+    }
+
+    ~TwoThreeTree() {
+        delete root;
+    }
+    void printInOrder() {
+        printInOrder(root);
+        cout << endl;
+    }
+};
