@@ -1,3 +1,7 @@
+-------------------------------------------
+--        First lecture
+-------------------------------------------
+
 -- 7
 select *
 from
@@ -122,3 +126,199 @@ select
 from
     film
 
+-- 22
+select
+    count(distinct rating)
+from
+    film
+
+-- 23
+select
+    count(*),
+    count(postal_code) as psc,
+    count(distinct postal_code) as nopsc
+from
+    address
+
+-- 24
+select
+    MAX(length) as maxln,
+    MIN(length) as minln,
+    AVG(cast(length as float)) as avgln
+from
+    film
+
+-- 25
+select
+    count(*) as pocet,
+    sum(amount) as soucet
+from
+    payment
+where
+    year(payment_date) = 2005
+
+-- 26
+select
+    sum(len(title))
+from
+    film
+
+
+-------------------------------------------
+--        Second lecture
+-------------------------------------------
+-- 1
+select
+    *
+from
+    city
+join country c on c.country_id = city.country_id
+
+-- 2
+select f.title, l.name
+from film f
+join language l on f.language_id = l.language_id
+
+-- 3
+select r.rental_id, CONCAT(c.first_name, ' ', c.last_name)
+from rental r
+join customer c on r.customer_id = c.customer_id
+where c.last_name like 'SIMPSON'
+
+-- 4
+select
+    address
+from
+    address a
+join customer c on a.address_id = c.address_id
+where c.last_name like 'SIMPSON'
+
+-- 5
+select
+    distinct c.first_name, c.last_name, a.address, ci.city
+from customer c
+join address a on c.address_id = a.address_id
+join city ci on a.city_id = ci.city_id
+
+-- 6
+select
+    distinct c.first_name, c.last_name, ci.city
+from customer c
+join address a on c.address_id = a.address_id
+join city ci on a.city_id = ci.city_id
+
+-- 7
+select
+    r.rental_id,
+    CONCAT(sf.first_name, ' ', sf.last_name) as staff,
+    CONCAT(c.first_name, ' ', c.last_name) as customer,
+    f.title
+from film f
+    join inventory i on f.film_id = i.film_id
+    join rental r on i.inventory_id = r.inventory_id
+    join customer c on r.customer_id = c.customer_id
+    join store s on i.store_id = s.store_id
+    join staff sf on s.store_id = sf.staff_id
+
+-- 8
+select
+    f.title,
+    CONCAT(a.first_name, ' ', a.last_name)
+from film f
+    join film_actor fa on f.film_id = fa.film_id
+    join actor a on fa.actor_id = a.actor_id
+order by
+    f.title
+
+-- 9
+select
+    CONCAT(a.first_name, ' ', a.last_name),
+    f.title
+from film f
+    join film_actor fa on f.film_id = fa.film_id
+    join actor a on fa.actor_id = a.actor_id
+order by
+    a.last_name, a.first_name
+
+-- 10
+select
+    f.title
+from
+    film f
+    join film_category fc on f.film_id = fc.film_id
+    join category c on fc.category_id = c.category_id
+where
+    c.name = 'HORROR'
+
+-- 11
+select
+    s.store_id,
+    a_st.address as store_address,
+    concat(sf.first_name, ' ', sf.last_name) as spravce,
+    a_sf.address as staff_address
+from
+    store s
+    join staff sf on s.manager_staff_id = sf.staff_id
+    join address a_sf on sf.address_id = a_sf.address_id
+    join address a_st on s.address_id = a_st.address_id
+
+-- 12
+select
+    f.film_id,
+    f.title,
+    fa.actor_id,
+    fc.category_id
+from
+    film f
+    join film_category fc on f.film_id = fc.film_id
+    join film_actor fa on f.film_id = fa.film_id
+order by
+    film_id,
+    actor_id
+
+-- 13
+select
+    distinct
+    fa.actor_id,
+    fc.category_id
+from
+    film f
+    join film_category fc on f.film_id = fc.film_id
+    join film_actor fa on f.film_id = fa.film_id
+order by
+    actor_id
+
+-- 14
+select
+    distinct film.title
+from
+    film
+    join inventory on film.film_id = inventory.film_id
+
+-- 15
+select
+    distinct concat(a.first_name, ' ', a.last_name)
+from
+    film f
+    join film_actor fa on f.film_id = fa.film_id
+    join actor a on fa.actor_id = a.actor_id
+    join film_category fc on f.film_id = fc.film_id
+    join category c on fc.category_id = c.category_id
+where
+    c.name = 'Comedy'
+
+-- 16
+select
+    distinct
+    concat(cu.first_name, ' ', cu.last_name) as customer
+from
+    country co
+    join city ci on co.country_id = ci.country_id
+    join address adr on ci.city_id = adr.city_id
+    join customer cu on adr.address_id = cu.address_id
+    join rental re on cu.customer_id = re.customer_id
+    join inventory inv on re.inventory_id = inv.inventory_id
+    join film f on inv.film_id = f.film_id
+where
+    co.country = 'Italy' AND
+    f.title = 'Motions details'
