@@ -305,26 +305,29 @@ public:
 		return;
 	}
 	
+	void Delete(int inp){
+		
+	}
 };
 
 
 int main(){
     TwoTree t;
 
-	t.Insert(500);
-	t.Insert(600);
-	t.Insert(700);
-	t.Insert(400);
-	t.Insert(300);
-	t.Insert(200);
-	t.Insert(100);
-	t.Insert(800);
-	t.Insert(900);
+	t.Insert(5);
+	t.Insert(6);
+	t.Insert(7);
+	t.Insert(4);
+	t.Insert(3);
+	t.Insert(2);
+	t.Insert(1);
+	t.Insert(8);
+	t.Insert(9);
 
-	t.Search(900);
-	t.Search(500);
-	t.Search(2);
-	t.Search(8);
+	t.Search(9);
+	t.Search(5);
+	t.Search(17);
+	t.Search(10);
 
     return 0;
 }
