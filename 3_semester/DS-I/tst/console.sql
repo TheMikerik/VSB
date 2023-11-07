@@ -532,3 +532,63 @@ FROM
 language
     LEFT JOIN film ON language.language_id = film.language_id
 GROUP BY language.language_id, language.name
+    -- Aggregation functions are usually left joined
+
+-- 13
+select
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    count(r.rental_id) as rental_count
+from
+    customer c
+    left join rental r on c.customer_id = r.customer_id
+group by
+    c.customer_id, c.first_name, c.last_name
+
+
+-- 14
+select
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    count(distinct i.film_id) as no_rented
+from
+    customer c
+    left join dbo.rental r on c.customer_id = r.customer_id
+    left join dbo.inventory i on r.inventory_id = i.inventory_id
+group by
+    c.customer_id,
+    c.first_name,
+    c.last_name
+
+-- 15
+select
+    a.actor_id,
+    concat(a.first_name, ' ', a.last_name) as actor,
+    count(*) as nof
+from
+    film
+    join dbo.film_actor fa on film.film_id = fa.film_id
+    join dbo.actor a on a.actor_id = fa.actor_id
+group by
+    a.actor_id,
+    a.first_name,
+    a.last_name
+having
+    count(fa.film_id) > 20
+
+-- 16
+select
+    c.customer_id,
+    MIN(p.amount) as min_rent,
+    AVG(p.amount) as avg_rent,
+    MAX(p.amount) as max_rent
+from
+    customer c
+    left join dbo.payment p on c.customer_id = p.customer_id
+    left join dbo.rental r2 on c.customer_id = r2.customer_id
+group by
+    c.customer_id
+order by
+    c.customer_id
