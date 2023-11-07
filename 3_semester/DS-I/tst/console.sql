@@ -411,3 +411,124 @@ FROM
     film
     LEFT JOIN language ON film.language_id = language.language_id AND
     language.name LIKE 'I%'
+
+
+-------------------------------------------
+--        Third lecture
+-------------------------------------------
+
+-- 1
+select
+    f.rating,
+    count(*) as pocat_kat
+from
+    film f
+group by
+    f.rating
+
+-- 2
+select
+    customer_id,
+    count(c.last_name)
+from
+    customer c
+group by
+    c.customer_id
+
+-- 3
+select
+    c.customer_id,
+    CONCAT(c.first_name, ' ', c.last_name) as customer,
+    count(p.payment_id) as payments
+from
+    customer c
+    join dbo.payment p on c.customer_id = p.customer_id
+group by
+    c.customer_id , c.first_name, c.last_name
+order by
+    count(p.payment_id)
+
+-- 4
+select
+    a.first_name,
+    a.last_name,
+    count(*) as same
+from
+    actor a
+group by
+    a.first_name,
+    a.last_name
+order by
+    same DESC
+
+--  5
+select
+    year(payment_date) as year,
+    month(payment_date) as month,
+    sum(amount) as sum
+from
+    payment
+group by
+    year(payment_date),
+    month(payment_date)
+order by
+    year,
+    month
+
+-- 6
+select
+    store_id, count(*)
+from
+    inventory
+group by
+    store_id
+    having count(*) > 2300
+
+-- 7
+select
+    f.language_id,
+    min(f.length)
+from
+    film f
+group by
+    f.language_id
+having
+    min(f.length) > 46
+
+
+-- 8
+select
+    year(payment_date),
+    month(payment_date),
+    sum(amount)
+from
+    payment p
+group by
+    year(payment_date),
+    month(payment_date)
+having
+    sum(amount) > 20000
+
+-- 9
+-- idk hard
+
+-- 11
+select
+    l.name,
+    count(*) as film_count
+from
+    film f
+    join dbo.language l on f.language_id = l.language_id
+group by
+    l.name
+
+-- 12
+
+SELECT
+    language.language_id,
+    language.name,
+    COUNT(film.film_id) AS pocet_filmu
+FROM
+language
+    LEFT JOIN film ON language.language_id = film.language_id
+GROUP BY language.language_id, language.name
