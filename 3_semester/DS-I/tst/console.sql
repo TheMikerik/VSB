@@ -592,3 +592,555 @@ group by
     c.customer_id
 order by
     c.customer_id
+
+-- 17
+select
+    c.name,
+    avg(cast(f.length as float)) as film_len
+from
+    category c
+    left join dbo.film_category fc on c.category_id = fc.category_id
+    left join dbo.film f on f.film_id = fc.film_id
+group by
+    c.name
+order by
+    avg(f.length)
+
+-- 18
+select
+    i.film_id,
+    sum(p2.amount) as profit
+from
+    inventory i
+    join dbo.rental r2 on i.inventory_id = r2.inventory_id
+    join dbo.payment p2 on r2.rental_id = p2.rental_id
+group by
+    i.film_id
+having
+    sum(p2.amount) > 100
+
+-- 19
+select
+    a.actor_id,
+    count(distinct fc.category_id) as no_cat
+from
+    actor a
+    left join dbo.film_actor fa on a.actor_id = fa.actor_id
+    left join dbo.film_category fc on fa.film_id = fc.film_id
+group by
+    a.actor_id
+order by
+    no_cat asc
+
+-- 23
+select
+    c.first_name, c.last_name, c2.city, c3.country,
+    count(distinct fc.category_id) as no_cat
+from
+    customer c
+    join dbo.address a on a.address_id = c.address_id
+    join dbo.city c2 on c2.city_id = a.city_id
+    join dbo.country c3 on c3.country_id = c2.country_id
+    left join dbo.rental r2 on c.customer_id = r2.customer_id
+    left join dbo.inventory i on r2.inventory_id = i.inventory_id
+    left join dbo.film_category fc on i.film_id = fc.film_id
+group by
+    c.first_name, c.last_name, c2.city, c3.country
+having
+    c3.country = 'Poland'
+
+
+---------------------------------------------------------------
+-- 4th lecture
+---------------------------------------------------------------
+-- this or this
+SELECT film_id, title FROM film
+WHERE
+    film_id IN (
+        SELECT film_id FROM film_actor
+        WHERE actor_id = 1 OR actor_id = 10
+    )
+    AND NOT
+    (
+        film_id IN (
+        SELECT film_id FROM film_actor WHERE actor_id = 1 ) AND
+        film_id IN (
+        SELECT film_id FROM film_actor WHERE actor_id = 10 )
+    )
+
+-- 7
+select f.title
+from film f
+where not exists(
+          select *
+          from actor a
+          join dbo.film_actor fa on a.actor_id = fa.actor_id
+          where fa.film_id = f.film_id AND
+                a.first_name = 'Penelope' AND
+                a.last_name = 'Guiness'
+      )
+
+
+-- 9
+select c.first_name, c.last_name
+from customer c
+where exists(
+        select *
+        from rental r
+        join dbo.inventory i on r.inventory_id = i.inventory_id
+        join dbo.film f on i.film_id = f.film_id
+        where f.title = 'Enemy odds' and
+              c.customer_id = r.customer_id
+      ) and exists(
+        select *
+        from rental r
+        join dbo.inventory i on r.inventory_id = i.inventory_id
+        join dbo.film f on i.film_id = f.film_id
+        where f.title = 'pollock deliverance' and
+              c.customer_id = r.customer_id
+      ) and exists(
+        select *
+        from rental r
+        join dbo.inventory i on r.inventory_id = i.inventory_id
+        join dbo.film f on i.film_id = f.film_id
+        where f.title = 'falcon volume' and
+              c.customer_id = r.customer_id
+      )
+
+
+
+SELECT actor.first_name, actor.last_name
+FROM actor
+WHERE EXISTS (
+    SELECT *
+    FROM film
+    JOIN film_actor ON film.film_id = film_actor.film_id
+    WHERE film_actor.actor_id = actor.actor_id AND film.length < 50
+)
+
+
+
+
+
+---------------------------------------------------------------
+-- TEST
+---------------------------------------------------------------
+-- ut 12:30 VARIANTA A
+-- A
+with tab as (
+    select
+       o.jmeno,
+       o.prijmeni,
+       org.id_organ,
+       count(distinct zhp.id_hlasovani) as zmatecne
+    from
+        organ org
+        join dbo.hlasovani h on org.id_organ = h.id_organ
+        join dbo.zmatecne_hlasovani_poslanec zhp on h.id_hlasovani = zhp.id_hlasovani
+        join dbo.osoba o on zhp.id_osoba = o.id_osoba
+    group by
+        o.jmeno, o.prijmeni, org.id_organ
+)
+select
+    *
+from tab t1
+where zmatecne = (
+        select max(zmatecne)
+        from tab t2
+        where t1.id_organ = t2.id_organ
+        )
+
+
+-- 2
+select hl.id_hlasovani, hl.datum, hl.nazev_dlouhy,(
+    select count(*)
+    from hlasovani_poslanec hp
+    join dbo.poslanec p on p.id_poslanec = hp.id_poslanec
+    join dbo.osoba o on o.id_osoba = p.id_osoba
+    join dbo.zarazeni z on o.id_osoba = z.id_osoba
+    join dbo.organ o2 on z.id_of = o2.id_organ AND z.cl_funkce = 0
+    -- 0 = organ
+    -- 1 = function
+    where hl.id_hlasovani = hp.id_hlasovani AND
+          hp.vysledek = 'A' AND
+          o2.zkratka = 'ODS' AND
+          o2.rodic_id_organ = hl.id_organ
+          -- timto spojuju dve obdobi
+    ),(
+    select count(*)
+    from hlasovani_poslanec hp
+    join dbo.poslanec p on p.id_poslanec = hp.id_poslanec
+    join dbo.osoba o on o.id_osoba = p.id_osoba
+    join dbo.zarazeni z on o.id_osoba = z.id_osoba
+    join dbo.organ o2 on z.id_of = o2.id_organ AND z.cl_funkce = 0
+    where hl.id_hlasovani = hp.id_hlasovani AND
+          hp.vysledek = 'A' AND
+          o2.zkratka = 'ANO' AND
+          -- zkratka = strana
+          o2.rodic_id_organ = hl.id_organ
+          -- timto spojuju dve obdobi
+    )
+from hlasovani hl
+where hl.datum = '2019-10-24' AND
+      hl.cislo = 172
+
+
+-- 3
+select s.id_schuze, s.schuze, s.do_schuze
+from schuze s
+join dbo.hlasovani h2 on s.id_organ = h2.id_organ
+where year(s.do_schuze) = 2015 AND s.id_schuze NOT IN(
+        select z.id_hlasovani
+        from hlasovani h
+        join dbo.zmatecne z on h.id_hlasovani = z.id_hlasovani
+    )
+
+-- skupina B
+select s.id_schuze, s.schuze, s.do_schuze
+from schuze s
+where exists(
+          select 1
+          from hlasovani hl
+          where s.schuze = hl.schuze AND
+                (year(s.od_schuze) = 2020 OR year(s.do_schuze) = 2020) and
+                hl.id_organ = s.id_organ
+      ) and not exists(
+          select 1
+          from hlasovani hl
+          join dbo.zmatecne z on hl.id_hlasovani = z.id_hlasovani
+          where s.schuze = hl.schuze AND
+                hl.id_organ = s.id_organ
+      )
+
+
+
+-- utery, 14:00
+SELECT t.zkratka, count(*)
+FROM (
+	SELECT org.zkratka, org.nazev_organu_cz, ps.od_organ, count(*) cnt
+	FROM poslanec p
+	JOIN zarazeni z ON p.id_osoba = z.id_osoba
+	JOIN organ org ON z.id_of = org.id_organ
+	JOIN typ_organu typo ON org.id_typ_org = typo.id_typ_org
+	JOIN organ ps ON ps.id_organ = p.id_organ and org.rodic_id_organ = ps.id_organ
+	WHERE typo.nazev_typ_org_cz = 'klub'
+	GROUP BY org.zkratka, ps.od_organ, org.nazev_organu_cz
+	HAVING count(*) >= 50
+) t
+GROUP BY t.zkratka
+HAVING count(*) >= 2
+----------------------------------------->>>> toto si projit zitra znova
+
+-- 2
+with tab as (
+    select hl.id_hlasovani, hl.schuze, hl.cislo, hl.nazev_dlouhy
+    from schuze s
+    join hlasovani hl on s.id_organ = hl.id_organ AND s.schuze = hl.schuze
+    join dbo.organ o on hl.id_organ = o.id_organ
+    where year(o.od_organ) = 2013 AND year(o.do_organ) = 2017
+)
+
+select *
+from tab t1
+where t1.cislo = (
+        select max(t2.cislo)
+        from tab t2
+        where t1.schuze = t2.schuze
+    )
+
+
+-- 3
+select id_osoba
+from osoba o
+where exists(
+        select *
+        from poslanec p
+        join hlasovani_poslanec hp on p.id_poslanec = hp.id_poslanec
+        join hlasovani h on hp.id_hlasovani = h.id_hlasovani
+        join dbo.organ org on h.id_organ = org.id_organ
+        where h.nazev_dlouhy like 'Návrh na vyslovení nedůvěry vládě%' AND
+              year(org.od_organ) = 2017 AND
+              p.id_osoba = o.id_osoba
+) and not exists(
+        select *
+        from poslanec p
+        join hlasovani_poslanec hp on p.id_poslanec = hp.id_poslanec
+        join hlasovani h on hp.id_hlasovani = h.id_hlasovani
+        join dbo.organ og on h.id_organ = og.id_organ
+        where h.nazev_dlouhy like 'Návrh na vyslovení nedůvěry vládě%' AND
+              year(og.od_organ) = 2017 AND
+              hp.vysledek = 'A' AND
+              p.id_osoba = o.id_osoba
+)
+order by o.id_osoba
+
+select *
+from osoba and exists (
+	select 1
+	from hlasovani
+	join hlasovani_poslanec hp on hlasovani.id_hlasovani = hp.id_hlasovani
+	join poslanec on poslanec.id_poslanec = hp.id_poslanec
+	join organ on hlasovani.id_organ = organ.id_organ
+	where nazev_dlouhy LIKE 'NĂˇvrh na vyslovenĂ­ nedĹŻvÄ›ry vlĂˇdÄ›%' and
+		 year(organ.od_organ) = 2017 and
+		 poslanec.id_osoba = osoba.id_osoba
+)
+order by id_osoba
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+with tab as (
+    select hl.id_hlasovani, hl.schuze, hl.cislo, hl.nazev_dlouhy
+    from hlasovani hl
+    order by hl.schuze
+)
+select *
+from tab t1
+where
+
+
+
+with tab as (
+	select id_hlasovani, schuze.schuze, cislo, nazev_dlouhy
+	from schuze
+	join hlasovani on schuze.schuze = hlasovani.schuze
+	join organ on organ.id_organ = schuze.id_organ
+	where year(organ.od_organ) = 2013 and
+						schuze.id_organ = hlasovani.id_organ
+)
+select *
+from tab t1
+where t1.cislo = (
+  select MAX(cislo)
+  from tab t2
+  where t1.schuze = t2.schuze
+)
+order by t1.schuze
+
+-- 3
+select *
+from osoba
+where not exists (
+    select 1
+    from poslanec p
+    join dbo.hlasovani_poslanec hp on p.id_poslanec = hp.id_poslanec
+    join dbo.hlasovani h on hp.id_hlasovani = h.id_hlasovani
+    join dbo.organ o on h.id_organ = o.id_organ
+    where h.nazev_dlouhy like 'Návrh na vyslovení nedůvěry vládě%' AND
+          year(o.od_organ) between 2017 and 2021 AND
+          hp.vysledek in ('A') AND
+          p.id_osoba = osoba.id_osoba
+) and exists (
+    select 1
+    from poslanec p
+    join dbo.hlasovani_poslanec hp on p.id_poslanec = hp.id_poslanec
+    join dbo.hlasovani h on hp.id_hlasovani = h.id_hlasovani
+    join dbo.organ o on h.id_organ = o.id_organ
+    where h.nazev_dlouhy like 'Návrh na vyslovení nedůvěry vládě%' AND
+          year(o.od_organ) between 2017 and 2021 AND
+          hp.vysledek not in ('A') AND
+          p.id_osoba = osoba.id_osoba
+)
+order by id_osoba
+
+
+-- Streda 10:45 ----------------------------------------
+--A/2
+with tab as (
+    select distinct o.id_osoba, o.prijmeni, o.jmeno,(
+        select count(o2.id_poslanec)
+        from poslanec p
+        join dbo.omluva o2 on p.id_poslanec = o2.id_poslanec
+        where p.id_osoba = o.id_osoba and
+        month(o2.den) = 11
+        having count(o2.id_poslanec) > 16
+    ) as listopad ,(
+        select count(o2.id_poslanec)
+        from poslanec p
+        join dbo.omluva o2 on p.id_poslanec = o2.id_poslanec
+        where p.id_osoba = o.id_osoba and
+        month(o2.den) = 12
+    ) as prosinec
+    from osoba o
+    join dbo.zarazeni z on o.id_osoba = z.id_osoba and cl_funkce = 0
+    join dbo.organ org on z.id_of = org.id_organ
+    where org.nazev_organu_cz = 'Poslanecký klub Občanské demokratické strany'
+)
+
+select *
+from tab t1
+where listopad > prosinec
+
+-- 3
+with tab as (
+    select o.id_osoba, o.jmeno, o.prijmeni, org.nazev_organu_cz, count(*) as pocet_klubu
+    from osoba o
+    join zarazeni z on o.id_osoba = z.id_osoba
+    join organ org on z.id_of = org.id_organ and z.cl_funkce = 0
+    where org.nazev_organu_cz like '%klub%'
+    group by o.id_osoba, o.jmeno, o.prijmeni, org.nazev_organu_cz
+    having count(*) > 6
+)
+
+select *
+from tab t1;
+
+with tab as (
+    select o.id_osoba, o.jmeno, o.prijmeni, org.nazev_organu_cz
+    from osoba o
+    join zarazeni z on o.id_osoba = z.id_osoba
+    join organ org on z.id_of = org.id_organ and z.cl_funkce = 0
+    where org.nazev_organu_cz like '%klub%'
+)
+
+select *
+from tab t1
+
+
+
+-- 2
+
+select o1.id_osoba, o1.jmeno, o1.prijmeni, (
+        select count(*)
+        from osoba os
+        join dbo.poslanec p on os.id_osoba = p.id_osoba
+        join dbo.omluva o on p.id_poslanec = o.id_poslanec and p.id_organ = o.id_organ
+        where month(o.den) < 7 AND
+              year(o.den) = 2021 AND
+              o1.id_osoba = os.id_osoba
+        having count(*) > 47
+        group by os.id_osoba, os.jmeno, os.prijmeni
+    ) as oml_1_6, (
+        select count(*)
+        from osoba os
+        join dbo.poslanec p on os.id_osoba = p.id_osoba
+        join dbo.omluva o on p.id_poslanec = o.id_poslanec and p.id_organ = o.id_organ
+        where month(o.den) > 6 AND
+            year(o.den) = 2021 AND
+            o1.id_osoba = os.id_osoba
+        group by os.id_osoba, os.jmeno, os.prijmeni
+    ) as oml_7_12
+from osoba o1
+
+
+
+WITH OmluvaCounts AS (
+    SELECT p.id_osoba,
+           SUM(CASE WHEN month(o.den) BETWEEN 1 AND 6 AND year(o.den) = 2021 THEN 1 ELSE 0 END) as oml_1_6,
+           SUM(CASE WHEN month(o.den) BETWEEN 7 AND 12 AND year(o.den) = 2021 THEN 1 ELSE 0 END) as oml_7_12
+    FROM poslanec p
+    JOIN dbo.omluva o ON p.id_poslanec = o.id_poslanec
+    GROUP BY p.id_osoba
+)
+SELECT o1.id_osoba, o1.jmeno, o1.prijmeni, oc.oml_1_6, oc.oml_7_12
+FROM osoba o1
+JOIN OmluvaCounts oc ON o1.id_osoba = oc.id_osoba
+
+
+
+
+
+-- 1
+select o.id_osoba, o.jmeno, o.prijmeni, z.od_o, z.do_o
+from osoba o
+join zarazeni z on o.id_osoba = z.id_osoba and z.cl_funkce = 0
+where exists(
+            select *
+            from organ org
+            where org.nazev_organu_cz like 'Poslanecký klub Unie svobody' AND
+                  z.id_of = org.id_organ
+      ) and not exists(
+            select *
+            from organ org
+            where org.nazev_organu_cz like 'Poslanecký klub Občanské demokratické strany' AND
+                  z.id_of = org.id_organ
+      )
+
+
+WITH OmluvaCounts AS (
+    SELECT p.id_osoba,
+           SUM(CASE WHEN month(o.den) BETWEEN 1 AND 6 AND year(o.den) = 2021 THEN 1 ELSE 0 END) as oml_1_6,
+           SUM(CASE WHEN month(o.den) BETWEEN 7 AND 12 AND year(o.den) = 2021 THEN 1 ELSE 0 END) as oml_7_12
+    FROM poslanec p
+    JOIN dbo.omluva o ON p.id_poslanec = o.id_poslanec
+    GROUP BY p.id_osoba
+)
+SELECT o1.id_osoba, o1.jmeno, o1.prijmeni, oc.oml_1_6, oc.oml_7_12
+FROM osoba o1
+JOIN OmluvaCounts oc ON o1.id_osoba = oc.id_osoba
+
+select o.id_osoba, o.prijmeni, t.nazev_typ_org_cz, count(*) as pocet_klubu
+from osoba o
+join dbo.zarazeni z on o.id_osoba = z.id_osoba
+join organ org on z.id_of = org.id_organ and z.cl_funkce = 0
+join dbo.typ_organu t on org.id_typ_org = t.id_typ_org
+where t.nazev_typ_org_cz = 'klub' AND
+      org.do_organ is null
+group by o.id_osoba, o.prijmeni, t.nazev_typ_org_cz
+having count(*) > 1
+
+
+select o.id_osoba, o.jmeno, o.prijmeni,
+  count(distinct org.nazev_organu_cz) as pocet_ruznych_klubu,
+  sum(datediff(month, z.od_o, do_o)) pocet_mesicu_ukoncenych_clenstvi
+from osoba o
+join zarazeni z on o.id_osoba=z.id_osoba
+join organ org on z.id_of=org.id_organ and z.cl_funkce=0
+join typ_organu tor on tor.id_typ_org=org.id_typ_org
+join poslanec p on p.id_osoba=o.id_osoba
+join organ snemovna on p.id_organ=snemovna.id_organ
+where tor.nazev_typ_org_cz='Klub' and year(snemovna.od_organ)=2021 and
+      org.od_organ >= snemovna.od_organ
+group by o.id_osoba, o.jmeno, o.prijmeni
+having count(distinct org.nazev_organu_cz) > 1
+order by pocet_ruznych_klubu desc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+select o.id_osoba, o.jmeno, o.prijmeni
+from osoba o
+join zarazeni z on o.id_osoba = z.id_osoba
+join organ org on z.id_of = org.id_organ and z.cl_funkce = 0
