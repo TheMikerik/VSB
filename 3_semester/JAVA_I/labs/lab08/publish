@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+push_remote () {
+	git push -f $1 origin/$1:master
+}
+
+push_remote lab01
+push_remote lab02
+push_remote lab03
+push_remote lab04

@@ -1,0 +1,8 @@
+/target/
+.settings/
+.project
+.classpath
+/high_score.obj
+/high_score.csv
+/scoreDB
+/derby.log
