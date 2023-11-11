@@ -11,9 +11,10 @@ int main(){
        tree.Insert(i);
    }
 
-   tree.SearchNode(5);
-   tree.SearchNode(10);
-   tree.SearchNode(150);
+   tree.SearchNodeID(5);
+   tree.SearchNodeID(10);
+
+   tree.SendMessage(24);
 
     return 0;
 }

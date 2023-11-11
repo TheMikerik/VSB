@@ -11,21 +11,8 @@ BinaryHeap::~BinaryHeap(){
 
 void BinaryHeap::Insert(short inp){
     this->size++;
-    int tmp_position = this->size;
 
-    // Scans path to next free position
-    // LEFT = even number; RIGHT = odd number
-    while(tmp_position != 1){
-        if(tmp_position % 2 == 1){
-            path.push(RIGHT);
-            tmp_position -= 1;
-        }
-        else{
-            path.push(LEFT);
-        }
-
-        tmp_position /= 2;
-    }
+    this->GetPathFrom(this->size);
 
     // Navigate insertion into the next free position
     // Based on tracked path from function above
@@ -53,7 +40,7 @@ void BinaryHeap::Insert(short inp){
     }
 }
 
-short BinaryHeap::SearchNode(short inp){
+short BinaryHeap::SearchNodeID(short inp){
     std::queue<Node*> q;
     Node* current = this->Graph;
     q.push(current);
@@ -76,5 +63,85 @@ short BinaryHeap::SearchNode(short inp){
     throw std::runtime_error("Number was not found");
 }
 
+void BinaryHeap::GetPathFrom(short id_destination){
+    while(id_destination != 1){
+        if(id_destination % 2 == 1){
+            path.push(RIGHT);
+            id_destination -= 1;
+        }
+        else{
+            path.push(LEFT);
+        }
+
+        id_destination /= 2;
+    }
+}
+
+bool BinaryHeap::CheckNearbyStatuses(Node *node) {
+    if(node->parent != nullptr){
+        node->parent->status = UNCHECKED;
+        return true;
+    }
+    if(node->left != nullptr){
+        node->left->status = UNCHECKED;
+        return true;
+    }
+    if(node->right != nullptr){
+        node->right->status = UNCHECKED;
+        return true;
+    }
+    return false;
+}
+
 void BinaryHeap::SendMessage(short start_number) {
+    short start_id = this->SearchNodeID(start_number);
+    this->GetPathFrom(start_id);
+
+    Node *current = this->Graph;
+    while(!path.empty()){
+        bool direction = path.top();
+        path.pop();
+
+        if(direction == LEFT){
+            current = current->left;
+        }
+        else if(direction == RIGHT){
+            current = current->right;
+        }
+    }
+
+    std::cout << "Seeked node was found " << current->value << " and ID " << current->ID << std::endl;
+    std::queue<Node*> q;
+    current->status = CHECKED;
+    q.push(current);
+
+    short iter = 0;
+
+    while(!q.empty()){
+
+        current = q.front();
+        q.pop();
+
+        if(this->CheckNearbyStatuses(current)){
+            std::cout << "Iteration " << iter << ": ";
+
+            if (current->parent != nullptr && current->parent->status == UNCHECKED) {
+                current->parent->status = CHECKED;
+                q.push(current->parent);
+                std::cout << current->parent->value << " (ID_" << current->parent->ID << ") ";
+            }
+            if (current->left != nullptr && current->left->status == UNCHECKED) {
+                current->left->status = CHECKED;
+                q.push(current->left);
+                std::cout << current->left->value << " (ID_" << current->left->ID << ") ";
+            }
+            if (current->right != nullptr && current->right->status == UNCHECKED) {
+                current->right->status = CHECKED;
+                q.push(current->right);
+                std::cout << current->right->value << " (ID_" << current->right->ID << ") ";
+            }
+            std::cout << std::endl;
+            iter++;
+        }
+    }
 }
