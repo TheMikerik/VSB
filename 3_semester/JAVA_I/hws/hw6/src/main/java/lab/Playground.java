@@ -14,10 +14,10 @@ public class Playground implements DrawableSimulable {
     private short score1;
     private short score2;
 
-    public Playground(World wrld){
+    public Playground(World wrld, short sc1, short sc2) {
         this.world = wrld;
-        this.score1 = 0;
-        this.score2 = 0;
+        this.score1 = sc1;
+        this.score2 = sc2;
     }
 
     @Override

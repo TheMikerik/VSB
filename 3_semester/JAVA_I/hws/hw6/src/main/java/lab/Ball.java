@@ -14,6 +14,8 @@ public class Ball implements DrawableSimulable, Collisionable  {
 	protected double size;
 	private final World world;
 
+	private ScoreListener = new EmptyScoreListener();
+
 
 	public Ball(Point2D position, double sz, World wrld) {
 		this.position = position;
@@ -40,9 +42,18 @@ public class Ball implements DrawableSimulable, Collisionable  {
 	@Override
 	public void simulate(double deltaT) {
 		if(moving) {
-			double x = position.getX() + (directionX * 4) * velocity;
-			double y = position.getY() + (directionY * 5) * velocity;
-			position = new Point2D((x + this.world.width) % this.world.width, (y + this.world.height) % this.world.height);
+			double x = position.getX() + (directionX * 2) * velocity;
+			double y = position.getY() + (directionY * 2) * velocity;
+
+			if (position.getX() < 20 || position.getX() > world.width-20 ) {
+				this.moving = false;
+				position = new Point2D((this.world.width / 2), (this.world.height / 2));
+			}
+			else {
+				position = new Point2D((x + this.world.width) % this.world.width, (y + this.world.height) % this.world.height);
+			}
+
+			System.out.println("position: " + position);
 		}
 	}
 

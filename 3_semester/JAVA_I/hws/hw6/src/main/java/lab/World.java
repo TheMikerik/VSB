@@ -8,11 +8,15 @@ import static java.lang.Math.floor;
 public class World {
 
 	public final double width;
+	public short score1;
+	public short score2;
 	public final double height;
 	public final int offset;
 	public final double player_height;
 
 	private final DrawableSimulable[] entities;
+
+	private GameListener gameListener = new EmptyGameListener();
 
 	public final Rectangle2D upper_barrier;
 	public final Rectangle2D bottom_barrier;
@@ -22,6 +26,9 @@ public class World {
 		this.height = height;
 		this.offset = 20;
 
+		this.score1 = 0;
+		this.score2 = 0;
+
 		this.player_height = 120;
 		double player_width = 20;
 		double ball_size = 20;
@@ -30,11 +37,13 @@ public class World {
 		/*0*/		new Player(new Point2D(20, floor(height / 3)), player_width, player_height, this, 0),
 		/*1*/		new Player(new Point2D(width - 40, offset + 20), player_width, player_height, this, 1),
 		/*2*/       new Ball(new Point2D(40, 40), ball_size, this),
-		/*3*/		new Playground(this)
+		/*3*/		new Playground(this, score1, score2),
         };
 
 		upper_barrier = new Rectangle2D(0,0, width, offset);
 		bottom_barrier = new Rectangle2D(0,height - offset, width, offset);
+
+
 
 	}
 
