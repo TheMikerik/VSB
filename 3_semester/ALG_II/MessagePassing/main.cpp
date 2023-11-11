@@ -2,19 +2,47 @@
 #include "src/BinaryHeap.h"
 #include "src/BinaryHeap.cpp"
 
-#include <vector>
+
 
 int main(){
-    BinaryHeap tree((short)1);
 
-   for(short i = 2; i <= 32; i++){
-       tree.Insert(i);
-   }
+    std::string graph_path;
+    short start;
 
-   tree.SearchNodeID(5);
-   tree.SearchNodeID(10);
+    for (int i = 1; i < 5; i++){
+        switch(i){
+            case 1:
+                std::cout << "\n---------------------------------------------------" <<
+                             "\n--------------GRAPH: graph-single.txt--------------" <<
+                             "\n---------------------------------------------------";
+                graph_path = "test_data/graph-single.txt";
+                break;
+            case 2:
+                std::cout << "\n---------------------------------------------------" <<
+                             "\n---------------GRAPH: graph-small.txt--------------" <<
+                             "\n---------------------------------------------------";
+                graph_path = "test_data/graph-small.txt";
+                break;
+            case 3:
+                std::cout << "\n---------------------------------------------------" <<
+                             "\n--------------GRAPH: graph-medium.txt--------------" <<
+                             "\n---------------------------------------------------";
+                graph_path = "test_data/graph-medium.txt";
+                break;
+            case 4:
+                std::cout << "\n---------------------------------------------------" <<
+                             "\n---------------GRAPH: graph-huge.txt---------------" <<
+                             "\n---------------------------------------------------";
+                graph_path = "test_data/graph-huge.txt";
+                break;
+            default:
+                break;
+        }
 
-   tree.SendMessage(24);
+        BinaryHeap tree;
+        tree.LoadGraph(graph_path);
+        tree.ShortestPath();
 
+    }
     return 0;
 }

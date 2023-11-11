@@ -1,40 +1,53 @@
 #include "BinaryHeap.h"
 
-BinaryHeap::BinaryHeap(short inp){
-        this->size = 1;
-        this->Graph = new Node(inp, size);
+BinaryHeap::BinaryHeap(){
+        this->size = 0;
+        this->Graph = nullptr;
 }
 
 BinaryHeap::~BinaryHeap(){
         delete this->Graph;
 }
 
+void BinaryHeap::LoadGraph(const std::string& filename){
+    short number;
+    std::ifstream infile(filename);
+
+    while(!infile.eof()) {
+        infile >> number;
+        this->Insert(number);
+    }
+
+    infile.close();
+}
+
 void BinaryHeap::Insert(short inp){
-    this->size++;
+    if(this->Graph == nullptr){
+        this->size++;
+        this->Graph = new Node(inp, this->size);
+    }
+    else {
+        this->size++;
+        this->GetPathFrom(this->size);
+        // Navigate insertion into the next free position
+        // Based on tracked path from function above
+        Node *current = this->Graph;
+        while (!path.empty()) {
+            bool direction = path.top();
+            path.pop();
 
-    this->GetPathFrom(this->size);
-
-    // Navigate insertion into the next free position
-    // Based on tracked path from function above
-    Node *current = this->Graph;
-    while(!path.empty()){
-        bool direction = path.top();
-        path.pop();
-
-        if(direction == LEFT){
-            if(current->left == nullptr){
-                current->left = new Node(inp, size, current);
-            }
-            else {
-                current = current->left;
-            }
-        }
-        else if(direction == RIGHT){
-            if(current->right == nullptr){
-                current->right = new Node(inp, size, current);
-            }
-            else{
-                current = current->right;
+            if (direction == LEFT) {
+                if (current->left == nullptr) {
+                    current->left = new Node(inp, size, current);
+                } else {
+                    current = current->left;
+                }
+            } else if (direction == RIGHT) {
+                if (current->right == nullptr) {
+                    current->right = new Node(inp, size, current);
+                } else {
+                    current = current->right;
+                }
             }
         }
     }
@@ -78,23 +91,20 @@ void BinaryHeap::GetPathFrom(short id_destination){
 }
 
 bool BinaryHeap::CheckNearbyStatuses(Node *node) {
-    if(node->parent != nullptr){
-        node->parent->status = UNCHECKED;
+    if(node->parent != nullptr && node->parent->status == UNCHECKED){
         return true;
     }
-    if(node->left != nullptr){
-        node->left->status = UNCHECKED;
+    if(node->left != nullptr && node->left->status == UNCHECKED){
         return true;
     }
-    if(node->right != nullptr){
-        node->right->status = UNCHECKED;
+    if(node->right != nullptr && node->right->status == UNCHECKED){
         return true;
     }
     return false;
 }
 
-void BinaryHeap::SendMessage(short start_number) {
-    short start_id = this->SearchNodeID(start_number);
+short BinaryHeap::SendMessage(short start_id) {
+    this->ResetStatuses();
     this->GetPathFrom(start_id);
 
     Node *current = this->Graph;
@@ -110,38 +120,149 @@ void BinaryHeap::SendMessage(short start_number) {
         }
     }
 
-    std::cout << "Seeked node was found " << current->value << " and ID " << current->ID << std::endl;
     std::queue<Node*> q;
     current->status = CHECKED;
     q.push(current);
+    short added = 1;
+    short time = 0;
 
-    short iter = 0;
+    std::vector<short> iter;
+    iter.push_back(added);
 
     while(!q.empty()){
-
-        current = q.front();
-        q.pop();
-
-        if(this->CheckNearbyStatuses(current)){
-            std::cout << "Iteration " << iter << ": ";
-
-            if (current->parent != nullptr && current->parent->status == UNCHECKED) {
-                current->parent->status = CHECKED;
-                q.push(current->parent);
-                std::cout << current->parent->value << " (ID_" << current->parent->ID << ") ";
+        added = 0;
+        for(int i = 0; i < iter.at(time); i++) {
+            current = q.front();
+            q.pop();
+            if (this->CheckNearbyStatuses(current)) {
+                if (current->parent != nullptr && current->parent->status == UNCHECKED) {
+                    current->parent->status = CHECKED;
+                    q.push(current->parent);
+                    added++;
+                }
+                if (current->left != nullptr && current->left->status == UNCHECKED) {
+                    current->left->status = CHECKED;
+                    q.push(current->left);
+                    added++;
+                }
+                if (current->right != nullptr && current->right->status == UNCHECKED) {
+                    current->right->status = CHECKED;
+                    q.push(current->right);
+                    added++;
+                }
             }
-            if (current->left != nullptr && current->left->status == UNCHECKED) {
-                current->left->status = CHECKED;
-                q.push(current->left);
-                std::cout << current->left->value << " (ID_" << current->left->ID << ") ";
-            }
-            if (current->right != nullptr && current->right->status == UNCHECKED) {
-                current->right->status = CHECKED;
-                q.push(current->right);
-                std::cout << current->right->value << " (ID_" << current->right->ID << ") ";
-            }
-            std::cout << std::endl;
-            iter++;
+        }
+        iter.push_back(added);
+        time++;
+    }
+    time--;
+    return time;
+}
+
+void BinaryHeap::SendMessagePrint(short start_id) {
+    this->ResetStatuses();
+    this->GetPathFrom(start_id);
+
+    Node *current = this->Graph;
+    while(!path.empty()){
+        bool direction = path.top();
+        path.pop();
+
+        if(direction == LEFT){
+            current = current->left;
+        }
+        else if(direction == RIGHT){
+            current = current->right;
         }
     }
+
+    std::queue<Node*> q;
+    current->status = CHECKED;
+    q.push(current);
+    short added = 1;
+    short time = 1;
+
+    std::vector<short> iter;
+    iter.push_back(added);
+
+    std::cout << "Starting from: " << current->value << std::endl;
+    while(!q.empty()){
+        bool iter_desc = true;
+        added = 0;
+
+        for(int i = 0; i < iter.at(time-1); i++) {
+            current = q.front();
+            q.pop();
+            if (this->CheckNearbyStatuses(current)) {
+                if (iter_desc){
+                    std::cout << "Iteration " << time << ": ";
+                    iter_desc = false;
+                }
+                if (current->parent != nullptr && current->parent->status == UNCHECKED) {
+                    current->parent->status = CHECKED;
+                    q.push(current->parent);
+                    std::cout << current->parent->ID << " ";
+                    added++;
+                }
+                if (current->left != nullptr && current->left->status == UNCHECKED) {
+                    current->left->status = CHECKED;
+                    q.push(current->left);
+                    std::cout << current->left->ID << " ";
+                    added++;
+                }
+                if (current->right != nullptr && current->right->status == UNCHECKED) {
+                    current->right->status = CHECKED;
+                    q.push(current->right);
+                    std::cout << current->right->ID << " ";
+                    added++;
+                }
+            }
+        }
+        iter.push_back(added);
+        std::cout << std::endl;
+        time++;
+    }
+    std::cout << "Message handled trough entire graph" << "\n";
+}
+
+void BinaryHeap::ResetStatuses(){
+    Node* current = this->Graph;
+    std::queue<Node*> q;
+    q.push(current);
+
+    while(!q.empty()){
+        current = q.front();
+        q.pop();
+        current->status = UNCHECKED;
+        if(current->left != nullptr){
+            q.push(current->left);
+        }
+        if(current->right != nullptr) {
+            q.push(current->right);
+        }
+    }
+}
+
+void BinaryHeap::ShortestPath(){
+    short min_time = -1;
+    std::vector<short> min_id;
+
+    for(short id = 1; id <= this->size; id++){
+        short tmp = this->SendMessage(id);
+
+        if(min_time == -1 || min_time > tmp){
+            min_time = tmp;
+            min_id.push_back(id);
+        }
+    }
+
+    std::cout << "\nShortest time: " << min_time << " iterations on those IDS: ";
+    for(short id : min_id){
+        std::cout << id << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Shortest path example (" << "id:" << min_id.back()  << ")\n" << std::endl;
+    this->SendMessagePrint(min_id.back());
+    std::cout << "Checked " << this->size << " different routes\n\n";
 }
