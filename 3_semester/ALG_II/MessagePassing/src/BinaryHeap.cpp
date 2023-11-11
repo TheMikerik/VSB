@@ -9,19 +9,25 @@ BinaryHeap::~BinaryHeap(){
         delete this->Graph;
 }
 
-void BinaryHeap::LoadGraph(const std::string& filename){
+void BinaryHeap::LoadGraph(const std::string& filename, bool style){
     short number;
     std::ifstream infile(filename);
 
     while(!infile.eof()) {
         infile >> number;
-        this->Insert(number);
+
+        if(style==BALANCED) {
+            this->InsertBalanced(number);
+        }
+        if(style==RANDOM) {
+            this->InsertRandom(number);
+        }
     }
 
     infile.close();
 }
 
-void BinaryHeap::Insert(short inp){
+void BinaryHeap::InsertBalanced(short inp){
     if(this->Graph == nullptr){
         this->size++;
         this->Graph = new Node(inp, this->size);
@@ -53,27 +59,40 @@ void BinaryHeap::Insert(short inp){
     }
 }
 
-short BinaryHeap::SearchNodeID(short inp){
-    std::queue<Node*> q;
-    Node* current = this->Graph;
-    q.push(current);
+void BinaryHeap::InsertRandom(short inp){
+    if(this->Graph == nullptr){
+        this->size++;
+        this->Graph = new Node(inp, this->size);
+    }
+    else {
+        this->size++;
 
-    while(!q.empty()){
-        current = q.front();
-        q.pop();
+        Node *current = this->Graph;
+        bool direction = inp % 2 == 0 ? LEFT : RIGHT;
+        while(true){
+            short add = current->value;
+            direction = (inp+add) % 2 == 0 ? LEFT : RIGHT;
 
-        if(current->value == inp){
-            return current->ID;
-        }
-
-        if(current->left != nullptr){
-            q.push(current->left);
-        }
-        if(current->right!= nullptr){
-            q.push(current->right);
+            if(direction == LEFT){
+                if(current->left == nullptr){
+                    current->left = new Node(inp, size, current);
+                    break;
+                }
+                else{
+                    current = current->left;
+                }
+            }
+            else if(direction == RIGHT){
+                if(current->right == nullptr){
+                    current->right = new Node(inp, size, current);
+                    break;
+                }
+                else{
+                    current = current->right;
+                }
+            }
         }
     }
-    throw std::runtime_error("Number was not found");
 }
 
 void BinaryHeap::GetPathFrom(short id_destination){

@@ -40,7 +40,11 @@ int main(){
         }
 
         BinaryHeap tree;
-        tree.LoadGraph(graph_path);
+
+        // Choose one
+        //tree.LoadGraph(graph_path, BALANCED);
+        tree.LoadGraph(graph_path, RANDOM);
+
         tree.ShortestPath();
 
     }

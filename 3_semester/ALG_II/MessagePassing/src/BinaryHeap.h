@@ -7,7 +7,10 @@
 
 enum{
     LEFT = true,
-    RIGHT = false
+    RIGHT = false,
+
+    RANDOM = true,
+    BALANCED = false
 };
 
 class BinaryHeap{
@@ -23,21 +26,21 @@ class BinaryHeap{
         /**
          * Loads graph form input file
          * @param filename name of the input file
+         * @param style true if random, false if balanced
          */
-        void LoadGraph(const std::string& filename);
+        void LoadGraph(const std::string& filename, bool style);
 
         /**
-         * Inserts a node into the Graph
+         * Inserts a node into the Graph (in a BALANCED way)
          * @param inp input number of the new node
          */
-        void Insert(short inp);
+        void InsertBalanced(short inp);
 
         /**
-         * Searches for a node in the Graph
-         * @param inp seeked number value
-         * @return ID of the found node
+         * Inserts a node into the Graph (in a RANDOM way)
+         * @param inp input number of the new node
          */
-        short SearchNodeID(short inp);
+        void InsertRandom(short inp);
 
         /**
          * Fills the path vector with the path from the root to the node
@@ -67,6 +70,9 @@ class BinaryHeap{
         */
         void SendMessagePrint(short start_id);
 
+        /**
+         * Resets statuses of each node in the graph
+         */
         void ResetStatuses();
 
         /**
