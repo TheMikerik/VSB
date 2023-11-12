@@ -80,7 +80,7 @@ bool BinaryBalanced::CheckNearbyStatuses(Node *node) {
     return false;
 }
 
-short BinaryBalanced::SendMessage(short start_id) {
+short BinaryBalanced::SendMessage(short start_id, bool print) {
     this->ResetStatuses();
     this->GetPathFrom(start_id);
 
@@ -101,105 +101,52 @@ short BinaryBalanced::SendMessage(short start_id) {
     current->status = CHECKED;
     q.push(current);
     short added = 1;
-    short time = 0;
+    short iter_time = 0;
 
     std::vector<short> iter;
     iter.push_back(added);
 
+    if(print){ std::cout << "Starting from: " << current->ID << std::endl;}
+
     while(!q.empty()){
-        added = 0;
-        for(int i = 0; i < iter.at(time); i++) {
-            current = q.front();
-            q.pop();
-            if (this->CheckNearbyStatuses(current)) {
-                if (current->parent != nullptr && current->parent->status == UNCHECKED) {
-                    current->parent->status = CHECKED;
-                    q.push(current->parent);
-                    added++;
-                }
-                if (current->left != nullptr && current->left->status == UNCHECKED) {
-                    current->left->status = CHECKED;
-                    q.push(current->left);
-                    added++;
-                }
-                if (current->right != nullptr && current->right->status == UNCHECKED) {
-                    current->right->status = CHECKED;
-                    q.push(current->right);
-                    added++;
-                }
-            }
-        }
-        iter.push_back(added);
-        time++;
-    }
-    time--;
-    return time;
-}
-
-void BinaryBalanced::SendMessagePrint(short start_id) {
-    this->ResetStatuses();
-    this->GetPathFrom(start_id);
-
-    Node *current = this->Graph;
-    while(!path.empty()){
-        bool direction = path.top();
-        path.pop();
-
-        if(direction == LEFT){
-            current = current->left;
-        }
-        else if(direction == RIGHT){
-            current = current->right;
-        }
-    }
-
-    std::queue<Node*> q;
-    current->status = CHECKED;
-    q.push(current);
-    short added = 1;
-    short time = 1;
-
-    std::vector<short> iter;
-    iter.push_back(added);
-
-    std::cout << "Starting from: " << current->value << std::endl;
-    while(!q.empty()){
-        bool iter_desc = true;
+        iter_time++;
+        bool iter_desc = print;
         added = 0;
 
-        for(int i = 0; i < iter.at(time-1); i++) {
+        for(int i = 0; i < iter.at(iter_time - 1); i++) {
             current = q.front();
             q.pop();
             if (this->CheckNearbyStatuses(current)) {
                 if (iter_desc){
-                    std::cout << "Iteration " << time << ": ";
+                    std::cout << "Iteration " << iter_time << ": ";
                     iter_desc = false;
                 }
                 if (current->parent != nullptr && current->parent->status == UNCHECKED) {
                     current->parent->status = CHECKED;
                     q.push(current->parent);
-                    std::cout << current->parent->value << " ";
+                    if(print){ std::cout << current->parent->ID << " "; }
                     added++;
                 }
                 if (current->left != nullptr && current->left->status == UNCHECKED) {
                     current->left->status = CHECKED;
                     q.push(current->left);
-                    std::cout << current->left->value << " ";
+                    if(print){ std::cout << current->left->ID << " "; }
                     added++;
                 }
                 if (current->right != nullptr && current->right->status == UNCHECKED) {
                     current->right->status = CHECKED;
                     q.push(current->right);
-                    std::cout << current->right->value << " ";
+                    if(print){ std::cout << current->right->ID << " "; }
                     added++;
                 }
             }
         }
         iter.push_back(added);
-        std::cout << std::endl;
-        time++;
+        if(print){std::cout << std::endl; }
     }
-    std::cout << "Message handled trough entire graph" << "\n";
+    if(print){ std::cout << "Message handled trough entire graph" << "\n"; }
+    iter_time--;
+    return iter_time;
 }
 
 void BinaryBalanced::ResetStatuses(){
@@ -221,16 +168,18 @@ void BinaryBalanced::ResetStatuses(){
 }
 
 void BinaryBalanced::ShortestPath(){
-    this->ResetStatuses();
-
     short min_time = -1;
     std::vector<short> min_id;
 
     for(short id = 1; id <= this->size; id++){
-        short tmp = this->SendMessage(id);
-
-        if(min_time == -1 || min_time <= tmp){
+        short tmp = this->SendMessage(id, false);
+        if(min_time == -1 || tmp < min_time){
             min_time = tmp;
+        }
+    }
+    for(short id = 1; id <= this->size; id++){
+        short tmp = this->SendMessage(id, false);
+        if(min_time == tmp){
             min_id.push_back(id);
         }
     }
@@ -242,6 +191,6 @@ void BinaryBalanced::ShortestPath(){
     std::cout << std::endl;
 
     std::cout << "Shortest path example (" << "id:" << min_id.back()  << ")\n" << std::endl;
-    this->SendMessagePrint(min_id.back());
+    this->SendMessage(min_id.back(), true);
     std::cout << "Checked " << this->size << " different routes\n\n";
 }

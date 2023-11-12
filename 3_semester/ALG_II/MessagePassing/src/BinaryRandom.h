@@ -45,17 +45,10 @@ public:
     Node* SearchNode(short inp);
 
     /**
-     * Calculates the time for the message to travel all trough the graph
-     * @param inp Value from which the path should be calculated
-     * @return Shortest time to travel all trough the graph
-     */
-    short SendMessage(short inp);
-
-    /**
     * Prints the shortest path for the message to travel all trough the graph
     * @param start_number ID from which the path is starting
     */
-    void SendMessagePrint(short inp);
+    short SendMessage(short inp, bool print);
 
     /**
      * Resets statuses of each node in the graph

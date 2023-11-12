@@ -43,17 +43,10 @@ class BinaryBalanced{
         bool CheckNearbyStatuses(Node* node);
 
         /**
-         * Calculates the time for the message to travel all trough the graph
-         * @param start_number ID from which the path should be calculated
-         * @return Shortest time to travel all trough the graph
-         */
-        short SendMessage(short start_id);
-
-        /**
         * Prints the shortest path for the message to travel all trough the graph
         * @param start_number ID from which the path is starting
         */
-        void SendMessagePrint(short start_id);
+        short SendMessage(short start_id, bool print);
 
         /**
          * Resets statuses of each node in the graph
