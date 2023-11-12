@@ -5,17 +5,34 @@ BinaryUnbalanced::BinaryUnbalanced(){
     this->Graph = nullptr;
 }
 
-BinaryUnbalanced::~BinaryUnbalanced(){
-    delete this->Graph;
+BinaryUnbalanced::~BinaryUnbalanced() {
+    if (this->Graph != nullptr) {
+        this->DeleteGraph(this->Graph);
+        this->Graph = nullptr;
+    }
+}
+
+void BinaryUnbalanced::DeleteGraph(Node* node) {
+    if (node != nullptr) {
+        this->DeleteGraph(node->left);
+        this->DeleteGraph(node->right);
+        delete node;
+    }
 }
 
 void BinaryUnbalanced::LoadGraph(const std::string& filename){
     short number;
     std::ifstream infile(filename);
 
-    while(!infile.eof()) {
-        infile >> number;
-        this->Insert(number);
+    if (!infile.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
+    else {
+        while (!infile.eof()) {
+            infile >> number;
+            this->Insert(number);
+        }
     }
 
     infile.close();
@@ -96,52 +113,51 @@ short BinaryUnbalanced::SendMessage(short inp, bool print) {
     std::queue<Node*> q;
     current->status = CHECKED;
     q.push(current);
-    short added = 1;
-    short iter_time = 0;
+    short from_q = 1;
+    short iterations = 0;
 
-    std::vector<short> iter;
-    iter.push_back(added);
+    std::vector<short> added;
+    added.push_back(from_q);
 
     if(print){ std::cout << "\tStarting from: " << current->value << std::endl; }
     while(!q.empty()){
-        iter_time++;
+        iterations++;
 
         bool iter_desc = print;
-        added = 0;
-        for(int i = 0; i < iter.at(iter_time - 1); i++) {
+        from_q = 0;
+        for(int i = 0; i < added.at(iterations - 1); i++) {
             current = q.front();
             q.pop();
             if (this->CheckNearbyStatuses(current)) {
                 if (iter_desc){
-                    std::cout << "\tIteration " << iter_time << ": ";
+                    std::cout << "\tIteration " << iterations << ": ";
                     iter_desc = false;
                 }
                 if (current->parent != nullptr && current->parent->status == UNCHECKED) {
                     current->parent->status = CHECKED;
                     q.push(current->parent);
                     if(print){ std::cout << current->parent->value << " ";}
-                    added++;
+                    from_q++;
                 }
                 if (current->left != nullptr && current->left->status == UNCHECKED) {
                     current->left->status = CHECKED;
                     q.push(current->left);
                     if(print){ std::cout << current->left->value << " ";}
-                    added++;
+                    from_q++;
                 }
                 if (current->right != nullptr && current->right->status == UNCHECKED) {
                     current->right->status = CHECKED;
                     q.push(current->right);
                     if(print){ std::cout << current->right->value << " ";}
-                    added++;
+                    from_q++;
                 }
             }
         }
-        iter.push_back(added);
+        added.push_back(from_q);
         if(print){ std::cout << std::endl;}
     }
-   // if(print){ std::cout << "Message handled trough entire graph" << "\n";}
-    iter_time--;
-    return iter_time;
+    iterations--;
+    return iterations;
 }
 
 void BinaryUnbalanced::ResetStatuses(){
@@ -189,13 +205,13 @@ void BinaryUnbalanced::ShortestPath(){
         }
     }
 
-    short min_time = -1;
+    short min_time = UNASSIGNED;
     std::vector<short> min_values;
     short no_nodes = 0;
 
     for(Node* s : starters){
         short tmp = this->SendMessage(s->value, false);
-        if(min_time == -1 || tmp < min_time){
+        if(min_time == UNASSIGNED || tmp < min_time){
             min_time = tmp;
         }
         no_nodes++;

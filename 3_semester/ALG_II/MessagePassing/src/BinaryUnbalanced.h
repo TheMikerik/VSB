@@ -14,6 +14,7 @@ private:
 public:
     BinaryUnbalanced();
     ~BinaryUnbalanced();
+    void DeleteGraph(Node* node);
 
     /**
      * Loads graph form input file

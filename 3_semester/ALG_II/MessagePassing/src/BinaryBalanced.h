@@ -14,6 +14,7 @@ class BinaryBalanced{
     public:
         BinaryBalanced();
         ~BinaryBalanced();
+        void DeleteGraph(Node* node);
 
         /**
          * Loads graph form input file

@@ -8,8 +8,7 @@ enum {
     LEFT = true,
     RIGHT = false,
 
-    RANDOM = true,
-    BALANCED = false
+    UNASSIGNED = -1
 };
 
 struct Node {
