@@ -1,33 +1,27 @@
-#include "BinaryHeap.h"
+#include "BinaryBalanced.h"
 
-BinaryHeap::BinaryHeap(){
+BinaryBalanced::BinaryBalanced(){
         this->size = 0;
         this->Graph = nullptr;
 }
 
-BinaryHeap::~BinaryHeap(){
+BinaryBalanced::~BinaryBalanced(){
         delete this->Graph;
 }
 
-void BinaryHeap::LoadGraph(const std::string& filename, bool style){
+void BinaryBalanced::LoadGraph(const std::string& filename){
     short number;
     std::ifstream infile(filename);
 
     while(!infile.eof()) {
         infile >> number;
-
-        if(style==BALANCED) {
-            this->InsertBalanced(number);
-        }
-        if(style==RANDOM) {
-            this->InsertRandom(number);
-        }
+        this->Insert(number);
     }
 
     infile.close();
 }
 
-void BinaryHeap::InsertBalanced(short inp){
+void BinaryBalanced::Insert(short inp){
     if(this->Graph == nullptr){
         this->size++;
         this->Graph = new Node(inp, this->size);
@@ -59,43 +53,7 @@ void BinaryHeap::InsertBalanced(short inp){
     }
 }
 
-void BinaryHeap::InsertRandom(short inp){
-    if(this->Graph == nullptr){
-        this->size++;
-        this->Graph = new Node(inp, this->size);
-    }
-    else {
-        this->size++;
-
-        Node *current = this->Graph;
-        bool direction = inp % 2 == 0 ? LEFT : RIGHT;
-        while(true){
-            short add = current->value;
-            direction = (inp+add) % 2 == 0 ? LEFT : RIGHT;
-
-            if(direction == LEFT){
-                if(current->left == nullptr){
-                    current->left = new Node(inp, size, current);
-                    break;
-                }
-                else{
-                    current = current->left;
-                }
-            }
-            else if(direction == RIGHT){
-                if(current->right == nullptr){
-                    current->right = new Node(inp, size, current);
-                    break;
-                }
-                else{
-                    current = current->right;
-                }
-            }
-        }
-    }
-}
-
-void BinaryHeap::GetPathFrom(short id_destination){
+void BinaryBalanced::GetPathFrom(short id_destination){
     while(id_destination != 1){
         if(id_destination % 2 == 1){
             path.push(RIGHT);
@@ -109,7 +67,7 @@ void BinaryHeap::GetPathFrom(short id_destination){
     }
 }
 
-bool BinaryHeap::CheckNearbyStatuses(Node *node) {
+bool BinaryBalanced::CheckNearbyStatuses(Node *node) {
     if(node->parent != nullptr && node->parent->status == UNCHECKED){
         return true;
     }
@@ -122,7 +80,7 @@ bool BinaryHeap::CheckNearbyStatuses(Node *node) {
     return false;
 }
 
-short BinaryHeap::SendMessage(short start_id) {
+short BinaryBalanced::SendMessage(short start_id) {
     this->ResetStatuses();
     this->GetPathFrom(start_id);
 
@@ -178,7 +136,7 @@ short BinaryHeap::SendMessage(short start_id) {
     return time;
 }
 
-void BinaryHeap::SendMessagePrint(short start_id) {
+void BinaryBalanced::SendMessagePrint(short start_id) {
     this->ResetStatuses();
     this->GetPathFrom(start_id);
 
@@ -220,19 +178,19 @@ void BinaryHeap::SendMessagePrint(short start_id) {
                 if (current->parent != nullptr && current->parent->status == UNCHECKED) {
                     current->parent->status = CHECKED;
                     q.push(current->parent);
-                    std::cout << current->parent->ID << " ";
+                    std::cout << current->parent->value << " ";
                     added++;
                 }
                 if (current->left != nullptr && current->left->status == UNCHECKED) {
                     current->left->status = CHECKED;
                     q.push(current->left);
-                    std::cout << current->left->ID << " ";
+                    std::cout << current->left->value << " ";
                     added++;
                 }
                 if (current->right != nullptr && current->right->status == UNCHECKED) {
                     current->right->status = CHECKED;
                     q.push(current->right);
-                    std::cout << current->right->ID << " ";
+                    std::cout << current->right->value << " ";
                     added++;
                 }
             }
@@ -244,7 +202,7 @@ void BinaryHeap::SendMessagePrint(short start_id) {
     std::cout << "Message handled trough entire graph" << "\n";
 }
 
-void BinaryHeap::ResetStatuses(){
+void BinaryBalanced::ResetStatuses(){
     Node* current = this->Graph;
     std::queue<Node*> q;
     q.push(current);
@@ -262,14 +220,16 @@ void BinaryHeap::ResetStatuses(){
     }
 }
 
-void BinaryHeap::ShortestPath(){
+void BinaryBalanced::ShortestPath(){
+    this->ResetStatuses();
+
     short min_time = -1;
     std::vector<short> min_id;
 
     for(short id = 1; id <= this->size; id++){
         short tmp = this->SendMessage(id);
 
-        if(min_time == -1 || min_time > tmp){
+        if(min_time == -1 || min_time <= tmp){
             min_time = tmp;
             min_id.push_back(id);
         }

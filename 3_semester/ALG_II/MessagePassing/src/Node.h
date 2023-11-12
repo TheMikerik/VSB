@@ -3,7 +3,13 @@
 
 enum {
     UNCHECKED = false,
-    CHECKED = true
+    CHECKED = true,
+
+    LEFT = true,
+    RIGHT = false,
+
+    RANDOM = true,
+    BALANCED = false
 };
 
 struct Node {

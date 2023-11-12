@@ -1,13 +1,14 @@
 // https://www.youtube.com/watch?v=mvbKAzt3W1s&ab_channel=JavaCodingInsightInterviewPreparation
-#include "src/BinaryHeap.h"
-#include "src/BinaryHeap.cpp"
+#include "src/BinaryBalanced.h"
+#include "src/BinaryBalanced.cpp"
+#include "src/BinaryRandom.h"
+#include "src/BinaryRandom.cpp"
 
 
 
 int main(){
 
     std::string graph_path;
-    short start;
 
     for (int i = 1; i < 5; i++){
         switch(i){
@@ -39,13 +40,13 @@ int main(){
                 break;
         }
 
-        BinaryHeap tree;
+        BinaryBalanced balanced_tree;
+        balanced_tree.LoadGraph(graph_path);
+        balanced_tree.ShortestPath();
 
-        // Choose one
-        //tree.LoadGraph(graph_path, BALANCED);
-        tree.LoadGraph(graph_path, RANDOM);
-
-        tree.ShortestPath();
+//        BinaryRandom random_tree;
+//        random_tree.LoadGraph(graph_path);
+//        random_tree.ShortestPath();
 
     }
     return 0;

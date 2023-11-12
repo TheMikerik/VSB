@@ -5,42 +5,27 @@
 #include <vector>
 #include <fstream>
 
-enum{
-    LEFT = true,
-    RIGHT = false,
-
-    RANDOM = true,
-    BALANCED = false
-};
-
-class BinaryHeap{
+class BinaryBalanced{
     private:
         short size;
         Node* Graph;
         std::stack<bool> path;
 
     public:
-        BinaryHeap();
-        ~BinaryHeap();
+        BinaryBalanced();
+        ~BinaryBalanced();
 
         /**
          * Loads graph form input file
          * @param filename name of the input file
-         * @param style true if random, false if balanced
          */
-        void LoadGraph(const std::string& filename, bool style);
+        void LoadGraph(const std::string& filename);
 
         /**
          * Inserts a node into the Graph (in a BALANCED way)
          * @param inp input number of the new node
          */
-        void InsertBalanced(short inp);
-
-        /**
-         * Inserts a node into the Graph (in a RANDOM way)
-         * @param inp input number of the new node
-         */
-        void InsertRandom(short inp);
+        void Insert(short inp);
 
         /**
          * Fills the path vector with the path from the root to the node
