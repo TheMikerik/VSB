@@ -106,7 +106,7 @@ short BinaryBalanced::SendMessage(short start_id, bool print) {
     std::vector<short> iter;
     iter.push_back(added);
 
-    if(print){ std::cout << "Starting from: " << current->ID << std::endl;}
+    if(print){ std::cout << "\tStarting from: " << current->ID << std::endl;}
 
     while(!q.empty()){
         iter_time++;
@@ -118,7 +118,7 @@ short BinaryBalanced::SendMessage(short start_id, bool print) {
             q.pop();
             if (this->CheckNearbyStatuses(current)) {
                 if (iter_desc){
-                    std::cout << "Iteration " << iter_time << ": ";
+                    std::cout << "\tIteration " << iter_time << ": ";
                     iter_desc = false;
                 }
                 if (current->parent != nullptr && current->parent->status == UNCHECKED) {
@@ -144,7 +144,7 @@ short BinaryBalanced::SendMessage(short start_id, bool print) {
         iter.push_back(added);
         if(print){std::cout << std::endl; }
     }
-    if(print){ std::cout << "Message handled trough entire graph" << "\n"; }
+    //if(print){ std::cout << "Message handled trough entire graph" << "\n"; }
     iter_time--;
     return iter_time;
 }
@@ -184,13 +184,13 @@ void BinaryBalanced::ShortestPath(){
         }
     }
 
-    std::cout << "\nShortest time: " << min_time << " iterations on those IDS: ";
+    std::cout << "\n\tShortest time: " << min_time << " iterations on those IDS: ";
     for(short id : min_id){
         std::cout << id << " ";
     }
     std::cout << std::endl;
 
-    std::cout << "Shortest path example (" << "id:" << min_id.back()  << ")\n" << std::endl;
+    std::cout << "\tShortest path example (" << "id:" << min_id.back()  << ")\n" << std::endl;
     this->SendMessage(min_id.back(), true);
-    std::cout << "Checked " << this->size << " different routes\n\n";
+    std::cout << "\tBest path selected from " << this->size << " different routes\n\n";
 }

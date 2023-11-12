@@ -5,22 +5,21 @@
 #include <vector>
 #include <fstream>
 
-class BinaryRandom{
+class BinaryUnbalanced{
 private:
     short size;
     Node* Graph;
     std::stack<bool> path;
 
 public:
-    BinaryRandom();
-    ~BinaryRandom();
+    BinaryUnbalanced();
+    ~BinaryUnbalanced();
 
     /**
      * Loads graph form input file
      * @param filename name of the input file
      */
     void LoadGraph(const std::string& filename);
-
 
     /**
      * Inserts a node into the Graph (in a RANDOM way)
