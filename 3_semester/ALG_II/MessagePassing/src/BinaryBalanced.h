@@ -35,7 +35,7 @@ class BinaryBalanced{
         void GetPathFrom(short id_destination);
 
         /**
-         * Checks if the given node has some neighbors that has not been checked
+         * Checks if the given node has some neighbors that has not been checked yet
          *
          * @param node Current node that should be checked
          * \retval TRUE unchecked neighbors do exist
@@ -44,8 +44,10 @@ class BinaryBalanced{
         bool CheckNearbyStatuses(Node* node);
 
         /**
-        * Prints the shortest path for the message to travel all trough the graph
+        * Sends a message though the graph starting from the given node
+        * @param print Prints each iteration (step) of the shortest path
         * @param start_number ID from which the path is starting
+        * @return Time period for the message to travel trough the graph
         */
         short SendMessage(short start_id, bool print);
 
@@ -55,7 +57,7 @@ class BinaryBalanced{
         void ResetStatuses();
 
         /**
-         * Calculates the shortest time for the message to travel
+         * Calculates the shortest time period for the message to travel over the graph
          */
         void ShortestPath();
 };
