@@ -1,0 +1,149 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="FAC30AF0-DFD1-0C88-A8E7-62F7D0E0D80B" name="P2P_Offers">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:17:54 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<adequatelyNormalized>NO</adequatelyNormalized>
+<expectedVolumes>0</expectedVolumes>
+<fwdEngineeringStrategyName>Single Table</fwdEngineeringStrategyName>
+<growthPercent>0</growthPercent>
+<growthType>Year</growthType>
+<maxVolumes>9999999</maxVolumes>
+<minVolumes>0</minVolumes>
+<normalForm>Third</normalForm>
+<attributes itemClass="oracle.dbtools.crest.model.design.logical.Attribute">
+<Attribute name="Offer_ID" id="AD4FF8D7-D5BC-FB94-BE44-C441DDFCFEEE">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:18:06 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Cryptocurrency_ID" id="3C8D5BE9-26CF-E1FF-BDCC-AA65193EF14C">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:18:26 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Volume" id="FACDE486-8BF8-0E13-7491-67905A9C4FA9">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:19:17 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Value" id="5644699D-50C1-8FCD-2A5A-D76CAC0D1C46">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:19:28 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Place" id="C099EAB5-6231-BA7D-B9E6-861C762B9A98">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:19:40 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Status" id="56B46778-E9E6-2B11-FA62-3FD0C164B450">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:20:08 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Negotiable" id="2B0B99BE-F223-3139-4FBC-7F7192BC894F">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:20:35 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<dataTypeSize>1</dataTypeSize>
+<ownDataTypeParameters>1,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Cryptocurrency_ID1" id="68377215-F2D9-0779-3209-401733CD7E59">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:42:40 UTC</createdTime>
+<generatorID>9CF13AC3-5FFF-B118-58DD-0DFD05AEBAFF</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<referedAttribute>27DC4D23-C5C4-F747-0C06-6E5B13368D49</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+<Attribute name="Trader_ID" id="5F620EAD-EE6C-EB5F-C3F4-25D9F4C8A958">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:43:36 UTC</createdTime>
+<generatorID>5842E773-DBA3-47CC-856E-EC7CEDC9E6A3</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<referedAttribute>4FB4B6DD-53D7-DFBE-0F7A-6FB4FD4D54BC</referedAttribute>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+</Attribute>
+</attributes>
+<identifiers itemClass="oracle.dbtools.crest.model.design.logical.CandidateKey">
+<identifier id="EBC5825E-61AD-B20A-462D-C37B7A6C6E8D" name="P2P_Offers PK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:18:23 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<pk>true</pk>
+<usedAttributes>
+<attributeRef>AD4FF8D7-D5BC-FB94-BE44-C441DDFCFEEE</attributeRef>
+</usedAttributes>
+</identifier>
+</identifiers>
+</Entity>

@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="4EC99558-51F6-FE5B-8976-83A0757968C2" containerWithKeyObject="5536DD47-5E2A-E2AA-427E-EA38EB5FBC0E" localFKIndex="3EBB068F-B690-94BE-2019-0D23E492AF3A" name="Transactions_Portfolios_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:47:52 UTC</createdTime>
+<generatorID>107092CC-845E-9EDD-7282-279BDB9B6777</generatorID>
+<ownerDesignName>relational_model</ownerDesignName>
+<referredTableLongName>Portfolios</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>218E151E-9010-52BF-32A8-260049C1F69F</referredTableID>
+<keyObject>9ECB2F22-9574-090A-4813-85B160B653FE</keyObject>
+<referredKeyID>9ECB2F22-9574-090A-4813-85B160B653FE</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>Portfolio_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

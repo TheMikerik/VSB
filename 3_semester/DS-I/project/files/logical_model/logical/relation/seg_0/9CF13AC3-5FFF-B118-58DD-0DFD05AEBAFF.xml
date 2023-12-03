@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="cryptocurrency_P2Poffer" directorySegmentName="seg_0" id="9CF13AC3-5FFF-B118-58DD-0DFD05AEBAFF">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 17:42:40 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<sourcePk>19E9E736-C97A-811E-4FF5-AA2EB1F6DF05</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>DD7F95DA-1DC4-6F9F-A00C-41C8F15C7796</sourceEntity>
+<targetCardinalityString>*</targetCardinalityString>
+<targetEntity>FAC30AF0-DFD1-0C88-A8E7-62F7D0E0D80B</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>

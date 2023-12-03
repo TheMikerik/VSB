@@ -1,0 +1,86 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="60AD3BB3-77D1-14B9-DEAF-A050C0002A03" name="Vexels">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<generatorID>2CD7588C-91CF-792B-1884-E7A2A115AB99</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Trader_ID" id="E414BEAD-29F6-CD02-5EC1-C96FB2D394E0">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<generatorID>4FB4B6DD-53D7-DFBE-0F7A-6FB4FD4D54BC</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Location" id="3D53FAC3-0990-BCE0-F7D0-049BF84F2685">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<generatorID>F69DCD88-EC9C-4C09-3A52-F8BEDF6BFE1F</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50</dataTypeSize>
+<ownDataTypeParameters>50,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Users_User_ID" id="E70A7FBC-A620-8D51-5B3A-FA9112634BBB">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<generatorID>F15B289B-B49C-D21A-0E5C-E5CB41A357F8</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="0D1C9E40-1648-5CC7-1008-EE53F0A40452" referredColumn="722562F3-2802-11E7-3A74-84108F251CA8"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="2601D75D-AD47-A53A-F059-BDDCF7C1AEB6" name="Vexels_PK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<generatorID>E42D6CA8-CEF7-AB2F-B86D-DDDC41F286A0</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E414BEAD-29F6-CD02-5EC1-C96FB2D394E0"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="2B9D72A7-538F-2820-EFEE-53B438CA6889" name="Vexels__IDX">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<relationGeneratorID>1E29B27D-861E-75AF-58A9-7530F1BE47BC</relationGeneratorID>
+<indexColumnUsage>
+<colUsage columnID="E70A7FBC-A620-8D51-5B3A-FA9112634BBB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6802C8F7-F96E-0C36-BA7C-1FB726ECE70B" name="Vexels_Users_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:06:10 UTC</createdTime>
+<generatorID>1E29B27D-861E-75AF-58A9-7530F1BE47BC</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="E70A7FBC-A620-8D51-5B3A-FA9112634BBB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

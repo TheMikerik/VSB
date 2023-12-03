@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Relation class="oracle.dbtools.crest.model.design.logical.Relation" name="user_vexel" directorySegmentName="seg_0" id="1E29B27D-861E-75AF-58A9-7530F1BE47BC">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-11-27 19:04:21 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<engineerTo>
+<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
+</engineerTo>
+<sourcePk>4CCC1BC1-C905-7248-09F0-F615003512BA</sourcePk>
+<identifying>false</identifying>
+<optionalSource>true</optionalSource>
+<optionalTarget>false</optionalTarget>
+<sourceCardinality>1</sourceCardinality>
+<sourceEntity>7E672492-B36B-099C-D770-7A5343E069E5</sourceEntity>
+<targetCardinalityString>1</targetCardinalityString>
+<targetEntity>2CD7588C-91CF-792B-1884-E7A2A115AB99</targetEntity>
+<transferable>true</transferable>
+<deleteRule>NO ACTION</deleteRule>
+</Relation>
