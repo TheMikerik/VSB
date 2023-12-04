@@ -1,0 +1,49 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C443A16D-1FD7-3F1B-E739-5C780398E50A" name="Currencies">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>01FBB2A2-F3EA-9148-931E-B3980724DA56</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Currency_ID" id="529732C4-5C0F-1F99-7186-9A1CE463BBAB">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>BA1877B2-8AB3-7EE5-EC90-4444E3CFD0B6</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Name" id="F665526A-EA0A-E91C-654B-ECA4A3B2BDA0">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>527DD404-A33D-C48B-A395-C2C00B86FBF8</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="1F29A982-BA3C-C878-7816-1397A6B6D259" name="Currencies_PK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>D22AC784-5BFA-9D76-D421-E5B87A5F2AE7</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="529732C4-5C0F-1F99-7186-9A1CE463BBAB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

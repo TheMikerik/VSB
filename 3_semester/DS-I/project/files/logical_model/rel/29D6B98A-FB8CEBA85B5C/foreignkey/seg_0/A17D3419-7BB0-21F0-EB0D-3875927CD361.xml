@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="A17D3419-7BB0-21F0-EB0D-3875927CD361" containerWithKeyObject="30F88AD5-AD0A-E387-5E24-9EAB104A2F41" localFKIndex="F2353C85-22C8-5184-489B-7D495114753A" name="P2P_Transaction_P2P_Offers_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>B24807F1-02E4-D4BA-F3B2-3695ADEB8A16</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<referredTableLongName>P2P_Offers</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>C6F76551-AE84-0CAD-CA95-03B98E9A835B</referredTableID>
+<keyObject>A9F4CAA7-F5A7-6B97-1B95-A4258BCCB974</keyObject>
+<referredKeyID>A9F4CAA7-F5A7-6B97-1B95-A4258BCCB974</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>Offer_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

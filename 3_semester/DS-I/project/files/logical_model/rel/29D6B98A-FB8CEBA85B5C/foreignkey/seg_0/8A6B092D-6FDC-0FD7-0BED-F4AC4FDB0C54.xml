@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="8A6B092D-6FDC-0FD7-0BED-F4AC4FDB0C54" containerWithKeyObject="689126B5-AD4F-49AF-C3ED-EA5841D73959" localFKIndex="EA869C75-A38A-0986-7117-924FB4EA4B37" name="Vexels_Users_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>1E29B27D-861E-75AF-58A9-7530F1BE47BC</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<referredTableLongName>Users</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>13EFB43E-6078-5FFC-4E9A-AAECF995EFFA</referredTableID>
+<keyObject>FB112BC3-03A3-3C37-F1EB-986B7CB835E5</keyObject>
+<referredKeyID>FB112BC3-03A3-3C37-F1EB-986B7CB835E5</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>User_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

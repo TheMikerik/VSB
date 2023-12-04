@@ -1,0 +1,124 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="A8D1FC9B-E5BC-D4CF-8804-8D6479280841" name="Transactions">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>944CB6B3-E708-210D-4F0B-4DB3D3F40B31</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="Transaction_ID" id="A4D3B5CD-80F5-4B5B-2CFD-BA0CA696503B">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>89D323C6-91C6-0470-00C3-E273CD0193FF</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Volume" id="B72C34E7-F76B-54E6-9DA3-166CA939AF02">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>07FBD2B8-21E3-24D8-3F25-21086505D9ED</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Value" id="096A89A4-3AA9-65D4-C2B4-2F42000A6567">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>F89BAC35-3BFF-8C14-E049-0256FB50BE91</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT021</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Date" id="5FE171F0-0987-7655-066F-99605A62C9D9">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>9806E816-44E6-E130-01CE-785150F466C6</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>91229484-D19C-D458-8647-333C7FFE7B60</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Portfolios_Portfolio_ID" id="694970C0-21FA-36FD-7D5B-26D224858718">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>BD73A9D1-2FAC-A9B9-B265-89BE5C9356C8</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT018</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="CDEA655A-F4A4-9643-CE20-2850643F2878" referredColumn="C5CB69C1-E6A7-39EB-2F57-C04E4E3FC6DD"/>
+</associations>
+</Column>
+<Column name="Cryptocurrencies_Cryptocurrency_ID" id="7DCA24D0-FD83-D5AE-FCF9-CAB97A3D4545">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>1DF1B289-17BC-EA22-FCC2-BC59AE5637E2</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="96884909-CB15-5D88-4373-A6D4C8D54562" referredColumn="655880F3-35E7-EBC2-0C1B-51F2E06B196B"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="DC33C340-62F8-CF34-6AA9-96A46053CDDD" name="Transactions_PK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>78A40643-F80C-048A-512F-CD49BD8132A0</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A4D3B5CD-80F5-4B5B-2CFD-BA0CA696503B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FF139997-5770-9BF5-E5EB-54822D9EC260" name="Transactions_Portfolios_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>107092CC-845E-9EDD-7282-279BDB9B6777</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="694970C0-21FA-36FD-7D5B-26D224858718"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="904E9478-874A-5DC4-30C0-9F507F11C9B0" name="Transactions_Cryptocurrencies_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>313D99E6-825E-C996-3B20-366BF8B752FF</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7DCA24D0-FD83-D5AE-FCF9-CAB97A3D4545"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

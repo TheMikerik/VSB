@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="676B57D3-BC98-D615-4D00-95645B901F26" containerWithKeyObject="C6F76551-AE84-0CAD-CA95-03B98E9A835B" localFKIndex="6167268E-1378-270A-B446-36EBC5CA4000" name="P2P_Offers_Cryptocurrencies_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>9CF13AC3-5FFF-B118-58DD-0DFD05AEBAFF</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<referredTableLongName>Cryptocurrencies</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>F3E9ACF0-D8C4-2DAD-2BF8-67E1FCE8F9B0</referredTableID>
+<keyObject>7DFC09AB-EECB-4C88-DC96-84FE8D548032</keyObject>
+<referredKeyID>7DFC09AB-EECB-4C88-DC96-84FE8D548032</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>Cryptocurrency_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

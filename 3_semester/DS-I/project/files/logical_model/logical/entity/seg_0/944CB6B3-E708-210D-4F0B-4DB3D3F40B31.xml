@@ -27,18 +27,6 @@
 <logicalDatatype>LOGDT018</logicalDatatype>
 <ownDataTypeParameters>,,</ownDataTypeParameters>
 </Attribute>
-<Attribute name="Cryptocurrency_ID" id="04ACED94-059F-4BD8-256D-B9B9931C26AA">
-<createdBy>michalrucka</createdBy>
-<createdTime>2023-11-27 16:59:03 UTC</createdTime>
-<ownerDesignName>logical_model</ownerDesignName>
-<engineerTo>
-<item key="29D6B98A-94D3-9153-2C47-FB8CEBA85B5C" value="true"/>
-</engineerTo>
-<useDomainConstraints>false</useDomainConstraints>
-<use>1</use>
-<logicalDatatype>LOGDT024</logicalDatatype>
-<ownDataTypeParameters>,,</ownDataTypeParameters>
-</Attribute>
 <Attribute name="Volume" id="07FBD2B8-21E3-24D8-3F25-21086505D9ED">
 <createdBy>michalrucka</createdBy>
 <createdTime>2023-11-27 17:00:02 UTC</createdTime>

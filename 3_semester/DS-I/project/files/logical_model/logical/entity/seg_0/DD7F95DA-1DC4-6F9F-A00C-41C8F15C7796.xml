@@ -1,5 +1,5 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
-<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="DD7F95DA-1DC4-6F9F-A00C-41C8F15C7796" name="Cryptocurrency">
+<Entity class="oracle.dbtools.crest.model.design.logical.Entity" directorySegmentName="seg_0" id="DD7F95DA-1DC4-6F9F-A00C-41C8F15C7796" name="Cryptocurrencies">
 <createdBy>michalrucka</createdBy>
 <createdTime>2023-11-27 17:13:02 UTC</createdTime>
 <ownerDesignName>logical_model</ownerDesignName>

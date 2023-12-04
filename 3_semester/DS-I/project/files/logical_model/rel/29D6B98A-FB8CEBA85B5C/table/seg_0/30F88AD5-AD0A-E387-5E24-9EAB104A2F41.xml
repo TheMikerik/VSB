@@ -1,0 +1,85 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="30F88AD5-AD0A-E387-5E24-9EAB104A2F41" name="P2P_Transaction">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>0FB0990D-99F6-B72D-7CD8-554AF00D2ED9</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="P2P_Transaction_ID" id="F151DBDF-DDDE-3704-4365-931F7534B6E9">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>A980782F-6AAA-DF15-5B8B-3A81A047C3B1</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="Date" id="EC5C86F9-626E-31B2-4DB5-E157795E532C">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>BE71A51C-1F80-B86F-6CDE-B2EB10032E17</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>91229484-D19C-D458-8647-333C7FFE7B60</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="P2P_Offers_Offer_ID" id="545A8AF2-15BB-57A7-0F8A-CD9D14592095">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>A407B0AC-FE09-DEBB-51A2-292CF710DEF1</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT011</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A17D3419-7BB0-21F0-EB0D-3875927CD361" referredColumn="3C19A029-7D8D-BDFD-E2B1-DBF82CD67846"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="48389C9C-FEE6-3A6E-13DC-4072C34148E1" name="P2P_Transaction_PK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>4EEBD92C-327A-648C-5C84-775C9780F4AD</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F151DBDF-DDDE-3704-4365-931F7534B6E9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="ADB167D1-B575-BD97-C76B-58BFF364464D" name="P2P_Transaction__IDX">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<ownerDesignName>logical_model</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<relationGeneratorID>B24807F1-02E4-D4BA-F3B2-3695ADEB8A16</relationGeneratorID>
+<indexColumnUsage>
+<colUsage columnID="545A8AF2-15BB-57A7-0F8A-CD9D14592095"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F2353C85-22C8-5184-489B-7D495114753A" name="P2P_Transaction_P2P_Offers_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>B24807F1-02E4-D4BA-F3B2-3695ADEB8A16</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="545A8AF2-15BB-57A7-0F8A-CD9D14592095"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,17 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="96884909-CB15-5D88-4373-A6D4C8D54562" containerWithKeyObject="A8D1FC9B-E5BC-D4CF-8804-8D6479280841" localFKIndex="904E9478-874A-5DC4-30C0-9F507F11C9B0" name="Transactions_Cryptocurrencies_FK">
+<createdBy>michalrucka</createdBy>
+<createdTime>2023-12-03 09:06:53 UTC</createdTime>
+<generatorID>313D99E6-825E-C996-3B20-366BF8B752FF</generatorID>
+<ownerDesignName>logical_model</ownerDesignName>
+<referredTableLongName>Cryptocurrencies</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>F3E9ACF0-D8C4-2DAD-2BF8-67E1FCE8F9B0</referredTableID>
+<keyObject>7DFC09AB-EECB-4C88-DC96-84FE8D548032</keyObject>
+<referredKeyID>7DFC09AB-EECB-4C88-DC96-84FE8D548032</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>Cryptocurrency_ID</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>
