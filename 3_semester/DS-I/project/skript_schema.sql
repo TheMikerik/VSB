@@ -1,14 +1,3 @@
-DROP TABLE Currencies
-DROP TABLE Admins
-DROP TABLE Users
-DROP TABLE Portfolios
-DROP TABLE Transactions
-DROP TABLE Cryptocurrencies
-DROP TABLE Vexels
-DROP TABLE P2P_Offers
-DROP TABLE P2P_Transaction
-
-
 -------------------------------------------------
 CREATE TABLE Cryptocurrencies
     (
@@ -95,7 +84,7 @@ CREATE TABLE P2P_Transaction
     (
      P2P_Transaction_ID INTEGER IDENTITY PRIMARY KEY ,
      Date DATETIME2 NOT NULL ,
-     Trader_ID INTEGER NOT NULL CONSTRAINT FK_p2ptransaction_p2poffer FOREIGN KEY REFERENCES Vexels(Trader_ID)
+     Offer_ID INTEGER NOT NULL CONSTRAINT FK_p2ptransaction_p2poffer FOREIGN KEY REFERENCES P2P_Offers(Offer_ID)
     )
 GO
 -------------------------------------------------

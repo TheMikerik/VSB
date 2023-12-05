@@ -91,7 +91,7 @@ VALUES
   ('Energy Holdings', 96000.75, 18.3, '0x6A09F56C7F3DD8C4B6A1F1', 18),
   ('Random Holdings', 92000.35, 14.1, '0x7F0D8C4B6A1F10xF1', 6),
   ('Azbest Fund', 68000.60, 10.5, '0xE2F1A7F0D8C0D8C4B6A1F1', 6),
-  ('True Investments', 86000.75, 18.2, null, 6),
+  ('True Investments', 86000.7, 18.2, null, 6),
   ('Local Fund', 115000.90, 12.3, '0xB3E2F1A7F0D8F0D8C4B6A1F1', 2),
   ('FinT Holdings', 74000.45, 20.6, '0x2F1A7F0D8C4B6C4B6A1F1', 2),
   ('Roll Stocks', 107000.80, null, null, 15),
@@ -144,6 +144,7 @@ VALUES
 ----------------------------------------------------------------
 INSERT INTO Vexels (Location, User_ID)
 VALUES
+    ('Dhali', 20),
     ('New York', 1),
     ('Tokyo', 4),
     ('London', 5),
@@ -153,7 +154,8 @@ VALUES
     ('Los Angeles', 13),
     ('Shanghai', 17),
     ('Dubai', 19),
-    ('Singapore', 7);
+    ('Singapore', 7),
+    ('Prague', 14)
 ----------------------------------------------------------------
 INSERT INTO P2P_Offers (Volume, Value, Place, Status, Negotiable, Cryptocurrency_ID, Trader_ID)
 VALUES
@@ -168,10 +170,10 @@ VALUES
     (2.7, 7375.0, 'Dubai', 1, 1, 4, 9),
     (3.5, 5200.0, 'Singapore', 1, 1, 5, 1);
 ----------------------------------------------------------------
-INSERT INTO P2P_Transaction (Date, Trader_ID)
+INSERT INTO P2P_Transaction (Date, Offer_ID)
 VALUES
-    ('2023-01-15T08:30:00', 1),
-    ('2023-02-21T14:45:00', 1),
-    ('2023-03-10T10:15:00', 2),
-    ('2023-11-19T13:25:00', 8);
+    ('2019-01-15T08:30:00', 1),
+    ('2021-02-21T14:45:00', 2),
+    ('2022-03-10T10:15:00', 3),
+    ('2023-11-19T13:25:00', 4);
 ----------------------------------------------------------------
