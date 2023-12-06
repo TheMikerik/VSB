@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Dec 06 22:06:39 CET 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-018c-40f4-4391-000007183200 
+on database directory memory:/Users/michalrucka/Desktop/java-test2-master/vector with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@77459877 
+Loaded from file:/Users/michalrucka/.m2/repository/org/apache/derby/derby/10.15.2.0/derby-10.15.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=21.0.1+12-29
+user.dir=/Users/michalrucka/Desktop/java-test2-master
+os.name=Mac OS X
+os.arch=aarch64
+os.version=13.2.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
