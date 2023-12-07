@@ -1,0 +1,309 @@
+\documentclass[a4paper, 10pt, oneside]{article}       % nechceme twoside
+\usepackage{lmodern}                                  % latin modern font
+\usepackage[utf8]{inputenc}                           % UTF-8
+\usepackage[a4paper, left=20mm, right=30mm, top=30mm, bottom=35mm]{geometry}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{tikz} 
+\usepackage{multicol}
+
+\usepackage[ruled, vlined, czech] {algorithm2e}
+\usepackage[czech=quotes]{csquotes}
+\usepackage{cmap}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[style=numeric,backend=biber,sorting=nty]{biblatex}
+\usepackage[czech]{babel}                             % tenhle musi byt za biblatex
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{verbatim}
+\usepackage{algorithm2e}
+
+\usepackage{amsmath}
+\usepackage{amssymb}                                  % velice důležité pro symboly
+
+\newcolumntype{e}{D{,}{,}{3.5}}                       % zarovnání hodnot v tabulce podle .
+
+% Úvodní strana
+\usepackage{titling}
+\title{\Huge\textbf{Diskrétní matematika}\\
+{\textbf{Projekt}}\\
+{\Large číslo zadání \underline{\makebox[1cm]{3}}}}
+\author{}                                             % nutno ponechat prázdné
+\date{}
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}      % vertically CENTER title page!!!
+\renewcommand\maketitlehookd{\vfill\null}
+
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0pt}                    % odstraní čáru pod textem v záhlaví
+
+%\usepackage[useregional]{datetime2}                  % pro hod:min pomocí \DTMnow místo \today
+\pagestyle{fancy} 				                      % nastavení stylu záhlaví a zápatí
+\fancyhead[LO]{\Large VŠB - TUO}
+\fancyhead[RO]{\Large Datum \underline{\the\day.\the\month.\the\year}}
+\fancyfoot[LO]{\Large Osobní číslo \underline{\makebox[2.5cm]{RUC0066}}}
+\fancyfoot[RO]{\Large Jméno \underline{\makebox[4cm]{Michal Ručka}}}
+\fancyfoot[C]{}                                       % smaže číslování titulní strany!!!
+
+% ZAČÁTEK*********************************************
+\begin{document}
+
+\shorthandoff{-}
+
+% TITULNÍ STRANA
+\maketitle\thispagestyle{fancy}
+
+\vfill
+\hfill
+\begin{table}[b]
+  \begin{tabular}{c|p{3cm}}
+    \textbf{Příklad} & \textbf{Poznámky} \\
+    \hline
+        \rule{0pt}{1cm} \centering 1 &  \\
+        \rule{0pt}{1.5cm}\\
+        \rule{0pt}{1cm} \centering 2 &  \\
+        \rule{0pt}{1.5cm}\\
+  \end{tabular}
+\end{table}
+
+\clearpage                                            % zprovozní náš custom header!!!
+
+% Záhlaví a zápatí
+\fancyhead{}                                          % clear all header fields
+\fancyfoot{}                                          % clear all footer fields
+%\fancyhf{}                                           % clear existing header/footer entries
+
+\fancyhead[LO]{\textit{Diskrétní matematika}}         % text v záhlaví
+
+\fancyhead[RO]{\thepage}                              % číslování v záhlaví
+
+\newpage
+\setcounter{page}{1}
+\section{Kombinatorika}\label{sec:sec_1}
+
+V soutěži o poklad je třeba otevřít zakódovanou skříňku, která skrývá další soutěžní úkol a část pokladu. Skříňka je zajištěna zámkem se 4-místným kódem. K rozluštění kódu mají soutěžící tuto nápovědu:
+\begin{itemize}
+    \item Čtyřciferné číslo kódu dává po dělení 7 zbytek 2.
+    \item Po dělení 8 dává zbytek 5.
+    \item Přičteme-li ke kódovému číslu 2, dostaneme násobek 11.
+    \item Kódové číslo je menší než číslo 2000.
+\end{itemize}
+
+Určete všechna čísla, která by mohla být kódem zamku na skříňce.
+\newline\\\\
+\textbf{Řešení příkladu 1:}
+\newline
+\begin{enumerate}
+    \item[a)] $x \equiv 2\pmod{7}$ 
+    \item[b)] $x \equiv 5\pmod{8}$ 
+    \item[c)] $x \equiv 9\pmod{11}$
+    \item[d)] $0 \leq x \leq 2000$
+\end{enumerate}
+\newline
+
+\begin{multicols}{3}
+\raggedcolumns
+
+\section*{a)}
+\begin{align*}
+    x &\equiv 2 \pmod{7} \\
+    x &= 2 + 7t
+\end{align*}
+\newline
+
+\section*{b)}
+\begin{align*}
+    x &\equiv 5\pmod{8}         \\
+    2 + 7t &\equiv 5\pmod{8}    \\
+    7t &\equiv 3\pmod{8}        \\
+    7t &\equiv 11\pmod{8}       \\
+    7t &\equiv 19\pmod{8}       \\
+    7t &\equiv 27\pmod{8}       \\
+    7t &\equiv 35\pmod{8}       \\
+    t &\equiv 5\pmod{8}         \\
+    \underline{Dosazeni:} &\implies a)      \\
+    t &= 5 + 8u                 \\
+    x &= 2 + 7 ( 5 + 8u )       \\
+    x &= 2 + 35 + 56u           \\
+    x &= 37 + 56u               \\
+\end{align*}
+\newline
+
+\section*{c)}
+\begin{align*}
+    x &\equiv 9\pmod{11}         \\
+    37 + 56u &\equiv 9\pmod{11}  \\
+    56u &\equiv -28\pmod{11}     \\
+    2u &\equiv -1\pmod{11}       \\
+    2u &\equiv -12\pmod{11}      \\
+    u &\equiv -6\pmod{11}        \\
+    u &\equiv 5\pmod{11}         \\
+                                 \\
+    \underline{Dosazeni} &\implies b) \\
+    u &= 5 + 11v                 \\
+    x &= 37 + 56 ( 5 + 11v )     \\
+    x &= 37 + 280 +  616v        \\
+    x &= 317 + 616v              \\
+\end{align*}
+\end{multicols}
+
+Finální výsledek této úlohy vychází ze soustavy kongurencí, které nám umožní získat předpis pro výpočet konkrétních řešení. Tento finální předpis vypadá následovně:
+$$ x = 317 + 616v,\quad v\in\mathbb{N} $$
+\newpage
+Aby byla splněna podmínka d), tak musí proměnná $v$ nabývat čísel od 0 do 2. Výsledné možné kódy zámku budou tedy po dosazení jednotlivých čísel následovné:
+$$ v_0:  x_1 = 317 + 616 \cdot 0 \implies x_1 = 0317$$
+$$ v_1:  x_2 = 317 + 616 \cdot 1 \implies x_2 = 0933$$
+$$ v_2:  x_3 = 317 + 616 \cdot 2 \implies x_3 = 1549$$
+\newline
+Výsledná kódová čísla jsou tedy tyto: \textbf{0317, 0933, 1549}
+
+
+
+\section{Teorie grafů}\label{sec:sec_2}
+
+Graf $U$ je zadán jeho maticí sousednosti $I$.
+\[ I = \begin{bmatrix}
+0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\
+1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\
+0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 1 \\
+0 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & 1 & 1 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 \\
+0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 0 \\
+\end{bmatrix} \]
+
+Nakreslete graf $U$ a pojmenujte jeho vrcholy tak, aby číslování vrcholů odpovídalo řádkům matice sousednosti. Zvláště vykreslete indukovaný podgraf $P$ grafu $U$, kde $P$ je indukovaný na všech vrcholech lichého stupně.
+
+\begin{enumerate}
+    \item[a)] Kolik hran má graf $U$ a kolik hran má indukovaný podgraf $P$? Zapište stupňové posloupnosti obou grafů.
+    \item[b)] Je graf $U$ eulerovský? Je podgraf $P$ eulerovský? Svou odpověď zdůvodněte.
+    \item[c)] Kolika nejméně tahy lze podgraf $P$ nakreslit? Popište, jak takové tahy najít a zapište je.
+\end{enumerate}
+
+\begin{multicols}{2}
+% GRAF U
+\begin{align*}
+    \text{\textbf{Graf U}} \\
+    \begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw, circle}]
+    \foreach \i in {1,...,10} {
+        \node[main] (x\i) at (360/10*\i:3) {$x_{\i}$};
+    }
+    % x1
+    \draw (x3) -- (x1);
+    \draw (x5) -- (x1);
+    % x2
+    \draw (x3) -- (x2);
+    \draw (x4) -- (x2);
+    \draw (x5) -- (x2);
+    % x3
+    \draw (x5) -- (x3);
+    % x4
+    \draw (x5) -- (x4);
+    \draw (x6) -- (x4);
+    % x5
+    \draw (x6) -- (x5);
+    \draw (x7) -- (x5);
+    \draw (x8) -- (x5);
+    % x6
+    \draw (x7) -- (x6);
+    \draw (x8) -- (x6);
+    \draw (x10) -- (x6);
+    % x7
+    \draw (x8) -- (x7);
+    \draw (x9) -- (x7);
+    \draw (x10) -- (x7);
+    % x8
+    \draw (x9) -- (x8);
+    \draw (x10) -- (x8);
+    % x9
+    \draw (x10) -- (x9);
+    \end{tikzpicture} 
+\end{align*}
+
+% GRAF P
+\begin{align*}
+    \text{\textbf{Indukovaný graf P}}\\
+    \begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw, circle}]
+    \foreach \i in {2,...,9} {
+        \node[main] (x\i) at (360/10*\i:3) {$x_{\i}$};
+    }
+    % x2
+    \draw (x3) -- (x2);
+    \draw (x4) -- (x2);
+    \draw (x5) -- (x2);
+    % x3
+    \draw (x5) -- (x3);
+    % x4
+    \draw (x5) -- (x4);
+    \draw (x6) -- (x4);
+    % x5
+    \draw (x6) -- (x5);
+    \draw (x7) -- (x5);
+    \draw (x8) -- (x5);
+    % x6
+    \draw (x7) -- (x6);
+    \draw (x8) -- (x6);
+    % x7
+    \draw (x8) -- (x7);
+    \draw (x9) -- (x7);
+    % x8
+    \draw (x9) -- (x8);
+    \end{tikzpicture} 
+\end{align*}
+\end{multicols}
+
+\section*{a)}
+\begin{enumerate}
+    \item [U:]  Graf $U$ má následující stupňovou posloupnost: [7,5,5,5,4,3,3,3,3,2] \\ 
+                Po postupném dosazení do následujícího vzorce získáme výpočtem počet hran tohoto grafu.\\
+                \[ \sum_{i=1}^{10} S(U_i) = 2 |H| \]
+                $$ \textit{S = Stupeň vrcholů, H = Počet hran} $$ \\
+                $$ 1\cdot7 + 3\cdot5 + 1\cdot4 + 4\cdot3 + 1\cdot2  = 2 |H| $$
+                $$ 40 = 2 |H| $$
+                $$ 20 = |H| $$
+                $$ H = 20 $$
+                $$ \textit{Tento graf má tedy celkem 20 hran} $$
+    \\
+    \item [P:]  Graf $P$ má následující stupňovou posloupnost: [6,4,4,4,3,3,2,2] \\ 
+                Po postupném dosazení do následujícího vzorce získáme výpočtem počet hran tohoto grafu.\\
+                \[ \sum_{i=2}^{9} S(U_i) = 2 |H| \]
+                $$ \textit{S = Stupeň vrcholů, H = Počet hran} $$ \\
+                $$ 1\cdot6 + 3\cdot4 + 2\cdot3 + 2\cdot2 =  2 |H| $$
+                $$ 28 = 2 |H| $$
+                $$ 14 = |H| $$
+                $$ H = 14 $$
+                $$ \textit{Tento graf má tedy celkem 14 hran} $$
+\end{enumerate}
+
+\section*{b)}
+\begin{enumerate}
+    \item [U:]  Tento graf není eulerovský\\\\
+                Platí pro něj sice podmínky, že eulerovský graf musí být souvislý, obyčejný a konečný, ovšem neplatí pro něj další podmínka, a to uzavřenost eulerovského tahu. Eulerovský tah je uzavřený pouze v případě, že jsou všechny vrcholy daného grafu sudého stupně. V tomto grafu máme pouze dva vrcholy sudého stupně a osm vrcholů lichého stupně.\\
+    \\
+    \item [P:]  Tento graf taktéž není eulerovský\\\\
+                Platí pro něj stejné podmínky jako u předešlého grafu,  ovšem znova neplatí podmínka uzavřenosti eulerovského tahu. V tomto grafu máme pouze dva vrcholy lichého stupně a šest vrcholů sudého stupně.\\
+\end{enumerate}
+
+\section*{c)}
+\begin{enumerate}
+    \item [U:]  Tento graf nesplňuje podmínku uzavřeného eulerovského tahu, ovšem splňuje                 podmínku otevřeného eulerovského tahu. Tato podmínka nám říká, že graf má                 otevřený eulerovský tah právě tehdy, pokud má právě 2 vrcholy lichého stupňě.
+                \\\\
+                Důsledkem tohoto víme, že graf lze nakreslit jedním tahem. Ovšem musíme dodržet podmínku a začít tah na jednom ze dvou lichých vrcholů. Následně pokračujeme libovolným výberem jednoho z jeho sousedů. Tento tah končí v moment, kdy dorazíme na lichý vrchol, ze kterého jsme nezačínali, a ten již nemá žádné hrany, které jsme ještě nepoužili.
+                \\\\
+                Graf tedy lze nakreslit nejméně jedním tahem s tím, že cesta povede přes celkem 15 vrcholů a použije všech jeho 14 hran. Jednou z touto cest je například tato:
+                \\\\
+                $$ x2 \rightarrow x3 \rightarrow x5 \rightarrow x6 \rightarrow x7 \rightarrow x8 \rightarrow x9 \rightarrow x7 \rightarrow x5 \rightarrow x8 \rightarrow x6 \rightarrow x4 \rightarrow x2 \rightarrow x5 \rightarrow x4 $$
+\end{enumerate}
+
+
+\end{document} % konec celého dokumentu

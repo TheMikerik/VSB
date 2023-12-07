@@ -1,0 +1,106 @@
+\documentclass[a4paper, 10pt, oneside]{article}       % nechceme twoside
+\usepackage{lmodern}                                  % latin modern font
+\usepackage[utf8]{inputenc}                           % UTF-8
+\usepackage[a4paper, left=20mm, right=30mm, top=30mm, bottom=35mm]{geometry}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{siunitx}
+\usepackage{listings}
+\usepackage{caption}
+
+\usepackage[ruled, vlined, czech] {algorithm2e}
+\usepackage[czech=quotes]{csquotes}
+\usepackage{cmap}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage[style=numeric,backend=biber,sorting=nty]{biblatex}
+\usepackage[czech]{babel}                             % tenhle musi byt za biblatex
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{verbatim}
+\usepackage{algorithm2e}
+
+\usepackage{amsmath}
+\usepackage{amssymb}                                  % velice důležité pro symboly
+
+\newcolumntype{e}{D{,}{,}{3.5}}                       % zarovnání hodnot v tabulce podle .
+
+% Úvodní strana
+\usepackage{titling}
+\title{\Huge\textbf{Diskrétní matematika}\\
+{\textbf{Projekt}}\\
+{\Large číslo zadání \underline{\makebox[1cm]{X}}}}
+\author{}                                             % nutno ponechat prázdné
+\date{}
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}      % vertically CENTER title page!!!
+\renewcommand\maketitlehookd{\vfill\null}
+
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0pt}                    % odstraní čáru pod textem v záhlaví
+
+%\usepackage[useregional]{datetime2}                  % pro hod:min pomocí \DTMnow místo \today
+\pagestyle{fancy} 				                      % nastavení stylu záhlaví a zápatí
+\fancyhead[LO]{\Large VŠB - TUO}
+\fancyhead[RO]{\Large Datum \underline{\the\day.\the\month.\the\year}}
+\fancyfoot[LO]{\Large Osobní číslo \underline{\makebox[2.5cm]{END0155}}}
+\fancyfoot[RO]{\Large Jméno \underline{\makebox[4cm]{Jméno Příjmení}}}
+\fancyfoot[C]{}                                       % smaže číslování titulní strany!!!
+
+% ZAČÁTEK*********************************************
+\begin{document}
+
+\shorthandoff{-}
+
+% TITULNÍ STRANA
+\maketitle\thispagestyle{fancy}
+
+\vfill
+\hfill
+\begin{table}[b]
+  \begin{tabular}{c|p{3cm}}
+    \textbf{Příklad} & \textbf{Poznámky} \\
+    \hline
+        \rule{0pt}{1cm} \centering 1 &  \\
+        \rule{0pt}{1.5cm}\\
+        \rule{0pt}{1cm} \centering 2 &  \\
+        \rule{0pt}{1.5cm}\\
+  \end{tabular}
+\end{table}
+
+\clearpage                                            % zprovozní náš custom header!!!
+
+% Záhlaví a zápatí
+\fancyhead{}                                          % clear all header fields
+\fancyfoot{}                                          % clear all footer fields
+%\fancyhf{}                                           % clear existing header/footer entries
+
+\fancyhead[LO]{\textit{Diskrétní matematika}}         % text v záhlaví
+
+\fancyhead[RO]{\thepage}                              % číslování v záhlaví
+
+\newpage
+\setcounter{page}{1}
+\section{Kombinatorika nebo Kongruence (záleží dle zadání)}\label{sec:sec_1}
+
+\textit{Zaměstnanec depa má za úkol natankovat 3 stejné kamiony. První kamion tankoval pouze plnými dvoulitrovými kanystry, přičemž mu po naplnění nádrže zbyl v posledním kanystru jeden litr nafty. Další dva kamiony tankoval pouze plnými třílitrovými kanystry, přičemž mu po naplnění nádrží zbyly v posledním kanystru dva litry nafty. Zaměstnanec si vzpomněl, že když naposled tankoval tyto tři kamiony, používal pouze pětilitrové kanystry a na konci mu v posledním použitém kanystru zbyl jeden litr nafty.\\
+a) Najděte všechny přípustné velikosti nádrže kamionu, které odpovídají zadání.\\
+b) Jaké mohly být velikosti nádrže kamionu, pokud víme, že nebyly větší než 500 litrů? Úlohu řešte jako soustavu kongruencí.}
+\newline\\
+\textbf{Máme celkem 3 nejlepší způsoby psaní matematických výrazů:}
+
+$$2023x\equiv 155\pmod{13},\quad k\in\mathbb{N}$$
+bez odstřelení na nový řádek $365x \equiv 12 \pmod{0}$
+\[33x\equiv 11\pmod{77}\implies 3x=101010\]
+
+\newpage
+\section{Teorie grafů}\label{sec:sec_2}
+
+\textit{Mějme kompletní graf $K_{\text{n}}$ a označme vrcholy čísly 1 až n.\\
+a) Kolik má kompletní graf $K_{\text{n}}$ faktorů?\\
+b) Kolik existuje různých podgrafů tohoto grafu? Izomorfní grafy považujeme za různé, pokud mají různá očíslování vrcholů. Svůj postup dobře okomentujte.\\
+c) Obecné řešení vyčíslete pro kompletní grafy $K_{\text{3}}$ a $K_{\text{6}}$.}
+
+\end{document} % konec celého dokumentu
