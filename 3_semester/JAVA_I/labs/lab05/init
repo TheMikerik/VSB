@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-remote_add () {
-	git remote add $1 https://git.cs.vsb.cz/vyuka-koz01/java-1/2021/$1.git
-}
-
-remote_add lab01
-remote_add lab02
-remote_add lab03
-remote_add lab04
