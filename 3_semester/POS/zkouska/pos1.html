@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <title>POS(raný) kvíz na zkoušku</title>
+
+  <style>
+    .question {
+      margin-bottom: 20px;
+    }
+
+    .answer {
+      margin-left: 20px;
+      display: block;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .incorrect {
+      color: red;
+    }
+
+    .questions, .question {
+      display: flex;
+      flex-direction: column;
+    }
+
+    p {
+      font-weight: bold;
+    }
+
+    .question > input {
+      order: 999;
+      width: 150px;
+      margin-top: 25px;
+    }
+
+    .secondSubmit {
+      margin-top: 10px !important;
+    }
+  </style>
+</head>
+
+
+<body>
+  <h1>POS(raný) kvíz na zkoušku (made by Fujta & Martinmore)</h1>
+
+  <form method="post">
+    <div class="questions">
+    <div class="question">
+      <p>Pro sítě typu Ethernet (alespoň 10 Mbit/s) se používá následující kabelaž</p>
+
+      <label class="answer">
+        <input type="checkbox" name="q1_a1"> Supervidové optické vlákno (supermode)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q1_a2"> Tenký koaxiální kabel
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q1_a3"> FTP (kroucená dvoulinka stíněná folií)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q1_a4"> UTP kategorie 1
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q1_a5"> Dle normy EIA/TIA 568A/B
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q1_a6"> Dle normy ISO 8859-2
+      </label>   
+    </div>
+
+    <div class="question">
+      <p>O metodě LSA (link state algorithm) lze říci</p>
+      <label class="answer">
+        <input type="checkbox" name="q2_a1"> Je příkladem dynamického směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q2_a2"> Směrovače znají topologii sítě
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q2_a3"> Směrovače posílají sousedům směrovací tabulku
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q2_a4"> Pomalu konverguje
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q2_a5"> Je reprezentována směrovacím protokolem RIP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q2_a6"> Je reprezentována směrovacím protokolem OSPF
+      </label>
+    </div>
+
+    <div class="question">
+      <p>Hlavička protokolu TCP*</p>
+      <label class="answer">
+        <input type="checkbox" name="q3_a1"> Obsahuje čísla zdrojového a cílového portu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q3_a2"> Posílá číslo následujícího oktetu, který je možno odeslat ( čímž potvrzuje
+        poslední přijatý oktet)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q3_a3"> Obsahuje kontrolní součet, který ale nemusí být vyplněn
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q3_a4"> Obsahuje pole jednobitových příznaků určených k řízení spojení
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q3_a5"> Obsahuje číslo protokolu, neseného v TCP segmentu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q3_a6"> Obsahuje číslo posledního správně přijatého oktetu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q3_a7"> Je vkládána do rámců přímo na začátek datového pole
+      </label>
+    </div>
+
+    <div class="question">
+      <p>Přepínač (SWITCH)</p>
+      <label class="answer">
+        <input type="checkbox" name="q4_a1"> Posílá rámec Ethernetu s MAC adresou FF:FF:FF:FF:FF:FF na všechna rozhraní.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q4_a2"> Vybírá rozhraní, na něž bude rámec zaslán , podle cílové MAC adresy.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q4_a3"> Udržuje si tabulku MAC adresami a čísli portú.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q4_a4"> Směřuje pakety na základě IP adresy cíle
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q4_a5"> Má na každém portu přiřazenu IP adresu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q4_a6"> Umožňuje definovat virtuální LAN sítě (VLANy)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q4_a7"> Může posílat rámce z různých VLANů jinému přepínači pomocí TRUNK portů
+      </label>
+    </div>
+
+    <div class="question">
+      <p>SMTP server komunikuje</p>
+      <label class="answer">
+        <input type="checkbox" name="q5_a1"> s POP3 serverem, od kterého přijímá e-maily
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q5_a2"> se SMTP klientem (user agent)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q5_a3"> jak s POP3, tak s IMAP serverem
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q5_a4"> s jiným SMTP serverem.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q5_a5"> s IMAP serverem
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q5_a6"> s IMAP klientem
+      </label>
+    </div>
+
+    <div class="question">
+      <p>Pro přenos dat se běžně používají následující typy modulací.</p>
+      <label class="answer">
+        <input type="checkbox" name="q6_a1"> Amplitudová
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q6_a2"> Kvantová
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q6_a3"> Frekvenční
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q6_a4"> Fázová
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q6_a5"> Doplerovská
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q6_a6"> Binární
+      </label>
+    </div>
+
+    <div class="question">
+      <p>Metody nedeterministického přístupu ke sdílení kanálu jsou:</p>
+      <label class="answer">
+        <input type="checkbox" name="q7_a1"> Centrální řízení
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q7_a2"> Distribuované řízení předávání …..
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q7_a3"> Aloha
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q7_a4"> Virtuální logický kruh
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q7_a5"> Metoda CSMA/CD
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q7_a6"> Binární vyhledávání
+      </label>
+    </div>
+
+    <div class="question">
+      <p>O metodě DVA (distance vector algorithm) lze říci:</p>
+      <label class="answer">
+        <input type="checkbox" name="q8_a1"> Je příkladem dynamického směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q8_a2"> Směrovače znají topologii celé sítě
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q8_a3"> Směrovače poskytují sousedům směrovací tabulku.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q8_a4"> pomalu konverguje
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q8_a5"> Je reprezentován směrovacím protokolem RIP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q8_a6"> Je reprezentován směrovacím protokolem OSPF
+      </label>
+    </div>
+    <div class="question">
+      <p>Směrovač (router)</p>
+      <label class="answer">
+        <input type="checkbox" name="q9_a1"> Posílá rámec Ethernetu s MAC adresou FF:FF:FF:FF:FF:FF na všechna rozhraní.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q9_a2"> Vybírá rozhraní, na něž bude rámec zaslán , podle cílové MAC adresy.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q9_a3"> Směřuje pakety na základě IP adresy cíle
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q9_a4"> Zvyšuje pole TTL každého procházejícího paketu o nakonfigurovanou hodnotu.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q9_a5"> Má na každém portu přiřazenou IP adresu.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q9_a6"> Musí mít celou směrovací tabulku ručně definovanou administrátorem (kromě
+        připojených sítí.)
+      </label>
+    </div>
+    <div class="question">
+      <p>SMTP server*</p>
+      <label class="answer">
+        <input type="checkbox" name="q10_a1"> Přímá e-maily od poštovního klienta (user agent)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q10_a2"> Odesílá e-maily poštovním klientem (user agent)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q10_a3"> V případě neexistence schránky příjemce zasílá klientovy zprávu ICMP
+        Destination Unreachabble
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q10_a4"> Může navazovat TCP spojení s jinými SMTP serverem.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q10_a5"> Přijímá e-maily od jiného SMTP serveru.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q10_a6"> Posílá e-maily jiného SMTP serveru jako UDP datagramy.
+      </label>
+    </div>
+    <div class="question">
+      <p>Topologie sítí jsou</p>
+      <label class="answer">
+        <input type="checkbox" name="q11_a1"> Sběrnice
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q11_a2"> Hvězda
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q11_a3"> Distribuovaná hvězda (strom)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q11_a4"> Čtverec
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q11_a5"> Kruh
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q11_a6"> Polynomiální
+      </label>
+    </div>
+    <div class="question">
+      <p>Topologie sítě Ethernet jsou</p>
+      <label class="answer">
+        <input type="checkbox" name="q12_a1"> Sběrnice
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q12_a2"> Hvězda
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q12_a3"> Distribuovaná hvězda (strom)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q12_a4"> Čtverec
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q12_a5"> Kruh
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q12_a6"> Polynomiální
+      </label>
+    </div>
+    <div class="question">
+      <p>Protokol RIP*</p>
+      <label class="answer">
+        <input type="checkbox" name="q13_a1"> Běží mezi směrovači (ROUTERY)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q13_a2"> Běží mezi přepínači (SWITCHi)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q13_a3"> Předává sousedovi směrovací tabulku
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q13_a4"> Předává sousedovi tabulku dvojic <MAC adresa, port>
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q13_a5"> Počítá nejkratší (nejlevnější) cesty do všech sítí
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q13_a6"> Zabraňuje vzniku smyček na 2. vrstvě
+      </label>
+    </div>
+    <div class="question">
+      <p>Následující typy záznamů jmenných serverů mají tyto významy</p>
+      <label class="answer">
+        <input type="checkbox" name="q14_a1"> SOA – Definuje všechny neautoritativní servery pro danou doménu.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q14_a2"> NS – určuje autoritativní jmenný server pro danou doménu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q14_a3"> MX – určuje WINS server (jmenný server pro protokol MS NetBios)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q14_a4"> A – přiřazuje k IP adrese k doménové jméno
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q14_a5"> PTR – přiřazuje ke speciálnímu zápisu IP adresy doménové jméno
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q14_a6"> CNAME – určuje alias pro dané doménové jméno
+      </label>
+    </div>
+    <div class="question">
+      <p>Ve kterých situacích se posílá odesílateli ICMP zpráva?</p>
+      <label class="answer">
+        <input type="checkbox" name="q15_a1"> Pokud velikost paketu přesáhne 64 kB a je zakázána fragmentace.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q15_a2"> Když se paket na některé lince ztratí.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q15_a3"> Pokud velikost paketu přesáhne délku datového pole rámce některé linky a
+        je povolena fragmentace.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q15_a4"> Pokud velikost paketu přesáhne délku dat.pole rámce některé linky a je
+        zakázaná frag.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q15_a5"> Pokud směrovač příjme paket s TTL=1 a podle směrovací tabulky jej má
+        přeposlat dalšímu směrovači.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q15_a6"> Jako odpověď na DNS dotaz
+      </label>
+    </div>
+    <div class="question">
+      <p>Pro odesílání a příjem elektronické pošty slouží následující protokoly</p>
+      <label class="answer">
+        <input type="checkbox" name="q16_a1"> SMTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q16_a2"> SNMP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q16_a3"> POP3
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q16_a4"> IMAP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q16_a5"> FTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q16_a6"> BOOTP
+      </label>
+    </div>
+    <div class="question">
+      <p>Referenční model ISO-OSI</p>
+      <label class="answer">
+        <input type="checkbox" name="q17_a1"> Obsahuje 10 vrstev
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q17_a2"> Definuje na 1. vrstvě fyzické parametry rozhraní
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q17_a3"> Definuje na spojové vrstvě (link layer) způsoby svařování kabelů
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q17_a4"> Na 3. vrstvě realizuje směrování mezi sítěmi
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q17_a5"> Pro přenos dat na 4. vrstvě může využívat metodu plovoucího okénka
+        (sliding window)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q17_a6"> Definuje jako standardní protokol 3. vrstvy protokol IP
+      </label>
+    </div>
+    <div class="question">
+      <p>Sériový přenos</p>
+      <label class="answer">
+        <input type="checkbox" name="q18_a1"> Je synchronní, asynchronní nebo antisynchronní.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q18_a2"> Zasílá v jednom taktu hodin podle implementace slovo o délce 8, 16 nebo 32
+        bitů
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q18_a3"> V synchronním režimu udržuje neustálou časovou synchronizaci zdroje a
+        cíle.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q18_a4"> Používá vždy pro přenos dat start bity a stop bity.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q18_a5"> Po vypršení časového limitu vždy znovu posílá nepotvrzené znaky
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q18_a6"> V synchronním režimu používá křídlových značek pro označení hranic datové
+        jednotky.
+      </label>
+    </div>
+    <div class="question">
+      <p>Služba doménových jmen (DNS)</p>
+      <label class="answer">
+        <input type="checkbox" name="q19_a1"> Umožňuje používat doménová jména o délce komponenty max. 63 znaků
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q19_a2"> Rozlišuje malá a velká písmena (je case-sensitive)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q19_a3"> Používá jako oddělovač komponent jmen dvojtečku
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q19_a4"> Využívá pro komunikaci protokoly UDP i TCP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q19_a5"> Realizuje překlad MAC adresy na IP adresu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q19_a6"> Umožňuje překlad IP adres na doménová jména
+      </label>
+    </div>
+    <div class="question">
+      <p>Co se stane, když router nemůže doručit IP paket?</p>
+      <label class="answer">
+        <input type="checkbox" name="q20_a1"> Paket je zahozen.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q20_a2"> Router paket uchová v bufferu do doby, než se dobudují směrovací tabulky.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q20_a3"> Je poslána chybová zpráva ICMP původnímu odesílateli
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q20_a4"> Je poslána chybová zpráva ICMP původnímu cíli
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q20_a5"> Paket je vrácen na předchozí router.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q20_a6"> Paket je zaslán zpět původnímu zdroji.
+      </label>
+    </div>
+    <div class="question">
+      <p>Pro stahování binárních souborů z Internetu se běžně používají tyto protokoly</p>
+      <label class="answer">
+        <input type="checkbox" name="q21_a1"> SNMP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q21_a2"> HTTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q21_a3"> FTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q21_a4"> HTTPS
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q21_a5"> BOOTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q21_a6"> DHCP
+      </label>
+    </div>
+    <div class="question">
+      <p>Jednoznačnou IP adresu (Ipv4) může stanice získat následujícím způsobem</p>
+      <label class="answer">
+        <input type="checkbox" name="q22_a1"> Pomocí protokolu DHCP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q22_a2"> Pomocí protokolu HTTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q22_a3"> Protokolem BOOTP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q22_a4"> Protokolem ICMP (IP address request)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q22_a5"> Pomocí protokolu ARP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q22_a6"> Od nejbližšího DNS serveru nalezeného pomocí zprávy vyslané broadcastem
+      </label>
+    </div>
+    <div class="question">
+      <p>Jak může router získat informace o cestách do cílových sítí?</p>
+      <label class="answer">
+        <input type="checkbox" name="q23_a1"> Switche informují okolní routery, které sítě admin nakonfiguroval do
+        jejich tabulek
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q23_a2"> Informace jsou vloženy staticky síťovým administrátorem.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q23_a3"> Cesty se získávají z informací shromážděných v ARP tabulkách.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q23_a4"> Routery a switche si vzájemně přeposílají informace o sítích, které znají,
+        pomocí směrovacích protokolů.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q23_a5"> Informace jsou odeslány jako broadcast switchem pokaždé, když je k němu
+        připojen nový segment sítě.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q23_a6"> Informace lze získat aktivními dotazy protokolu ARP
+      </label>
+    </div>
+    <div class="question">
+      <p>V hlavičce protokolu TCP jsou obsaženy následující položky</p>
+      <label class="answer">
+        <input type="checkbox" name="q24_a1"> Bitový příznak FIN, požadující ukončení komunikace v jednom směru
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q24_a2"> Bitový příznak NAK určující, že se jedná o negativní potvrzení
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q24_a3"> Bitový příznak NOP, definující, že se jedná o paket, udržující spojení
+        (keep-alive)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q24_a4"> Bitový příznak RST, který vynucuje ukončení spojení v obou směrech
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q24_a5"> Bitový příznak SYN, který se používá při navazování spojení
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q24_a6"> Pole určující aktuální šířku přijímacího okénka
+      </label>
+    </div>
+    <div class="question">
+      <p>Metody deterministického přístupu ke sdílenému kanálu jsou</p>
+      <label class="answer">
+        <input type="checkbox" name="q25_a1"> Centrální řízení
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q25_a2"> Distribuované řízení předáváním pověření
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q25_a3"> ALOHA
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q25_a4"> Virtuální logický kruh
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q25_a5"> Metoda CSMA/CD
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q25_a6"> Binární vyhledávání
+      </label>
+    </div>
+    <div class="question">
+      <p>Které z následujících tvrzení jsou pravdivá o protokolu HTTP ?</p>
+      <label class="answer">
+        <input type="checkbox" name="q26_a1"> Je postaven na architektuře client-server
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q26_a2"> Slouží pro získání IP adresy, při znalosti MAC adresy.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q26_a3"> Je provozován nad transportním protokolem UDP.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q26_a4"> Používá se pro šifrovaný přenos WWW stránek
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q26_a5"> Využívá se pro ohlašování chyb a zvláštních stavů při přenosu paketů.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q26_a6"> Je provozován nad transportním protokolem TCP.
+      </label>
+    </div>
+    <div class="question">
+      <p>MAC adresa (globálně platná)</p>
+      <label class="answer">
+        <input type="checkbox" name="q27_a1"> Je rozdělena na dvě části, určující výrobce a sériové číslo
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q27_a2"> Slouží k adresaci cílového počítače na 3. vrstvě OSI modelu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q27_a3"> Je rozdělena na adresu sítě a koncového uzlu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q27_a4"> Je tvořena čtyřmi osmibitovými čísly
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q27_a5"> Je na Ethernetu tvořena šesti osmibitovými čísly
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q27_a6"> Obsahuje informace nutné pro směrování paketů směrovačem
+      </label>
+    </div>
+    <div class="question">
+      <p>Metoda Sliding window (plovoucí okénko)*</p>
+      <label class="answer">
+        <input type="checkbox" name="q28_a1"> Ve variantě GO-BACK-N požaduje retransmisi paketů od prvního ztraceného
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q28_a2"> Udržuje v přijímacím okénku dosud nepotvrzené pakety.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q28_a3"> Používá na odesílající straně okénka zaslané pakety
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q28_a4"> Vždy vyžaduje zasílání negativních potvrzení (NAK)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q28_a5"> Po vypršení časového limitu ve variantě GO-BACK-N znovu posílá všechny
+        dosud nepotvrzené pakety
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q28_a6"> Je použita pro přenos dat na internetu protokolem UDP
+      </label>
+    </div>
+    <div class="question">
+      <p>Druhy směrování jsou</p>
+      <label class="answer">
+        <input type="checkbox" name="q29_a1"> Statické (neadaptivní) směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q29_a2"> Hierarchické směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q29_a3"> Geografické směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q29_a4"> Distribuované směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q29_a5"> Topologické směrování
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q29_a6"> Dynamické směrování
+      </label>
+    </div>
+    <div class="question">
+      <p>Co jsou to výhody použití statického směrování oproti dynamickému?</p>
+      <label class="answer">
+        <input type="checkbox" name="q30_a1"> menší zatížení procesoru routeru
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q30_a2"> úplná kontrola nad výběrem použitých cest
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q30_a3"> menší námaha při konfiguraci
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q30_a4"> vyšší adaptabilita při změně topologie
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q30_a5"> vyšší bezpečnost než při použití směrovacího protokolu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q30_a6"> možnost použití i na přepínačích s podporou VLAN
+      </label>
+    </div>
+    <div class="question">
+      <p>Pokud nemáte k dispozici žádný e-mailový klient, jakým způsobem si můžete nahlédnout do své emailové schránky?
+      </p>
+      <label class="answer">
+        <input type="checkbox" name="q31_a1"> Použiji příkaz ping s volbou –t MX a adresou serveru, kde je má poštovní
+        schránka
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q31_a2"> Využiji program telnet a připojím se na port 25 (port SMTP serveru)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q31_a3"> Neexistuje žádný způsob, kterým lze přečíst obsah emailové schránky-
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q31_a4"> Využiji program FTP a připojím se na port 110 (port POP3 serveru)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q31_a5"> Využiji program telnet a připojím se na port 110 (port POP3 serveru)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q31_a6"> Použiji protokolu MDP (Mail Download Protocol) pomocí příkazu mdp
+      </label>
+    </div>
+    <div class="question">
+      <p>Ve kterých situacích se posílá odesílateli ICMP zpráva?</p>
+      <label class="answer">
+        <input type="checkbox" name="q32_a1"> Pokud velikost paketu přesáhne 64 kB a je zakázána fragmentace.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q32_a2"> Když se paket na některé lince ztratí.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q32_a3"> Pokud velikost paketu přesáhne délku datového pole rámce některé linky a
+        je povolena fragmentace.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q32_a4"> Pokud velikost paketu přesáhne délku dat.pole rámce některé linky a je
+        zakázaná frag.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q32_a5"> Pokud směrovač příjme paket s TTL=1 a podle směrovací tabulky jej má
+        přeposlat dalšímu směrovači.
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q32_a6"> Jako odpověď na DNS dotaz
+      </label>
+    </div>
+    <div class="question">
+      <p>Protokol TFTP</p>
+      <label class="answer">
+        <input type="checkbox" name="q33_a1"> Umožňuje stanicím stáhnout soubor pro start OS ze serveru
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q33_a2"> Poskytuje masku podsítě
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q33_a3"> Vyžaduje uživatelské jméno a heslo pro autentizaci
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q33_a4"> Umožňuje nahrávat soubor na server
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q33_a5"> Využívá protokol TCP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q33_a6"> Používá potvrzovacího schématu stop-and-wait
+      </label>
+    </div>
+    <div class="question">
+      <p>Technologie ASDL</p>
+      <label class="answer">
+        <input type="checkbox" name="q34_a1"> Je vhodná pro poskytovatele služeb díky velkým přenosovým rychlostem
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q34_a2"> Umožňuje přenášet data na vzdálenosti řádově jednotek km po klasickém
+        vedení telefonní sítě
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q34_a3"> Má asymetrické přenosové rychlosti rychlejší k poskytovateli pomalejší
+        opacně
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q34_a4"> Přizpůsobuje skutečnou rychlost kvalitě linky
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q34_a5"> Vylučuje současné použití analogového telefonu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q34_a6"> Používá splitter pro rozdělení pásma
+      </label>
+    </div>
+    <div class="question">
+      <p>Sítě typu Ethernet jsou podle normy IEEE 802.3</p>
+      <label class="answer">
+        <input type="checkbox" name="q35_a1"> 10Base2 – sítě Ethernet na tenkém koax kabelu typu RG58
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q35_a2"> 100BaseSX – plně duplexní přenos po 1 metalickém vodiči
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q35_a3"> 10BaseT a 100BaseT – metalické sítě na kroucené dvojlince
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q35_a4"> 100BaseFX – optické trasy 10Mbit/s
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q35_a5"> 10BaseGLX – přenos po klasické telefonní dvojlince
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q35_a6"> 10GBaseT – optické sítě 10000 Mbps full duplex
+      </label>
+    </div>
+    <div class="question">
+      <p>Protokol ICMP IPv4 lze využít k</p>
+      <label class="answer">
+        <input type="checkbox" name="q36_a1"> Přiřazení MAC adresy IP adrese (address resultion)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q36_a2"> Přesměrování provozu pro určitou sít na jinou bránu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q36_a3"> Kontrola dostupnosti PC (echo request)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q36_a4"> Informaci o nedoručitelnosti datagramu (destination unreachable)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q36_a5"> Informaci o překročení počtu směrování (time exceeded)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q36_a6"> Informaci o počtu paketu zahozených směrovačem (router drop rate)
+      </label>
+    </div>
+    <div class="question">
+      <p>Protokol FTP</p>
+      <label class="answer">
+        <input type="checkbox" name="q37_a1"> UDP data
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q37_a2"> ICMP data
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q37_a3"> TCP data
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q37_a4"> UDP řídící
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q37_a5"> ICMP řídící
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q37_a6"> TCP řídící
+      </label>
+    </div>
+    <div class="question">
+      <p>Použití ISDN pro přenos dat přes přípojku BRI dává tyto možnosti</p>
+      <label class="answer">
+        <input type="checkbox" name="q38_a1"> Datový kanál s přenosovou rychlostí až 2Mbps
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q38_a2"> Zřízení spojení cca do 1 sekundy
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q38_a3"> Vetší přenosovou rychlost ve směru ke koncovému zařízeni (downstream) než
+        ve směru do sítě (upstream)
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q38_a4"> Možnost svazkování až 16 kanálů
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q38_a5"> Možnost pomalého přenosu po kanále D pokud to operátor sítě ISDN podporuje
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q38_a6"> Současné použití analogového telefonu na téže lince
+      </label>
+    </div>
+    <div class="question">
+      <p>Virtuální privátní sítě</p>
+      <label class="answer">
+        <input type="checkbox" name="q39_a1"> Jsou sítě založené na VLAN které používají privátních IP adres
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q39_a2"> Používají sdílenou veřejnou infrastrukturu
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q39_a3"> Lze na 3 vrstvě realizovat s použitím SSL
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q39_a4"> Lze na 3 vrstvě realizovat s použitím IPSec
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q39_a5"> Z principu nedovolují provozovaní jiných protokolů než IP
+      </label>
+      <label class="answer">
+        <input type="checkbox" name="q39_a6"> Jsou nákladnější na vybudování a správu než privátní infrastruktura
+      </label>
+    </div>
+    </div>
+
+    <div>----------------------------------------------------------------------------</div>
+
+    <input type="submit" value="Ukaž Skóre"> 
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+
+var correctAnswers = ["q1_a2", "q1_a3", "q1_a5", "q2_a1", "q2_a2", "q2_a6", "q3_a1", "q3_a2", "q3_a4", "q3_a7", "q4_a1", "q4_a2", "q4_a3", "q4_a6", "q4_a7", "q5_a2", "q5_a4", "q6_a1", "q6_a3", "q6_a4", "q7_a3", "q7_a5", "q8_a1", "q8_a3", "q8_a4", "q8_a5", "q9_a3", "q9_a5", "q10_a1", "q10_a4", "q10_a5", "q11_a1", "q11_a2", "q11_a3", "q11_a5", "q12_a1", "q12_a2", "q12_a3", "q13_a1", "q13_a3", "q13_a5", "q14_a2", "q14_a5", "q14_a6", "q15_a4", "q15_a5", "q16_a1", "q16_a3", "q16_a4", "q17_a2", "q17_a4", "q17_a5", "q18_a3", "q18_a6", "q19_a1", "q19_a4", "q19_a6", "q20_a1", "q20_a3", "q21_a2", "q21_a3", "q21_a4", "q22_a1", "q22_a3", "q23_a2", "q24_a1", "q24_a4", "q24_a5", "q24_a6", "q25_a1", "q25_a2", "q25_a4", "q25_a6", "q26_a1", "q26_a6", "q27_a1", "q27_a5", "q28_a1", "q28_a3", "q28_a5", "q29_a1", "q29_a2", "q29_a4", "q29_a6", "q30_a1", "q30_a2", "q30_a5", "q31_a5", "q32_a4", "q32_a5", "q33_a1", "q33_a4", "q33_a6", "q34_a2", "q34_a4", "q34_a6", "q35_a1", "q35_a3", "q36_a3", "q36_a4", "q36_a5", "q37_a3", "q37_a6", "q38_a2", "q38_a5", "q39_a2", "q40_a3", "q40_a6", "q41_a2", "q41_a5", "q42_a1", "q42_a2", "q42_a3", "q43_a1", "q43_a2", "q44_a1", "q44_a2", "q44_a3", "q45_a2", "q45_a3", "q45_a4", "q46_a2", "q46_a5", "q46_a6", "q47_a1", "q47_a4", "q47_a5", "q47_a6", "q48_a1", "q48_a5", "q49_a1", "q49_a3", "q49_a4", "q49_a6", "q50_a3", "q50_a4", "q50_a6", "q51_a3", "q51_a4", "q52_a2", "q52_a4", "q52_a5", "q53_a3", "q53_a5", "q53_a6", "q54_a1", "q54_a2", "q55_a2", "q55_a4", "q55_a5", "q56_a3", "q56_a4", "q56_a5", "q57_a1", "q57_a2",, "q58_a2", "q58_a3", "q58_a5", "q59_a1", "q59_a2", "q59_a6", "q60_a1", "q60_a3", "q60_a5", "q61_a1", "q61_a3", "q61_a5", "q62_a1", "q62_a2", "q62_a5", "q62_a6", "q63_a2", "q63_a4", "q64_a1", "q64_a3", "q64_a4", "q65_a3", "q65_a5", "q66_a1", "q66_a3", "q66_a4", "q66_a5", "q67_a3", "q67_a5", "q68_a1", "q68_a4", "q68_a5", "q69_a1", "q69_a2", "q69_a3", "q69_a5", "q70_a1", "q70_a2", "q70_a3", "q71_a1", "q71_a3", "q71_a5", "q72_a2", "q72_a5", "q72_a6", "q73_a4", "q73_a5", "q74_a1", "q74_a3", "q74_a4", "q75_a2", "q76_a4", "q77_a2", "q77_a4", "q77_a5", "q78_a3", "q78_a6", "q79_a1", "q79_a4", "q79_a6", "q80_a1", "q80_a3", "q81_a2", "q81_a3", "q81_a4", "q82_a1", "q82_a3", "q83_a2", "q84_a1", "q84_a4", "q84_a5", "q84_a6", "q85_a1", "q85_a2", "q85_a4", "q85_a6", "q86_a1", "q86_a6", "q87_a1", "q87_a5", "q88_a1", "q88_a3", "q88_a5", "q89_a1", "q89_a2", "q89_a4", "q89_a6", "q90_a1", "q90_a2", "q90_a5", "q91_a5", "q92_a4", "q93_a2", "q94_a3", "q95_a3", "q96_a1", "q97_a3", "q98_a2", "q99_a4", "q100_a1", "q100_a4", "q100_a6", "q101_a2", "q101_a4", "q101_a6", "q102_a1", "q102_a3", "q103_a3", "q103_a4", "q103_a5", "q104_a3", "q104_a6", "q105_a2", "q105_a5", "q106_a2", "q106_a4", "q107_a3", "q108_a2", "q108_a5", "q109_a1", "q109_a2", "q109_a3", "q110_a1", "q110_a2", "q111_a1", "q111_a2", "q111_a3", "q112_a1", "q112_a2", "q113_a1", "q114_a2", "q114_a3", "q114_a4", "q115_a2", "q115_a5", "q115_a6", "q116_a1", "q116_a4", "q116_a5", "q116_a6", "q117_a1", "q117_a5", "q118_a1", "q118_a3", "q118_a4" , "q118_a6", "q119_a3", "q119_a4", "q119_a6", "q120_a3", "q120_a4", "q121_a2", "q122_a2", "q123_a2", "q124_a2", "q124_a4", "q124_a5", "q125_a1", "q126_a3", "q126_a5", "q126_a6", "q127_a1", "q127_a2", "q128_a2", "q128_a4", "q128_a5", "q129_a3", "q129_a4", "q129_a5", "q130_a1", "q130_a2", "q131_a1", "q131_a4", "q131_a5", "q132_a2", "q132_a5", "q133_a1", "q134_a6", "q135_a1", "q136_a1", "q136_a2", "q136_a3", "q137_a1", "q137_a2", "q137_a5", "q138_a1", "q138_a2", "q139_a1", "q139_a2", "q139_a3", "q140_a1", "q141_a1", "q141_a2", "q141_a3", "q142_a1", "q142_a2", "q143_a3", "q143_a5","q144_a2","q144_a3","q145_a2","q145_a5"];
+
+
+function submitQuiz(inputs) {
+  event.preventDefault();   
+
+  var score = 0;
+
+
+  inputs.forEach((input) => {
+    const isCorrectAnswer = correctAnswers.find((answer) => answer === input.name);
+
+    if (input.type === 'checkbox') {
+      if (input.checked) {
+        if (isCorrectAnswer) {
+          score++; 
+          input.parentElement.classList.add("correct");
+        } else {
+          score--; 
+          input.parentElement.classList.add("incorrect");
+        }
+      } else {
+        if (isCorrectAnswer) {
+          score--; 
+        } else {
+          score++; 
+        }
+      }
+    }
+  });
+
+  var results = document.getElementById('results');
+  results.innerHTML = 'Vaše skóre: ' + score + '/' + correctAnswers.length;
+}
+
+let showAllCorrectState = false;
+
+function toggleAllCorrect() {
+  const showAllCorrectButton = document.querySelector('.allanswersbutton'); // Předpokládá, že třída tlačítka je 'allanswersbutton'
+
+  if (!showAllCorrectState) {
+    document.querySelectorAll('.question .answer input').forEach((input) => {
+      if (correctAnswers.includes(input.name)) {
+        input.parentElement.classList.add("correct");
+      } else {
+        input.parentElement.classList.add("incorrect");
+      }
+    });
+    showAllCorrectButton.setAttribute("value", "Schovej správné odpovědi od všeho");
+    showAllCorrectState = true;
+  } else {
+    document.querySelectorAll('.question .answer input').forEach((input) => {
+      input.parentElement.classList.remove("correct");
+      input.parentElement.classList.remove("incorrect");
+    });
+    showAllCorrectButton.setAttribute("value", "Ukaž správné odpovědi od všeho");
+    showAllCorrectState = false;
+  }
+}
+
+
+    let form = document.querySelector("form");
+    var inputs = document.querySelectorAll('input');
+    form.addEventListener("submit", () => submitQuiz(inputs));
+
+    let formQuestions = form.querySelectorAll(".question");
+    formQuestions.forEach((question) => {
+        const qCount = formQuestions.length;
+        question.style.order =  Math.floor(Math.random() * qCount);
+
+        let answers = question.querySelectorAll("label");
+        const aCount = answers.length;
+
+        answers.forEach((answer) => {
+          answer.style.order =  Math.floor(Math.random() * aCount);
+        })
+
+        const submit = document.createElement("input");
+        submit.setAttribute("type", "submit");
+        submit.setAttribute("value", "Zvaliduj mé odpovědi");
+
+        question.appendChild(submit);
+
+        const showCorrect = document.createElement("input");
+        showCorrect.setAttribute("type", "submit");
+        showCorrect.setAttribute("class", "secondSubmit");
+        showCorrect.setAttribute("value", "Ukaž správné odpovědi");
+
+        question.appendChild(showCorrect);
+
+        showCorrect.addEventListener("click", () => {
+          question.querySelectorAll(".answer input").forEach((inpt) => {
+            if (correctAnswers.find((answer) => answer === inpt.name)) {
+              inpt.parentElement.classList.add("correct");
+            } else {
+              inpt.parentElement.classList.add("incorrect");
+            }
+          });
+        });
+
+    });
+
+
+    const showAllCorrectButton = document.createElement("input");
+    showAllCorrectButton.setAttribute("type", "button");
+    showAllCorrectButton.setAttribute("value", "Ukaž správné odpovědi od všeho");
+    showAllCorrectButton.setAttribute("class", "allanswersbutton");
+    showAllCorrectButton.addEventListener("click", toggleAllCorrect);
+    form.appendChild(showAllCorrectButton);
+   
+
+   
+
+  </script>
+
+
+</body>
+
+</html>
