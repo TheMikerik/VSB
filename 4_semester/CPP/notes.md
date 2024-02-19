@@ -30,5 +30,7 @@
         - ``using std::cout``
 - typedef
     - Can wrap casual types with wanted label
-    - ``typedef int AircraftId``
+    - ``typedef int AircraftId`` or ``using AircraftId = int`` (using is more C++like so use it)
     - It works just like the normal int, but its labeled as ``AircraftId``
+- static_cast
+    - Compiler checks if the cast is possible. If it is, it will cast it
