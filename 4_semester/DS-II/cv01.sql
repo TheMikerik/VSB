@@ -48,3 +48,7 @@ SELECT
     EXTRACT(DAY FROM DATE_OF_BIRTH) AS den_narozeni
 FROM
     STUDENT;
+
+
+SELECT UPPER(fname) || ' ' || UPPER(lname)
+from teacher
