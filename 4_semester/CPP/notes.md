@@ -34,3 +34,16 @@
     - It works just like the normal int, but its labeled as ``AircraftId``
 - static_cast
     - Compiler checks if the cast is possible. If it is, it will cast it
+
+### 2nd class
+- Union
+    - There are exactly two values and this object can aquire value only one of them
+- Classes inherity
+    - ``class B : public A ``
+    - Pulbic: Everyone knows that B inherited from A & class B can be casted to class A
+    - Protected: Only inherited classes knows, that the "parent" is class A
+    - Private: Only the exact class knows what it inherited from & class B cannot be casted to class A
+- RAII
+    - Lifetime of each object
+    - Calls destructor on every end of the scope
+    - In comparision with garbage collector, we exaclty know when the object is created and when it is destroyed
