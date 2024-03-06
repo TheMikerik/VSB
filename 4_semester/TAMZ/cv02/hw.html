@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+		<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet"> 
+	</head>
+	<body>
+		<ion-app>
+			<ion-header>
+				<ion-toolbar>
+					<ion-title>Narozeniny</ion-title>
+				</ion-toolbar>
+			</ion-header>
+
+			<ion-content class="ion-padding">
+				<ion-card>
+					<ion-card-header>
+						<ion-card-title>Zadejte jméno a datum narození:</ion-card-title>
+					</ion-card-header>
+
+					<ion-card-content>
+						<ion-item>
+							<ion-label position="floating">Jméno</ion-label>
+							<ion-input id="nameInput" type="text"></ion-input>
+						</ion-item>
+
+						<ion-item>
+							<ion-label position="stacked">Datum narození</ion-label>
+							<ion-datetime id="dateInputID" presentation="date" show-default-buttons="true" locale="cs-CZ" done-text="OK" cancel-text="Zrušit"></ion-datetime>
+						</ion-item>
+
+						<ion-button expand="block" onclick="calculateBirthday()">Zpráva</ion-button>
+					</ion-card-content>
+				</ion-card>
+
+				<ion-card id="birthdayMessageCard" style="display: none;">
+					<ion-card-header>
+						<ion-card-title>Výsledek</ion-card-title>
+					</ion-card-header>
+
+					<ion-card-content id="birthdayMessage"></ion-card-content>
+				</ion-card>
+			</ion-content>
+		</ion-app>
+
+		<script>
+			function calculateBirthday() {
+				const name = document.getElementById("nameInput").value;
+				const dateInput = document.getElementById("dateInputID").value;
+
+				const currentDate = new Date();
+				const birthday = new Date(dateInput);
+				const diffTime = birthday - currentDate;
+				const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+				const dayOfWeek = birthday.toLocaleDateString('cs-CZ', { weekday: 'long' });
+
+				let message = "";
+
+				if (diffDays === 0) {
+					message = `Krásné narozeniny ${name}!`;
+				} else if (diffDays > 0) {
+					message = `${name} má narozeniny za ${diffDays} dní a den jeho narozenin je ${dayOfWeek}.`;
+				} else {
+					const nextBirthday = new Date(birthday.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+					const nextBirthdayDiffTime = nextBirthday - currentDate;
+					const nextBirthdayDiffDays = Math.ceil(nextBirthdayDiffTime / (1000 * 60 * 60 * 24));
+					message = `${name} již měl narozeniny. Jeho další narozeniny jsou za ${nextBirthdayDiffDays} dní`;
+				}
+
+				document.getElementById("birthdayMessage").innerText = message;
+				document.getElementById("birthdayMessageCard").style.display = "block";
+			}
+		</script>
+	</body>
+</html>
