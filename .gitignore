@@ -1,3 +1,8 @@
+# IDE settings
 .idea/
 .vscode/
 .DS_Store/
+
+# SKJ VENV
+4_semester\SKJ\cv\.venv
+4_semester\SKJ\cv\__pycache__
