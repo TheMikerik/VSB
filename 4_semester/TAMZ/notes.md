@@ -12,4 +12,18 @@
         - How to get the number -> Number(new Date())
             - This way how to handle the date calculations is better, cause the the date is transfered to int number (such as 17091173782348). While comparing two dates, it can cause errors (so dont use "2024-01-15 < 2024-08-15")
         - State management
-        - Choose one. Either numbers or dates. Dont mix it.
+            - Choose one. Either numbers or dates. Dont mix it.
+## CV3
+- JSON
+    - JavaScript Object Notation
+    - https://www.json.org/json-en.html
+- LocalStorage
+    - localStorage.<name_of_variable> = <value>
+    - ``localStorage.abc = 123``
+    - ``localStorage["a.b.c"] = "abc"``
+    - You can access it by ``localStorage``
+        - ```Storage = $1
+            a.b.c: "abc"
+            abc: "123"
+            length: 2
+            Storage Prototype
