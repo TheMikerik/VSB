@@ -18,3 +18,156 @@
         - [ion-input number]
             - Save and load button (save and reads from localStorage)
 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        TAMZ | CV3 | Refueling
+    </title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <script src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js" type="module"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('body-input');
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const date = form.elements.date.value;
+                const pricePerLiter = parseFloat(form.elements.price.value);
+                const paidByCard = form.elements.paidByCard.value;
+                const fuelType = form.elements.fuelType.value;
+                const gasStation = form.elements.gasStation.value;
+                const liters = parseInt(form.elements.liters.value);
+                const tachometer = parseInt(form.elements.tachometer.value);
+
+                const saveDataLocal = {
+                    date: date,
+                    pricePerLiter: pricePerLiter,
+                    paidByCard: paidByCard,
+                    fuelType: fuelType,
+                    gasStation: gasStation,
+                    liters: liters
+                };
+                const saveDataSession = {
+                    tachometer: tachometer
+                }
+
+                localStorage.setItem('fuelEntry', JSON.stringify(saveDataLocal));
+                sessionStorage.setItem('fuelEntry', JSON.stringify(saveDataSession));
+            });
+
+            const loadButton = form.querySelector('[type="load"]');
+            loadButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            const savedDataLocal = JSON.parse(localStorage.getItem('fuelEntry'));
+            if (savedDataLocal) {
+                form.elements.date.value = savedDataLocal.date;
+                form.elements.price.value = savedDataLocal.pricePerLiter;
+                form.elements.paidWith.value = savedDataLocal.paidByCard;
+                form.elements.selectedGasoline.value = savedDataLocal.fuelType;
+                form.elements.gasStation.value = savedDataLocal.gasStation;
+                form.elements.liters.value = savedDataLocal.liters;
+                
+            } else {
+                alert('No saved data found.');
+            }
+            });
+        });
+    </script>
+</head>
+
+<body>
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Refueling</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+    <form id="body-input">
+
+        <ion-item>
+            <ion-label position="stacked">Date of refueling</ion-label>
+            <ion-input name="date" type="date"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Price of gas per liter</ion-label>
+            <ion-input name="price" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Paid by card</ion-label>
+            <ion-radio-group name="paidByCard">
+                <ion-item>
+                    <ion-label>Yes</ion-label>
+                    <ion-radio slot="start" value="Yes"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>No</ion-label>
+                    <ion-radio slot="start" value="No"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <br/>
+            <ion-item>
+                <ion-label position="stacked">Option</ion-label>
+                <ion-input name="paidWith" type="text"></ion-input>
+            </ion-item>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Gasoline type</ion-label>
+            <ion-radio-group name="fuelType">
+                <ion-item>
+                    <ion-label>BA 95</ion-label>
+                    <ion-radio slot="start" value="BA 95"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>BA 100</ion-label>
+                    <ion-radio slot="start" value="BA 100"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Nafta</ion-label>
+                    <ion-radio slot="start" value="Nafta"></ion-radio>
+                </ion-item>
+                <ion-item>
+                    <ion-label>Arktická nafta</ion-label>
+                    <ion-radio slot="start" value="Arktická nafta"></ion-radio>
+                </ion-item>
+            </ion-radio-group>
+            <br/>
+            <ion-item>
+                <ion-label position="stacked">Selected gasoline</ion-label>
+                <ion-input name="selectedGasoline" type="text"></ion-input>
+            </ion-item>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Gas station name</ion-label>
+            <ion-input name="gasStation" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Total liters</ion-label>
+            <ion-input name="liters" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">Tachometer state</ion-label>
+            <ion-input name="tachometer" type="number"></ion-input>
+        </ion-item>
+        <div style="display: block; justify-content: center;">
+            <ion-button expand="block" type="submit">Save</ion-button>
+            <ion-button expand="block" type="load">Load</ion-button>
+        </div>
+        
+
+    </form>
+</ion-content>
+</body>
+</html>
