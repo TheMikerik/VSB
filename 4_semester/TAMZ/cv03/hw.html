@@ -30,7 +30,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js" type="module"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet">
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('body-input');
@@ -104,7 +103,7 @@
         </ion-item>
 
         <ion-item>
-            <ion-label position="stacked">Paid by card</ion-label>
+            <ion-label position="stacked" class="paidByCard">Paid by card</ion-label>
             <ion-radio-group name="paidByCard">
                 <ion-item>
                     <ion-label>Yes</ion-label>
@@ -164,8 +163,8 @@
             <ion-input name="tachometer" type="number"></ion-input>
         </ion-item>
         <div style="display: flex; justify-content: center;">
-            <ion-button expand="block" type="submit">Save</ion-button>
-            <ion-button expand="block" type="load">Load</ion-button>
+            <ion-button class="button" expand="block" type="submit">Save</ion-button>
+            <ion-button class="button" expand="block" type="load">Load</ion-button>
         </div>
         
 
@@ -173,3 +172,14 @@
 </ion-content>
 </body>
 </html>
+
+<style>
+    .paidByCard
+    {
+        margin-bottom: 20px;
+    }
+    .button
+    {
+        margin-bottom: 40px;
+    }
+</style>
