@@ -58,25 +58,27 @@
                     tachometer: tachometer
                 }
 
-                localStorage.setItem('fuelEntry', JSON.stringify(saveDataLocal));
-                sessionStorage.setItem('fuelEntry', JSON.stringify(saveDataSession));
+                localStorage.setItem('localData', JSON.stringify(saveDataLocal));
+                sessionStorage.setItem('sessionData', JSON.stringify(saveDataSession));
             });
 
             const loadButton = form.querySelector('[type="load"]');
             loadButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            const savedDataLocal = JSON.parse(localStorage.getItem('fuelEntry'));
-            if (savedDataLocal) {
-                form.elements.date.value = savedDataLocal.date;
-                form.elements.price.value = savedDataLocal.pricePerLiter;
-                form.elements.paidWith.value = savedDataLocal.paidByCard;
-                form.elements.selectedGasoline.value = savedDataLocal.fuelType;
-                form.elements.gasStation.value = savedDataLocal.gasStation;
-                form.elements.liters.value = savedDataLocal.liters;
-                
-            } else {
-                alert('No saved data found.');
-            }
+                event.preventDefault();
+                const savedDataLocal = JSON.parse(localStorage.getItem('localData'));
+                const savedDataSession = JSON.parse(sessionStorage.getItem('sessionData'));
+                if (savedDataLocal && savedDataSession) {
+                    form.elements.date.value = savedDataLocal.date;
+                    form.elements.price.value = savedDataLocal.pricePerLiter;
+                    form.elements.paidWith.value = savedDataLocal.paidByCard;
+                    form.elements.selectedGasoline.value = savedDataLocal.fuelType;
+                    form.elements.gasStation.value = savedDataLocal.gasStation;
+                    form.elements.liters.value = savedDataLocal.liters;
+                    
+                    form.elements.tachometer.value = savedDataSession.tachometer;
+                } else {
+                    alert('No saved data found.');
+                }
             });
         });
     </script>
