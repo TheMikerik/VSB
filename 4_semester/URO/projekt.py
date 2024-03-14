@@ -1,95 +1,92 @@
-# -*- coding: utf-8 -*- 
 import tkinter as tk
 from tkinter import ttk
 
-root = tk.Tk()
-hlavniMenu = tk.Menu(root)
+class FlashcardApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Flashcard App")
 
-# vytvořit rozbalovací menu a přidat ho k hlavnímu menu
-menuSoubor = tk.Menu(hlavniMenu, tearoff=0)
-menuSoubor.add_command(label="Otevřít")
-menuSoubor.add_command(label="Uložit")
-menuSoubor.add_separator()
-menuSoubor.add_command(label="Pryč", command=root.quit)
-hlavniMenu.add_cascade(label="Soubor", menu=menuSoubor)
+        self.create_menu()
+        self.create_treeview()
+        self.create_entries()
+        self.create_save_button()
 
-# další rozbalovací menu
-menuUpravy = tk.Menu(hlavniMenu, tearoff=0)
-menuUpravy.add_command(label="Vyjmout")
-menuUpravy.add_command(label="Kopírovat")
-menuUpravy.add_command(label="Vložit")
-hlavniMenu.add_cascade(label="Upravit", menu=menuUpravy)
+        self.tree.bind('<<TreeviewSelect>>', self.on_tree_select)
 
-menuNapoveda = tk.Menu(hlavniMenu, tearoff=0)
-menuNapoveda.add_command(label="O aplikaci")
-hlavniMenu.add_cascade(label="Nápověda", menu=menuNapoveda)
+    def create_menu(self):
+        menu_bar = tk.Menu(self.root)
+        file_menu = tk.Menu(menu_bar, tearoff=0)
+        file_menu.add_command(label="Open")
+        file_menu.add_command(label="Save")
+        file_menu.add_separator()
+        file_menu.add_command(label="Exit", command=self.root.quit)
+        menu_bar.add_cascade(label="File", menu=file_menu)
 
-# zobrazení menu
-root.config(menu=hlavniMenu)
+        tools_menu = tk.Menu(menu_bar, tearoff=0)
+        tools_menu.add_command(label="Extract")
+        tools_menu.add_command(label="Copy")
+        tools_menu.add_command(label="Paste")
+        menu_bar.add_cascade(label="Adjust", menu=tools_menu)
 
-# TreeView
-tree = ttk.Treeview(root, columns=('book_name', 'author', 'year_published'), 
-                    show='headings')
+        help_menu = tk.Menu(menu_bar, tearoff=0)
+        help_menu.add_command(label="About")
+        menu_bar.add_cascade(label="Help", menu=help_menu)
 
-tree.heading('book_name', text='Kniha')
-tree.heading('author', text='Autor')
-tree.heading('year_published', text='Publikovano')
+        self.root.config(menu=menu_bar)
 
-tree.insert('', tk.END, values=("Atomic Habits", "J. Clear", "2011"))
-tree.insert('', tk.END, values=("Jane", "Doe", "901121/7238"))
+    def create_treeview(self):
+        self.tree = ttk.Treeview(self.root, columns=('deck_name', 'front_side', 'back_side', 'status'), show='headings')
+        self.tree.heading('deck_name', text='Deck name')
+        self.tree.heading('front_side', text='Front side')
+        self.tree.heading('back_side', text='Back side')
+        self.tree.heading('status', text='Status')
 
-tree.grid(row=0, column=0, columnspan=2, sticky='nsew')
+        data = [
+            ("English", "Inquisitive", "Zvedavy", "Nauceno"),
+            ("English", "Diminishing", "Zmensujici se", "Procviceno"),
+            ("English", "Skidding", "Smyk", "Nenauceno"),
+            ("IT", "Transakce v databazi", "Databázová transakce je skupina příkazů, které převedou databázi z jednoho konzistentního stavu do druhého.", "Nenauceno")
+        ]
 
-scrollbar = ttk.Scrollbar(root, orient=tk.VERTICAL, command=tree.yview)
-tree.configure(yscroll=scrollbar.set)
-scrollbar.grid(row=0, column=3, sticky='ns')
+        for item in data:
+            self.tree.insert('', tk.END, values=item)
 
-entries = []
-# Kniha LABEL
-ttk.Label(root, text="Kniha: ").grid(row=1, column=0, sticky='w')
-entry = ttk.Entry(root)
-entry.grid(row=1, column=1)
-entries.append(entry)
+        self.tree.grid(row=0, column=0, columnspan=2, sticky='nsew')
 
-# Autor LABEL
-ttk.Label(root, text="Autor: ").grid(row=2, column=0, sticky='w')
-entry = ttk.Entry(root)
-entry.grid(row=2, column=1)
-entries.append(entry)
+        scrollbar = ttk.Scrollbar(self.root, orient=tk.VERTICAL, command=self.tree.yview)
+        self.tree.configure(yscroll=scrollbar.set)
+        scrollbar.grid(row=0, column=2, sticky='ns')
 
-# Publikovano LABEL
-ttk.Label(root, text="Publikovano: ").grid(row=3, column=0, sticky='w')
-entry = ttk.Entry(root)
-entry.grid(row=3, column=1)
-entries.append(entry)
+    def create_entries(self):
+        self.entries = []
+        labels = ["Deck:", "Front side:", "Back side:", "Status:"]
+        for i, label_text in enumerate(labels):
+            ttk.Label(self.root, text=label_text).grid(row=i+1, column=0, sticky='w', padx=5)
+            entry = ttk.Entry(self.root)
+            entry.grid(row=i+1, column=1, sticky='we', padx=5)
+            entry.insert(tk.END, "")
+            self.entries.append(entry)
 
-def on_tree_select(event):
-    # Get selected item
-    selected_item = tree.selection()[0]
-    values = tree.item(selected_item, 'values')
+    def create_save_button(self):
+        ttk.Button(self.root, text='Save Changes', command=self.save_changes).grid(row=6, column=0, columnspan=2, pady=5)
 
-    # Update input fields
-    for i in range(len(values)):
-        entries[i].delete(0, tk.END)
-        entries[i].insert(tk.END, values[i])
+    def on_tree_select(self, event):
+        selected_item = self.tree.selection()[0]
+        values = self.tree.item(selected_item, 'values')
 
-def save_changes():
-    # Get selected item
-    selected_item = tree.selection()[0]
+        for entry, value in zip(self.entries, values):
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, value)
 
-    # Get input field values
-    values = [entry.get() for entry in entries]
+    def save_changes(self):
+        selected_item = self.tree.selection()[0]
+        values = [entry.get() for entry in self.entries]
+        self.tree.item(selected_item, values=values)
 
-    # Update selected item
-    tree.item(selected_item, values=values)
+def main():
+    root = tk.Tk()
+    app = FlashcardApp(root)
+    root.mainloop()
 
-# Bind select event
-tree.bind('<<TreeviewSelect>>', on_tree_select)
-
-ttk.Button(root, text='Save Changes', command=save_changes).grid(row=4, column=0, columnspan=2)
-
-# pages
-notebook = ttk.Notebook(root)
-
-
-root.mainloop()
+if __name__ == "__main__":
+    main()
