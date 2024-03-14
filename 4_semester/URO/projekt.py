@@ -1,106 +1,95 @@
+# -*- coding: utf-8 -*- 
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import ttk
 
-class FlashcardApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Flashcard App")
-        
-        # Flashcards
-        self.flashcards = []
-        self.current_flashcard_index = 0
-        
-        # Frame to hold flashcard
-        self.flashcard_frame = tk.Frame(self.root)
-        self.flashcard_frame.pack(pady=10)
-        
-        # Flashcard label
-        self.flashcard_text = tk.StringVar()
-        self.flashcard_label = tk.Label(self.flashcard_frame, textvariable=self.flashcard_text, font=("Helvetica", 18))
-        self.flashcard_label.pack()
-        
-        # Frame to hold buttons
-        self.button_frame = tk.Frame(self.root)
-        self.button_frame.pack(pady=10)
-        
-        # Buttons
-        self.show_answer_button = tk.Button(self.button_frame, text="Show Answer", command=self.show_answer)
-        self.show_answer_button.grid(row=0, column=0, padx=10)
-        
-        self.next_card_button = tk.Button(self.button_frame, text="Next Card", command=self.next_card)
-        self.next_card_button.grid(row=0, column=1, padx=10)
-        
-        self.add_card_button = tk.Button(self.button_frame, text="Add Card", command=self.add_card)
-        self.add_card_button.grid(row=0, column=2, padx=10)
-        
-        self.edit_card_button = tk.Button(self.button_frame, text="Edit Card", command=self.edit_card)
-        self.edit_card_button.grid(row=0, column=3, padx=10)
-        
-        self.save_button = tk.Button(self.button_frame, text="Save Cards", command=self.save_cards)
-        self.save_button.grid(row=0, column=4, padx=10)
-        
-        self.load_button = tk.Button(self.button_frame, text="Load Cards", command=self.load_cards)
-        self.load_button.grid(row=0, column=5, padx=10)
-        
-        # Initialize flashcards
-        self.load_cards()
-        self.show_flashcard()
+root = tk.Tk()
+hlavniMenu = tk.Menu(root)
 
-    def show_flashcard(self):
-        # Display the current flashcard
-        if self.flashcards:
-            self.flashcard_text.set(self.flashcards[self.current_flashcard_index])
-        else:
-            self.flashcard_text.set("No flashcards available")
+# vytvořit rozbalovací menu a přidat ho k hlavnímu menu
+menuSoubor = tk.Menu(hlavniMenu, tearoff=0)
+menuSoubor.add_command(label="Otevřít")
+menuSoubor.add_command(label="Uložit")
+menuSoubor.add_separator()
+menuSoubor.add_command(label="Pryč", command=root.quit)
+hlavniMenu.add_cascade(label="Soubor", menu=menuSoubor)
 
-    def show_answer(self):
-        # Function to show the answer of the flashcard
-        if self.flashcards:
-            messagebox.showinfo("Answer", self.flashcards[self.current_flashcard_index])
-        else:
-            messagebox.showinfo("No Flashcard", "No flashcards available")
+# další rozbalovací menu
+menuUpravy = tk.Menu(hlavniMenu, tearoff=0)
+menuUpravy.add_command(label="Vyjmout")
+menuUpravy.add_command(label="Kopírovat")
+menuUpravy.add_command(label="Vložit")
+hlavniMenu.add_cascade(label="Upravit", menu=menuUpravy)
 
-    def next_card(self):
-        # Function to load the next flashcard
-        if self.flashcards:
-            self.current_flashcard_index = (self.current_flashcard_index + 1) % len(self.flashcards)
-            self.show_flashcard()
+menuNapoveda = tk.Menu(hlavniMenu, tearoff=0)
+menuNapoveda.add_command(label="O aplikaci")
+hlavniMenu.add_cascade(label="Nápověda", menu=menuNapoveda)
 
-    def add_card(self):
-    # Function to add a new flashcard
-        new_flashcard = simpledialog.askstring("Add Flashcard", "Enter the new flashcard:")
-        if new_flashcard:
-            self.flashcards.append(new_flashcard)
-            self.show_flashcard()
+# zobrazení menu
+root.config(menu=hlavniMenu)
 
-    def edit_card(self):
-        # Function to edit the current flashcard
-        if self.flashcards:
-            edited_flashcard = simpledialog.askstring("Edit Flashcard", "Edit the flashcard:", initialvalue=self.flashcards[self.current_flashcard_index])
-            if edited_flashcard:
-                self.flashcards[self.current_flashcard_index] = edited_flashcard
-                self.show_flashcard()
-                
-    def save_cards(self):
-        # Function to save flashcards to a file
-        filename = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
-        if filename:
-            with open(filename, "w") as f:
-                for flashcard in self.flashcards:
-                    f.write(flashcard + "\n")
-            messagebox.showinfo("Save Successful", "Flashcards saved successfully")
+# TreeView
+tree = ttk.Treeview(root, columns=('book_name', 'author', 'year_published'), 
+                    show='headings')
 
-    def load_cards(self):
-        # Function to load flashcards from a file
-        filename = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
-        if filename:
-            with open(filename, "r") as f:
-                self.flashcards = f.read().splitlines()
-            self.current_flashcard_index = 0
-            self.show_flashcard()
-            messagebox.showinfo("Load Successful", "Flashcards loaded successfully")
+tree.heading('book_name', text='Kniha')
+tree.heading('author', text='Autor')
+tree.heading('year_published', text='Publikovano')
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = FlashcardApp(root)
-    root.mainloop()
+tree.insert('', tk.END, values=("Atomic Habits", "J. Clear", "2011"))
+tree.insert('', tk.END, values=("Jane", "Doe", "901121/7238"))
+
+tree.grid(row=0, column=0, columnspan=2, sticky='nsew')
+
+scrollbar = ttk.Scrollbar(root, orient=tk.VERTICAL, command=tree.yview)
+tree.configure(yscroll=scrollbar.set)
+scrollbar.grid(row=0, column=3, sticky='ns')
+
+entries = []
+# Kniha LABEL
+ttk.Label(root, text="Kniha: ").grid(row=1, column=0, sticky='w')
+entry = ttk.Entry(root)
+entry.grid(row=1, column=1)
+entries.append(entry)
+
+# Autor LABEL
+ttk.Label(root, text="Autor: ").grid(row=2, column=0, sticky='w')
+entry = ttk.Entry(root)
+entry.grid(row=2, column=1)
+entries.append(entry)
+
+# Publikovano LABEL
+ttk.Label(root, text="Publikovano: ").grid(row=3, column=0, sticky='w')
+entry = ttk.Entry(root)
+entry.grid(row=3, column=1)
+entries.append(entry)
+
+def on_tree_select(event):
+    # Get selected item
+    selected_item = tree.selection()[0]
+    values = tree.item(selected_item, 'values')
+
+    # Update input fields
+    for i in range(len(values)):
+        entries[i].delete(0, tk.END)
+        entries[i].insert(tk.END, values[i])
+
+def save_changes():
+    # Get selected item
+    selected_item = tree.selection()[0]
+
+    # Get input field values
+    values = [entry.get() for entry in entries]
+
+    # Update selected item
+    tree.item(selected_item, values=values)
+
+# Bind select event
+tree.bind('<<TreeviewSelect>>', on_tree_select)
+
+ttk.Button(root, text='Save Changes', command=save_changes).grid(row=4, column=0, columnspan=2)
+
+# pages
+notebook = ttk.Notebook(root)
+
+
+root.mainloop()
