@@ -116,7 +116,7 @@
             </ion-radio-group>
             <br/>
             <ion-item>
-                <ion-label position="stacked">Option</ion-label>
+                <ion-label position="stacked">Output</ion-label>
                 <ion-input name="paidWith" type="text"></ion-input>
             </ion-item>
         </ion-item>
@@ -143,7 +143,7 @@
             </ion-radio-group>
             <br/>
             <ion-item>
-                <ion-label position="stacked">Selected gasoline</ion-label>
+                <ion-label position="stacked">Output</ion-label>
                 <ion-input name="selectedGasoline" type="text"></ion-input>
             </ion-item>
         </ion-item>
@@ -166,6 +166,9 @@
             <ion-button class="button" expand="block" type="submit">Save</ion-button>
             <ion-button class="button" expand="block" type="load">Load</ion-button>
         </div>
+        <ion-card>
+
+        </ion-card>
         
 
     </form>
@@ -202,8 +205,16 @@
         margin-bottom: 20px;
     }
 
+    ion-title {
+        font-weight: bold;
+        /* padding: 10px; */
+        margin-top: 10px;
+    }
+
     ion-label {
         font-weight: bold;
+        /* padding: 10px; */
+        margin-bottom: 10px;
     }
 
     ion-input {
@@ -222,8 +233,9 @@
         margin-right: 10px;
     }
 
+
     .button {
-        margin-top: 20px;
+        margin-bottom: 50px;
     }
 
     .button:first-child {
