@@ -95,13 +95,12 @@ class FlashcardApp:
         ttk.Button(self.root, text='Delete', command=self.create_delete_dialog).grid(row=row, column=0, pady=2, padx=5, sticky='ew')
         ttk.Button(self.root, text='Save Changes', command=self.save_changes).grid(row=row, column=1, pady=2, padx=5, sticky='ew')
         ttk.Button(self.root, text='Highlight', command=self.highlight_flashcard).grid(row=row, column=2, pady=2, padx=5, sticky='ew')
+        ttk.Button(self.root, text='Add Flashcard', command=self.create_add_flashcard_section).grid(row=row+1, column=1, pady=2, padx=5, sticky='ew')
 
 
     def create_delete_dialog(self):
-        # Create a dialog window to confirm deletion
         response = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete this flashcard?")
         if response:
-            # Delete the selected flashcard
             selected_item = self.tree.selection()[0]
             self.tree.delete(selected_item)
     
@@ -109,16 +108,37 @@ class FlashcardApp:
         selected_item = self.tree.selection()[0]
         tags = self.tree.item(selected_item, 'tags')
         
-        # Check if the flashcard is already highlighted
         if 'highlighted' in tags:
-            # If highlighted, remove highlighting
             self.tree.item(selected_item, tags=())
         else:
-            # If not highlighted, apply highlighting
             self.tree.item(selected_item, tags=('highlighted',))
-            
-        # Configure the tag for highlighting
         self.tree.tag_configure('highlighted', background='red', foreground='white')
+
+    def create_add_flashcard_section(self):
+        add_flashcard_frame = ttk.Frame(self.root)
+        add_flashcard_frame.grid(row=len(self.entries) + 2, column=0, columnspan=3, padx=5, pady=5, sticky='we')
+
+        ttk.Label(add_flashcard_frame, text="Category:").grid(row=0, column=0, sticky='w', padx=5)
+        self.category_entry = ttk.Entry(add_flashcard_frame)
+        self.category_entry.grid(row=0, column=1, sticky='we', padx=5)
+
+        ttk.Label(add_flashcard_frame, text="Front side:").grid(row=1, column=0, sticky='w', padx=5)
+        self.front_entry = ttk.Entry(add_flashcard_frame)
+        self.front_entry.grid(row=1, column=1, sticky='we', padx=5)
+
+        ttk.Label(add_flashcard_frame, text="Back side:").grid(row=2, column=0, sticky='w', padx=5)
+        self.back_entry = ttk.Entry(add_flashcard_frame)
+        self.back_entry.grid(row=2, column=1, sticky='we', padx=5)
+
+        ttk.Button(add_flashcard_frame, text='Add Flashcard', command=self.add_flashcard).grid(row=3, columnspan=2, pady=5)
+
+    def add_flashcard(self):
+        category = self.category_entry.get()
+        front_side = self.front_entry.get()
+        back_side = self.back_entry.get()
+        status = "Unlearned"  # Default status for newly added flashcards
+
+        self.tree.insert('', tk.END, values=(category, front_side, back_side, status))
 
 
     def on_tree_select(self, event):
