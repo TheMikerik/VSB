@@ -11,7 +11,6 @@ class FlashcardApp:
             ("English", "Inquisitive", "Zvedavy", "Learned"),
             ("English", "Diminishing", "Zmensujici se", "Studied"),
             ("English", "Skidding", "Smyk", "Unlearned"),
-            ("IT", "Transakce v databazi", "Databázová transakce je skupina příkazů, které převedou databázi z jednoho konzistentního stavu do druhého.", "Unlearned"),
             ("History", "Industrial Revolution", "Průmyslová revoluce", "Studied"),
             ("Mathematics", "Pythagorean theorem", "Pythagorova věta", "Reviewed"),
             ("Biology", "Mitochondria", "Mitochondrie", "Learned"),
@@ -44,8 +43,8 @@ class FlashcardApp:
     def create_menu(self):
         menu_bar = tk.Menu(self.root)
         file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="Open")
-        file_menu.add_command(label="Save")
+        file_menu.add_command(label="Load")
+        file_menu.add_command(label="Delete all", command=self.delete_all)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.root.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
@@ -57,10 +56,16 @@ class FlashcardApp:
         menu_bar.add_cascade(label="Adjust", menu=tools_menu)
 
         help_menu = tk.Menu(menu_bar, tearoff=0)
-        help_menu.add_command(label="About")
+        help_menu.add_command(label="About", command=lambda: messagebox.showinfo("About", "Michal Ručka, RUC0066\nURO Tkinter Projekt\nFlashcards aplikace"))
         menu_bar.add_cascade(label="Help", menu=help_menu)
 
         self.root.config(menu=menu_bar)
+
+    def delete_all(self):
+        response = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete all flashcards?")
+        if response:
+            for item in self.tree.get_children():
+                self.tree.delete(item)
 
     def create_treeview(self):
         self.tree = ttk.Treeview(self.root, columns=('deck_name', 'front_side', 'back_side', 'status'), show='headings')
@@ -92,11 +97,62 @@ class FlashcardApp:
         num_entries = len(self.entries)
         row = num_entries + 1
 
-        ttk.Button(self.root, text='Delete', command=self.create_delete_dialog).grid(row=row, column=0, pady=2, padx=5, sticky='ew')
-        ttk.Button(self.root, text='Save Changes', command=self.save_changes).grid(row=row, column=1, pady=2, padx=5, sticky='ew')
-        ttk.Button(self.root, text='Highlight', command=self.highlight_flashcard).grid(row=row, column=2, pady=2, padx=5, sticky='ew')
-        ttk.Button(self.root, text='Add Flashcard', command=self.create_add_flashcard_section).grid(row=row+1, column=1, pady=2, padx=5, sticky='ew')
+        ttk.Button(self.root, text='Delete', command=self.create_delete_dialog).grid(row=row, column=0, pady=4, padx=5, sticky='ew')
+        ttk.Button(self.root, text='Save Changes', command=self.save_changes).grid(row=row, column=1, pady=4, padx=5, sticky='ew')
+        ttk.Button(self.root, text='Highlight', command=self.highlight_flashcard).grid(row=row, column=2, pady=4, padx=5, sticky='ew')
+        ttk.Button(self.root, text='Practise', command=self.practise).grid(row=row+1, column=0, columnspan=3, pady=4, padx=5, sticky='ew')
+        ttk.Button(self.root, text='Add Flashcard', command=self.create_add_flashcard_section).grid(row=row+2, column=1, pady=4, padx=5, sticky='ew')
 
+    def practise(self):
+        self.practise_window = tk.Toplevel(self.root)
+        self.practise_window.title("Practice Flashcards")
+
+        self.current_flashcard_index = 0
+
+        self.practise_window.grid_columnconfigure(0, weight=1)
+        self.practise_window.grid_rowconfigure(0, weight=1)
+        self.practise_window.grid_rowconfigure(1, weight=1)
+        self.practise_window.configure(padx=20, pady=20)
+
+        self.display_flashcard()
+
+    def display_flashcard(self):
+        for widget in self.practise_window.winfo_children():
+            widget.destroy()
+
+        flashcard_data = self.data[self.current_flashcard_index]
+
+        front_label = ttk.Label(self.practise_window, text=flashcard_data[1], font=("Arial", 14))
+        back_label = ttk.Label(self.practise_window, text=flashcard_data[2], font=("Arial", 14))
+
+        front_label.grid(row=0, column=0, padx=10, pady=(0, 10))
+        back_label.grid(row=0, column=0, padx=10, pady=(0, 10))
+        back_label.grid_remove()
+
+        show_button = ttk.Button(self.practise_window, text="Show", command=lambda: self.toggle_back_side(back_label, show_button))
+        show_button.grid(row=1, column=0, pady=10)
+
+        prev_button = ttk.Button(self.practise_window, text="Previous", command=self.show_previous_flashcard)
+        next_button = ttk.Button(self.practise_window, text="Next", command=self.show_next_flashcard)
+
+        prev_button.grid(row=2, column=0, pady=10)
+        next_button.grid(row=2, column=1, pady=10)
+
+    def toggle_back_side(self, back_label, show_button):
+        if back_label.winfo_viewable():
+            back_label.grid_remove()
+            show_button.config(text="Show")
+        else:
+            back_label.grid()
+            show_button.config(text="Hide")
+
+    def show_previous_flashcard(self):
+        self.current_flashcard_index = (self.current_flashcard_index - 1) % len(self.data)
+        self.display_flashcard()
+
+    def show_next_flashcard(self):
+        self.current_flashcard_index = (self.current_flashcard_index + 1) % len(self.data)
+        self.display_flashcard()
 
     def create_delete_dialog(self):
         response = messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete this flashcard?")
@@ -116,7 +172,7 @@ class FlashcardApp:
 
     def create_add_flashcard_section(self):
         add_flashcard_frame = ttk.Frame(self.root)
-        add_flashcard_frame.grid(row=len(self.entries) + 2, column=0, columnspan=3, padx=5, pady=5, sticky='we')
+        add_flashcard_frame.grid(row=len(self.entries) + 3, column=0, columnspan=3, padx=5, pady=5, sticky='we')
 
         ttk.Label(add_flashcard_frame, text="Category:").grid(row=0, column=0, sticky='w', padx=5)
         self.category_entry = ttk.Entry(add_flashcard_frame)
@@ -130,16 +186,15 @@ class FlashcardApp:
         self.back_entry = ttk.Entry(add_flashcard_frame)
         self.back_entry.grid(row=2, column=1, sticky='we', padx=5)
 
-        ttk.Button(add_flashcard_frame, text='Add Flashcard', command=self.add_flashcard).grid(row=3, columnspan=2, pady=5)
+        ttk.Button(add_flashcard_frame, text='Add Flashcard', command=self.add_flashcard).grid(row=3, columnspan=2, pady=5, padx=50)
 
     def add_flashcard(self):
         category = self.category_entry.get()
         front_side = self.front_entry.get()
         back_side = self.back_entry.get()
-        status = "Unlearned"  # Default status for newly added flashcards
+        status = "Unlearned"
 
         self.tree.insert('', tk.END, values=(category, front_side, back_side, status))
-
 
     def on_tree_select(self, event):
         selected_item = self.tree.selection()[0]
