@@ -12,22 +12,22 @@ class FlashcardApp:
             ("English", "Diminishing", "Zmensujici se", "Studied"),
             ("English", "Skidding", "Smyk", "Unlearned"),
             ("History", "Industrial Revolution", "Průmyslová revoluce", "Studied"),
-            ("Mathematics", "Pythagorean theorem", "Pythagorova věta", "Reviewed"),
+            ("Mathematics", "Pythagorean theorem", "Pythagorova věta", "Studied"),
             ("Biology", "Mitochondria", "Mitochondrie", "Learned"),
             ("Geography", "Plate tectonics", "Tektonické desky", "Unlearned"),
-            ("Literature", "Shakespeare", "Shakespear", "Reviewed"),
+            ("Literature", "Shakespeare", "Shakespear", "Studied"),
             ("Chemistry", "Periodic table", "Periodická tabulka", "Studied"),
             ("Physics", "Newton's laws", "Newtonovy zákony", "Learned"),
             ("Art", "Renaissance", "Renesance", "Unlearned"),
             ("Economics", "Supply and demand", "Poptávka a nabídka", "Studied"),
-            ("Music", "Mozart", "Mozart", "Reviewed"),
+            ("Music", "Mozart", "Mozart", "Studied"),
             ("Psychology", "Pavlov's dog experiment", "Pavlovův experiment na psech", "Learned"),
             ("Sociology", "Social stratification", "Sociální stratifikace", "Unlearned"),
-            ("Computer Science", "Algorithm", "Algoritmus", "Reviewed"),
+            ("Computer Science", "Algorithm", "Algoritmus", "Studied"),
             ("Political Science", "Democracy", "Demokracie", "Studied"),
             ("Engineering", "Mechanical Engineering", "Strojní inženýrství", "Learned"),
             ("Philosophy", "Socrates", "Sokrates", "Unlearned"),
-            ("Languages", "French", "Francouzština", "Reviewed"),
+            ("Languages", "French", "Francouzština", "Studied"),
             ("Medicine", "Vaccination", "Očkování", "Studied"),
             ("Architecture", "Gothic architecture", "Gotická architektura", "Learned"),
             ("Business", "Entrepreneurship", "Podnikání", "Unlearned")
@@ -75,13 +75,18 @@ class FlashcardApp:
         self.tree.heading('status', text='Status')
 
         for item in self.data:
-            self.tree.insert('', tk.END, values=item)
+            self.tree.insert('', tk.END, values=item, tags=(item[3],))
 
         self.tree.grid(row=0, column=0, columnspan=3, sticky='nsew')
 
         scrollbar = ttk.Scrollbar(self.root, orient=tk.VERTICAL, command=self.tree.yview)
         self.tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row=0, column=3, sticky='ns')
+
+        self.tree.tag_configure('Learned', background='#005500')
+        self.tree.tag_configure('Studied', background='#555500')
+        self.tree.tag_configure('Unlearned', background='#550000')
+
 
     def create_entries(self):
         self.entries = []
@@ -126,17 +131,16 @@ class FlashcardApp:
         back_label = ttk.Label(self.practise_window, text=flashcard_data[2], font=("Arial", 14))
 
         front_label.grid(row=0, column=0, padx=10, pady=(0, 10))
-        back_label.grid(row=0, column=0, padx=10, pady=(0, 10))
+        back_label.grid(row=0, column=1, padx=10, pady=(0, 10))
         back_label.grid_remove()
 
-        show_button = ttk.Button(self.practise_window, text="Show", command=lambda: self.toggle_back_side(back_label, show_button))
-        show_button.grid(row=1, column=0, pady=10)
-
         prev_button = ttk.Button(self.practise_window, text="Previous", command=self.show_previous_flashcard)
+        show_button = ttk.Button(self.practise_window, text="Show", command=lambda: self.toggle_back_side(back_label, show_button))
         next_button = ttk.Button(self.practise_window, text="Next", command=self.show_next_flashcard)
 
-        prev_button.grid(row=2, column=0, pady=10)
-        next_button.grid(row=2, column=1, pady=10)
+        prev_button.grid(row=2, column=0, pady=0)
+        next_button.grid(row=2, column=1, pady=0)
+        show_button.grid(row=3, column=0, columnspan=2, pady=0)
 
     def toggle_back_side(self, back_label, show_button):
         if back_label.winfo_viewable():
