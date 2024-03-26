@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Request</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/core.css">
+    <style>
+        ion-content {
+            --ion-background-color: #f0f2f5;
+        }
+
+        .card {
+            --background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            --background: #4CAF50;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-header ion-card-title {
+            color: #ffffff;
+        }
+
+        ion-input {
+            --background: #ffffff;
+            --padding-start: 10px;
+            --padding-end: 10px;
+            border-radius: 5px;
+            border: 1px solid #cccccc;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        ion-button {
+            --background: #4CAF50;
+            --color: #ffffff;
+            --border-radius: 5px;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <ion-app>
+        <ion-content fullscreen class="ion-padding">
+            <ion-card class="card">
+                <ion-card-header class="card-header">
+                    <ion-card-title class="ion-text-center">HTTP Request</ion-card-title>
+                </ion-card-header>
+
+                <ion-card-content>
+                    <ion-item>
+                        <ion-label position="stacked">URL</ion-label>
+                        <ion-input id="url" value="https://homel.vsb.cz/~mor03/TAMZ/TAMZ22.php"></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label position="stacked">Login</ion-label>
+                        <ion-input id="login" value="ruc0066"></ion-input>
+                    </ion-item>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-card class="card">
+                <ion-card-header class="card-header">
+                    <ion-card-title class="ion-text-center">Received Data</ion-card-title>
+                </ion-card-header>
+
+                <ion-card-content>
+                    <ion-item>
+                        <ion-label position="stacked">Received Secret Data</ion-label>
+                        <ion-input id="rsc" readonly></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label position="stacked">Decoded Secret Data (atob)</ion-label>
+                        <ion-input id="rsc_atob" readonly></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label position="stacked">Final Message</ion-label>
+                        <ion-input id="fm" readonly></ion-input>
+                    </ion-item>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-button expand="full" id="getAndSendCode" onclick="getAndSendCode()">
+                <ion-icon slot="start" name="mail-open-outline"></ion-icon>
+                <ion-label>GET and SEND CODE</ion-label>
+            </ion-button>
+        </ion-content>
+    </ion-app>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+
+    <script>
+        async function getAndSendCode() {
+            let baseURL = document.getElementById("url").value;
+            let login = document.getElementById('login').value;
+            const timestamp = new Date().getTime();
+            let fullURL = `${baseURL}?user=${encodeURIComponent(login)}&timestamp=${encodeURIComponent(timestamp)}`;
+
+            try {
+                let response = await fetch(fullURL);
+                console.log(`${response.status} ${response.statusText}`);
+
+                if (response.ok) {
+                    let data = await response.text();
+                    console.log("Received Secret Data: " + data);
+
+                    document.getElementById("rsc").value = data;
+                    document.getElementById("rsc_atob").value = window.atob(data);
+
+                    console.log("Decoded token: " + atob(data));
+
+                    let authResponse = await fetch(baseURL, {
+                        headers: {
+                            'Authorization': `Bearer ${data}`
+                        }
+                    });
+
+                    console.log(`${authResponse.status} ${authResponse.statusText}`);
+
+                    if (authResponse.ok) {
+                        let authData = await authResponse.text();
+                        console.log("Authenticated data: " + authData);
+                        document.getElementById("fm").value = authData;
+                    } else {
+                        console.error('Error in authenticated request:', authResponse.statusText);
+                    }
+                } else {
+                    console.error('Error in first request:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>
