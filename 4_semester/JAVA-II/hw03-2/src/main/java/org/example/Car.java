@@ -36,8 +36,17 @@ class Car {
 
     @Override
     public int hashCode() {
-        return Objects.hash(brand, model, year, maxSpeed);
+        final int prime = 31;
+        int result = 1;
+
+        result = prime * result + ((brand == null) ? 0 : brand.hashCode());
+        result = prime * result + ((model == null) ? 0 : model.hashCode());
+        result = prime * result + Double.hashCode(maxSpeed);
+        result = prime * result + Double.hashCode(year);
+
+        return result;
     }
+
 
     static class Builder {
         private final String brand;
