@@ -19,6 +19,10 @@ def cached(func):
 runs = 0
 
 
+
+# Volam cached s argumentem argsum
+
+@cached
 def argsum(*args):
     global runs
     runs += 1
