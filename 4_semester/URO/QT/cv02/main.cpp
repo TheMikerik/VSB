@@ -7,6 +7,7 @@
 #include <QTableView>
 #include <QPushButton>
 #include <QStandardItemModel>
+#include <QLabel>
 
 class FlashcardEditorDialog : public QDialog {
     Q_OBJECT
@@ -80,13 +81,35 @@ public:
         tableView = new QTableView(this);
         tableView->setModel(model);
 
-        // Button to add a new flashcard
+        tableView->setColumnWidth(1, 275);
+        tableView->setColumnWidth(2, 125);
+
+        // Form to display flashcard details
+        flashcardTagEdit = new QLineEdit(this);
+        flashcardFrontsideEdit = new QLineEdit(this);
+        flashcardBacksideEdit = new QLineEdit(this);
+        flashcardStatusEdit = new QLineEdit(this);
+
+        // Layout for the flashcard details
+        flashcardFormLayout = new QFormLayout;
+        flashcardFormLayout->addRow("Tag:", flashcardTagEdit);
+        flashcardFormLayout->addRow("Frontside:", flashcardFrontsideEdit);
+        flashcardFormLayout->addRow("Backside:", flashcardBacksideEdit);
+        flashcardFormLayout->addRow("Status:", flashcardStatusEdit);
+
+        flashcardTagEdit->setMinimumSize(400, 30); // Adjust the size as needed
+        flashcardFrontsideEdit->setMinimumSize(400, 30); // Adjust the size as needed
+        flashcardBacksideEdit->setMinimumSize(400, 30); // Adjust the size as needed
+        flashcardStatusEdit->setMinimumSize(400, 30);
+
+        // Add flashcard button
         addButton = new QPushButton("Add Flashcard", this);
         connect(addButton, &QPushButton::clicked, this, &MainWindow::addFlashcard);
 
         // Main layout
         QVBoxLayout *layout = new QVBoxLayout;
         layout->addWidget(tableView);
+        layout->addLayout(flashcardFormLayout);
         layout->addWidget(addButton);
 
         // Set the central widget of the window
@@ -94,15 +117,10 @@ public:
         centralWidget->setLayout(layout);
         setCentralWidget(centralWidget);
 
-        resize(440, 600); // Set window size
-    }
+        resize(650, 600); // Set window size
 
-private slots:
-    void addFlashcard() {
-        // Open dialog to add a new flashcard
-        FlashcardEditorDialog dialog(this);
-        connect(&dialog, &FlashcardEditorDialog::flashcardSaved, this, &MainWindow::insertFlashcard);
-        dialog.exec();
+        // Connect table view selection change to slot
+        connect(tableView->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &MainWindow::displayFlashcardDetails);
     }
 
     void insertFlashcard(const QString &tag, const QString &frontside, const QString &backside, const QString &status) {
@@ -115,9 +133,37 @@ private slots:
         model->appendRow(newRow);
     }
 
+private slots:
+    void addFlashcard() {
+        // Open dialog to add a new flashcard
+        FlashcardEditorDialog dialog(this);
+        connect(&dialog, &FlashcardEditorDialog::flashcardSaved, this, &MainWindow::insertFlashcard);
+        dialog.exec();
+    }
+
+    void displayFlashcardDetails(const QModelIndex &index) {
+        if (index.isValid()) {
+            QString tag = model->item(index.row(), 0)->text();
+            QString frontside = model->item(index.row(), 1)->text();
+            QString backside = model->item(index.row(), 2)->text();
+            QString status = model->item(index.row(), 3)->text();
+
+            // Update flashcard details
+            flashcardTagEdit->setText(tag);
+            flashcardFrontsideEdit->setText(frontside);
+            flashcardBacksideEdit->setText(backside);
+            flashcardStatusEdit->setText(status);
+        }
+    }
+
 private:
     QStandardItemModel *model; // Model for the table
     QTableView *tableView; // Table view to display flashcards
+    QLineEdit *flashcardTagEdit; // QLineEdit for flashcard tag
+    QLineEdit *flashcardFrontsideEdit; // QLineEdit for flashcard frontside
+    QLineEdit *flashcardBacksideEdit; // QLineEdit for flashcard backside
+    QLineEdit *flashcardStatusEdit; // QLineEdit for flashcard status
+    QFormLayout *flashcardFormLayout; // Layout for flashcard details
     QPushButton *addButton; // Button to add a new flashcard
 };
 
@@ -125,6 +171,19 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainWindow window;
     window.show();
+
+    // Inserting 10 initial flashcards
+    window.insertFlashcard("Math", "What is 2 + 2?", "4", "Studied");
+    window.insertFlashcard("Science", "What is the chemical symbol for water?", "H2O", "Not studied");
+    window.insertFlashcard("History", "When did World War II end?", "1945", "Studied");
+    window.insertFlashcard("Geography", "What is the capital of France?", "Paris", "Not studied");
+    window.insertFlashcard("Literature", "Who wrote Romeo and Juliet?", "William Shakespeare", "Studied");
+    window.insertFlashcard("Art", "Who painted the Mona Lisa?", "Leonardo da Vinci", "Not studied");
+    window.insertFlashcard("Biology", "What is the powerhouse of the cell?", "Mitochondria", "Studied");
+    window.insertFlashcard("Physics", "What is Newton's first law of motion?", "An object in motion stays in motion unless acted upon by an external force.", "Not studied");
+    window.insertFlashcard("Chemistry", "What is the pH scale used to measure?", "Acidity or alkalinity", "Studied");
+    window.insertFlashcard("Language", "What is the most spoken language in the world?", "Mandarin Chinese", "Not studied");
+
     return app.exec();
 }
 
