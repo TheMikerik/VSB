@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arc Clock</title>
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    canvas {
+        display: block;
+        background-color: black;
+    }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" style="background-color: rgb(214, 221, 255);"></canvas>
+<script>
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+    var centerX = canvas.width / 2;
+    var centerY = canvas.height / 2;
+    var hourRadius = 360;
+    var minuteRadius = 330;
+    var secondRadius = 300;
+    var dateColor = '#000000';
+
+    function drawClock() {
+        var now = new Date();
+        var hours = now.getHours() % 12;
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawCircle(hours / 12, 'blue', hourRadius);
+        drawCircle(minutes / 60, 'green', minuteRadius);
+        drawCircle(seconds / 60, 'red', secondRadius);
+
+        var dateText = now.toLocaleDateString();
+        ctx.fillStyle = dateColor;
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(dateText, centerX, centerY);
+    }
+
+    function drawCircle(percent, color, radius) {
+        var startAngle = -Math.PI / 2;
+        var endAngle = startAngle + 2 * Math.PI * percent;
+
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 25;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(0, 0, 100, 0.7)';
+        ctx.shadowBlur = 65;
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.stroke();
+    }
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        centerX = canvas.width / 2;
+        centerY = canvas.height / 2;
+        drawClock();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    setInterval(drawClock, 1000);
+    resizeCanvas();
+</script>
+</body>
+</html>

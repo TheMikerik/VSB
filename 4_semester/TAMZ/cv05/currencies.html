@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+	<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet"> 
+</head>
+<body>
+<ion-app>
+
+  <ion-header>
+
+	<ion-toolbar>
+	  <ion-title>CNB Exchange Rates</ion-title>
+	</ion-toolbar>
+
+  </ion-header>
+
+  <ion-content class="ion-padding">
+
+    <ion-toolbar>
+  <ion-card>
+      <ion-card-header>
+        <ion-card-title></ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-input id="amount-czk" type="number" step="1" label="CZK" label-placement="floating" fill="outline" placeholder=""></ion-input>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title></ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-input id="converted-amount" label="CUR" label-placement="floating" fill="outline" placeholder="" readonly></ion-input>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title></ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-label>Select Date:</ion-label>
+        <ion-datetime-button datetime="date-picker"></ion-datetime-button>
+        <ion-modal>
+        <ion-datetime id="date-picker" show-default-buttons="true" locale="cs-CZ" done-text="OK" cancel-text="Zrušit" presentation="date" (ionChange)="saveSelectedDate($event)"></ion-datetime>
+        </ion-modal>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title></ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+        <ion-label>Select CUR:</ion-label>
+        <ion-searchbar id="currency-searchbar"></ion-searchbar>
+        <ion-list id="search-results" style="display:none;">
+        </ion-list>
+
+        <ion-list>
+          <ion-item>
+            <ion-select id="currency-select" label="CUR:" placeholder="Make a selection">
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</ion-app>
+
+<script>
+let exchangeRates = {};
+let currentCurrency = '';
+var eventSource;
+
+const mySelect = document.getElementById('currency-select');
+const mySearchBar = document.getElementById('currency-searchbar');
+
+function fetchExchangeRates(date) {
+  var lang = navigator.language.startsWith('cs') ? 'cs' : 'en';
+  console.log(date);
+  $.ajax({
+      url: `http://linedu.vsb.cz/~mor03/TAMZ/cnb_json.php?date=${encodeURIComponent(date)}&lang=${encodeURIComponent(lang)}&sse=n`,
+      dataType: 'json',
+      success: function(response) {
+          console.log(response);
+          exchangeRates = {};
+            response.data.forEach(rateInfo => {
+                exchangeRates[rateInfo.code] = rateInfo;
+            });
+          updateCurrencySelect(response.data);
+      },
+      error: function() {
+          console.error("Nelze načíst počáteční směnné kurzy.");
+      }
+  });
+}
+
+function updateCurrencySelect(currencies) {
+  const select = $('#currency-select');
+  select.empty();
+  $.each(exchangeRates, function(code, rateInfo) {
+      const option = $('<ion-select-option>').attr('value', code).text(`${rateInfo.country_label} - ${rateInfo.curr_label} - ${rateInfo.rate}`);
+      select.append(option);
+  });
+}
+
+function updateConversion() {
+  if(currentCurrency && exchangeRates[currentCurrency]) {
+      const rate = parseFloat(exchangeRates[currentCurrency].rate);
+      const amountInCZK = parseFloat($('#amount-czk').val());
+      const convertedAmount = amountInCZK / rate;
+      $('#converted-amount').val(convertedAmount.toFixed(2));
+  }
+}
+
+document.querySelector('#currency-select').addEventListener('ionChange', (event) => {
+  currentCurrency = event.detail.value;
+  updateConversion();
+});
+
+$(document).ready(function() {
+  var date = new Date().toISOString().slice(0, 10);
+  fetchExchangeRates(date);
+});
+
+$('#date-picker').on('ionChange', function(event) {
+  var selectedDate = event.detail.value.slice(0, 10);
+  updateConversion();
+});
+
+$('#amount-czk').on('input', function() {
+  updateConversion();
+});
+
+$('#amount-czk').val(100);
+
+$('#currency-searchbar').on('ionInput', function(event) {
+  const query = event.target.value.toLowerCase();
+
+  if (!query) {
+    $('#search-results').hide();
+    return;
+  }
+  
+  $('#search-results').show();
+
+  const currenciesArray = Object.values(exchangeRates);
+
+  const filteredCurrencies = currenciesArray.filter(c => 
+    c.curr_label.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const searchResultsEl = $('#search-results');
+  searchResultsEl.empty();
+
+  filteredCurrencies.forEach(currency => {
+    const item = $(`<ion-item>${currency.country_label} - ${currency.curr_label} - ${currency.rate}</ion-item>`).on('click', function() {
+      currentCurrency = currency.code;
+      mySelect.value = currency.code;
+      mySearchBar.value = '';
+      updateConversion();
+      searchResultsEl.hide();
+    });
+    searchResultsEl.append(item);
+  });
+});
+
+
+</script>
+
+</body>
+</html>
