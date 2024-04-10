@@ -80,102 +80,105 @@
 </ion-app>
 
 <script>
-let exchangeRates = {};
-let currentCurrency = '';
-var eventSource;
+  let exchangeRates = {};
+  let currentCurrency = '';
 
-const mySelect = document.getElementById('currency-select');
-const mySearchBar = document.getElementById('currency-searchbar');
+  const currencySelect = document.getElementById('currency-select');
+  const searchBar = document.getElementById('currency-searchbar');
 
-function fetchExchangeRates(date) {
-  var lang = navigator.language.startsWith('cs') ? 'cs' : 'en';
-  console.log(date);
-  $.ajax({
-      url: `http://linedu.vsb.cz/~mor03/TAMZ/cnb_json.php?date=${encodeURIComponent(date)}&lang=${encodeURIComponent(lang)}&sse=n`,
-      dataType: 'json',
-      success: function(response) {
-          console.log(response);
-          exchangeRates = {};
-            response.data.forEach(rateInfo => {
-                exchangeRates[rateInfo.code] = rateInfo;
-            });
-          updateCurrencySelect(response.data);
-      },
-      error: function() {
-          console.error("Nelze načíst počáteční směnné kurzy.");
-      }
-  });
-}
-
-function updateCurrencySelect(currencies) {
-  const select = $('#currency-select');
-  select.empty();
-  $.each(exchangeRates, function(code, rateInfo) {
-      const option = $('<ion-select-option>').attr('value', code).text(`${rateInfo.country_label} - ${rateInfo.curr_label} - ${rateInfo.rate}`);
-      select.append(option);
-  });
-}
-
-function updateConversion() {
-  if(currentCurrency && exchangeRates[currentCurrency]) {
-      const rate = parseFloat(exchangeRates[currentCurrency].rate);
-      const amountInCZK = parseFloat($('#amount-czk').val());
-      const convertedAmount = amountInCZK / rate;
-      $('#converted-amount').val(convertedAmount.toFixed(2));
+  function fetchExchangeRates(date) {
+    const lang = navigator.language.startsWith('cs') ? 'cs' : 'en';
+    console.log(date);
+    fetch(`http://linedu.vsb.cz/~mor03/TAMZ/cnb_json.php?date=${encodeURIComponent(date)}&lang=${encodeURIComponent(lang)}&sse=n`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        exchangeRates = {};
+        data.data.forEach(rateInfo => {
+          exchangeRates[rateInfo.code] = rateInfo;
+        });
+        updateCurrencySelect(data.data);
+      })
+      .catch(error => {
+        console.error("Nelze načíst počáteční směnné kurzy.", error);
+      });
   }
-}
 
-document.querySelector('#currency-select').addEventListener('ionChange', (event) => {
-  currentCurrency = event.detail.value;
-  updateConversion();
-});
-
-$(document).ready(function() {
-  var date = new Date().toISOString().slice(0, 10);
-  fetchExchangeRates(date);
-});
-
-$('#date-picker').on('ionChange', function(event) {
-  var selectedDate = event.detail.value.slice(0, 10);
-  updateConversion();
-});
-
-$('#amount-czk').on('input', function() {
-  updateConversion();
-});
-
-$('#amount-czk').val(100);
-
-$('#currency-searchbar').on('ionInput', function(event) {
-  const query = event.target.value.toLowerCase();
-
-  if (!query) {
-    $('#search-results').hide();
-    return;
-  }
-  
-  $('#search-results').show();
-
-  const currenciesArray = Object.values(exchangeRates);
-
-  const filteredCurrencies = currenciesArray.filter(c => 
-    c.curr_label.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const searchResultsEl = $('#search-results');
-  searchResultsEl.empty();
-
-  filteredCurrencies.forEach(currency => {
-    const item = $(`<ion-item>${currency.country_label} - ${currency.curr_label} - ${currency.rate}</ion-item>`).on('click', function() {
-      currentCurrency = currency.code;
-      mySelect.value = currency.code;
-      mySearchBar.value = '';
-      updateConversion();
-      searchResultsEl.hide();
+  function updateCurrencySelect(currencies) {
+    const select = document.getElementById('currency-select');
+    select.innerHTML = '';
+    currencies.forEach(rateInfo => {
+      const option = document.createElement('ion-select-option');
+      option.value = rateInfo.code;
+      option.textContent = `${rateInfo.country_label} - ${rateInfo.curr_label} - ${rateInfo.rate}`;
+      select.appendChild(option);
     });
-    searchResultsEl.append(item);
+  }
+
+  function updateConversion() {
+    if (currentCurrency && exchangeRates[currentCurrency]) {
+      const rate = parseFloat(exchangeRates[currentCurrency].rate);
+      const amountInCZK = parseFloat(document.getElementById('amount-czk').value);
+      const convertedAmount = amountInCZK / rate;
+      document.getElementById('converted-amount').value = convertedAmount.toFixed(2);
+    }
+  }
+
+  document.getElementById('currency-select').addEventListener('ionChange', (event) => {
+    currentCurrency = event.detail.value;
+    updateConversion();
   });
-});
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const date = new Date().toISOString().slice(0, 10);
+    fetchExchangeRates(date);
+  });
+
+  document.getElementById('date-picker').addEventListener('ionChange', (event) => {
+    const selectedDate = event.detail.value.slice(0, 10);
+    updateConversion();
+  });
+
+  document.getElementById('amount-czk').addEventListener('input', () => {
+    updateConversion();
+  });
+
+  document.getElementById('amount-czk').value = 100;
+
+  document.getElementById('currency-searchbar').addEventListener('ionInput', (event) => {
+    const query = event.target.value.toLowerCase();
+    const searchResults = document.getElementById('search-results');
+
+    if (!query) {
+      searchResults.style.display = 'none';
+      return;
+    }
+
+    searchResults.style.display = 'block';
+
+    const currenciesArray = Object.values(exchangeRates);
+    const filteredCurrencies = currenciesArray.filter(currency => 
+      currency.curr_label.toLowerCase().includes(query)
+    );
+
+    const searchResultsList = document.createElement('ion-list');
+    filteredCurrencies.forEach(currency => {
+      const item = document.createElement('ion-item');
+      item.textContent = `${currency.country_label} - ${currency.curr_label} - ${currency.rate}`;
+      item.addEventListener('click', () => {
+        currentCurrency = currency.code;
+        currencySelect.value = currency.code;
+        searchBar.value = '';
+        updateConversion();
+        searchResults.style.display = 'none';
+      });
+      searchResultsList.appendChild(item);
+    });
+
+    searchResults.innerHTML = '';
+    searchResults.appendChild(searchResultsList);
+  });
+
 
 
 </script>
