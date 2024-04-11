@@ -1,113 +1,72 @@
+import time
+
+
 def cached(func):
-    """
-    Create a decorator that caches up to 3 function results, based on the same parameter values.
+    last_one = []
+    cache = {}
+    def my_wrapper(*args):
+        if args not in cache:
+            res = func(*args)
+            if len(cache) == 3:
+                old_one = last_one.pop(0)
+                cache.pop(old_one)
+            last_one.append(args)
+            cache[args] = res
+        else:
+            last_one.remove(args)
+            last_one.append(args)
+            res = cache[args]
+        return res
+    return my_wrapper
 
-    When `f` is called with the same parameter values that are already in the cache, return the
-    stored result associated with these parameter values. You can assume that `f` receives only
-    positional arguments (you can ignore keyword arguments).
-
-    When `f` is called with new parameter values, forget the oldest accessed result in the cache
-    if the cache is already full.
-
-    Example:
-        @cached
-        def fn(a, b):
-            return a + b # imagine an expensive computation
-
-        fn(1, 2) == 3 # computed
-        fn(1, 2) == 3 # returned from cache, `a + b` is not executed
-        fn(3, 4) == 7 # computed
-        fn(3, 5) == 8 # computed
-        fn(3, 6) == 9 # computed, (1, 2) was now forgotten
-        fn(1, 2) == 3 # computed again, (3, 4) was now forgotten
-    """
-    pass
 
 class GameOfLife:
-    """
-    Implement "Game of life" (https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
-
-    The game board will be represented with nested tuples, where '.'
-    marks a dead cell and 'x' marks a live cell. Cells that are out of bounds of the board are
-    assumed to be dead.
-
-    Try some patterns from wikipedia + the provided tests to test the functionality.
-
-    The GameOfLife objects should be immutable, i.e. the move method will return a new instance
-    of GameOfLife.
-
-    Example:
-        game = GameOfLife((
-            ('.', '.', '.'),
-            ('.', 'x', '.'),
-            ('.', 'x', '.'),
-            ('.', 'x', '.'),
-            ('.', '.', '.')
-        ))
-        game.alive()    # 3
-        game.dead()     # 12
-        x = game.move() # 'game' doesn't change
-        # x.board:
-        (
-            ('.', '.', '.'),
-            ('.', '.', '.'),
-            ('x', 'x', 'x'),
-            ('.', '.', '.'),
-            ('.', '.', '.')
-        )
-
-        str(x)
-        ...\n
-        ...\n
-        xxx\n
-        ...\n
-        ...\n
-    """
-
     def __init__(self, board):
         self.board = board
-        pass
 
     def move(self):
-        """
-        Simulate one iteration of the game and return a new instance of GameOfLife containing
-        the new board state.
-        """
-        pass
+        rows = len(self.board)
+        cols = len(self.board[0])
+
+        new_board = []
+        for i in range(rows):
+            new_row = []
+            for j in range(cols):
+                live_neighbors = 0
+                neighbors = [(i - 1, j - 1), (i - 1, j), (i - 1, j + 1), (i, j - 1), (i, j + 1), (i + 1, j - 1),
+                            (i + 1, j), (i + 1, j + 1)]
+                for x, y in neighbors:
+                    if 0 <= x < rows and 0 <= y < cols and self.board[x][y] == 'x':
+                        live_neighbors += 1
+                if live_neighbors == 3:
+                    new_row.append('x')
+                elif self.board[i][j] == 'x' and (live_neighbors == 2 or live_neighbors == 3):
+                    new_row.append('x')
+                else:
+                    new_row.append('.')
+            new_board.append(tuple(new_row))
+
+        return GameOfLife(tuple(new_board))
 
     def alive(self):
-        count = 0
-        for row in self.board:
-            count += row.count('x')
-
-        return count
+        return sum(row.count('x') for row in self.board)
 
     def dead(self):
-        count = 0
-        for row in self.board:
-            count += row.count('.')
-
-        return count
+        return sum(row.count('.') for row in self.board)
 
     def __repr__(self):
-        repr_str = ""
+        rows = []
         for row in self.board:
-            repr_str += "".join(row) + "\n"
-        return repr_str.rstrip("\n")
+            rows.append(' '.join(row))
+        return '\n'.join(rows)
 
 
 def play_game(game, n):
-    """
-    You can use this function to render the game for n iterations
-    """
     for i in range(n):
         print(game)
         game = game.move()
-        time.sleep(0.25)  # sleep to see the output
+        time.sleep(0.25)
 
-
-# this code will only be executed if you run `python tasks.py`
-# it will not be executed when tasks.py is imported
 if __name__ == "__main__":
     play_game(GameOfLife((
         ('.', '.', '.'),
