@@ -5,8 +5,8 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QLineEdit>
-#include <QRegularExpression> // Include QRegularExpression for splitting the expression
-#include <QMessageBox> // Include QMessageBox for error handling
+#include <QRegularExpression>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,13 +24,13 @@ public:
     ~MainWindow();
 
 private slots:
-    void handleButtonClick(const QString &text); // Slot for handling button clicks
-    void calculateResult(); // Function to calculate the result
+    void handleButtonClick(const QString &text);
+    void calculateResult();
 
 private:
     Ui::MainWindow *ui;
 
-    double evalExpression(const QString &expression); // Function to evaluate the expression
+    double evalExpression(const QString &expression);
 };
 
 #endif // MAINWINDOW_H
