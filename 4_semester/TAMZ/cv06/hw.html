@@ -11,12 +11,12 @@
     }
     canvas {
         display: block;
-        background-color: black;
+        background-color: rgb(214, 221, 255);
     }
 </style>
 </head>
 <body>
-<canvas id="myCanvas" style="background-color: rgb(214, 221, 255);"></canvas>
+<canvas id="myCanvas"></canvas>
 <script>
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
@@ -25,7 +25,14 @@
     var hourRadius = 360;
     var minuteRadius = 330;
     var secondRadius = 300;
+    var dateTransparent = false;
+    var binaryDateTransparent = false;
+
     var dateColor = '#000000';
+    var binaryDateColor = '#888888';
+    var hourColor = 'blue';
+    var minuteColor = 'green';
+    var secondColor = 'red';
 
     function drawClock() {
         var now = new Date();
@@ -34,15 +41,20 @@
         var seconds = now.getSeconds();
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawCircle(hours / 12, 'blue', hourRadius);
-        drawCircle(minutes / 60, 'green', minuteRadius);
-        drawCircle(seconds / 60, 'red', secondRadius);
+        drawCircle(hours / 12, hourColor, hourRadius);
+        drawCircle(minutes / 60, minuteColor, minuteRadius);
+        drawCircle(seconds / 60, secondColor, secondRadius);
 
         var dateText = now.toLocaleDateString();
-        ctx.fillStyle = dateColor;
-        ctx.font = '20px Arial';
+        ctx.fillStyle = dateTransparent ? 'rgba(0, 0, 0, 0)' : dateColor;
+        ctx.font = '30px Arial';
         ctx.textAlign = 'center';
         ctx.fillText(dateText, centerX, centerY);
+
+        var binaryDateText = toBinaryDate(now);
+        ctx.fillStyle = binaryDateTransparent ? 'rgba(0, 0, 0, 0)' : binaryDateColor;
+        ctx.font = '24px Arial';
+        ctx.fillText(binaryDateText, centerX, centerY + 35);
     }
 
     function drawCircle(percent, color, radius) {
@@ -53,7 +65,7 @@
         ctx.strokeStyle = color;
         ctx.lineWidth = 25;
         ctx.lineCap = 'round';
-        ctx.shadowColor = 'rgba(0, 0, 100, 0.7)';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
         ctx.shadowBlur = 65;
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.stroke();
@@ -66,6 +78,55 @@
         centerY = canvas.height / 2;
         drawClock();
     }
+
+    function toBinaryDate(date) {
+        var day = date.getDate().toString(2);
+        var month = (date.getMonth() + 1).toString(2);
+        var year = date.getFullYear().toString(2);
+        return padZero(day) + ' / ' + padZero(month) + ' / ' + padZero(year);
+    }
+
+    function padZero(str) {
+        return str.length < 2 ? '0' + str : str;
+    }
+
+    function randomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    function changeColors() {
+        dateColor = randomColor();
+        binaryDateColor = randomColor();
+        hourColor = randomColor();
+        minuteColor = randomColor();
+        secondColor = randomColor();
+        drawClock();
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.keyCode === 32) {
+            changeColors();
+        }
+    });
+
+    canvas.addEventListener('click', function(event) {
+        var rect = canvas.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        if (Math.abs(x - centerX) < 100 && Math.abs(y - centerY) < 15) {
+            dateTransparent = !dateTransparent;
+        }
+        if (Math.abs(x - centerX) < 100 && Math.abs(y - (centerY + 35)) < 15) {
+            binaryDateTransparent = !binaryDateTransparent;
+        }
+
+        drawClock();
+    });
 
     window.addEventListener('resize', resizeCanvas);
     setInterval(drawClock, 1000);
