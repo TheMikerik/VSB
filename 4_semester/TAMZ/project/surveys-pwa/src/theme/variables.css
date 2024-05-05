@@ -1,2 +1,16 @@
-/* For information on how to create your own theme, please see:
-http://ionicframework.com/docs/theming/ */
+/* Modern Brilliance Color Palette */
+
+:root {
+    --primary: #bc6c25;
+    --secondary: #dda15e;
+
+    --text: #283618;
+    --text-light: #fefae0;
+
+    --action: #31841e;
+
+    --ion-background: #fefae0;
+    --ion-background-light: #fbfbf5;
+
+    --shadow: rgba(0, 0, 0, 0.2);
+}

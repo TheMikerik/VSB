@@ -1,0 +1,41 @@
+@import url('../theme/variables.css');
+
+.survey-title {
+    font-size: 1.7em;
+    font-weight: bold;
+    color: var(--text);
+    background-color: var(--primary);
+}
+
+.survey-card {
+    margin-bottom: 30px;
+    border-radius: 13px;
+    background-color: var(--ion-background-light);
+    box-shadow: 0px 8px 8px var(--shadow);
+}
+
+.survey-card-header {
+    padding: 10px;
+    background-color: var(--primary);
+    color: var(--text-light);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.survey-card-content {
+    padding: 10px;
+    color: var(--text);
+    --ion-background-color: var(--ion-background-light);
+}
+
+.take-survey-button {
+    margin-top: 10px;
+    --background: var(--primary);
+    --border-radius: 10px;
+    --color: var(--text-light);
+}
+
+ion-content {
+    padding: 20px;
+    --ion-background-color: var(--ion-background);
+}
