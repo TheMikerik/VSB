@@ -1,7 +1,7 @@
 import { IonAlert, IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonGrid, IonRow, IonCol, IonItem, IonLabel, IonInput } from "@ionic/react";
 import React, { useRef, useState } from "react";
-import BmiControls from "../components/BmiControls";
-import BmiResult from "../components/BmiResult";
+import BmiControls from "./BmiControls";
+import BmiResult from "./BmiResult";
 
 const TestPage: React.FC = () => {
     const weightInputRef = useRef<HTMLIonInputElement>(null);

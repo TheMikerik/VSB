@@ -1,8 +1,8 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, setupIonicReact, IonRouterOutlet } from '@ionic/react';
+import { IonApp, setupIonicReact, IonRouterOutlet, IonContent, IonItem, IonLabel, IonList, IonMenu } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
-import TestPage from './pages/Test';
+import TestPage from './other/Test';
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -34,20 +34,36 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Stats from './pages/Stats';
 
 setupIonicReact();
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
+      <IonMenu contentId="main">
+        <IonContent>
+          <IonList>
+            <IonItem routerLink="/home">
+              <IonLabel>Home</IonLabel>
+            </IonItem>
+            <IonItem routerLink="/test">
+              <IonLabel>Test</IonLabel>
+            </IonItem>
+          </IonList>
+        </IonContent>
+      </IonMenu>
+      <IonRouterOutlet id="main">
         <Route exact path="/home">
           <Home />
         </Route>
-        <Route exact path="/test"> {/* Define a new route for /test */}
+        <Route exact path="/test">
           <TestPage />
         </Route>
-        <Route exact path="/"> {/* Redirect to /home by default */}
+        <Route exact path="/stats">
+          <Stats />
+        </Route>
+        <Route exact path="/">
           <Redirect to="/home" />
         </Route>
       </IonRouterOutlet>
