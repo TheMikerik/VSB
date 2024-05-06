@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonButton, IonItem } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonButton, IonItem, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
 import './Home.css';
+
+import { hourglassOutline, caretForwardOutline } from 'ionicons/icons';
 
 const Home: React.FC = () => {
   // const [surveys, setSurveys] = useState<any[]>([]);
@@ -78,22 +80,38 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle className='survey-title'>Surveys PWA</IonTitle>
+        <IonToolbar className='toolbar'>
+          <IonTitle className='app-title'>Surveys PWA</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen scrollY={true} className="ion-padding">
         {surveys.map(survey => (
           <IonCard key={survey.id} className="survey-card">
-            <IonCardHeader className="survey-card-header ion-padding">
+            <IonCardHeader className="survey-card-header">
               <IonTitle>{survey.title}</IonTitle>
             </IonCardHeader>
             <IonCardContent className="survey-card-content">
-              <IonItem lines="full">
-                <p>Description: {survey.description}</p>
-                <p>Estimated Time: {survey.estimatedTime}</p>
-              </IonItem>
-              <IonButton routerLink={`/survey/${survey.id}`} expand="block" className="take-survey-button">Take Survey</IonButton>
+              <IonGrid>
+                <IonRow className="center-row">
+                  <IonItem lines="full" className='description-box'>
+                    <p className="survey-description">{survey.description}</p>
+                  </IonItem>
+                </IonRow>
+                <IonRow>
+                  <IonCol className='ion-text-left'>
+                    <IonButton expand='block' className='take-survey-button'>
+                      <IonIcon slot="start" icon={hourglassOutline} />
+                      <p className="button-text">{survey.estimatedTime}</p>
+                    </IonButton>
+                  </IonCol>
+                  <IonCol>
+                    <IonButton routerLink={`/survey/${survey.id}`} expand="block" className="take-survey-button">
+                      <IonIcon slot="start" icon={caretForwardOutline} />
+                      Start
+                    </IonButton>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
             </IonCardContent>
           </IonCard>
         ))}
