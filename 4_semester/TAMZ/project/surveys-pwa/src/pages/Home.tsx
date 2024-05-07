@@ -5,77 +5,166 @@ import './Home.css';
 import { hourglassOutline, caretForwardOutline } from 'ionicons/icons';
 
 const Home: React.FC = () => {
-  // const [surveys, setSurveys] = useState<any[]>([]);
-
-  // useEffect(() => { 
-  //   fetch('path/to/your/surveys.json')
-  //     .then(response => response.json())
-  //     .then(data => setSurveys(data))
-  //     .catch(error => console.error('Error fetching surveys:', error));
-  // }, []);
 
   const [surveys] = useState([
     {
-      title: "Customer Satisfaction Survey",
-      description: "Tell us about your experience with our products and services.",
-      estimatedTime: "5 minutes",
-      id: 1,
+      "title": "Movie Magic!",
+      "description": "Tell us about your favorite films!",
+      "estimatedTime": "2 minutes",
+      "id": "1",
+      "questions": [
+        {
+          "type": "text",
+          "label": "What's your favorite genre of movie?"
+        },
+        {
+          "type": "multiple_choice",
+          "label": "How often do you watch movies at home?",
+          "options": ["Daily", "Several times a week", "Once a week", "Less than once a week"]
+        },
+        {
+          "type": "single_choice",
+          "label": "Would you recommend our movie streaming service to a friend?",
+          "options": ["Yes", "No", "Unsure"]
+        }
+      ]
     },
     {
-      title: "Market Research Survey",
-      description: "Help us understand your preferences and needs.",
-      estimatedTime: "10 minutes",
-      id: 2,
+      "title": "Coffee Break!",
+      "description": "Help us understand your coffee habits!",
+      "estimatedTime": "4 minutes",
+      "id": "2",
+      "questions": [
+        {
+          "type": "multiple_choice",
+          "label": "How do you typically drink your coffee?",
+          "options": ["Black", "With milk/creamer", "With sugar/sweetener", "Flavored Coffee"]
+        },
+        {
+          "type": "text",
+          "label": "What's your favorite brand of coffee?"
+        },
+        {
+          "type": "single_choice",
+          "label": "Do you prefer hot or iced coffee?",
+          "options": ["Hot", "Iced", "Both"]
+        },
+        {
+          "type": "multiple_choice",
+          "label": "What time of day do you usually drink coffee?",
+          "options": ["Morning", "Afternoon", "Both", "Never"]
+        },
+        {
+          "type": "number",
+          "label": "On average, how many cups of coffee do you drink per day?"
+        },
+        {
+          "type": "single_choice",
+          "label": "Do you consider yourself a coffee addict?",
+          "options": ["Yes", "No", "Maybe"]
+        },
+        {
+          "type": "text",
+          "label": "What are your favorite coffee shop recommendations?"
+        }
+      ]
     },
     {
-      title: "Website Usability Survey",
-      description: "Share your feedback on the ease of use of our website.",
-      estimatedTime: "7 minutes",
-      id: 3,
-    },
-    {
-      title: "Product Feedback Survey",
-      description: "Provide your insights on a specific product.",
-      estimatedTime: "8 minutes",
-      id: 4,
-    },
-    {
-      title: "Event Satisfaction Survey",
-      description: "Let us know what you thought of our recent event.",
-      estimatedTime: "3 minutes",
-      id: 5,
-    },
-    {
-      title: "Brand Perception Survey",
-      description: "Help us understand your perception of our brand.",
-      estimatedTime: "12 minutes",
-      id: 6,
-    },
-    {
-      title: "Employee Satisfaction Survey",
-      description: "Share your thoughts on your work experience.",
-      estimatedTime: "15 minutes",
-      id: 7,
-    },
-    {
-      title: "Feature Request Survey",
-      description: "Suggest new features you'd like to see.",
-      estimatedTime: "10 minutes",
-      id: 8,
-    },
-    {
-      title: "App Usability Survey",
-      description: "Provide feedback on the usability of our mobile app.",
-      estimatedTime: "8 minutes",
-      id: 9,
-    },
-    {
-      title: "Competition Analysis Survey",
-      description: "Help us understand our competitors better.",
-      estimatedTime: "10 minutes",
-      id: 10,
-    },
+      "title": "Wanderlust Survey",
+      "description": "Share your travel dreams and experiences!",
+      "estimatedTime": "8 minutes",
+      "id": "4",
+      "questions": [
+        {
+          "type": "multiple_choice",
+          "label": "What type of travel experience do you prefer?",
+          "options": ["Relaxation on the beach", "Adventure and exploration", "Cultural immersion", "City breaks", "Luxury getaways"]
+        },
+        {
+          "type": "text",
+          "label": "What is your dream travel destination?"
+        },
+        {
+          "type": "multiple_choice",
+          "label": "When do you typically travel (time of year)?",
+          "options": ["Spring", "Summer", "Fall", "Winter", "All year round"]
+        },
+        {
+          "type": "number",
+          "label": "How much do you typically budget for a vacation?"
+        },
+        {
+          "type": "single_choice",
+          "label": "Do you prefer to travel solo or with others?",
+          "options": ["Solo", "With family", "With friends", "Both"]
+        },
+        {
+          "type": "multiple_choice",
+          "label": "What amenities are most important to you in a hotel?",
+          "options": ["Location", "Price", "Amenities (pool, gym, etc.)", "Luxury accommodations", "Unique experiences"]
+        },
+        {
+          "type": "text",
+          "label": "What are your top 3 travel essentials?"
+        },
+        {
+          "type": "single_choice",
+          "label": "Have you ever used a travel booking app or website?",
+          "options": ["Yes", "No"]
+        },
+        {
+          "type": "text",
+          "label": "If so, which travel booking app or website do you prefer?"
+        },
+        {
+          "type": "single_choice",
+          "label": "How important is eco-friendly travel to you?",
+          "options": ["Very important", "Somewhat important", "Not important"]
+        },
+        {
+          "type": "text",
+          "label": "Describe a travel experience that stands out to you the most. Why was it memorable?"
+        },
+        {
+          "type": "multiple_choice",
+          "label": "What travel styles are you most interested in trying in the future?",
+          "options": ["Backpacking", "Volunteering abroad", "Culinary tours", "Road trips", "Luxury cruises"]
+        },
+        {
+          "type": "text",
+          "label": "What are some challenges you face when planning or taking trips?"
+        },
+        {
+          "type": "text",
+          "label": "What are your top travel tips for others?"
+        },
+        {
+          "type": "text",
+          "label": "Anything else you'd like to share about your travel experiences or preferences?"
+        }
+      ]
+    }
   ]);
+
+  // const [surveys, setSurveys] = useState<Survey[]>([]);
+
+  // useEffect(() => {
+  //   console.log('Fetching surveys...');
+
+  //   fetch('../resources/surveys.json')
+  //     .then(response => {
+  //       console.log('Response received:', response);
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       console.log('Data received:', data);
+  //       setSurveys(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching surveys:', error);
+  //     });
+  // }, []);
+
 
   return (
     <IonPage>
@@ -121,3 +210,19 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+// const [surveys, setSurveys] = useState<any[]>([]);
+
+// useEffect(() => {
+//   fetch('path/to/your/surveys.json')
+//     .then(response => response.json())
+//     .then(data => setSurveys(data))
+//     .catch(error => console.error('Error fetching surveys:', error));
+// }, []);
