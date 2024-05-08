@@ -1,0 +1,83 @@
+@import url('../theme/variables.css');
+
+.app-title {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: var(--text);
+  background-color: var(--primary);
+}
+
+.toolbar {
+  --ion-background-color: var(--primary);
+  box-shadow: 0px 8px 8px var(--shadow);
+}
+
+.margin {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+
+.sur-title {
+  background-color: var(--primary);
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  border-radius: 10px;
+  color: var(--text-light);
+  text-align: center;
+  box-shadow: 8px 6px 4px var(--shadow);
+}
+
+.sur-desc {
+  background-color: var(--primary);
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  color: var(--text-light);
+  text-align: center;
+  margin-top: 0rem;
+  margin-bottom: 3rem;
+  box-shadow: 8px 8px 4px var(--shadow);
+}
+
+.card-styling {
+  color: var(--text);
+  background-color: var(--primary);
+  box-shadow: 8px 8px 4px var(--shadow);
+}
+
+.card-label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--text-light);
+  padding-left: 1rem;
+  padding-top: 0.5rem;
+}
+
+.card-question {
+  font-size: 1rem;
+  font-weight: semi-bold;
+  color: var(--text-light);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+.answer-section {
+  background-color: var(--ion-background-light);
+  height: 150px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: start;
+}
+
+.answer-section textarea {
+  /* Your styles for the textarea go here */
+  width: 100%;
+  /* Set the width as desired */
+  height: 140px;
+  /* Set the height as desired */
+  resize: vertical;
+  /* Allow vertical resizing */
+}
