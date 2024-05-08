@@ -44,6 +44,7 @@
   color: var(--text);
   background-color: var(--primary);
   box-shadow: 8px 8px 4px var(--shadow);
+  margin-top: 2rem;
 }
 
 .card-label {
@@ -80,4 +81,25 @@
   /* Set the height as desired */
   resize: vertical;
   /* Allow vertical resizing */
+}
+
+.multiple-answer-section {
+  background-color: var(--ion-background-light);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 150px;
+  text-align: start;
+}
+
+.survey-send-button {
+  margin-top: 30px;
+  height: 50px;
+  width: 200px;
+  box-shadow: 6px 6px 4px var(--shadow);
+  left: 45%;
+  transform: translateX(45%);
+}
+
+.custom-radio {
+  --background: var(--ion-background-light);
 }

@@ -56,25 +56,27 @@ const SurveyPage: React.FC = () => {
 
               {/* TEXT INPUT */}
               {question.type === 'text' && (
-                <IonTextarea className='answer-section' />
+                <IonTextarea className='answer-section' placeholder='Write your answer here...' />
               )}
 
 
               {/* MULTIPLE CHOICE */}
               {question.type === 'multiple_choice' && (
-                <IonSelect>
-                  {question.options?.map((option, optionIndex) => (
-                    <IonSelectOption key={optionIndex} value={option}>{option}</IonSelectOption>
-                  ))}
-                </IonSelect>
+                <IonRow className='multiple-answer-section'>
+                  <IonSelect multiple placeholder='Select multiple answers...'>
+                    {question.options?.map((option, optionIndex) => (
+                      <IonSelectOption key={optionIndex} value={option}>{option}</IonSelectOption>
+                    ))}
+                  </IonSelect>
+                </IonRow>
               )}
 
 
               {/* SINGLE CHOICE */}
               {question.type === 'single_choice' && (
-                <IonRadioGroup>
+                <IonRadioGroup className="custom-radio">
                   {question.options?.map((option, optionIndex) => (
-                    <IonItem key={optionIndex}>
+                    <IonItem key={optionIndex} className="custom-radio">
                       <IonRadio slot="start" value={option} />
                       <IonLabel>{option}</IonLabel>
                     </IonItem>
@@ -83,9 +85,12 @@ const SurveyPage: React.FC = () => {
               )}
 
 
+
             </IonCard>
           ))}
-          <IonButton type="submit">Submit</IonButton>
+
+
+          <IonButton type="submit" className='survey-send-button'>Submit</IonButton>
         </form>
       </IonContent>
     </IonPage >
@@ -181,7 +186,7 @@ const surveyData: Survey[] = [
         "options": ["Daily", "Weekly", "Monthly", "Less frequently than monthly", "Never"]
       },
       {
-        "type": "single_choice",
+        "type": "text",
         "label": "When browsing the internet, what security measures do you take to protect your device from malware?",
       },
       {
