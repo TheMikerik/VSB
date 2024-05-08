@@ -90,7 +90,7 @@ const SurveyPage: React.FC = () => {
           ))}
 
 
-          <IonButton type="submit" className='survey-send-button'>Submit</IonButton>
+          <IonButton type="submit" className='survey-send-button'>Finish survey</IonButton>
         </form>
       </IonContent>
     </IonPage >

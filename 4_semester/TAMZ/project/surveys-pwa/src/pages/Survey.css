@@ -74,13 +74,9 @@
 }
 
 .answer-section textarea {
-  /* Your styles for the textarea go here */
   width: 100%;
-  /* Set the width as desired */
   height: 140px;
-  /* Set the height as desired */
   resize: vertical;
-  /* Allow vertical resizing */
 }
 
 .multiple-answer-section {
@@ -92,12 +88,11 @@
 }
 
 .survey-send-button {
-  margin-top: 30px;
-  height: 50px;
-  width: 200px;
-  box-shadow: 6px 6px 4px var(--shadow);
-  left: 45%;
-  transform: translateX(45%);
+  margin-top: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --background: var(--action);
 }
 
 .custom-radio {
