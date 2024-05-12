@@ -1,5 +1,7 @@
-interface Question {
+interface QuestionInt {
   type: string;
   label: string;
-  options?: string[];
+  options: string[];
 }
+
+export default QuestionInt;

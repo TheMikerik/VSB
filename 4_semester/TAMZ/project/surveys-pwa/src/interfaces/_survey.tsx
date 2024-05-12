@@ -1,7 +1,11 @@
-interface Survey {
+import QuestionInt from "./_question";
+
+interface SurveyInt {
+  id: number;
   title: string;
   description: string;
   estimatedTime: string;
-  id: string;
-  questions: Question[];
+  questions: QuestionInt[];
 }
+
+export default SurveyInt;
