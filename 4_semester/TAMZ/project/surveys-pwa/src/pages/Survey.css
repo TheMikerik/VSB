@@ -98,3 +98,7 @@
 .custom-radio {
   --background: var(--ion-background-light);
 }
+
+.custom-radio .label-text {
+  color: grey;
+}

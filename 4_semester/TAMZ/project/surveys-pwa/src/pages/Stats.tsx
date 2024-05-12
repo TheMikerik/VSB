@@ -1,14 +1,44 @@
 import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonGrid, IonRow, IonCol, IonButton, IonIcon } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonGrid, IonRow, IonCol, IonButton, IonIcon, IonButtons, IonMenuButton } from '@ionic/react';
 
 import './Stats.css';
 import { downloadOutline } from 'ionicons/icons';
 
 const StatisticsPage: React.FC = () => {
+
+    const survStarted = localStorage.getItem('survStarted') || '0';
+    const survFinished = localStorage.getItem('survFinished') || '0';
+    const timeSpent = localStorage.getItem('timeSpent') || '0';
+
+    const handleDownloadStats = () => {
+        const data = [
+            ['Statistic', 'Value'],
+            ['Surveys Started', survStarted],
+            ['Surveys Finished', survFinished],
+            ['Time Spent (mins)', timeSpent]
+        ];
+
+        const csvContent = data.map(row => row.join(',')).join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+
+        const anchor = document.createElement('a');
+        anchor.href = window.URL.createObjectURL(blob);
+        anchor.download = 'survey_stats.csv';
+
+        document.body.appendChild(anchor);
+        anchor.click();
+
+        document.body.removeChild(anchor);
+    };
+
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar className='toolbar'>
+                    <IonButtons slot="start">
+                        <IonMenuButton style={{ "--color": "var(--ion-background-light)" }}></IonMenuButton>
+                    </IonButtons>
                     <IonTitle className='app-title'>Statistics</IonTitle>
                 </IonToolbar>
             </IonHeader>
@@ -22,7 +52,9 @@ const StatisticsPage: React.FC = () => {
                                         Surveys Started
                                     </IonCardHeader>
                                     <IonCardContent>
-                                        <h2 className='stat-text'>10</h2> {/* Static number */}
+                                        <h2 className='stat-text'>
+                                            {survStarted} pcs
+                                        </h2>
                                     </IonCardContent>
                                 </IonCard>
                             </div>
@@ -33,10 +65,12 @@ const StatisticsPage: React.FC = () => {
                             <div className="statistic-card">
                                 <IonCard className="custom-ion-card">
                                     <IonCardHeader>
-                                        Questions Answered
+                                        Time Spent
                                     </IonCardHeader>
                                     <IonCardContent>
-                                        <h2 className='stat-text'>200</h2> {/* Static number */}
+                                        <h2 className='stat-text'>
+                                            {timeSpent} mins
+                                        </h2>
                                     </IonCardContent>
                                 </IonCard>
                             </div>
@@ -50,7 +84,9 @@ const StatisticsPage: React.FC = () => {
                                         Surveys Finished
                                     </IonCardHeader>
                                     <IonCardContent>
-                                        <h2 className='stat-text'>50</h2> {/* Static number */}
+                                        <h2 className='stat-text'>
+                                            {survFinished} pcs
+                                        </h2>
                                     </IonCardContent>
                                 </IonCard>
                             </div>
@@ -59,7 +95,7 @@ const StatisticsPage: React.FC = () => {
                     <IonRow>
                         <IonCol>
                             <div className="button-container">
-                                <IonButton expand="block" className='testbuton'>
+                                <IonButton onClick={handleDownloadStats} expand="block" className='testbuton'>
                                     <IonIcon slot="start" icon={downloadOutline} />
                                     Download Stats
                                 </IonButton>

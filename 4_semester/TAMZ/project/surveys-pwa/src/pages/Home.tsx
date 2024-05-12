@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonButton, IonItem, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonButton, IonItem, IonGrid, IonRow, IonCol, IonIcon, IonButtons, IonMenuButton } from '@ionic/react';
 import './Home.css';
 
 import { hourglassOutline, caretForwardOutline } from 'ionicons/icons';
@@ -328,11 +328,40 @@ const Home: React.FC = () => {
   //     });
   // }, []);
 
+  useEffect(() => {
+    if (!localStorage.getItem('survStarted')) {
+      localStorage.setItem('survStarted', '0');
+    }
+
+    if (!localStorage.getItem('survFinished')) {
+      localStorage.setItem('survFinished', '0');
+    }
+
+    if (!localStorage.getItem('timeSpent')) {
+      localStorage.setItem('timeSpent', '0');
+    }
+  }, []);
+
+  const startSurvey = (estimatedTime: number) => {
+    const survStarted = parseInt(localStorage.getItem('survStarted') || '0', 10) + 1;
+    localStorage.setItem('survStarted', survStarted.toString());
+
+    saveTimeSpent(estimatedTime);
+  };
+
+  const saveTimeSpent = (estimatedTime: number) => {
+    const timeSpent = parseInt(localStorage.getItem('timeSpent') || '0', 10) + estimatedTime;
+    localStorage.setItem('timeSpent', timeSpent.toString());
+  };
+
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar className='toolbar'>
+          <IonButtons slot="start">
+            <IonMenuButton style={{ "--color": "var(--ion-background-light)" }}></IonMenuButton>
+          </IonButtons>
           <IonTitle className='app-title'>Surveys PWA</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -357,7 +386,7 @@ const Home: React.FC = () => {
                     </IonButton>
                   </IonCol>
                   <IonCol>
-                    <IonButton routerLink={`/survey/${survey.id}`} expand="block" className="take-survey-button">
+                    <IonButton onClick={() => startSurvey(parseInt(survey.estimatedTime, 10))} routerLink={`/survey/${survey.id}`} expand="block" className="take-survey-button">
                       <IonIcon slot="start" icon={caretForwardOutline} />
                       Start
                     </IonButton>

@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonSelect, IonSelectOption, IonRadioGroup, IonRadio, IonButton, IonLabel, IonItem, IonList, IonCard, IonGrid, IonRow, IonCol, IonTextarea } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonSelect, IonSelectOption, IonRadioGroup, IonRadio, IonButton, IonLabel, IonItem, IonList, IonCard, IonGrid, IonRow, IonCol, IonTextarea, IonButtons, IonMenuButton } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Survey.css';
@@ -31,10 +31,18 @@ const SurveyPage: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  const finishSurvey = () => {
+    const survFinished = parseInt(localStorage.getItem('survFinished') || '0', 10) + 1;
+    localStorage.setItem('survFinished', survFinished.toString());
+  };
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar className='toolbar'>
+          <IonButtons slot="start">
+            <IonMenuButton style={{ "--color": "var(--ion-background-light)" }}></IonMenuButton>
+          </IonButtons>
           <IonTitle className='app-title'>Survey</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -78,19 +86,18 @@ const SurveyPage: React.FC = () => {
                   {question.options?.map((option, optionIndex) => (
                     <IonItem key={optionIndex} className="custom-radio">
                       <IonRadio slot="start" value={option} />
-                      <IonLabel>{option}</IonLabel>
+                      <IonLabel className='label-text'>{option}</IonLabel>
                     </IonItem>
                   ))}
                 </IonRadioGroup>
               )}
 
 
-
             </IonCard>
           ))}
 
 
-          <IonButton type="submit" className='survey-send-button'>Finish survey</IonButton>
+          <IonButton onClick={finishSurvey} type="submit" className='survey-send-button'>Finish survey</IonButton>
         </form>
       </IonContent>
     </IonPage >
