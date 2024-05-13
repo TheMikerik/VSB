@@ -2,34 +2,34 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonSele
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Survey.css';
-
-interface Survey {
-  title: string;
-  description: string;
-  estimatedTime: string;
-  id: string;
-  questions: Question[];
-}
-
-interface Question {
-  type: string;
-  label: string;
-  options?: string[];
-}
+import SurveyInt from '../interfaces/_survey';
 
 const SurveyPage: React.FC = () => {
-  const [survey, setSurvey] = useState<Survey | null>(null);
+  const [survey, setSurvey] = useState<SurveyInt | null>(null);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/survey/get/${id}`)
       .then(res => res.json())
-      .then((result: Survey) => {
-        setSurvey(result);
+      .then((result: SurveyInt) => {
+        const promises = result.questions.map(question =>
+          fetch(`http://localhost:8080/api/option/getAll/${question.id}`)
+            .then(res => res.json())
+            .then(options => ({ ...question, options }))
+        );
+        Promise.all(promises)
+          .then(questionsWithOptions => {
+            setSurvey({ ...result, questions: questionsWithOptions });
+          })
+          .catch(error => {
+            console.error('Error fetching options:', error);
+          });
       })
       .catch(error => {
         console.error('Error fetching survey data:', error);
       });
+
+    console.log(survey);
   }, [id]);
 
   if (!survey) {
@@ -72,26 +72,28 @@ const SurveyPage: React.FC = () => {
                 <IonTextarea className='answer-section' placeholder='Write your answer here...' />
               )}
 
+
               {/* MULTIPLE CHOICE */}
               {question.type === 'multiple_choice' && (
                 <IonRow className='multiple-answer-section'>
                   <IonSelect multiple placeholder='Select multiple answers...'>
-                    {/* {question.options?.map((option, optionIndex) => (
-                      <IonSelectOption key={optionIndex} value={option}>{option}</IonSelectOption>
-                    ))} */}
+                    {question.options?.map((option, optionIndex) => (
+                      <IonSelectOption key={optionIndex} value={option}>{option.option}</IonSelectOption>
+                    ))}
                   </IonSelect>
                 </IonRow>
               )}
 
+
               {/* SINGLE CHOICE */}
               {question.type === 'single_choice' && (
                 <IonRadioGroup className="custom-radio">
-                  {/* {question.options?.map((option, optionIndex) => (
+                  {question.options?.map((option, optionIndex) => (
                     <IonItem key={optionIndex} className="custom-radio">
                       <IonRadio slot="start" value={option} />
-                      <IonLabel className='label-text'>{option}</IonLabel>
+                      <IonLabel className='label-text'>{option.option}</IonLabel>
                     </IonItem>
-                  ))} */}
+                  ))}
                 </IonRadioGroup>
               )}
 

@@ -39,6 +39,7 @@ import { useEffect, useState } from 'react';
 import AddSurvey from './pages/AddSurvey';
 import AddQuestion from './pages/AddQuestion';
 import SurveyInt from './interfaces/_survey';
+import AddOption from './pages/AddOption';
 
 setupIonicReact();
 
@@ -90,6 +91,9 @@ const App: React.FC = () => {
               <IonItem routerLink="/addQuestion">
                 <IonLabel>Add Question</IonLabel>
               </IonItem>
+              <IonItem routerLink="/addOption">
+                <IonLabel>Add Option</IonLabel>
+              </IonItem>
               <br />
               <br />
               <br />
@@ -119,6 +123,9 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/addQuestion">
             <AddQuestion />
+          </Route>
+          <Route exact path="/addOption">
+            <AddOption />
           </Route>
           <Route path="/survey/:id">
             <Survey />

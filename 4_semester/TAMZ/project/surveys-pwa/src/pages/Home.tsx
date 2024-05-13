@@ -89,19 +89,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-
-
-
-
-
-
-
-// const [surveys, setSurveys] = useState<any[]>([]);
-
-// useEffect(() => {
-//   fetch('path/to/your/surveys.json')
-//     .then(response => response.json())
-//     .then(data => setSurveys(data))
-//     .catch(error => console.error('Error fetching surveys:', error));
-// }, []);

@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { IonInput, IonButton, IonItem, IonLabel, IonTextarea, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton } from '@ionic/react';
+import { IonInput, IonButton, IonItem, IonLabel, IonTextarea, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonAlert } from '@ionic/react';
 import './AddSurvey.css';
 
 const AddSurvey: React.FC = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [estimatedTime, setEstimatedTime] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const handleClick = () => {
+
+    if (!title || !description || !estimatedTime) {
+      setShowError(true);
+      return;
+    }
+
     const survey = { title, description, estimatedTime };
     console.log(survey);
 
@@ -17,9 +25,21 @@ const AddSurvey: React.FC = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(survey)
-    }).then(() => {
-      console.log('Survey added')
-    })
+    }).then(response => {
+      if (response.ok) {
+        setTitle('');
+        setDescription('');
+        setEstimatedTime('');
+        setShowSuccess(true);
+        console.log("Survey added");
+      } else {
+        console.error('Failed to add survey');
+      }
+    }).catch(error => {
+      console.error('Error adding survey:', error);
+    });
+
+
   };
 
   return (
@@ -49,6 +69,20 @@ const AddSurvey: React.FC = () => {
           <IonButton onClick={handleClick} expand="full">Submit</IonButton>
         </form>
       </IonContent>
+      <IonAlert
+        isOpen={showSuccess}
+        onDidDismiss={() => setShowSuccess(false)}
+        header="Success"
+        message="Survey was added."
+        buttons={['OK']}
+      />
+      <IonAlert
+        isOpen={showError}
+        onDidDismiss={() => setShowError(false)}
+        header="Error"
+        message="Please fill in all the fields."
+        buttons={['OK']}
+      />
     </IonPage>
   );
 };

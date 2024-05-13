@@ -2,42 +2,40 @@ import React, { useState } from 'react';
 import { IonInput, IonButton, IonItem, IonLabel, IonTextarea, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton, IonAlert } from '@ionic/react';
 import './AddQuestion.css';
 
-const AddQuestion: React.FC = () => {
+const AddOption: React.FC = () => {
   const [id, setId] = useState('');
-  const [type, setType] = useState('');
-  const [label, setLabel] = useState('');
+  const [options, setOptions] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
 
-  const url = 'http://localhost:8080/api/questions/add/' + id;
+  const url = 'http://localhost:8080/api/option/add/' + id;
 
   const handleClick = () => {
 
-    if (!id || !type || !label) {
+    if (!id || !options) {
       setShowError(true);
       return;
     }
 
-    const question = { type, label };
-    console.log(question);
+    const option = { option: options };
+    console.log(option);
 
     fetch(url, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(question)
+      body: JSON.stringify(option)
     }).then(response => {
       if (response.ok) {
-        setType('');
-        setLabel('');
+        setOptions('');
         setShowSuccess(true);
-        console.log("Question added");
+        console.log("Option added");
       } else {
-        console.error('Failed to add question');
+        console.error('Failed to add option');
       }
     }).catch(error => {
-      console.error('Error adding question:', error);
+      console.error('Error adding option:', error);
     });
   };
 
@@ -48,22 +46,18 @@ const AddQuestion: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton style={{ "--color": "var(--ion-background-light)" }}></IonMenuButton>
           </IonButtons>
-          <IonTitle className='app-title'>Add Question</IonTitle>
+          <IonTitle className='app-title'>Add Option</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className='cus-ion-content'>
         <form className='cus-form'>
           <IonItem className='cus-ion-item'>
-            <IonLabel position="stacked">Survey Id</IonLabel>
+            <IonLabel position="stacked">Question Id</IonLabel>
             <IonInput className='cus-ion-input' type="text" value={id} onIonChange={e => setId(e.detail.value!)} />
           </IonItem>
           <IonItem className='cus-ion-item'>
-            <IonLabel position="stacked">Type - text, single_choice, multiple_choice</IonLabel>
-            <IonInput className='cus-ion-input' type="text" value={type} onIonChange={e => setType(e.detail.value!)} />
-          </IonItem>
-          <IonItem className='cus-ion-item'>
-            <IonLabel position="stacked">Label</IonLabel>
-            <IonTextarea className='cus-ion-textarea' value={label} onIonChange={e => setLabel(e.detail.value!)} />
+            <IonLabel position="stacked">Option</IonLabel>
+            <IonInput className='cus-ion-input' type="text" value={options} onIonChange={e => setOptions(e.detail.value!)} />
           </IonItem>
           <IonButton onClick={handleClick} expand="full">Submit</IonButton>
         </form>
@@ -72,7 +66,7 @@ const AddQuestion: React.FC = () => {
         isOpen={showSuccess}
         onDidDismiss={() => setShowSuccess(false)}
         header="Success"
-        message="Question was added."
+        message="Option was added."
         buttons={['OK']}
       />
       <IonAlert
@@ -86,4 +80,4 @@ const AddQuestion: React.FC = () => {
   );
 };
 
-export default AddQuestion;
+export default AddOption;
