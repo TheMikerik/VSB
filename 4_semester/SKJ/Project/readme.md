@@ -11,7 +11,12 @@
 
 
 # Progress
-[ ] View pro seznam balíčků karet
+- Landing page
+- Decks page
+
+
+
+[x] View pro seznam balíčků karet
 [ ] Detailní view balíčku karet s výpisem karet v něm
 [ ] View pro seznam karet všech balíčků
 [ ] Detailní view karty s možností opakování

@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #343a40; /* Dark background color */
-            color: #ffffff; /* Light text color */
+            background-color: #e1e2e3; /* Light background color */
+            color: #000000; /* Dark text color */
         }
 
         .container {
@@ -20,36 +20,37 @@
         }
 
         .navbar {
-            background-color: #454d55; /* Dark navbar background color */
+            background-color: #bbbbbb; /* Light navbar background color */
         }
 
         .navbar-light .navbar-nav .nav-link {
-            color: #ffffff; /* Light text color for navbar links */
+            color: #000000; /* Dark text color for navbar links */
         }
 
         .navbar-light .navbar-brand {
-            color: #ffffff; /* Light text color for navbar brand */
+            color: #000000; /* Dark text color for navbar brand */
         }
 
         .navbar-light .navbar-toggler-icon {
-            background-color: #ffffff; /* Light color for toggler icon */
+            background-color: #000000; /* Dark color for toggler icon */
         }
 
         .navbar-light .navbar-toggler {
-            border-color: #ffffff; /* Light color for toggler border */
+            border-color: #000000; /* Dark color for toggler border */
         }
 
         .jumbotron {
-            background-color: #383e44;
+            background-color: #e9ecef; /* Light background color for jumbotron */
         }
 
         table.table-striped tbody tr td {
-            color: #ffffff; /* White text color */
+            color: #000000; /* Dark text color */
         }
 
         table.table-striped thead th {
-            color: #ffffff; /* White text color */
+            color: #000000; /* Dark text color */
         }
+
     </style>
 </head>
 <body>
@@ -64,7 +65,7 @@
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Decks</a>
+                <a class="nav-link" href="{% url 'deck_list' %}">Decks</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Cards</a>
