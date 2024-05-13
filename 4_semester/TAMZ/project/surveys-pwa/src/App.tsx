@@ -44,9 +44,6 @@ import AddOption from './pages/AddOption';
 setupIonicReact();
 
 const App: React.FC = () => {
-
-
-
   const [surveys, setSurveys] = useState<SurveyInt[]>([]);
 
   useEffect(() => {

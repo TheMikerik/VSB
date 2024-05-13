@@ -1,0 +1,27 @@
+/* Modern Brilliance Color Palette */
+
+:root {
+    --primary: #bc6c25;
+    --secondary: #dda15e;
+
+    --text: #283618;
+    --text-light: #fefae0;
+
+    --action: #116a01;
+
+    --ion-background: #f4c9a5;
+    --ion-background-light: #ffe5ce;
+
+    --shadow: rgba(0, 0, 0, 0.2);
+}
+
+
+ion-menu::part(backdrop) {
+    background-color: #000000;
+}
+
+ion-menu::part(container) {
+    border-radius: 0 20px 20px 0;
+
+    box-shadow: 4px 0px 36px #56483d;
+}
