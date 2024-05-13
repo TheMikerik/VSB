@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+  Decks
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <h1>All Decks</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Owner</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for deck in decks %}
+          <tr>
+            <td>{{ deck.name }}</td>
+            <td>{{ deck.user.username }}</td>
+            <td>
+              <a href="{% url 'deck_edit' deck.id %}" class="btn btn-primary btn-sm">Edit</a>
+              <a href="{% url 'deck_delete' deck.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'deck_add' %}" class="btn btn-success">Add Deck</a>
+  </div>
+{% endblock %}
