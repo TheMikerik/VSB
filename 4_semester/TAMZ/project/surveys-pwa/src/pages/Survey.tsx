@@ -6,6 +6,7 @@ import SurveyInt from '../interfaces/_survey';
 
 const SurveyPage: React.FC = () => {
   const [survey, setSurvey] = useState<SurveyInt | null>(null);
+  const [answers, setAnswers] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -28,17 +29,35 @@ const SurveyPage: React.FC = () => {
       .catch(error => {
         console.error('Error fetching survey data:', error);
       });
-
-    console.log(survey);
   }, [id]);
 
   if (!survey) {
     return <div>Loading...</div>;
   }
 
+  const handleInputChange = (index: number, value: string) => {
+    const updatedAnswers = [...answers];
+    updatedAnswers[index] = value;
+    setAnswers(updatedAnswers);
+
+    console.log(answers);
+  };
+
   const finishSurvey = () => {
+    console.log(answers);
     const survFinished = parseInt(localStorage.getItem('survFinished') || '0', 10) + 1;
     localStorage.setItem('survFinished', survFinished.toString());
+
+    const answersBlob = new Blob([JSON.stringify(answers)], { type: 'application/json' });
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(answersBlob);
+    downloadLink.download = 'survey_answers.json';
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+
+    document.body.removeChild(downloadLink);
   };
 
   return (
@@ -69,16 +88,24 @@ const SurveyPage: React.FC = () => {
 
               {/* TEXT INPUT */}
               {question.type === 'text' && (
-                <IonTextarea className='answer-section' placeholder='Write your answer here...' />
+                <IonTextarea
+                  className='answer-section'
+                  placeholder='Write your answer here...'
+                  onIonChange={(e) => handleInputChange(index, e.detail.value!)}
+                />
               )}
 
 
               {/* MULTIPLE CHOICE */}
               {question.type === 'multiple_choice' && (
                 <IonRow className='multiple-answer-section'>
-                  <IonSelect multiple placeholder='Select multiple answers...'>
+                  <IonSelect
+                    multiple
+                    placeholder='Select multiple answers...'
+                    onIonChange={(e) => handleInputChange(index, e.detail.value as string)}
+                  >
                     {question.options?.map((option, optionIndex) => (
-                      <IonSelectOption key={optionIndex} value={option}>{option.option}</IonSelectOption>
+                      <IonSelectOption key={optionIndex} value={option.option}>{option.option}</IonSelectOption>
                     ))}
                   </IonSelect>
                 </IonRow>
@@ -87,10 +114,13 @@ const SurveyPage: React.FC = () => {
 
               {/* SINGLE CHOICE */}
               {question.type === 'single_choice' && (
-                <IonRadioGroup className="custom-radio">
+                <IonRadioGroup
+                  className="custom-radio"
+                  onIonChange={(e) => handleInputChange(index, e.detail.value)}
+                >
                   {question.options?.map((option, optionIndex) => (
                     <IonItem key={optionIndex} className="custom-radio">
-                      <IonRadio slot="start" value={option} />
+                      <IonRadio slot="start" value={option.option} />
                       <IonLabel className='label-text'>{option.option}</IonLabel>
                     </IonItem>
                   ))}
@@ -100,7 +130,7 @@ const SurveyPage: React.FC = () => {
             </IonCard>
           ))}
 
-          <IonButton onClick={finishSurvey} type="submit" className='survey-send-button'>Finish survey</IonButton>
+          <IonButton onClick={finishSurvey} type="button" className='survey-send-button'>Finish survey</IonButton>
         </form>
       </IonContent>
     </IonPage>
