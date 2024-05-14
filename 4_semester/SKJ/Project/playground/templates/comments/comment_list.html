@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Comments for Deck: {{ deck.name }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Comments for Deck: {{ deck.name }}</h1>
+    
+    <form method="post" action="{% url 'add_comment' deck.id %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="nicname">Nickname:</label>
+        <input type="text" class="form-control" id="nicname" name="nicname" required>
+      </div>
+      <div class="form-group">
+        <label for="comment">Add a Comment:</label>
+        <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br />
+    <br />
+    <h2>All Comments</h2>
+    <ul class="list-group">
+      {% for comment in comments %}
+        <li class="list-group-item top-margin">
+          <p>{{ comment.text }}</p>
+          <small>Commented by {{ comment.nicname }} on {{ comment.created_at }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

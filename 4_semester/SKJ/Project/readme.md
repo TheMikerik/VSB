@@ -10,12 +10,40 @@
   - python manage.py createsuperuser
 
 
+
+
 # Progress
+
+### Models (6)
+- User
+- Deck
+- Tag
+- Card
+- Comment
+- Review
+
+### Forms (6)
+- Add comment
+- Add deck / Edit deck
+- Add card / Edit card
+- Add user / Edit user
+- Select user
+
+### Views (12)
 - Landing page
-- Decks page
+- Comment list
+- Practice
+- Select user
+- History
+- Deck list
+- Add deck / Edit deck
+- Card list
+- Add card / Edit card
+- User list
+- Add user / Edit user
 
 
-
+### Ideas
 [x] View pro seznam balíčků karet
 [ ] Detailní view balíčku karet s výpisem karet v něm
 [ ] View pro seznam karet všech balíčků

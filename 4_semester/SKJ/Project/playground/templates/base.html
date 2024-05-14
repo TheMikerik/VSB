@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #e1e2e3; /* Light background color */
-            color: #000000; /* Dark text color */
+            background-color: #e1e2e3;
+            color: #000000;
         }
 
         .container {
@@ -20,58 +20,96 @@
         }
 
         .navbar {
-            background-color: #bbbbbb; /* Light navbar background color */
+            background-color: #bbbbbb;
+        }
+
+        h1 {
+            color: #000000;
+        }
+
+        p {
+            color: #000000;
         }
 
         .navbar-light .navbar-nav .nav-link {
-            color: #000000; /* Dark text color for navbar links */
+            color: #686868;
         }
 
         .navbar-light .navbar-brand {
-            color: #000000; /* Dark text color for navbar brand */
+            color: #000000;
         }
 
         .navbar-light .navbar-toggler-icon {
-            background-color: #000000; /* Dark color for toggler icon */
+            background-color: #000000;
         }
 
         .navbar-light .navbar-toggler {
-            border-color: #000000; /* Dark color for toggler border */
+            border-color: #000000;
         }
 
         .jumbotron {
-            background-color: #e9ecef; /* Light background color for jumbotron */
+            background-color: #e9ecef;
         }
 
         table.table-striped tbody tr td {
-            color: #000000; /* Dark text color */
+            color: #000000;
         }
 
         table.table-striped thead th {
-            color: #000000; /* Dark text color */
+            color: #000000;
         }
 
+        .table-striped {
+            background-color: #000000;
+        }
+
+        .table-striped thead {
+            background-color: #d3d3d3;
+        }
+
+        .table-striped tbody tr {
+            background-color: #ffffff;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f0f0f0;
+        }
+
+        .container .card {
+            background-color: #f3f3f3
+        }
+
+        .top-margin {
+            margin-top: 10px;
+        }
+
+        .large-text {
+            font-size: 2.5rem;
+        }
+        .mid-text {
+            font-size: 1.7rem;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="#">Flashcard Appka</a>
+    <a class="navbar-brand" href="{% url 'home' %}">Flashcard Appka</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'deck_list' %}">Decks</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Cards</a>
+                <a class="nav-link" href="{% url 'review_list' %}"">History</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Users</a>
+                <a class="nav-link" href="{% url 'user_list' %}">Users</a>
             </li>
         </ul>
     </div>

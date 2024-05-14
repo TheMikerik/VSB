@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+  User List
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">User List</h1>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th style="max-width: 60px;">Decks</th>
+          <th style="max-width: 100px;">Reviews</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in user_data %}
+          <tr>
+            <td>{{ user.user.username }}</td>
+            <td>{{ user.user.email }}</td>
+            <td>{{ user.user.fname }}</td>
+            <td>{{ user.user.lname }}</td>
+            <td>{{ user.num_decks }}</td>
+            <td>{{ user.num_comments }}</td>
+            <td>
+              <a href="{% url 'user_edit' user.user.id %}" class="btn btn-primary btn-sm">Edit</a>
+              <form method="post" action="{% url 'user_delete' user.user.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+            </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{% url 'user_add' %}" class="btn btn-success">Add User</a>
+  </div>
+</div>
+{% endblock %}

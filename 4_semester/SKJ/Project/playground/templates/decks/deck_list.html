@@ -5,11 +5,12 @@
 {% block content %}
   <div class="container">
     <h1>All Decks</h1>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
         <tr>
           <th>Name</th>
           <th>Owner</th>
+          <th>Cards</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -19,8 +20,15 @@
             <td>{{ deck.name }}</td>
             <td>{{ deck.user.username }}</td>
             <td>
+              <a href="{% url 'card_list' deck.id %}" class="btn btn-success btn-sm">View Cards</a>
+            </td>
+            <td>
               <a href="{% url 'deck_edit' deck.id %}" class="btn btn-primary btn-sm">Edit</a>
-              <a href="{% url 'deck_delete' deck.id %}" class="btn btn-danger btn-sm">Delete</a>
+              <form action="{% url 'deck_delete' deck.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this deck?')">Delete</button>
+              </form>
+              <a href="{% url 'comment_list' deck.id %}" class="btn btn-secondary btn-sm">Comments</a>
             </td>
           </tr>
         {% endfor %}
