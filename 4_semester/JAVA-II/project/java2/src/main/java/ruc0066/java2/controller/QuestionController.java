@@ -19,12 +19,9 @@ public class QuestionController {
     public String add(@PathVariable int surveyId, @RequestBody Questions questions) {
         try {
             if (questions != null) {
-                // Get the survey object corresponding to the provided surveyId
                 Survey survey = questionsService.getSurveyById(surveyId);
                 if (survey != null) {
-                    // Set the survey for the questions object
                     questions.setSurvey(survey);
-                    // Save the questions object
                     questionsService.saveQuestions(questions);
                     return "Question added successfully";
                 } else {
