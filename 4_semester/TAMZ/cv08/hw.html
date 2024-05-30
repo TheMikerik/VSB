@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Arc Clock</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            background-color: black;
+        }
+
+        #sound-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" style="background-color: rgba(148,123,84,0.9);"></canvas>
+<button id="sound-button">Play Sound</button>
+<script>
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+
+    var centerX, centerY;
+    var hourRadius = 360;
+    var minuteRadius = 330;
+    var secondRadius = 300;
+    var dateColor = '#000000';
+    var dateVisible = true;
+
+    var sound = new Audio('sounds/tick.mp3');
+    sound.loop = true;
+
+    document.getElementById('sound-button').addEventListener('click', function () {
+        if (sound.paused) {
+            sound.play();
+            this.textContent = 'Pause Sound';
+        } else {
+            sound.pause();
+            this.textContent = 'Play Sound';
+        }
+    });
+
+    function drawClock() {
+        var now = new Date();
+        var hours = now.getHours() % 12;
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawArc(hours / 12, 'blue', hourRadius);
+        drawArc(minutes / 60, 'green', minuteRadius);
+        drawArc(seconds / 60, 'red', secondRadius);
+
+        drawHourNumbers();
+        drawMinuteTicks();
+
+        if (dateVisible) {
+            drawDate(now);
+            drawBinaryDate(now);
+        }
+
+        if (seconds === 0) {
+            sound.play();
+        }
+    }
+
+    function drawArc(percent, color, radius) {
+        var startAngle = -Math.PI / 2;
+        var endAngle = startAngle + 2 * Math.PI * percent;
+
+        // VykreslenÃ­ oblouku
+        ctx.beginPath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 25;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(0, 0, 100, 0.7)';
+        ctx.shadowBlur = 65;
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.stroke();
+    }
+
+    function drawHourNumbers() {
+        ctx.font = '30px Poppins';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'white';
+
+        for (let hour = 1; hour <= 12; hour++) {
+            let angle = (hour - 3) * (Math.PI * 2) / 12;
+            let x = centerX + Math.cos(angle) * (hourRadius + 30);
+            let y = centerY + Math.sin(angle) * (hourRadius + 30);
+            ctx.fillText(hour.toString(), x, y);
+        }
+    }
+
+    function drawMinuteTicks() {
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+
+        for (let minute = 0; minute < 60; minute++) {
+            let angle = (minute / 60) * (Math.PI * 2);
+            let startX = centerX + Math.cos(angle) * (hourRadius - 50);
+            let startY = centerY + Math.sin(angle) * (hourRadius - 50);
+            let endX = centerX + Math.cos(angle) * (hourRadius - 90);
+            let endY = centerY + Math.sin(angle) * (hourRadius - 90);
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+        }
+
+        ctx.stroke();
+    }
+
+    function drawDate(now) {
+        var dateText = now.toLocaleDateString();
+        ctx.fillStyle = dateColor;
+        ctx.font = '35px Poppins';
+        ctx.textAlign = 'center';
+        ctx.fillText(dateText, centerX, centerY);
+    }
+
+    function drawBinaryDate(now) {
+        var day = now.getDate();
+        var month = now.getMonth() + 1;
+        var year = now.getFullYear();
+
+        var binaryDay = day.toString(2);
+        var binaryMonth = month.toString(2);
+        var binaryYear = year.toString(2);
+
+        var binaryDateText = binaryDay + ' ' + binaryMonth + ' ' + binaryYear;
+
+        ctx.fillStyle = dateColor;
+        ctx.font = '20px Poppins';
+        ctx.textAlign = 'center';
+        ctx.fillText(binaryDateText, centerX, centerY + 30);
+    }
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        centerX = canvas.width / 2;
+        centerY = canvas.height / 2;
+        drawClock();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    setInterval(drawClock, 1000);
+
+    resizeCanvas();
+
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 49) {
+            dateColor = '#ffffff';
+            drawClock();
+        } else if (event.keyCode === 50) {
+            dateVisible = !dateVisible;
+            drawClock();
+        } else if (event.keyCode === 51) {
+            dateColor = '#000000';
+            drawClock();
+        }
+    });
+</script>
+</body>
+</html>

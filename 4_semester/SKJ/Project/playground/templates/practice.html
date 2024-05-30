@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}
+  Practicing "{{ deck.name }}"
+{% endblock %}
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Practicing "{{ deck.name }}"</h1>
+    {% if card %}
+      <div class="card shadow-lg">
+        <div class="card-body text-center">
+          <h5 class="card-title">Question</h5>
+          <p class="card-text large-text">{{ card.front_content }}</p>
+          <button id="toggle-button" class="btn btn-primary mt-3" onclick="toggleBackContent()">Show Answer</button>
+          <div id="back-content" class="mt-4" style="display: none;">
+            <h5 class="card-title">Answer</h5>
+            <p class="card-text mid-text">{{ card.back_content }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="{% url 'practice' deck.id %}" class="btn btn-warning">Next Card</a>
+      </div>
+    {% else %}
+      <p class="text-center">No cards available in this deck.</p>
+    {% endif %}
+  </div>
+
+  <script>
+    function toggleBackContent() {
+      const backContent = document.getElementById('back-content');
+      const toggleButton = document.getElementById('toggle-button');
+      if (backContent.style.display === 'none') {
+        backContent.style.display = 'block';
+        toggleButton.textContent = 'Hide Answer';
+      } else {
+        backContent.style.display = 'none';
+        toggleButton.textContent = 'Show Answer';
+      }
+    }
+  </script>
+{% endblock %}

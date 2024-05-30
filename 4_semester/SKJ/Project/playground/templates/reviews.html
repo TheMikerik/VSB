@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+  Reviews
+{% endblock %}
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Reviews</h1>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th>Username</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Deck Name</th>
+            <th>Date Reviewed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for review in reviews %}
+            <tr>
+              <td>{{ review.user.username }}</td>
+              <td>{{ review.user.fname }} {{ review.user.lname }}</td>
+              <td>{{ review.user.email }}</td>
+              <td>{{ review.deck.name }}</td>
+              <td>{{ review.date_reviewed|date:"F j, Y, g:i a" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
