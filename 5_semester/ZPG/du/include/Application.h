@@ -3,14 +3,26 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include "Shader.h"
 #include "Model.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "Cube.h"
+#include "Square.h"
+#include "Triangle.h"
+#include <vector>
 
 class Application {
 public:
+    GLFWwindow* window;
+    Shader* shaderProgram;
+    glm::mat4 Projection;
+    glm::mat4 View;
+    glm::mat4 ModelMatrix;
+
+    // Vektor modelů
+    std::vector<Model*> models;
+    std::vector<glm::mat4> modelMatrices;
+
     Application();
     ~Application();
 
@@ -18,16 +30,8 @@ public:
     void createShaders();
     void createModels();
     void run();
-    
-private:
-    GLFWwindow* window;
-    Shader* shaderProgram;
-    Model* model;
 
-    glm::mat4 Projection;
-    glm::mat4 View;
-    glm::mat4 ModelMatrix;
-
+    // Deklarace error_callback jako statické funkce
     static void error_callback(int error, const char* description);
 };
 

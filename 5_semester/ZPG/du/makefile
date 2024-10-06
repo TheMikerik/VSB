@@ -3,15 +3,12 @@ CXX = g++
 CXXFLAGS = -std=c++11 -Wall -g -DGL_SILENCE_DEPRECATION
 
 # Include Directories
-# - "include" is your project's header files
-# - The rest are external libraries installed via Homebrew
 INCLUDES = -Iinclude \
            -I/opt/homebrew/opt/glfw/include \
            -I/opt/homebrew/opt/glm/include \
            -I/opt/homebrew/opt/glew/include
 
 # Library Paths and Libraries
-# - Adjust the library paths if your Homebrew prefix is different
 LIBS = -L/opt/homebrew/lib \
        -lglfw \
        -framework OpenGL \
@@ -27,10 +24,12 @@ BUILD_DIR = build
 SRCS = src/main.cpp \
        src/Application.cpp \
        src/Shader.cpp \
-       src/Model.cpp
+       src/Model.cpp \
+       src/Cube.cpp \
+       src/Square.cpp \
+       src/Triangle.cpp
 
-# Object Files: Replace src/ with build/
-# This transforms src/main.cpp to build/main.o, etc.
+# Object Files
 OBJS = $(patsubst src/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
 
 # Default Target
@@ -40,8 +39,7 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
 
-# Rule to compile source files into object files in build/
-# The pipe '|' ensures that build/ is created before compilation
+# Compile source files into object files in build/
 $(BUILD_DIR)/%.o: src/%.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 

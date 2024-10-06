@@ -5,14 +5,18 @@
 
 class Model {
 public:
-    Model(float* vertices, size_t size);
-    ~Model();
-
-    void draw();
-
-private:
-    GLuint VAO, VBO;
+    GLuint VAO;
+    GLuint VBO;
     GLsizei vertexCount;
+
+    // Konstruktor přijímá pole vertexů a jeho velikost
+    Model(float* vertices, size_t size);
+
+    // Destruktor pro uvolnění zdrojů
+    virtual ~Model();
+
+    // Metoda pro vykreslení modelu
+    virtual void draw();
 };
 
 #endif // MODEL_H
