@@ -36,6 +36,8 @@
       - Znakové
       - Blokové
       d - directory
+        - x - procházetelný adresář
+        - x - spustitelný soubor
       c - znakové zařízení, proudy dat, nelze se vracet zpátky
       b - blokové zařízení, má svou formu a lze se pohybovat
       s - socket
@@ -64,4 +66,3 @@
       - Proces je spuštěný program
     - Timesharing
       - Kdyz proces ceka na jakekoliv data, tak muze preskocit a zpracovavat procesy v mezicase nekde jinde
-       

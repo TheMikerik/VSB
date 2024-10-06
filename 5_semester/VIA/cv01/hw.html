@@ -5,25 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedule</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
         table {
-            width: 100%;
+            width: 90%;
             border-collapse: collapse;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
         }
+
         th, td {
-            border: 1px solid black;
+            border: 1px solid #ddd;
             text-align: center;
-            padding: 8px;
+            padding: 12px;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #f4f6f8;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
         }
+
+        td {
+            font-size: 14px;
+            color: #555;
+        }
+
+        td:hover {
+            background-color: #f1f1f1;
+        }
+
         .blue {
-            background-color: #e0f7fa;
-            border: 2px solid blue;
+            background-color: #e3f2fd;
+            border: 0px solid #42a5f5; 
+            color: #0d47a1;
+            font-weight: 600;
         }
+
         .red {
             background-color: #ffebee;
-            border: 2px solid red;
+            border: 0px solid #ef5350;
+            color: #b71c1c;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -32,19 +64,20 @@
 <table>
     <tr>
         <th></th>
-        <th>7:15</th>
+        <th>7:15</th> 
         <th>8:00</th>
         <th>8:45</th>
+        <th>9:00</th>
         <th>9:45</th>
         <th>10:30</th>
+        <th>10:45</th>
         <th>11:30</th>
         <th>12:15</th>
+        <th>13:00</th>
+        <th>13:45</th>
         <th>14:00</th>
-        <th>15:00</th>
-        <th>15:45</th>
-        <th>16:30</th>
-        <th>17:30</th>
-        <th>18:15</th>
+        <th>14:45</th>
+        <th>15:30</th>
     </tr>
     <tr>
         <th>Pondělí</th>
@@ -54,7 +87,7 @@
     </tr>
     <tr>
         <th>Úterý</th>
-        <td colspan="1"></td>
+        <td></td>
         <td class="red" colspan="2">OSY<br>P. Olivka<br>POREC2<br>P/01</td>
         <td colspan="2"></td>
         <td class="blue" colspan="2">VIA<br>M. Radecký<br>POREC213<br>C/03</td>

@@ -1,4 +1,6 @@
-# Letter
+# 
+## Lecture 1
+### Letter
 - Opening and closes
   - Dear Sir or Madam / Yours faithfully 
   - Dear Mr Jones / Your sincerely
@@ -14,3 +16,10 @@
  - v zastoupeni
  - "Rucka pp. T.Novak"
 - Encl., Enc., attachment = příloha
+
+## Lecture 2
+### Enquiry
+- Kalkulace ceny
+  - Estimated, quotation
+- Uspokojit poptavku
+  - Meet the demand
