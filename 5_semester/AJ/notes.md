@@ -23,3 +23,19 @@
   - Estimated, quotation
 - Uspokojit poptavku
   - Meet the demand
+
+## Lecture 3
+### Replies to Enquiries
+- We have enclosed our price-list, but should point out that prices are subject to change
+- Documents
+  - Bill of Lading - nakladni list
+  - Sea Waybill - nakladni list
+  - Shipping Note - seznam prepravovaneho zbozi
+  - Dangerous Good Note - rizikove predmety
+- Incoterms
+  - CFR - Cost and Freight
+  - CIF - Cost, Insurance and Freight
+  - CPT - Carriage Paid To
+  - CIP - Carriage and Insurance Paid To
+  - DEQ - Delivered Ex Quay (Quay = přístav)
+  - DES - Delivered Ex Ship (Ship = loď)

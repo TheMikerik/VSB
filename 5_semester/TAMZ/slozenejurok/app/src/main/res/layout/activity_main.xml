@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="16dp">
+
+    <!-- Total saved amount and interest amount -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_summary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Use a LinearLayout to arrange TextViews vertically inside CardView -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Total saved amount -->
+            <TextView
+                android:id="@+id/total_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Napořená suma: 63814"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Interest amount -->
+            <TextView
+                android:id="@+id/interest_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Z toho úroky: 13814"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Bar chart placeholder (use a library like MPAndroidChart for actual chart) -->
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/chart_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="#E0F7FA"
+        app:layout_constraintTop_toBottomOf="@id/interest_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/deposit_label"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Sliders and their labels -->
+    <TextView
+        android:id="@+id/deposit_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vklad: 50000"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/chart_placeholder"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/deposit_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="100000"
+        android:progress="50000"
+        app:layout_constraintTop_toBottomOf="@id/deposit_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/interest_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Úrok: 5"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/deposit_slider"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/interest_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="15"
+        android:progress="5"
+        app:layout_constraintTop_toBottomOf="@id/interest_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/period_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Období: 5"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/interest_slider"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/period_slider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="30"
+        android:progress="5"
+        app:layout_constraintTop_toBottomOf="@id/period_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

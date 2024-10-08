@@ -130,8 +130,7 @@ void Application::run() {
 
         // Pro každý model nastavíme MVP matici a vykreslíme ho
         for(size_t i = 0; i < models.size(); ++i){
-            glm::mat4 MVP = Projection * View * modelMatrices[i];
-            shaderProgram->setMat4("MVP", MVP);
+            glm::mat4 MVP = Projection * View * modelMatrices[i]; shaderProgram->setMat4("MVP", MVP);
             models[i]->draw();
         }
 
