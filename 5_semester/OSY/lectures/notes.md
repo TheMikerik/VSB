@@ -56,13 +56,93 @@
         - Knihovny, které jsou připojeny k programovacímu jazyku
         - Vícestavová návratová hodnota, jejíž return value nelze ošetřit jedním ifem
 
-### Přednáška 2
+### Přednáška 2 & 3
 - Monolitické systémy (zjistit)
 - Mikrokernely (zjistit)
 #### Procesy a vlákna
-  -Procesy
+  - Procesy
     - Prgram x process
       - Program je hrstka insturkcí
       - Proces je spuštěný program
     - Timesharing
       - Kdyz proces ceka na jakekoliv data, tak muze preskocit a zpracovavat procesy v mezicase nekde jinde
+      - Prepinaci cas se pohybuje v rozmezi milisekund
+    - Procesum muzeme posilat signaly
+      - SIGKILL - ukonci proces
+      - SIGSTOP - pozastavi proces
+      - SIGCONT - pokracuje proces
+      - syntax: ``kill -SIGSTOP 37531``
+    - Stavy procesu
+      - Run
+        - Drobne okamziky, kdyz procesor neco zpracovava
+        - Vetsinu casu je ve stavu id (idle)
+      - Block
+        - Proces ceka na jakekoliv data
+        - Chceme neco cist, cekame na vstup, cekame na vystup
+        - Tyto procesy jsou celkem pomale
+        - Proces muze byt zablokovany na jak dlouho chceme
+      - Ready
+        - Proces je pripraveny k behu
+        - Ceka ve fronte
+      - Exit
+        - Ukonceni procesu
+        - Pro ukonceni procesu je nutno projit stavem WAIT, jinak muzou vznikat zombie procesy
+        - Tyto zombie procesy vznikaji hlavne pri ukoncovani forku
+      - Zmena stavu dle obrazku
+        - planovac: ready -> run 
+      - ![Processes](./src/procesy.png)
+    - Vytvareni procesu
+      - fork()
+        - rozdvoji proces na dva identicke duplikaty
+        - lisi se od sebe process id
+        - 
+      ```cpp
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <unistd.h>
+      #include <sys/wait.h>
+
+      int main() {
+        printf('Zacina proces PID %d', getpid() );
+        if (fork() == 0) {
+          printf('Potomek PID %d', getpid();) 
+        } else {
+          printf('Rodic PID %d', getpid();) 
+        }
+        wait( NULL )
+      }
+      ```
+    - Vytvoreni roury
+      - Roura je virtualni soubor
+      - Fronta waitu, ktera ma vstupni a vystupni bod
+      - Vznika misto proces
+      - Roura se musi vytvorit pred forkem
+      - 0 -> Read
+      - 1 -> Write
+    ```cpp
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <unistd.h>
+      #include <sys/wait.h>
+
+      int main() {
+        int mojeroura[ 2 ];
+        pipe( mojeroura );
+        if (fork() == 0) {
+          while (1){
+            char buf[ 333 ]:•
+            int ret = read( mojeroura[ 0 ], buf, sizeof( buf) );
+            if (ret <= 0) break; • write( 1, buf, ret );
+          }
+          exit(0);
+        } else {
+          for (int i = 0; i < 10; i++){
+            char buff[ 1024];
+            sprintf('Cislo %d', rand() % 10000);
+            write (mojeroura[ 1 ], buf, strlen(buf));
+            usleep(500 * 10000)
+          }
+        }
+        wait( NULL )
+      }
+      ```

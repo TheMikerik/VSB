@@ -17,3 +17,23 @@
     - pixel se může skládat z více fragmentů
     - gl_FragColor - speciální proměnná, do které nastavujeme výslednou barvu (rgba)
   - VAO, VBO
+
+### Přednáška 3
+- Transformace
+  - Skalár
+    - Velicina, ktera je definovana jen velikosti (hmotnost, objem, velikost)
+  - Bod
+    - Zakladni bezrozmerny objekt, ktery ma jen polohu
+  - Vektor
+    - Reprezentuje zjednodusene pohyb z jednoho bodu dp druheho
+  - Transformace
+    - Zobrazeni, ktere kazdemu bodu A priradi jeho bod A'
+    - Afinni transformace (Afinita)
+      - zachovava rovnobeznosti, linierni zavislosti
+    - Posunuti
+      - Bodu A pricteme vektor d
+    - Zmena meritka
+      - Meni velikost bodu v jednotlivych osach
+      - Bod A vynasobime
+    - Rotace
+      - 
