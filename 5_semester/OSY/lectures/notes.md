@@ -96,53 +96,80 @@
         - rozdvoji proces na dva identicke duplikaty
         - lisi se od sebe process id
         - 
-      ```cpp
-      #include <stdio.h>
-      #include <stdlib.h>
-      #include <unistd.h>
-      #include <sys/wait.h>
+          ```cpp
+          #include <stdio.h>
+          #include <stdlib.h>
+          #include <unistd.h>
+          #include <sys/wait.h>
 
-      int main() {
-        printf('Zacina proces PID %d', getpid() );
-        if (fork() == 0) {
-          printf('Potomek PID %d', getpid();) 
-        } else {
-          printf('Rodic PID %d', getpid();) 
-        }
-        wait( NULL )
-      }
-      ```
-    - Vytvoreni roury
-      - Roura je virtualni soubor
-      - Fronta waitu, ktera ma vstupni a vystupni bod
-      - Vznika misto proces
-      - Roura se musi vytvorit pred forkem
-      - 0 -> Read
-      - 1 -> Write
-    ```cpp
-      #include <stdio.h>
-      #include <stdlib.h>
-      #include <unistd.h>
-      #include <sys/wait.h>
+          int main() {
+            printf('Zacina proces PID %d', getpid() );
+            if (fork() == 0) {
+              printf('Potomek PID %d', getpid();) 
+            } else {
+              printf('Rodic PID %d', getpid();) 
+            }
+            wait( NULL )
+          }
+          ```
+        - Vytvoreni roury
+          - Roura je virtualni soubor
+          - Fronta waitu, ktera ma vstupni a vystupni bod
+          - Vznika misto proces
+          - Roura se musi vytvorit pred forkem
+          - 0 -> Read
+          - 1 -> Write
+        ```cpp
+          #include <stdio.h>
+          #include <stdlib.h>
+          #include <unistd.h>
+          #include <sys/wait.h>
 
-      int main() {
-        int mojeroura[ 2 ];
-        pipe( mojeroura );
-        if (fork() == 0) {
-          while (1){
-            char buf[ 333 ]:•
-            int ret = read( mojeroura[ 0 ], buf, sizeof( buf) );
-            if (ret <= 0) break; • write( 1, buf, ret );
+          int main() {
+            int mojeroura[ 2 ];
+            pipe( mojeroura );
+            if (fork() == 0) {
+              while (1){
+                char buf[ 333 ]:•
+                int ret = read( mojeroura[ 0 ], buf, sizeof( buf) );
+                if (ret <= 0) break; • write( 1, buf, ret );
+              }
+              exit(0);
+            } else {
+              for (int i = 0; i < 10; i++){
+                char buff[ 1024];
+                sprintf('Cislo %d', rand() % 10000);
+                write (mojeroura[ 1 ], buf, strlen(buf));
+                usleep(500 * 10000)
+              }
+            }
+            wait( NULL )
           }
-          exit(0);
-        } else {
-          for (int i = 0; i < 10; i++){
-            char buff[ 1024];
-            sprintf('Cislo %d', rand() % 10000);
-            write (mojeroura[ 1 ], buf, strlen(buf));
-            usleep(500 * 10000)
-          }
-        }
-        wait( NULL )
-      }
-      ```
+          ```
+
+### Prednaska 4
+### Vlakna
+- Vlakna jsou procesy, ktere maji spolecny adresní prostor
+- Vlakna sdileji sve data
+- Pri prepinani neni nutne mazat cashe
+- Vzdy je jedno hlavni vlakno
+- Na jednom vlakne muze bezet vice procesu
+- Vlakna puvodne nemely existovat, jazyk C na to nebyl pripraven
+- Nektere funcke musely byt preprogramovane, aby fungovaly ve vlaknech
+  - problemy s koncepci knihoven a OS
+  - asctime_r, ctime_r, ... (vetsina konci _r)
+  - errno - puvodne vracelo pouze cislo, nyni je to pointer na string
+- IPC (Inter Process Communication)
+  - zjistit
+- Soubeh (Race Contition)
+  - zjistit
+- Kriticka sekce (Critical Section)
+  - zjistit
+- Vzajemne vylouceni (Mutial Exclusion)
+  - Vztahuje se k jedne kriticke sekci
+  - Neni mozne, aby byl udelen pristup do kriticke sekce ze dvou stran soucasne
+  - Spravne reseni:
+    1. Procesy se musi dostat do kriticke sekce jeden po jednom
+    2. Nehledi se na rychlost ci pocet CPU
+    3. Pokud je proces mimo kritickou sekci, tak by nemel blokovat kritickou sekci
+    4. Nikdy se nesmi cekat na vstup do kriticke sekce do nekonecna
