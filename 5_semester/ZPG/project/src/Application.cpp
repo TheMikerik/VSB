@@ -136,26 +136,17 @@ void Application::createModels() {
 }
 
 void Application::run() {
-  // glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.01f, 100.0f);
-  // glm::mat4 View = glm::lookAt(
-  //     glm::vec3(10, 10, 10), // Camera position
-  //     glm::vec3(0, 0, 0),    // Looks at the origin
-  //     glm::vec3(0, 1, 0)     // Head is up
-  // );
-  // glm::mat4 Model = glm::mat4(1.0f);
-
-
   // Main loop
-  while (!glfwWindowShouldClose(window)) {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-  }
+    while (!glfwWindowShouldClose(window)) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glfwPollEvents();
+        glfwSwapBuffers(window);
+    }
 
-  GLint status;
+    GLint status;
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 	{

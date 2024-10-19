@@ -10,22 +10,24 @@ LIBS = -L/opt/homebrew/opt/glfw/lib -L/opt/homebrew/opt/glew/lib -lglfw -lGLEW -
 
 # Executable name
 TARGET = main
+TARGET_PATH = build/$(TARGET)
 
 # Source files
 SRCS = src/main.cpp src/Application.cpp
 
 # Object files
-OBJS = $(SRCS:.cpp=.o)
+OBJS = $(SRCS:src/%.cpp=build/%.o)
 
 # Makefile rules
-all: $(TARGET)
-	./$(TARGET)
+all: $(TARGET_PATH)
+	./$(TARGET_PATH)
 
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET) $(LIBS)
+$(TARGET_PATH): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET_PATH) $(LIBS)
 
-%.o: %.cpp
+build/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(TARGET_PATH) $(OBJS)
