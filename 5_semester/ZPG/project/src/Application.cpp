@@ -4,10 +4,18 @@
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-Application::Application() : window(nullptr), VAO(0), VBO(0), shaderProgram(0) {}
+Application::Application() : window(nullptr), shaderProgram(0) {}
 
 Application::~Application() {
+    for (const auto& model : models) {
+        glDeleteVertexArrays(1, &model.VAO);
+        glDeleteBuffers(1, &model.VBO);
+    }
+    glDeleteProgram(shaderProgram);
     glfwDestroyWindow(window);
     glfwTerminate();
 }
@@ -122,39 +130,62 @@ std::vector<float> Application::loadObject(const std::string& filePath) {
 }
 
 void Application::createModels() {
-    std::vector<float> points = loadObject("./models/square.obj");
+    std::vector<float> square = loadObject("./models/square.obj");
+    addModel(square);
 
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, points.size() * sizeof(float), points.data(), GL_STATIC_DRAW);
+    std::vector<float> triangle = loadObject("./models/triangle.obj");
+    addModel(triangle);
 
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    std::vector<float> test = loadObject("./models/test.obj");
+    addModel(test);
 }
 
 void Application::run() {
-  // Main loop
+    glEnable(GL_DEPTH_TEST);
+
+    // Main loop
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        for (const auto& model : models) {
+            glBindVertexArray(model.VAO);
+            glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(model.vertexCount));
+            glBindVertexArray(0);
+        }
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
 
     GLint status;
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE)
-	{
-    GLint infoLogLength;
-    glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
-    GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-    glGetProgramInfoLog(shaderProgram, infoLogLength, NULL, strInfoLog);
-    fprintf(stderr, "Linker failure: %s\n", strInfoLog);
-    delete[] strInfoLog;
-	}
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &status);
+    if (status == GL_FALSE) {
+        GLint infoLogLength;
+        glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
+        std::vector<GLchar> strInfoLog(infoLogLength + 1);
+        glGetProgramInfoLog(shaderProgram, infoLogLength, nullptr, strInfoLog.data());
+        fprintf(stderr, "Linker failure:\n%s\n", strInfoLog.data());
+    }
+    glDisable(GL_DEPTH_TEST);
+}
+
+void Application::addModel(const std::vector<float>& vertices) {
+    Model model;
+    glGenVertexArrays(1, &model.VAO);
+    glGenBuffers(1, &model.VBO);
+
+    glBindVertexArray(model.VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, model.VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    model.vertexCount = vertices.size() / 3; // Předpokládáme 3 komponenty na vrchol
+
+    models.push_back(model);
 }
