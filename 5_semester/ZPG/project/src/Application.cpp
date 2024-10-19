@@ -64,13 +64,9 @@ std::string Application::loadShaderSource(const std::string& filePath) {
 }
 
 void Application::createShaders() {
-    std::string vertexShaderSource = loadShaderSource("../shaders/vertex_shader.glsl");
-    if (vertexShaderSource.empty())
-        fprintf(stderr, "ERROR::SHADER::VERTEX::FILE_NOT_SUCCESFULLY_READ\n");
+    std::string vertexShaderSource = loadShaderSource("./shaders/vertex_shader.glsl");
 
-    std::string fragmentShaderSource = loadShaderSource("../shaders/fragment_shader.glsl");
-    if (fragmentShaderSource.empty())
-        fprintf(stderr, "ERROR::SHADER::FRAGMENT::FILE_NOT_SUCCESFULLY_READ\n");
+    std::string fragmentShaderSource = loadShaderSource("./shaders/fragment_shader.glsl");
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     compileShader(vertexShaderSource, vertexShader);
@@ -126,7 +122,7 @@ std::vector<float> Application::loadObject(const std::string& filePath) {
 }
 
 void Application::createModels() {
-    std::vector<float> points = loadObject("../objects/square.obj");
+    std::vector<float> points = loadObject("./objects/square.obj");
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
