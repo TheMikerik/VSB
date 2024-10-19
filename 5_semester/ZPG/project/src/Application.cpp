@@ -2,44 +2,45 @@
 #include "Application.h"
 #include <fstream>
 #include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <cstdlib>
+#include <vector>
 
 Application::Application() : window(nullptr) {}
 
 Application::~Application() {
-    // Delete shader programs for each model
-    for (const auto& model : models) {
-        glDeleteVertexArrays(1, &model.VAO);
-        glDeleteBuffers(1, &model.VBO);
-        glDeleteProgram(model.shaderProgram);
+    for (auto model : models) {
+        delete model;
     }
-    glfwDestroyWindow(window);
+    models.clear();
+
+    if (window) {
+        glfwDestroyWindow(window);
+    }
     glfwTerminate();
 }
 
 void Application::errorCallback(int error, const char* description) {
-    fputs(description, stderr);
+    std::cerr << "GLFW Error (" << error << "): " << description << std::endl;
 }
 
 void Application::initialization() {
     glfwSetErrorCallback(errorCallback);
     if (!glfwInit()) {
-        fprintf(stderr, "ERROR: could not start GLFW3\n");
-        exit(EXIT_FAILURE);
+        std::cerr << "ERROR: could not start GLFW3" << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
-    // Set OpenGL version to 3.3 and core profile
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // For MacOS
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Create a windowed mode window and its OpenGL context
     window = glfwCreateWindow(800, 600, "OpenGL App", nullptr, nullptr);
     if (!window) {
+        std::cerr << "ERROR: could not create GLFW window" << std::endl;
         glfwTerminate();
-        exit(EXIT_FAILURE);
+        std::exit(EXIT_FAILURE);
     }
 
     // Make the window's context current
@@ -50,20 +51,20 @@ void Application::initialization() {
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (GLEW_OK != err) {
-        fprintf(stderr, "Error initializing GLEW: %s\n", glewGetErrorString(err));
-        exit(EXIT_FAILURE);
+        std::cerr << "Error initializing GLEW: " << glewGetErrorString(err) << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     // Print OpenGL and GLFW information
-    printf("\nOpenGL Version: %s\n", glGetString(GL_VERSION));
-    printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));
-    printf("Vendor: %s\n", glGetString(GL_VENDOR));
-    printf("Renderer: %s\n", glGetString(GL_RENDERER));
-    printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    std::cout << "\nOpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+    std::cout << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
+    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
+    std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
+    std::cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
     int major, minor, revision;
     glfwGetVersion(&major, &minor, &revision);
-    printf("Using GLFW %i.%i.%i\n", major, minor, revision);
+    std::cout << "Using GLFW " << major << "." << minor << "." << revision << std::endl;
 
     // Set the viewport
     int width, height;
@@ -71,80 +72,12 @@ void Application::initialization() {
     glViewport(0, 0, width, height);
 }
 
-std::string Application::loadShaderSource(const std::string& filePath) {
-    std::ifstream shaderFile(filePath);
-    if (!shaderFile.is_open()) {
-        fprintf(stderr, "Failed to open shader file: %s\n", filePath.c_str());
-        exit(EXIT_FAILURE);
-    }
-    std::stringstream shaderStream;
-    shaderStream << shaderFile.rdbuf();
-    return shaderStream.str();
-}
-
-GLuint Application::createShaderProgram(const std::string& vertexPath, const std::string& fragmentPath) {
-    // Load shader sources
-    std::string vertexSource = loadShaderSource(vertexPath);
-    std::string fragmentSource = loadShaderSource(fragmentPath);
-
-    // Create and compile vertex shader
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    compileShader(vertexSource, vertexShader);
-
-    // Create and compile fragment shader
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    compileShader(fragmentSource, fragmentShader);
-
-    // Create shader program and link shaders
-    GLuint program = glCreateProgram();
-    linkProgram(program, vertexShader, fragmentShader);
-
-    // Shaders can be deleted after linking
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return program;
-}
-
-void Application::compileShader(const std::string& source, GLuint shader) {
-    const char* shaderCode = source.c_str();
-    glShaderSource(shader, 1, &shaderCode, nullptr);
-    glCompileShader(shader);
-
-    // Check for compilation errors
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[1024];
-        glGetShaderInfoLog(shader, sizeof(infoLog), nullptr, infoLog);
-        std::string shaderType = (shader == GL_VERTEX_SHADER) ? "VERTEX" : "FRAGMENT";
-        fprintf(stderr, "ERROR::SHADER::%s::COMPILATION_FAILED\n%s\n", shaderType.c_str(), infoLog);
-        exit(EXIT_FAILURE);
-    }
-}
-
-void Application::linkProgram(GLuint program, GLuint vertexShader, GLuint fragmentShader) {
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
-
-    // Check for linking errors
-    GLint success;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[1024];
-        glGetProgramInfoLog(program, sizeof(infoLog), nullptr, infoLog);
-        fprintf(stderr, "ERROR::SHADER::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
-        exit(EXIT_FAILURE);
-    }
-}
-
 std::vector<float> Application::loadObject(const std::string& filePath) {
     std::vector<float> points;
     std::ifstream file(filePath);
     if (!file.is_open()) {
-        fprintf(stderr, "Failed to open object file: %s\n", filePath.c_str());
-        exit(EXIT_FAILURE);
+        std::cerr << "Failed to open object file: " << filePath << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     float value;
@@ -156,30 +89,8 @@ std::vector<float> Application::loadObject(const std::string& filePath) {
 }
 
 void Application::addModel(const std::vector<float>& vertices, const std::string& fragmentPath) {
-    Model model;
-
-    // Generate and bind VAO
-    glGenVertexArrays(1, &model.VAO);
-    glBindVertexArray(model.VAO);
-
-    // Generate and bind VBO
-    glGenBuffers(1, &model.VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, model.VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-    // Define vertex attribute (assuming position only)
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-    // Unbind VBO and VAO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    model.vertexCount = static_cast<GLsizei>(vertices.size() / 3); // Assuming 3 floats per vertex
-
-    // Create shader program for this model
-    // Assuming all models share the same vertex shader
-    model.shaderProgram = createShaderProgram("./shaders/vertex_shader.glsl", fragmentPath);
+    // Dynamically allocate a new Model instance
+    Model* model = new Model(vertices, fragmentPath);
 
     // Add the model to the list
     models.push_back(model);
@@ -196,7 +107,7 @@ void Application::createModels() {
     std::vector<float> triangle = loadObject("./models/triangle.obj");
     addModel(triangle, "./shaders/fragment_shader_green.glsl");
 
-    // Model 3: Test object with blue color
+    // Model 3: Test object with purple color
     std::vector<float> test = loadObject("./models/test.obj");
     addModel(test, "./shaders/fragment_shader_purple.glsl");
 }
@@ -209,12 +120,9 @@ void Application::run() {
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Render each model with its own shader
+        // Render each model
         for (const auto& model : models) {
-            glUseProgram(model.shaderProgram);
-            glBindVertexArray(model.VAO);
-            glDrawArrays(GL_TRIANGLES, 0, model.vertexCount);
-            glBindVertexArray(0);
+            model->render();
         }
 
         // Swap buffers and poll events

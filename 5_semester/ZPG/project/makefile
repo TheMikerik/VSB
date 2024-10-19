@@ -13,7 +13,7 @@ TARGET = main
 TARGET_PATH = build/$(TARGET)
 
 # Source files
-SRCS = src/main.cpp src/Application.cpp
+SRCS = src/main.cpp src/Application.cpp src/Model.cpp
 
 # Object files
 OBJS = $(SRCS:src/%.cpp=build/%.o)
