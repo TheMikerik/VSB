@@ -1,14 +1,9 @@
-// Model.cpp
 #include "Model.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 
-Model::Model(const std::vector<float>& vertices, 
-            const std::string& fragmentPath, 
-            const std::string& vertexPath)
-    : VAO(0), VBO(0), shaderProgram(0), vertexCount(0), modelMatrix(1.0f)
+Model::Model(const std::vector<float>& vertices)
+    : VAO(0), VBO(0), vertexCount(0)
 {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -17,107 +12,32 @@ Model::Model(const std::vector<float>& vertices,
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
+    // Assuming each vertex has position (3 floats) and color (3 floats)
+    // Adjust stride and attribute pointers accordingly
+    glEnableVertexAttribArray(0); // Position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(1); // Color
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-
-    vertexCount = static_cast<GLsizei>(vertices.size() / 6);
-
-    shaderProgram = createShaderProgram(vertexPath, fragmentPath);
+    vertexCount = static_cast<GLsizei>(vertices.size() / 6); // 6 floats per vertex
 }
 
-Model::~Model() {
+Model::~Model()
+{
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
 }
 
-void Model::render() const {
-    glUseProgram(shaderProgram);
-
-    GLint modelLoc = glGetUniformLocation(shaderProgram, "modelMatrix");
-    if (modelLoc == -1) {
-        std::cerr << "Could not find uniform 'modelMatrix' in shader program." << std::endl;
-    } else {
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    }
-
+void Model::bind() const
+{
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+}
+
+void Model::unbind() const
+{
     glBindVertexArray(0);
-}
-
-std::string Model::loadShaderSource(const std::string& filePath) const {
-    std::ifstream shaderFile(filePath);
-    if (!shaderFile.is_open()) {
-        std::cerr << "Failed to open shader file: " << filePath << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    std::stringstream shaderStream;
-    shaderStream << shaderFile.rdbuf();
-    return shaderStream.str();
-}
-
-void Model::compileShader(const std::string& source, GLuint shader, const std::string& shaderType) const {
-    const char* shaderCode = source.c_str();
-    glShaderSource(shader, 1, &shaderCode, nullptr);
-    glCompileShader(shader);
-
-    // Check for compilation errors
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[1024];
-        glGetShaderInfoLog(shader, sizeof(infoLog), nullptr, infoLog);
-        std::cerr << "ERROR::SHADER::" << shaderType << "::COMPILATION_FAILED\n" << infoLog << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-}
-
-void Model::linkProgram(GLuint program, GLuint vertexShader, GLuint fragmentShader) const {
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
-
-    GLint success;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[1024];
-        glGetProgramInfoLog(program, sizeof(infoLog), nullptr, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-}
-
-GLuint Model::createShaderProgram(const std::string& vertexPath, const std::string& fragmentPath) const {
-    std::string vertexSource = loadShaderSource(vertexPath);
-    std::string fragmentSource = loadShaderSource(fragmentPath);
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    compileShader(vertexSource, vertexShader, "VERTEX");
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    compileShader(fragmentSource, fragmentShader, "FRAGMENT");
-
-    GLuint program = glCreateProgram();
-    linkProgram(program, vertexShader, fragmentShader);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return program;
-}
-
-void Model::setModelMatrix(const glm::mat4& matrix) {
-    modelMatrix = matrix;
-}
-
-glm::mat4 Model::getModelMatrix() const {
-    return modelMatrix;
 }
