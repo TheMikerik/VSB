@@ -156,6 +156,11 @@ void Application::run()
     glClearColor(0.59f, 0.76f, 0.92f, 1.0f);
     createScenes();
 
+    if (!scenes.empty()) {
+        selectedDrawableIndex = 0;
+        std::cout << "Selected Drawable Index: " << selectedDrawableIndex << std::endl;
+    }
+
     // Main rendering loop
     while (!glfwWindowShouldClose(window)) {
         // Clear the screen
@@ -168,22 +173,143 @@ void Application::run()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        // Input handling for switching scenes
-        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-            switchScene(0);
-        }
-        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-            switchScene(1);
-        }
+        handleInput();
     }
 
     glDisable(GL_DEPTH_TEST);
+}
+
+
+void Application::handleInput()
+{
+    if (currentSceneIndex < 0 || currentSceneIndex >= scenes.size()) {
+        return;
+    }
+
+    auto& currentScene = scenes[currentSceneIndex];
+    auto& drawables = currentScene->getDrawables();
+
+    if (drawables.empty()) {
+        return;
+    }
+
+    // Clamp the selectedDrawableIndex
+    if (selectedDrawableIndex >= drawables.size()) {
+        selectedDrawableIndex = 0;
+    }
+
+    auto selectedDrawable = drawables[selectedDrawableIndex];
+
+    float translationStep = 0.05f;
+    float rotationStep = 5.0f; // degrees
+    float scaleStep = 0.05f;
+
+    // Translation Controls
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+        // Move on positive X axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.translate(glm::vec3(translationStep, 0.0f, 0.0f));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Translated +X" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        // Move on negative X axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.translate(glm::vec3(-translationStep, 0.0f, 0.0f));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Translated -X" << std::endl;
+    }
+
+
+    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+        // Move on positive Y axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.translate(glm::vec3(0.0f, translationStep, 0.0f));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Translated +Y" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        // Move on negative Y axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.translate(glm::vec3(0.0f, -translationStep, 0.0f));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Translated -Y" << std::endl;
+    }
+
+
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+        // Move on positive Z axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.translate(glm::vec3(0.0f, 0.0f, translationStep));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Translated +Z" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        // Move on negative Z axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.translate(glm::vec3(0.0f, 0.0f, -translationStep));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Translated -Z" << std::endl;
+    }
+
+    // Scaling Controls
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        // Make the object bigger
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.scale(glm::vec3(1.0f + scaleStep));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Scaled Up" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        // Make the object smaller
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.scale(glm::vec3(1.0f - scaleStep));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Scaled Down" << std::endl;
+    }
+
+    // Rotation Controls
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        // Rotate on positive X axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.rotate(rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Rotated +X" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        // Rotate on negative X axis
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.rotate(-rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Rotated -X" << std::endl;
+    }
+
+    // Switching to the next object
+    static bool enterPressedLastFrame = false;
+    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+        if (!enterPressedLastFrame) { // Detect key press event
+            selectedDrawableIndex = (selectedDrawableIndex + 1) % drawables.size();
+            std::cout << "Switched to Drawable Index: " << selectedDrawableIndex << std::endl;
+            enterPressedLastFrame = true;
+        }
+    } else {
+        enterPressedLastFrame = false;
+    }
+
+    // Switching between scenes
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        switchScene(0);
+    }
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        switchScene(1);
+    }
 }
 
 void Application::switchScene(int index)
 {
     if (index >=0 && index < scenes.size()) {
         currentSceneIndex = index;
+        selectedDrawableIndex = 0;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
     }

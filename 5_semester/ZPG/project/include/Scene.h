@@ -12,6 +12,7 @@ public:
     ~Scene();
 
     void addDrawable(std::shared_ptr<DrawableObject> drawable);
+    const std::vector<std::shared_ptr<DrawableObject>>& getDrawables();
     void render() const;
 
 private:
