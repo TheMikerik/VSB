@@ -96,17 +96,18 @@ void Application::createScenes()
     auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader1);
 
     // Apply transformations
-    // Transformation bushesTrans;
-    // bushesTrans.translate(glm::vec3(-0.0f, -0.0f, -0.0f));
-    // bushesTrans.rotate(45.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-    // bushesTrans.scale(glm::vec3(0.5f));
-    // bushesDrawable->setTransformation(bushesTrans);
+    Transformation bushesTrans;
+    bushesTrans.translate(glm::vec3(-0.3f, -0.0f, -0.0f));
+    bushesTrans.rotate(45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+    bushesTrans.scale(glm::vec3(0.5f));
+    bushesDrawable->setTransformation(bushesTrans);
 
     // Transformation treeTrans;
-    // treeTrans.translate(glm::vec3(0.0f, 0.0f, 0.0f));
+    Transformation treeTrans;
+    treeTrans.translate(glm::vec3(0.0f, -0.9f, 1.0f));
     // treeTrans.rotate(-30.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-    // treeTrans.scale(glm::vec3(1.0f));
-    // treeDrawable->setTransformation(treeTrans);
+    treeTrans.scale(glm::vec3(0.2f));
+    treeDrawable->setTransformation(treeTrans);
 
     // Add to scene
     scene1->addDrawable(bushesDrawable);
@@ -140,6 +141,9 @@ void Application::createScenes()
 void Application::run()
 {
     glEnable(GL_DEPTH_TEST);
+
+    glClearColor(0.59f, 0.76f, 0.92f, 1.0f);
+    createScenes();
 
     // Main rendering loop
     while (!glfwWindowShouldClose(window)) {
