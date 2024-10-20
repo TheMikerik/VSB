@@ -39,6 +39,7 @@ private:
     // Input handling
     void handleInput();
     void switchScene(int index);
+    float getRandom(float min, float max);
 
     // Static callbacks
     static void errorCallback(int error, const char* description);

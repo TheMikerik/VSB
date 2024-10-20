@@ -96,9 +96,7 @@ void Camera::removeObserver(ICameraObserver* observer)
 void Camera::notifyObservers()
 {
     glm::mat4 view = GetViewMatrix();
-    // For projection, you might want to store it as a member or calculate it based on window size
-    // Here, we'll assume a perspective projection with preset parameters
-    glm::mat4 projection = glm::perspective(glm::radians(Zoom), 800.0f / 600.0f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(Zoom), 1450.0f / 900.0f, 0.1f, 100.0f);
 
     for(auto& observer : observers)
     {
