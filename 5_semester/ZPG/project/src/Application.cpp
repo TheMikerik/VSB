@@ -6,10 +6,9 @@
 #include <cstdlib>
 #include <vector>
 
-#include "../models/plain.h"
 #include "../models/bushes.h"
 #include "../models/tree.h"
-#include "../models/suzi_flat.h"
+#include "../models/triangle.h"
 
 Application::Application() : window(nullptr) {}
 
@@ -83,8 +82,15 @@ void Application::addModel(const std::vector<float>& vertices, const std::string
 }
 
 void Application::createModels() {
-    std::vector<float> plainModel(std::begin(bushes), std::end(bushes));
-    addModel(plainModel, "./shaders/fragment_shader.glsl");
+    std::vector<float> bushesModel(std::begin(bushes), std::end(bushes));
+    addModel(bushesModel, "./shaders/fragment_shader.glsl");
+    
+    std::vector<float> treeModel(std::begin(tree), std::end(tree));
+    addModel(treeModel, "./shaders/fragment_shader.glsl");
+
+    std::vector<float> trinagleModel(std::begin(triangle), std::end(triangle));
+    addModel(trinagleModel, "./shaders/fragment_shader_red.glsl");
+
 }
 
 void Application::run() {
