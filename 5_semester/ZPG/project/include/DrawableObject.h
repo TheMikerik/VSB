@@ -1,6 +1,4 @@
-// DrawableObject.h (no changes needed)
-#ifndef DRAWABLEOBJECT_H
-#define DRAWABLEOBJECT_H
+#pragma once
 
 #include <memory>
 #include "Model.h"
@@ -10,8 +8,8 @@
 class DrawableObject {
 public:
     DrawableObject(std::shared_ptr<Model> model,
-                  std::shared_ptr<ShaderProgram> shaderProgram,
-                  const Transformation& transformation = Transformation());
+                    std::shared_ptr<ShaderProgram> shaderProgram,
+                    const Transformation& transformation = Transformation());
 
     void render() const;
     void setTransformation(const Transformation& trans);
@@ -22,5 +20,3 @@ private:
     std::shared_ptr<ShaderProgram> shaderProgram;
     Transformation transformation;
 };
-
-#endif // DRAWABLEOBJECT_H

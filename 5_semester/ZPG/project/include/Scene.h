@@ -1,10 +1,8 @@
-#ifndef SCENE_H
-#define SCENE_H
+#pragma once
 
 #include "DrawableObject.h"
 #include <vector>
 #include <memory>
-
 
 class Scene {
 public:
@@ -18,5 +16,3 @@ public:
 private:
     std::vector<std::shared_ptr<DrawableObject>> drawables;
 };
-
-#endif // SCENE_H

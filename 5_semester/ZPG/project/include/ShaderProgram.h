@@ -1,6 +1,4 @@
-// ShaderProgram.h
-#ifndef SHADERPROGRAM_H
-#define SHADERPROGRAM_H
+#pragma once
 
 #include <string>
 #include <GL/glew.h>
@@ -14,7 +12,6 @@ public:
 
     void use() const;
 
-    // Observer interface implementation
     void onCameraUpdate(const glm::mat4& view, const glm::mat4& projection) override;
 
     GLuint getProgramID() const { return programID; }
@@ -26,9 +23,6 @@ private:
     void compileShader(const std::string& source, GLuint shader, const std::string& shaderType) const;
     void linkProgram(GLuint vertexShader, GLuint fragmentShader);
 
-    // Uniform locations
     GLint viewLoc;
     GLint projLoc;
 };
-
-#endif // SHADERPROGRAM_H

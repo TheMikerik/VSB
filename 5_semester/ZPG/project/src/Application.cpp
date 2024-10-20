@@ -288,7 +288,6 @@ void Application::handleInput()
     float rotationStep = 5.0f;
     float scaleStep = 0.05f;
 
-    // Object Transformation Controls
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
         if (!rotationEnabled){
             Transformation trans = selectedDrawable->getTransformation();
@@ -370,16 +369,13 @@ void Application::handleInput()
         }
     }
 
-    // Scaling Controls
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        // Make the object bigger
         Transformation trans = selectedDrawable->getTransformation();
         trans.scale(glm::vec3(1.0f + scaleStep));
         selectedDrawable->setTransformation(trans);
         std::cout << "Scaled Up" << std::endl;
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        // Make the object smaller
         Transformation trans = selectedDrawable->getTransformation();
         trans.scale(glm::vec3(1.0f - scaleStep));
         selectedDrawable->setTransformation(trans);

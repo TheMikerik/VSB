@@ -1,5 +1,4 @@
-#ifndef MODEL_H
-#define MODEL_H
+#pragma once
 
 #include <vector>
 #include <GL/glew.h>
@@ -18,5 +17,3 @@ private:
     GLuint VBO;
     GLsizei vertexCount;
 };
-
-#endif // MODEL_H

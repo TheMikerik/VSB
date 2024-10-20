@@ -12,18 +12,16 @@ Model::Model(const std::vector<float>& vertices)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // Assuming each vertex has position (3 floats) and color (3 floats)
-    // Adjust stride and attribute pointers accordingly
-    glEnableVertexAttribArray(0); // Position
+    glEnableVertexAttribArray(0); // Pozice
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 
-    glEnableVertexAttribArray(1); // Color
+    glEnableVertexAttribArray(1); // Barva
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    vertexCount = static_cast<GLsizei>(vertices.size() / 6); // 6 floats per vertex
+    vertexCount = static_cast<GLsizei>(vertices.size() / 6);
 }
 
 Model::~Model()

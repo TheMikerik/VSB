@@ -4,8 +4,8 @@
 #include <iostream>
 
 DrawableObject::DrawableObject(std::shared_ptr<Model> model,
-                               std::shared_ptr<ShaderProgram> shaderProgram,
-                               const Transformation& transformation)
+                                std::shared_ptr<ShaderProgram> shaderProgram,
+                                const Transformation& transformation)
     : model(model), shaderProgram(shaderProgram), transformation(transformation)
 {}
 
@@ -13,7 +13,6 @@ void DrawableObject::render() const
 {
     shaderProgram->use();
 
-    // Set the model matrix uniform
     GLint modelLoc = glGetUniformLocation(shaderProgram->getProgramID(), "modelMatrix");
     if (modelLoc == -1) {
         std::cerr << "Could not find uniform 'modelMatrix' in shader program." << std::endl;
