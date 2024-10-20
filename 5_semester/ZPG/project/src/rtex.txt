@@ -4,3 +4,18 @@
     //     bushesTrans.scale(glm::vec3(0.5f));
     //     bushesDrawable->setTransformation(bushesTrans);
   
+
+Add this:
+You will have one selected drawable that you can adjust by pressing:
+x - move on positive x axis
+X - move on negative x axis
+y - move on positive y axis
+Y - move on negative x axis
+z - move on positive z axis
+Z - move on negative z axis
+
+arrow_up - make the object bigger
+arrow_down - make the object smaller
+
+arrow_right - rotate the object on positive x axis
+arrow_left - rotate the object on negative x axis

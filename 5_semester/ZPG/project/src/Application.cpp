@@ -205,14 +205,14 @@ void Application::handleInput()
     float scaleStep = 0.05f;
 
     // Translation Controls
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
         // Move on positive X axis
         Transformation trans = selectedDrawable->getTransformation();
         trans.translate(glm::vec3(translationStep, 0.0f, 0.0f));
         selectedDrawable->setTransformation(trans);
         std::cout << "Translated +X" << std::endl;
     }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
         // Move on negative X axis
         Transformation trans = selectedDrawable->getTransformation();
         trans.translate(glm::vec3(-translationStep, 0.0f, 0.0f));
@@ -221,14 +221,14 @@ void Application::handleInput()
     }
 
 
-    if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
         // Move on positive Y axis
         Transformation trans = selectedDrawable->getTransformation();
         trans.translate(glm::vec3(0.0f, translationStep, 0.0f));
         selectedDrawable->setTransformation(trans);
         std::cout << "Translated +Y" << std::endl;
     }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
         // Move on negative Y axis
         Transformation trans = selectedDrawable->getTransformation();
         trans.translate(glm::vec3(0.0f, -translationStep, 0.0f));
@@ -237,20 +237,21 @@ void Application::handleInput()
     }
 
 
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
         // Move on positive Z axis
         Transformation trans = selectedDrawable->getTransformation();
         trans.translate(glm::vec3(0.0f, 0.0f, translationStep));
         selectedDrawable->setTransformation(trans);
         std::cout << "Translated +Z" << std::endl;
     }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
         // Move on negative Z axis
         Transformation trans = selectedDrawable->getTransformation();
         trans.translate(glm::vec3(0.0f, 0.0f, -translationStep));
         selectedDrawable->setTransformation(trans);
         std::cout << "Translated -Z" << std::endl;
     }
+
 
     // Scaling Controls
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
@@ -267,6 +268,7 @@ void Application::handleInput()
         selectedDrawable->setTransformation(trans);
         std::cout << "Scaled Down" << std::endl;
     }
+
 
     // Rotation Controls
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
