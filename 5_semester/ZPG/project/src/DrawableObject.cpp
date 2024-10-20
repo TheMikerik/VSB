@@ -1,10 +1,11 @@
+// DrawableObject.cpp
 #include "DrawableObject.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 DrawableObject::DrawableObject(std::shared_ptr<Model> model,
-                              std::shared_ptr<ShaderProgram> shaderProgram,
-                              const Transformation& transformation)
+                               std::shared_ptr<ShaderProgram> shaderProgram,
+                               const Transformation& transformation)
     : model(model), shaderProgram(shaderProgram), transformation(transformation)
 {}
 

@@ -1,8 +1,10 @@
+// Application.cpp
 #include "Application.h"
 #include "ShaderProgram.h"
 #include "Model.h"
 #include "DrawableObject.h"
 #include "Transformation.h"
+#include "ICameraObserver.h"
 
 #include "../models/bushes.h"
 #include "../models/tree.h"
@@ -13,14 +15,53 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+Application* Application::instance = nullptr;
+
+// Callback implementations
 void Application::errorCallback(int error, const char* description)
 {
     // Forward to the instance's error callback if needed
     std::cerr << "GLFW Error (" << error << "): " << description << std::endl;
 }
 
+void Application::framebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
+void Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (instance->firstMouse)
+    {
+        instance->lastX = static_cast<float>(xpos);
+        instance->lastY = static_cast<float>(ypos);
+        instance->firstMouse = false;
+    }
+
+    float xoffset = static_cast<float>(xpos) - instance->lastX;
+    float yoffset = instance->lastY - static_cast<float>(ypos); // Reversed since y-coordinates go from bottom to top
+
+    instance->lastX = static_cast<float>(xpos);
+    instance->lastY = static_cast<float>(ypos);
+
+    instance->camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void Application::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    instance->camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
 Application::Application()
-    : window(nullptr), currentSceneIndex(0) {}
+    : window(nullptr), currentSceneIndex(0),
+      camera(glm::vec3(0.0f, 0.0f, 3.0f)),
+      lastX(400.0f), lastY(300.0f), firstMouse(true),
+      deltaTime(0.0f), lastFrame(0.0f),
+      selectedDrawableIndex(0)
+{
+    // Set the static instance pointer
+    instance = this;
+}
 
 Application::~Application()
 {
@@ -41,7 +82,7 @@ void Application::initialization()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(800, 600, "OpenGL Application", nullptr, nullptr);
+    window = glfwCreateWindow(800, 600, "OpenGL Application with Camera", nullptr, nullptr);
     if (!window) {
         std::cerr << "ERROR: could not create GLFW window" << std::endl;
         glfwTerminate();
@@ -74,6 +115,14 @@ void Application::initialization()
     glViewport(0, 0, width, height);
     std::cout << "Framebuffer size: " << width << "x" << height << std::endl;
     std::cout << "===============================\n" << std::endl;
+
+    // Set callbacks
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    glfwSetScrollCallback(window, scrollCallback);
+
+    // Capture the mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Application::createScenes()
@@ -83,6 +132,7 @@ void Application::createScenes()
     auto scene1 = std::make_shared<Scene>();
     auto scene2 = std::make_shared<Scene>();
 
+    // Create shader programs
     auto shader1 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader2 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
     auto shader3 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
@@ -90,7 +140,19 @@ void Application::createScenes()
 
     std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader1, shader3, shader4};
 
+    // Register shaders as observers to the camera
+    for(auto& shader : shaders)
+    {
+        camera.registerObserver(shader.get());
+    }
 
+    // Also register shader2 for scene2
+    camera.registerObserver(shader2.get());
+
+    // Initially notify all shaders to set their view and projection matrices
+    camera.notifyObservers();
+
+    // Load models
     std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     std::vector<float> triangleVertices(std::begin(triangle), std::end(triangle));
@@ -99,6 +161,7 @@ void Application::createScenes()
     auto treeModel = std::make_shared<Model>(treeVertices);
     auto triangleModel = std::make_shared<Model>(triangleVertices);
 
+    // Populate scene1 with bushes and trees
     for (int i = 0; i < 3; ++i)
     {
         auto randomShader = shaders[std::rand() % shaders.size()];
@@ -108,7 +171,9 @@ void Application::createScenes()
         bushesTrans.translate(glm::vec3(static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
                                         static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
                                         static_cast<float>(std::rand() % 200 - 100) / 100.0f));
-        bushesTrans.rotate(static_cast<float>(std::rand() % 360), glm::vec3(std::rand() % 2, std::rand() % 2, std::rand() % 2));
+        bushesTrans.rotate(static_cast<float>(std::rand() % 360), glm::vec3(static_cast<float>(std::rand() % 2),
+                                                                             static_cast<float>(std::rand() % 2),
+                                                                             static_cast<float>(std::rand() % 2)));
         bushesTrans.scale(glm::vec3(static_cast<float>(std::rand() % 100) / 100.0f));
         bushesDrawable->setTransformation(bushesTrans);
 
@@ -123,9 +188,11 @@ void Application::createScenes()
         // Apply random transformations
         Transformation treeTrans;
         treeTrans.translate(glm::vec3(static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
-                                        static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
-                                        static_cast<float>(std::rand() % 200 - 100) / 100.0f));
-        treeTrans.rotate(static_cast<float>(std::rand() % 360), glm::vec3(std::rand() % 2, std::rand() % 2, std::rand() % 2));
+                                      static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
+                                      static_cast<float>(std::rand() % 200 - 100) / 100.0f));
+        treeTrans.rotate(static_cast<float>(std::rand() % 360), glm::vec3(static_cast<float>(std::rand() % 2),
+                                                                           static_cast<float>(std::rand() % 2),
+                                                                           static_cast<float>(std::rand() % 2)));
         treeTrans.scale(glm::vec3(static_cast<float>(std::rand() % 100) / 100.0f));
         treeDrawable->setTransformation(treeTrans);
 
@@ -136,10 +203,10 @@ void Application::createScenes()
     auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader2);
     auto tree2 = std::make_shared<DrawableObject>(treeModel, shader2);
 
-    Transformation t2reeTrans;
-    t2reeTrans.translate(glm::vec3(0.0f, -0.9f, 1.0f));
-    t2reeTrans.scale(glm::vec3(0.2f));
-    tree2->setTransformation(t2reeTrans);
+    Transformation tree2Trans;
+    tree2Trans.translate(glm::vec3(0.0f, -0.9f, 1.0f));
+    tree2Trans.scale(glm::vec3(0.2f));
+    tree2->setTransformation(tree2Trans);
 
     scene2->addDrawable(triangleDrawable);
     scene2->addDrawable(tree2);
@@ -163,6 +230,11 @@ void Application::run()
 
     // Main rendering loop
     while (!glfwWindowShouldClose(window)) {
+        // Calculate delta time
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -179,7 +251,6 @@ void Application::run()
     glDisable(GL_DEPTH_TEST);
 }
 
-
 void Application::handleInput()
 {
     if (currentSceneIndex < 0 || currentSceneIndex >= scenes.size()) {
@@ -193,6 +264,16 @@ void Application::handleInput()
         return;
     }
 
+    // Process camera movement
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+
     // Clamp the selectedDrawableIndex
     if (selectedDrawableIndex >= drawables.size()) {
         selectedDrawableIndex = 0;
@@ -204,7 +285,7 @@ void Application::handleInput()
     float rotationStep = 5.0f; // degrees
     float scaleStep = 0.05f;
 
-    // Translation Controls
+    // Object Transformation Controls
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
         // Move on positive X axis
         Transformation trans = selectedDrawable->getTransformation();
@@ -219,7 +300,6 @@ void Application::handleInput()
         selectedDrawable->setTransformation(trans);
         std::cout << "Translated -X" << std::endl;
     }
-
 
     if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
         // Move on positive Y axis
@@ -236,7 +316,6 @@ void Application::handleInput()
         std::cout << "Translated -Y" << std::endl;
     }
 
-
     if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
         // Move on positive Z axis
         Transformation trans = selectedDrawable->getTransformation();
@@ -251,7 +330,6 @@ void Application::handleInput()
         selectedDrawable->setTransformation(trans);
         std::cout << "Translated -Z" << std::endl;
     }
-
 
     // Scaling Controls
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
@@ -268,7 +346,6 @@ void Application::handleInput()
         selectedDrawable->setTransformation(trans);
         std::cout << "Scaled Down" << std::endl;
     }
-
 
     // Rotation Controls
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
@@ -312,6 +389,7 @@ void Application::switchScene(int index)
     if (index >=0 && index < scenes.size()) {
         currentSceneIndex = index;
         selectedDrawableIndex = 0;
+        std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
     }

@@ -29,7 +29,8 @@ SRCS = \
     src/DrawableObject.cpp \
     src/ShaderProgram.cpp \
     src/Model.cpp \
-    src/Transformation.cpp
+    src/Transformation.cpp \
+    src/Camera.cpp 
 
 # Object files
 OBJS = $(SRCS:src/%.cpp=build/%.o)

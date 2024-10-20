@@ -1,10 +1,13 @@
+// ShaderProgram.cpp
 #include "ShaderProgram.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& fragmentPath)
+    : viewLoc(-1), projLoc(-1)
 {
     // Load shader sources
     std::string vertexSource = loadShaderSource(vertexPath);
@@ -25,6 +28,16 @@ ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& f
     // Clean up shaders as they are now linked into the program
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    // Get uniform locations for view and projection matrices
+    viewLoc = glGetUniformLocation(programID, "viewMatrix");
+    if (viewLoc == -1) {
+        std::cerr << "Warning: 'viewMatrix' uniform not found in shader." << std::endl;
+    }
+    projLoc = glGetUniformLocation(programID, "projectionMatrix");
+    if (projLoc == -1) {
+        std::cerr << "Warning: 'projectionMatrix' uniform not found in shader." << std::endl;
+    }
 }
 
 ShaderProgram::~ShaderProgram()
@@ -80,5 +93,16 @@ void ShaderProgram::linkProgram(GLuint vertexShader, GLuint fragmentShader)
         glGetProgramInfoLog(programID, sizeof(infoLog), nullptr, infoLog);
         std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
         std::exit(EXIT_FAILURE);
+    }
+}
+
+void ShaderProgram::onCameraUpdate(const glm::mat4& view, const glm::mat4& projection)
+{
+    use();
+    if (viewLoc != -1) {
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    }
+    if (projLoc != -1) {
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
     }
 }
