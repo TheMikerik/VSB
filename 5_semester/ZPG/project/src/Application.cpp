@@ -15,6 +15,8 @@
 #include <cstdlib>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <chrono>
+#include <thread>
 
 Application* Application::instance = nullptr;
 
@@ -43,7 +45,7 @@ void Application::mouseCallback(GLFWwindow* window, double xpos, double ypos)
     }
 
     float xoffset = static_cast<float>(xpos) - instance->lastX;
-    float yoffset = instance->lastY - static_cast<float>(ypos); // Reversed since y-coordinates go from bottom to top
+    float yoffset = instance->lastY - static_cast<float>(ypos);
 
     instance->lastX = static_cast<float>(xpos);
     instance->lastY = static_cast<float>(ypos);
@@ -61,7 +63,8 @@ Application::Application()
         camera(glm::vec3(0.0f, 10.0f, 20.0f)),
         lastX(400.0f), lastY(300.0f), firstMouse(true),
         deltaTime(0.0f), lastFrame(0.0f),
-        selectedDrawableIndex(0)
+        selectedDrawableIndex(0),
+        rotationEnabled(false)
 {
     // Set the static instance pointer
     instance = this;
@@ -93,11 +96,10 @@ void Application::initialization()
         std::exit(EXIT_FAILURE);
     }
 
-    // Make the window's context current
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    // timto se povoluje vsync
+    glfwSwapInterval(1);
 
-    // Initialize GLEW
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (GLEW_OK != err) {
@@ -120,12 +122,10 @@ void Application::initialization()
     std::cout << "Framebuffer size: " << width << "x" << height << std::endl;
     std::cout << "===============================\n" << std::endl;
 
-    // Set callbacks
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetScrollCallback(window, scrollCallback);
 
-    // Capture the mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
@@ -136,7 +136,6 @@ void Application::createScenes()
     auto scene1 = std::make_shared<Scene>();
     auto scene2 = std::make_shared<Scene>();
 
-    // Create shader programs
     auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
     auto shader_purple = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
@@ -144,7 +143,7 @@ void Application::createScenes()
 
     std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader_uni, shader_red, shader_purple, shader_green};
 
-    // Register shaders as observers to the camera
+    // Registrace shaderu jako observeru kamery
     for(auto& shader : shaders)
     {
         camera.registerObserver(shader.get());
@@ -152,7 +151,6 @@ void Application::createScenes()
 
     camera.notifyObservers();
 
-    // Load models
     std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     std::vector<float> triangleVertices(std::begin(triangle), std::end(triangle));
@@ -173,9 +171,9 @@ void Application::createScenes()
 
         Transformation bushesTrans;
         bushesTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),   // Spread trees over a larger area on the X-axis
-            0.0f,                      // Y-axis should be near the ground
-            getRandom(-15.0f, 15.0f)    // Spread trees over a larger area on the Z-axis
+            getRandom(-15.0f, 15.0f),
+            0.0f,
+            getRandom(-15.0f, 15.0f)
         ));
         bushesTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         bushesTrans.scale(glm::vec3(getRandom(1.0f, 3.0f)));
@@ -190,12 +188,11 @@ void Application::createScenes()
         auto randomShader = shaders[i % 4];
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
 
-        // Apply random transformations
         Transformation treeTrans;
         treeTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),   // Spread trees over a larger area on the X-axis
-            0.0f,                      // Y-axis should be near the ground
-            getRandom(-15.0f, 15.0f)    // Spread trees over a larger area on the Z-axis
+            getRandom(-15.0f, 15.0f),
+            0.0f,
+            getRandom(-15.0f, 15.0f)
         ));
         treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
@@ -204,7 +201,8 @@ void Application::createScenes()
         scene1->addDrawable(treeDrawable);
     }
 
-    // Scene 2    
+
+
     auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader_red);
     auto tree2 = std::make_shared<DrawableObject>(treeModel, shader_red);
 
@@ -216,7 +214,7 @@ void Application::createScenes()
     scene2->addDrawable(triangleDrawable);
     scene2->addDrawable(tree2);
 
-    // Add scenes to application
+
     scenes.push_back(scene1);
     scenes.push_back(scene2);
 }
@@ -235,12 +233,11 @@ void Application::run()
 
     // Main rendering loop
     while (!glfwWindowShouldClose(window)) {
-        // Calculate delta time
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
-        // Clear the screen
+        // Clearne screen a jeho buff
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (currentSceneIndex >= 0 && currentSceneIndex < scenes.size()) {
@@ -269,76 +266,108 @@ void Application::handleInput()
         return;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-    {
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
     }
 
-    // Process camera movement
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime * 2);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime * 2);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(LEFT, deltaTime * 2);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(RIGHT, deltaTime * 2);
 
-    // Clamp the selectedDrawableIndex
-    if (selectedDrawableIndex >= drawables.size()) {
+    if (selectedDrawableIndex >= drawables.size())
         selectedDrawableIndex = 0;
-    }
 
     auto selectedDrawable = drawables[selectedDrawableIndex];
 
     float translationStep = 0.05f;
-    float rotationStep = 5.0f; // degrees
+    float rotationStep = 5.0f;
     float scaleStep = 0.05f;
 
     // Object Transformation Controls
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
-        // Move on positive X axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.translate(glm::vec3(translationStep, 0.0f, 0.0f));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Translated +X" << std::endl;
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(translationStep, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated +X" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +X" << std::endl;
+        }
     }
     if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
-        // Move on negative X axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.translate(glm::vec3(-translationStep, 0.0f, 0.0f));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Translated -X" << std::endl;
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(-translationStep, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated -X" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(-rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated -X" << std::endl;
+        }
     }
 
     if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
-        // Move on positive Y axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.translate(glm::vec3(0.0f, translationStep, 0.0f));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Translated +Y" << std::endl;
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, translationStep, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated +Y" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +Y" << std::endl;
+        }
     }
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-        // Move on negative Y axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.translate(glm::vec3(0.0f, -translationStep, 0.0f));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Translated -Y" << std::endl;
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, -translationStep, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated -Y" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(-rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +Y" << std::endl;
+        }
     }
 
     if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-        // Move on positive Z axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.translate(glm::vec3(0.0f, 0.0f, translationStep));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Translated +Z" << std::endl;
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, 0.0f, translationStep));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated +Z" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +Z" << std::endl;
+        }
     }
     if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-        // Move on negative Z axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.translate(glm::vec3(0.0f, 0.0f, -translationStep));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Translated -Z" << std::endl;
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, 0.0f, -translationStep));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated -Z" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(-rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated -Z" << std::endl;
+        }
     }
 
     // Scaling Controls
@@ -357,28 +386,18 @@ void Application::handleInput()
         std::cout << "Scaled Down" << std::endl;
     }
 
-    // Rotation Controls
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        // Rotate on positive X axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.rotate(rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Rotated +X" << std::endl;
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+        rotationEnabled = !rotationEnabled;
+        std::cout << "Rotation: " << rotationEnabled << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        // Rotate on negative X axis
-        Transformation trans = selectedDrawable->getTransformation();
-        trans.rotate(-rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
-        selectedDrawable->setTransformation(trans);
-        std::cout << "Rotated -X" << std::endl;
-    }
+    
 
     if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
         selectedDrawableIndex = (selectedDrawableIndex + 1) % drawables.size();
         std::cout << "Switched to Drawable Index: " << selectedDrawableIndex << std::endl;
     }
 
-    // Switching between scenes
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
         switchScene(0);
     }

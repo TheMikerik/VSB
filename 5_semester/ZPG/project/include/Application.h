@@ -22,6 +22,7 @@ private:
     GLFWwindow* window;
     std::vector<std::shared_ptr<Scene>> scenes;
     int currentSceneIndex;
+    bool rotationEnabled;
 
     // Camera
     Camera camera;
