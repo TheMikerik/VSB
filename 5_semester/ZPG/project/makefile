@@ -29,5 +29,5 @@ build/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-clean:
+clear:
 	rm -f $(TARGET_PATH) $(OBJS)

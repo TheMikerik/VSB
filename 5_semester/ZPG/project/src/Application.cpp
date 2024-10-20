@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <vector>
 
+#include "../models/plain.h"
+
 Application::Application() : window(nullptr) {}
 
 Application::~Application() {
@@ -72,44 +74,14 @@ void Application::initialization() {
     glViewport(0, 0, width, height);
 }
 
-std::vector<float> Application::loadObject(const std::string& filePath) {
-    std::vector<float> points;
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open object file: " << filePath << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-
-    float value;
-    while (file >> value) {
-        points.push_back(value);
-    }
-
-    return points;
-}
-
 void Application::addModel(const std::vector<float>& vertices, const std::string& fragmentPath) {
-    // Dynamically allocate a new Model instance
     Model* model = new Model(vertices, fragmentPath);
-
-    // Add the model to the list
     models.push_back(model);
 }
 
 void Application::createModels() {
-    // Load object data and add models with different fragment shaders
-
-    // Model 1: Square with red color
-    std::vector<float> square = loadObject("./models/square.obj");
-    addModel(square, "./shaders/fragment_shader_red.glsl");
-
-    // Model 2: Triangle with green color
-    std::vector<float> triangle = loadObject("./models/triangle.obj");
-    addModel(triangle, "./shaders/fragment_shader_green.glsl");
-
-    // Model 3: Test object with purple color
-    std::vector<float> test = loadObject("./models/test.obj");
-    addModel(test, "./shaders/fragment_shader_purple.glsl");
+    std::vector<float> plainModel(std::begin(plain), std::end(plain));
+    addModel(plainModel, "./shaders/fragment_shader_red.glsl");
 }
 
 void Application::run() {

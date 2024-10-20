@@ -8,8 +8,8 @@
 class Model {
 public:
     Model(const std::vector<float>& vertices, 
-          const std::string& fragmentPath, 
-          const std::string& vertexPath = "./shaders/vertex_shader.glsl");
+        const std::string& fragmentPath, 
+        const std::string& vertexPath = "./shaders/vertex_shader.glsl");
 
     ~Model();
 

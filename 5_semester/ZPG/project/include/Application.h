@@ -22,7 +22,5 @@ private:
     std::vector<Model*> models;
 
     static void errorCallback(int error, const char* description);
-
-    std::vector<float> loadObject(const std::string& filePath);
     void addModel(const std::vector<float>& vertices, const std::string& fragmentPath);
 };
