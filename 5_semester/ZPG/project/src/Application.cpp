@@ -78,60 +78,71 @@ void Application::initialization()
 
 void Application::createScenes()
 {
-    // Scene 1
+    std::srand(static_cast<unsigned int>(std::time(0)));
+
     auto scene1 = std::make_shared<Scene>();
-
-    // Load shader program (shared across objects)
-    auto shader1 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-
-    // Create Model instances
-    std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
-    auto bushesModel = std::make_shared<Model>(bushesVertices);
-
-    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
-    auto treeModel = std::make_shared<Model>(treeVertices);
-
-    // Create DrawableObjects
-    auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, shader1);
-    auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader1);
-
-    // Apply transformations
-    Transformation bushesTrans;
-    bushesTrans.translate(glm::vec3(-0.3f, -0.0f, -0.0f));
-    bushesTrans.rotate(45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-    bushesTrans.scale(glm::vec3(0.5f));
-    bushesDrawable->setTransformation(bushesTrans);
-
-    // Transformation treeTrans;
-    Transformation treeTrans;
-    treeTrans.translate(glm::vec3(0.0f, -0.9f, 1.0f));
-    // treeTrans.rotate(-30.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-    treeTrans.scale(glm::vec3(0.2f));
-    treeDrawable->setTransformation(treeTrans);
-
-    // Add to scene
-    scene1->addDrawable(bushesDrawable);
-    scene1->addDrawable(treeDrawable);
-
-    // Scene 2 (example: different objects or different shaders)
     auto scene2 = std::make_shared<Scene>();
 
-    // Maybe use a different shader
+    auto shader1 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader2 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
+    auto shader3 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
+    auto shader4 = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_green.glsl");
 
-    // Create Model for triangle
+    std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader1, shader3, shader4};
+
+
+    std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
+    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     std::vector<float> triangleVertices(std::begin(triangle), std::end(triangle));
-    auto triangleModel = std::make_shared<Model>(triangleVertices);
-    auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader2);
 
-    // Apply transformations
-    // Transformation triangleTrans;
-    // triangleTrans.translate(glm::vec3(0.0f, 0.0f, 0.0f));
-    // triangleTrans.rotate(0.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-    // triangleTrans.scale(glm::vec3(1.0f));
-    // triangleDrawable->setTransformation(triangleTrans);
+    auto bushesModel = std::make_shared<Model>(bushesVertices);
+    auto treeModel = std::make_shared<Model>(treeVertices);
+    auto triangleModel = std::make_shared<Model>(triangleVertices);
+
+    for (int i = 0; i < 3; ++i)
+    {
+        auto randomShader = shaders[std::rand() % shaders.size()];
+        auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, randomShader);
+
+        Transformation bushesTrans;
+        bushesTrans.translate(glm::vec3(static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
+                                        static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
+                                        static_cast<float>(std::rand() % 200 - 100) / 100.0f));
+        bushesTrans.rotate(static_cast<float>(std::rand() % 360), glm::vec3(std::rand() % 2, std::rand() % 2, std::rand() % 2));
+        bushesTrans.scale(glm::vec3(static_cast<float>(std::rand() % 100) / 100.0f));
+        bushesDrawable->setTransformation(bushesTrans);
+
+        scene1->addDrawable(bushesDrawable);
+    }
+
+    for (int i = 0; i < 5; ++i)
+    {
+        auto randomShader = shaders[std::rand() % shaders.size()];
+        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
+
+        // Apply random transformations
+        Transformation treeTrans;
+        treeTrans.translate(glm::vec3(static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
+                                        static_cast<float>(std::rand() % 200 - 100) / 100.0f, 
+                                        static_cast<float>(std::rand() % 200 - 100) / 100.0f));
+        treeTrans.rotate(static_cast<float>(std::rand() % 360), glm::vec3(std::rand() % 2, std::rand() % 2, std::rand() % 2));
+        treeTrans.scale(glm::vec3(static_cast<float>(std::rand() % 100) / 100.0f));
+        treeDrawable->setTransformation(treeTrans);
+
+        scene1->addDrawable(treeDrawable);
+    }
+
+    // Scene 2    
+    auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader2);
+    auto tree2 = std::make_shared<DrawableObject>(treeModel, shader2);
+
+    Transformation t2reeTrans;
+    t2reeTrans.translate(glm::vec3(0.0f, -0.9f, 1.0f));
+    t2reeTrans.scale(glm::vec3(0.2f));
+    tree2->setTransformation(t2reeTrans);
 
     scene2->addDrawable(triangleDrawable);
+    scene2->addDrawable(tree2);
 
     // Add scenes to application
     scenes.push_back(scene1);
@@ -173,7 +184,6 @@ void Application::switchScene(int index)
 {
     if (index >=0 && index < scenes.size()) {
         currentSceneIndex = index;
-        std::cout << "Switched to scene " << index << std::endl;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
     }
