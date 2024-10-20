@@ -2,6 +2,8 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <vector>
 
@@ -14,12 +16,15 @@ public:
     ~Model();
 
     void render() const;
+    void setModelMatrix(const glm::mat4& matrix);
+    glm::mat4 getModelMatrix() const;
 
 private:
     GLuint VAO;
     GLuint VBO;
     GLuint shaderProgram;
     GLsizei vertexCount;
+    glm::mat4 modelMatrix;
 
     std::string loadShaderSource(const std::string& filePath) const;
     GLuint createShaderProgram(const std::string& vertexPath, const std::string& fragmentPath) const;

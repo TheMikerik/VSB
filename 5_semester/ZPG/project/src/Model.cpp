@@ -8,7 +8,7 @@
 Model::Model(const std::vector<float>& vertices, 
             const std::string& fragmentPath, 
             const std::string& vertexPath)
-    : VAO(0), VBO(0), shaderProgram(0), vertexCount(0) 
+    : VAO(0), VBO(0), shaderProgram(0), vertexCount(0), modelMatrix(1.0f)
 {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -40,6 +40,14 @@ Model::~Model() {
 
 void Model::render() const {
     glUseProgram(shaderProgram);
+
+    GLint modelLoc = glGetUniformLocation(shaderProgram, "modelMatrix");
+    if (modelLoc == -1) {
+        std::cerr << "Could not find uniform 'modelMatrix' in shader program." << std::endl;
+    } else {
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+    }
+
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
     glBindVertexArray(0);
@@ -104,4 +112,12 @@ GLuint Model::createShaderProgram(const std::string& vertexPath, const std::stri
     glDeleteShader(fragmentShader);
 
     return program;
+}
+
+void Model::setModelMatrix(const glm::mat4& matrix) {
+    modelMatrix = matrix;
+}
+
+glm::mat4 Model::getModelMatrix() const {
+    return modelMatrix;
 }
