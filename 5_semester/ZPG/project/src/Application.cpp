@@ -10,6 +10,7 @@
 #include "../models/tree.h"
 #include "../models/triangle.h"
 #include "../models/platform.h"
+#include "../models/sphere.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -135,6 +136,7 @@ void Application::createScenes()
 
     auto scene1 = std::make_shared<Scene>();
     auto scene2 = std::make_shared<Scene>();
+    auto scene3 = std::make_shared<Scene>();
 
     auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
@@ -155,11 +157,13 @@ void Application::createScenes()
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     std::vector<float> triangleVertices(std::begin(triangle), std::end(triangle));
     std::vector<float> platformVertices(std::begin(platform), std::end(platform));
+    std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
 
     auto bushesModel = std::make_shared<Model>(bushesVertices);
     auto treeModel = std::make_shared<Model>(treeVertices);
     auto triangleModel = std::make_shared<Model>(triangleVertices);
     auto platformModel = std::make_shared<Model>(platformVertices);
+    auto sphereModel = std::make_shared<Model>(sphereVertices);
 
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_uni);
     scene1->addDrawable(platformDrawable);
@@ -214,9 +218,26 @@ void Application::createScenes()
     scene2->addDrawable(triangleDrawable);
     scene2->addDrawable(tree2);
 
+    std::vector<glm::vec3> positions = {
+        glm::vec3(2.0f, 0.0f, 2.0f),
+        glm::vec3(-2.0f, 0.0f, 2.0f),
+        glm::vec3(2.0f, 0.0f, -2.0f),
+        glm::vec3(-2.0f, 0.0f, -2.0f)
+    };
+
+    for (auto position : positions){
+        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_uni);
+
+        Transformation sphereTrans;
+        sphereTrans.translate(position);
+        sphereDrawable->setTransformation(sphereTrans);
+        scene3->addDrawable(sphereDrawable);
+    }
+
 
     scenes.push_back(scene1);
     scenes.push_back(scene2);
+    scenes.push_back(scene3);
 }
 
 void Application::run()
@@ -399,6 +420,9 @@ void Application::handleInput()
     }
     if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
         switchScene(1);
+    }
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        switchScene(2);
     }
 }
 

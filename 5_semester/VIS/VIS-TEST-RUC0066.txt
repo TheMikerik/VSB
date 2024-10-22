@@ -8,7 +8,7 @@ Skupina 2
     
 - b - Popište vlasními slovy vzor Unit of Work
 
-- c - Popište vlastními slovy vzor Data Mapper
+- c - q
   - Data Mapper je návrhový vzor, který odděluje databázovou vrstvu od obchodní logiky tím, 
   že mapuje objekty na databázové tabulky a umožňuje přenos dat mezi nimi bez použití SQL
 
