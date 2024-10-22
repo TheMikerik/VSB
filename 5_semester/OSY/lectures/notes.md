@@ -171,5 +171,22 @@
   - Spravne reseni:
     1. Procesy se musi dostat do kriticke sekce jeden po jednom
     2. Nehledi se na rychlost ci pocet CPU
-    3. Pokud je proces mimo kritickou sekci, tak by nemel blokovat kritickou sekci
-    4. Nikdy se nesmi cekat na vstup do kriticke sekce do nekonecna
+    3. Pokud je proces mimo kritickou sekci, tak by nemel blokovat kritickou sekci (jinak by mohlo dojit k zablokovani)
+    4. Nikdy se nesmi cekat na vstup do kriticke sekce do nekonecna (System garantuje, ze se proces dostane do konecneho stavu v konecnem case)
+
+
+### Prednaska 5
+- Mutual Exclusion with Busy Waiting
+  - Zakaz preruseni 
+    - Pouziva se pouze u malych systemu
+    - Nelze pouzit u vetsich systemu
+  - Zamykaci promenna
+    - TSL (Test and Set Lock)
+      - Neprerusitelna strojova instrukce, ktera provede lock a jeho test zaroven
+      - Timto je system chraneny proti preruseni behem procesu zamceni
+  - Semafory
+    - Semafor resi bezpecne zamykani a take zapinani a vypinani
+    - Binarni semafor
+      - Ma omezeny rozsah prace, ktera garantuje chod kriticke sekce
+      - Ma pouze dve hodnoty (0/1)
+      - 0 - usina

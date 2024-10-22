@@ -1,0 +1,14 @@
+Skupina 2
+- a - Popište podstatu třívrstvé architektury. Jaký je rozdíl mezi fyzickou a logickou
+  - Trivrstva architektura je rozdělení aplikace na 3 vrstvy:
+    - Prezencni vrstva
+    - Logicka vrstva
+    - Datova vrstva
+  - fyzická architektura se vztahuje k fyzickým komponentám systému, zatímco logická architektura opisuje funkcionalitu a tok dat v systému.
+    
+- b - Popište vlasními slovy vzor Unit of Work
+
+- c - Popište vlastními slovy vzor Data Mapper
+  - Data Mapper je návrhový vzor, který odděluje databázovou vrstvu od obchodní logiky tím, 
+  že mapuje objekty na databázové tabulky a umožňuje přenos dat mezi nimi bez použití SQL
+
