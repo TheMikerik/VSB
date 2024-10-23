@@ -144,10 +144,12 @@ void Application::createScenes()
     auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
     auto shader_purple = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
     auto shader_green = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_green.glsl");
+    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert_vertex.glsl", "./shaders/lambert_fragment.glsl");
 
-    std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader_uni, shader_red, shader_purple, shader_green};
 
-    // Registrace shaderu jako observeru kamery
+    // std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader_uni, shader_red, shader_purple, shader_green};
+    std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader_lambert};
+
     for(auto& shader : shaders)
     {
         camera.registerObserver(shader.get());

@@ -6,6 +6,33 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+void my_awk() {
+    char buffer[32];
+
+    while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        int len = strlen(buffer);
+        if (buffer[len - 1] == '\n') {
+            buffer[len - 1] = '\0'; 
+            len--;                   
+        }
+        printf("%02d %s\n", len, buffer);
+    }
+}
+
+void my_nl() {
+    char buffer[32];
+    int line_number = 1;
+
+    while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
+        int len = strlen(buffer);
+        if (buffer[len - 1] == '\n') {
+            buffer[len - 1] = '\0'; 
+            len--;                    
+        }
+        printf("%d. %s\n", line_number++, buffer);
+    }
+}
+
 int main() {
     int pipe1[2], pipe2[2], pipe3[2];
 
@@ -31,8 +58,7 @@ int main() {
         close(pipe3[1]);
         close(input_file);
 
-        execlp("awk", "awk", "{printf \"%02d %s\\n\", length, $0}", NULL);
-        perror("[ERROR] Awk");
+        my_awk();
 
         exit(1);
     }
@@ -55,7 +81,7 @@ int main() {
 
     if (fork() == 0) {
         dup2(pipe2[0], STDIN_FILENO);
-        dup2(pipe3[1], STDIN_FILENO);
+        dup2(pipe3[1], STDOUT_FILENO);
 
         close(pipe1[0]);
         close(pipe1[1]);
@@ -78,8 +104,7 @@ int main() {
         close(pipe3[0]);
         close(pipe3[1]);
 
-        execlp("nl", "nl", "-s", ". ", NULL);
-        perror("[ERROR] Nl");
+        my_nl();
         exit(1);
     }
 
