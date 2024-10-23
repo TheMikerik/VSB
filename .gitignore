@@ -7,3 +7,6 @@
 4_semester/SKJ/cv/.venv/
 4_semester/SKJ/cv/__pycache__/
 4_semester/SKJ/cv/.pytest_cache/
+
+# ZPG MODELS
+5_semester/ZPG/**/models/
