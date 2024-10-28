@@ -1,4 +1,4 @@
--------------------------------------------------
+--------------------------------------------------
 CREATE TABLE Cryptocurrencies
     (
      Cryptocurrency_ID INTEGER IDENTITY PRIMARY KEY ,

@@ -25,6 +25,17 @@ CREATE TABLE Users
     )
 GO
 -------------------------------------------------
+CREATE TABLE Documents
+    (
+     Document_ID INTEGER PRIMARY KEY,
+     Type VARCHAR2(50),
+     File BLOB,
+     Upload_date TIMESTAMP,
+     User_ID INTEGER,
+     FOREIGN KEY (User_ID) REFERENCES Users(User_ID)
+    )
+GO
+-------------------------------------------------
 CREATE TABLE Admins
     (
      Admin_ID SMALLINT IDENTITY PRIMARY KEY ,
@@ -61,7 +72,7 @@ CREATE TABLE Transactions
      Transaction_ID SMALLINT IDENTITY PRIMARY KEY ,
      Volume FLOAT NOT NULL ,
      Value FLOAT ,
-     Date DATETIME2 ,
+     Date TIMESTAMP ,
      Portfolio_ID SMALLINT NOT NULL CONSTRAINT FK_transactions_portfolios FOREIGN KEY REFERENCES Portfolios(Portfolio_ID) ,
      Cryptocurrency_ID INTEGER NOT NULL CONSTRAINT FK_transactions_currencies FOREIGN KEY REFERENCES Cryptocurrencies(Cryptocurrency_ID)
     )
@@ -83,7 +94,7 @@ GO
 CREATE TABLE P2P_Transaction
     (
      P2P_Transaction_ID INTEGER IDENTITY PRIMARY KEY ,
-     Date DATETIME2 NOT NULL ,
+     Date TIMESTAMP NOT NULL ,
      Offer_ID INTEGER NOT NULL CONSTRAINT FK_p2ptransaction_p2poffer FOREIGN KEY REFERENCES P2P_Offers(Offer_ID)
     )
 GO

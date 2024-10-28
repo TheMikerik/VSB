@@ -1,0 +1,40 @@
+CREATE OR REPLACE TRIGGER THlasovani AFTER INSERT ON HLASOVANI_POSLANEC FOR EACH ROW
+DECLARE
+    v_hlasovani HLASOVANI%ROWTYPE;
+    v_vysledek HLASOVANI.VYSLEDEK%TYPE;
+    v_kvorum HLASOVANI.KVORUM%TYPE;
+BEGIN
+
+    
+    SELECT * INTO v_hlasovani FROM HLASOVANI WHERE ID_HLASOVANI = :new.ID_HLASOVANI;
+    DBMS_OUTPUT.PUT_LINE('Starý stav hlasování');
+    DBMS_OUTPUT.PUT_LINE(v_hlasovani.PRO || ' vs ' || v_hlasovani.PROTI || ' |' || v_hlasovani.KVORUM || ' => ' || v_hlasovani.VYSLEDEK);
+
+    IF :new.VYSLEDEK = 'A' THEN
+        UPDATE HLASOVANI SET PRIHLASENO = PRIHLASENO + 1, PRO = PRO + 1  WHERE ID_HLASOVANI=:new.ID_HLASOVANI;
+    ELSIF :new.VYSLEDEK = 'B' OR :new.VYSLEDEK = 'N' THEN
+        UPDATE HLASOVANI SET PRIHLASENO = PRIHLASENO + 1, PROTI = PROTI + 1  WHERE ID_HLASOVANI=:new.ID_HLASOVANI;
+    ELSIF :new.VYSLEDEK = 'C' OR :new.VYSLEDEK = 'K' THEN
+        UPDATE HLASOVANI SET PRIHLASENO = PRIHLASENO + 1, ZDRZEL = ZDRZEL + 1  WHERE ID_HLASOVANI=:new.ID_HLASOVANI;
+    ELSIF :new.VYSLEDEK = 'F' OR :new.VYSLEDEK = '@' THEN
+        UPDATE HLASOVANI SET PRIHLASENO = PRIHLASENO + 1, NEHLASOVAL = NEHLASOVAL + 1  WHERE ID_HLASOVANI=:new.ID_HLASOVANI;
+    END IF;
+
+    SELECT * INTO v_hlasovani FROM HLASOVANI WHERE ID_HLASOVANI=:new.ID_HLASOVANI;
+
+    v_kvorum := FLOOR(v_hlasovani.PRIHLASENO / 2) + 1;
+
+    IF v_hlasovani.PRO >= v_kvorum THEN
+        v_vysledek := 'A';
+    ELSE
+        v_vysledek := 'R';
+    END IF;
+
+    UPDATE HLASOVANI SET KVORUM=v_kvorum, VYSLEDEK=v_vysledek WHERE ID_HLASOVANI = :new.ID_HLASOVANI;
+
+    SELECT * INTO v_hlasovani FROM HLASOVANI WHERE ID_HLASOVANI=:new.ID_HLASOVANI;
+    DBMS_OUTPUT.PUT_LINE('Nový stav hlasování');
+    DBMS_OUTPUT.PUT_LINE(v_hlasovani.PRO || ' vs ' || v_hlasovani.PROTI || ' |' || v_hlasovani.KVORUM || ' => ' || v_hlasovani.VYSLEDEK);
+
+
+END;
