@@ -10,6 +10,8 @@
 // The mandatory arguments of program is IP adress or name of server and
 // a port number.
 //
+// Modified by [Your Name], 2024
+//
 //***************************************************************************
 
 #include <unistd.h>
@@ -25,9 +27,9 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h>
 #include <errno.h>
 #include <netdb.h>
+#include <time.h>        // Added for random expression generation
 
 #define STR_CLOSE               "close"
 
@@ -94,6 +96,25 @@ void help( int t_narg, char **t_args )
 }
 
 //***************************************************************************
+// Function to generate a random mathematical expression with + and -
+void generate_random_expression(char* expr, size_t max_len) {
+    int num_terms = rand() % 5 + 2; // Between 2 and 6 terms
+    int current_len = 0;
+
+    for (int i = 0; i < num_terms; i++) {
+        if (current_len >= max_len - 10) break; // Prevent buffer overflow
+
+        int number = rand() % 100; // Random number between 0 and 99
+        char op = (i == 0) ? '\0' : (rand() % 2 ? '+' : '-');
+        if (op != '\0') {
+            current_len += snprintf(expr + current_len, max_len - current_len, " %c ", op);
+        }
+        current_len += snprintf(expr + current_len, max_len - current_len, "%d", number);
+    }
+    snprintf(expr + current_len, max_len - current_len, "\n"); // Add newline at the end
+}
+
+//***************************************************************************
 
 int main( int t_narg, char **t_args )
 {
@@ -135,7 +156,7 @@ int main( int t_narg, char **t_args )
     l_ai_req.ai_family = AF_INET;
     l_ai_req.ai_socktype = SOCK_STREAM;
 
-    int l_get_ai = getaddrinfo( l_host, nullptr, &l_ai_req, &l_ai_ans );
+    int l_get_ai = getaddrinfo( l_host, NULL, &l_ai_req, &l_ai_ans );
     if ( l_get_ai )
     {
         log_msg( LOG_ERROR, "Unknown host name!" );
@@ -161,7 +182,7 @@ int main( int t_narg, char **t_args )
         exit( 1 );
     }
 
-    uint l_lsa = sizeof( l_cl_addr );
+    socklen_t l_lsa = sizeof( l_cl_addr );
     // my IP
     getsockname( l_sock_server, ( sockaddr * ) &l_cl_addr, &l_lsa );
     log_msg( LOG_INFO, "My IP: '%s'  port: %d",
@@ -173,26 +194,46 @@ int main( int t_narg, char **t_args )
 
     log_msg( LOG_INFO, "Enter 'close' to close application." );
 
+    // Initialize random number generator
+    srand(time(NULL));
+
     // list of fd sources
     pollfd l_read_poll[ 2 ];
 
-    l_read_poll[ 0 ].fd = STDIN_FILENO;
-    l_read_poll[ 0 ].events = POLLIN;
-    l_read_poll[ 1 ].fd = l_sock_server;
-    l_read_poll[ 1 ].events = POLLIN;
+    l_read_poll[0].fd = STDIN_FILENO;
+    l_read_poll[0].events = POLLIN;
+    l_read_poll[1].fd = l_sock_server;
+    l_read_poll[1].events = POLLIN;
 
     // go!
     while ( 1 )
     {
-        char l_buf[ 128 ];
+        // Set timeout to 15000 ms (15 seconds)
+        int timeout = 15000; // milliseconds
 
-        // select from fds
-        if ( poll( l_read_poll, 2, -1 ) < 0 ) break;
+        int poll_result = poll( l_read_poll, 2, timeout );
+
+        if ( poll_result < 0 ) {
+            log_msg( LOG_ERROR, "Poll failed." );
+            break;
+        } else if ( poll_result == 0 ) {
+            // Timeout occurred, generate and send random expression
+            char expr[128];
+            generate_random_expression(expr, sizeof(expr));
+            log_msg( LOG_INFO, "No input detected. Sending random expression: %s", expr);
+            ssize_t bytes_sent = write( l_sock_server, expr, strlen(expr) );
+            if ( bytes_sent < 0 )
+                log_msg( LOG_ERROR, "Unable to send data to server." );
+            else
+                log_msg( LOG_DEBUG, "Sent %ld bytes to server.", bytes_sent );
+            continue; // Continue to next poll
+        }
 
         // data on stdin?
-        if ( l_read_poll[ 0 ].revents & POLLIN )
+        if ( l_read_poll[0].revents & POLLIN )
         {
             //  read from stdin
+            char l_buf[128];
             int l_len = read( STDIN_FILENO, l_buf, sizeof( l_buf ) );
             if ( l_len < 0 )
                 log_msg( LOG_ERROR, "Unable to read from stdin." );
@@ -208,9 +249,10 @@ int main( int t_narg, char **t_args )
         }
 
         // data from server?
-        if ( l_read_poll[ 1 ].revents & POLLIN )
+        if ( l_read_poll[1].revents & POLLIN )
         {
             // read data from server
+            char l_buf[128];
             int l_len = read( l_sock_server, l_buf, sizeof( l_buf ) );
             if ( !l_len )
             {
@@ -243,4 +285,4 @@ int main( int t_narg, char **t_args )
     close( l_sock_server );
 
     return 0;
-  }
+}
