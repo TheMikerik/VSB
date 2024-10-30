@@ -136,47 +136,100 @@ int evaluate_expression(const char* expr, int* result) {
 
 //***************************************************************************
 // Function to handle each client in a separate process
+//***************************************************************************
+// Function to handle each client in a separate process
 void handle_client(int client_socket) {
     log_msg(LOG_INFO, "Child process %d handling client.", getpid());
 
-    char buffer[256];
-    while (1) {
-        memset(buffer, 0, sizeof(buffer));
-        ssize_t bytes_read = read(client_socket, buffer, sizeof(buffer) - 1);
-        if (bytes_read < 0) {
-            log_msg(LOG_ERROR, "Read error from client.");
-            break;
-        } else if (bytes_read == 0) {
-            log_msg(LOG_INFO, "Client disconnected.");
+    // Buffer to store the received season
+    char season_buffer[256];
+    memset(season_buffer, 0, sizeof(season_buffer));
+
+    // Read season request from client
+    ssize_t bytes_read = 0;
+    size_t total_read = 0;
+    while ((bytes_read = read(client_socket, season_buffer + total_read, 1)) > 0) {
+        if (season_buffer[total_read] == '\n') {
+            season_buffer[total_read] = '\0'; // Replace '\n' with null terminator
             break;
         }
-
-        log_msg(LOG_DEBUG, "Received from client: %s", buffer);
-
-        // Ensure the expression ends with '\n'
-        if (buffer[bytes_read - 1] != '\n') {
-            const char* error_msg = "Error: Expression must end with newline.\n";
-            write(client_socket, error_msg, strlen(error_msg));
-            continue;
-        }
-
-        // Remove the newline character
-        buffer[bytes_read - 1] = '\0';
-
-        // Evaluate the expression
-        int result;
-        if (evaluate_expression(buffer, &result) == 0) {
-            char result_str[256];
-            snprintf(result_str, sizeof(result_str), "%d\n", result);
-            write(client_socket, result_str, strlen(result_str));
-            log_msg(LOG_DEBUG, "Sent to client: %s", result_str);
-        } else {
-            const char* error_msg = "Error: Invalid expression.\n";
-            write(client_socket, error_msg, strlen(error_msg));
-            log_msg(LOG_DEBUG, "Sent to client: %s", error_msg);
+        total_read += bytes_read;
+        if (total_read >= sizeof(season_buffer) - 1) {
+            // Prevent buffer overflow
+            log_msg(LOG_ERROR, "Received season name is too long.");
+            close(client_socket);
+            exit(1);
         }
     }
 
+    if (bytes_read <= 0) {
+        log_msg(LOG_ERROR, "Failed to read season from client.");
+        close(client_socket);
+        exit(1);
+    }
+
+    log_msg(LOG_INFO, "Received season request: %s", season_buffer);
+
+    // Map season to corresponding image file
+    const char* image_file = nullptr;
+    if (strcasecmp(season_buffer, "jaro") == 0) {
+        image_file = "spring.png";
+    } else if (strcasecmp(season_buffer, "leto") == 0) {
+        image_file = "summer.jpg";
+    } else if (strcasecmp(season_buffer, "podzim") == 0) {
+        image_file = "autumn.jpg";
+    } else if (strcasecmp(season_buffer, "zima") == 0) {
+        image_file = "winter.png";
+    } else if (strcasecmp(season_buffer, "ukonceny") == 0) {
+        log_msg(LOG_INFO, "Client requested to close the connection.");
+        close(client_socket);
+        exit(0);
+    } else {
+        const char* error_msg = "Error: Invalid season name.\n";
+        write(client_socket, error_msg, strlen(error_msg));
+        log_msg(LOG_DEBUG, "Sent to client: %s", error_msg);
+        close(client_socket);
+        exit(1);
+    }
+
+    // Check if the image file exists
+    if (access(image_file, F_OK) != 0) {
+        const char* error_msg = "Error: Image file not found.\n";
+        write(client_socket, error_msg, strlen(error_msg));
+        log_msg(LOG_DEBUG, "Sent to client: %s", error_msg);
+        close(client_socket);
+        exit(1);
+    }
+
+    // Sleep for approximately 15 seconds
+    log_msg(LOG_INFO, "Preparing to send '%s' to client after a delay.", image_file);
+    sleep(15);
+
+    // Open the image file
+    FILE* img_fp = fopen(image_file, "rb");
+    if (!img_fp) {
+        const char* error_msg = "Error: Unable to open image file.\n";
+        write(client_socket, error_msg, strlen(error_msg));
+        log_msg(LOG_ERROR, "Unable to open image file '%s'.", image_file);
+        close(client_socket);
+        exit(1);
+    }
+
+    // Send the image file in chunks
+    char send_buffer[1024];
+    size_t bytes_sent;
+    while ((bytes_sent = fread(send_buffer, 1, sizeof(send_buffer), img_fp)) > 0) {
+        ssize_t write_result = write(client_socket, send_buffer, bytes_sent);
+        if (write_result <= 0) {
+            log_msg(LOG_ERROR, "Failed to send image data to client.");
+            break;
+        }
+    }
+
+    fclose(img_fp);
+    log_msg(LOG_INFO, "Finished sending '%s' to client.", image_file);
+
+    // Close the connection
     close(client_socket);
     log_msg(LOG_INFO, "Child process %d exiting.", getpid());
     exit(0);
@@ -190,6 +243,23 @@ void sigchld_handler(int signo) {
 }
 
 //***************************************************************************
+
+int reliable_poll(struct pollfd *fds, nfds_t nfds, int timeout) {
+    int ret;
+    while (1) {
+        ret = poll(fds, nfds, timeout);
+        if (ret < 0) {
+            if (errno == EINTR) {
+                continue; // Retry poll
+            } else {
+                return -1; // An actual error occurred
+            }
+        }
+        break; // Poll succeeded
+    }
+    return ret;
+}
+
 
 int main( int t_narg, char **t_args )
 {
@@ -279,13 +349,12 @@ int main( int t_narg, char **t_args )
     // go!
     while (1)
     {
-        // select from fds
-        int l_poll = poll( l_read_poll, 2, -1 );
+        int l_poll = reliable_poll(l_read_poll, 2, -1);
 
-        if ( l_poll < 0 )
+        if (l_poll < 0)
         {
-            log_msg( LOG_ERROR, "Function poll failed!" );
-            exit( 1 );
+            log_msg(LOG_ERROR, "Function poll failed! Errno: %d - %s", errno, strerror(errno));
+            exit(1);
         }
 
         if ( l_read_poll[ 0 ].revents & POLLIN )

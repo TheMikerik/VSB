@@ -76,22 +76,23 @@ void log_msg( int t_log_level, const char *t_form, ... )
 
 void help( int t_narg, char **t_args )
 {
-    if ( t_narg <= 1 || !strcmp( t_args[ 1 ], "-h" ) )
+    if ( t_narg <= 3 || !strcmp(t_args[1], "-h") )
     {
         printf(
             "\n"
             "  Socket client example.\n"
             "\n"
-            "  Use: %s [-h -d] ip_or_name port_number\n"
+            "  Use: %s [-h -d] ip_or_name port_number season\n"
             "\n"
-            "    -d  debug mode \n"
-            "    -h  this help\n"
-            "\n", t_args[ 0 ] );
+            "    -d       debug mode \n"
+            "    -h       this help\n"
+            "    season   jaro, leto, podzim, zima\n"
+            "\n", t_args[0] );
 
-        exit( 0 );
+        exit(0);
     }
 
-    if ( !strcmp( t_args[ 1 ], "-d" ) )
+    if (!strcmp(t_args[1], "-d"))
         g_debug = LOG_DEBUG;
 }
 
@@ -116,173 +117,189 @@ void generate_random_expression(char* expr, size_t max_len) {
 
 //***************************************************************************
 
-int main( int t_narg, char **t_args )
-{
+//***************************************************************************
+// Function to generate a random mathematical expression with + and -
+// (You can remove or keep this function if not needed)
+//***************************************************************************
 
-    if ( t_narg <= 2 ) help( t_narg, t_args );
+int main(int t_narg, char **t_args)
+{
+    if (t_narg < 4) help(t_narg, t_args); // Now requires at least 4 arguments
 
     int l_port = 0;
     char *l_host = nullptr;
+    char *season = nullptr;
 
     // parsing arguments
-    for ( int i = 1; i < t_narg; i++ )
+    for (int i = 1; i < t_narg; i++)
     {
-        if ( !strcmp( t_args[ i ], "-d" ) )
+        if (!strcmp(t_args[i], "-d"))
             g_debug = LOG_DEBUG;
 
-        if ( !strcmp( t_args[ i ], "-h" ) )
-            help( t_narg, t_args );
+        if (!strcmp(t_args[i], "-h"))
+            help(t_narg, t_args);
 
-        if ( *t_args[ i ] != '-' )
+        if (*t_args[i] != '-')
         {
-            if ( !l_host )
-                l_host = t_args[ i ];
-            else if ( !l_port )
-                l_port = atoi( t_args[ i ] );
+            if (!l_host)
+                l_host = t_args[i];
+            else if (!l_port)
+                l_port = atoi(t_args[i]);
+            else if (!season)
+                season = t_args[i];
         }
     }
 
-    if ( !l_host || !l_port )
+    if (!l_host || !l_port || !season)
     {
-        log_msg( LOG_INFO, "Host or port is missing!" );
-        help( t_narg, t_args );
-        exit( 1 );
+        log_msg(LOG_INFO, "Host, port, or season is missing!");
+        help(t_narg, t_args);
+        exit(1);
     }
 
-    log_msg( LOG_INFO, "Connection to '%s':%d.", l_host, l_port );
+    // Validate season
+    if (strcasecmp(season, "jaro") != 0 &&
+        strcasecmp(season, "leto") != 0 &&
+        strcasecmp(season, "podzim") != 0 &&
+        strcasecmp(season, "zima") != 0 &&
+        strcasecmp(season, "ukonceny") != 0)
+    {
+        log_msg(LOG_INFO, "Invalid season name: %s", season);
+        help(t_narg, t_args);
+        exit(1);
+    }
+
+    log_msg(LOG_INFO, "Connection to '%s':%d.", l_host, l_port);
 
     addrinfo l_ai_req, *l_ai_ans;
-    bzero( &l_ai_req, sizeof( l_ai_req ) );
+    bzero(&l_ai_req, sizeof(l_ai_req));
     l_ai_req.ai_family = AF_INET;
     l_ai_req.ai_socktype = SOCK_STREAM;
 
-    int l_get_ai = getaddrinfo( l_host, NULL, &l_ai_req, &l_ai_ans );
-    if ( l_get_ai )
+    int l_get_ai = getaddrinfo(l_host, NULL, &l_ai_req, &l_ai_ans);
+    if (l_get_ai)
     {
-        log_msg( LOG_ERROR, "Unknown host name!" );
-        exit( 1 );
+        log_msg(LOG_ERROR, "Unknown host name!");
+        exit(1);
     }
 
-    sockaddr_in l_cl_addr =  *( sockaddr_in * ) l_ai_ans->ai_addr;
-    l_cl_addr.sin_port = htons( l_port );
-    freeaddrinfo( l_ai_ans );
+    sockaddr_in l_cl_addr = *(sockaddr_in*)l_ai_ans->ai_addr;
+    l_cl_addr.sin_port = htons(l_port);
+    freeaddrinfo(l_ai_ans);
 
     // socket creation
-    int l_sock_server = socket( AF_INET, SOCK_STREAM, 0 );
-    if ( l_sock_server == -1 )
+    int l_sock_server = socket(AF_INET, SOCK_STREAM, 0);
+    if (l_sock_server == -1)
     {
-        log_msg( LOG_ERROR, "Unable to create socket.");
-        exit( 1 );
+        log_msg(LOG_ERROR, "Unable to create socket.");
+        exit(1);
     }
 
     // connect to server
-    if ( connect( l_sock_server, ( sockaddr * ) &l_cl_addr, sizeof( l_cl_addr ) ) < 0 )
+    if (connect(l_sock_server, (sockaddr*)&l_cl_addr, sizeof(l_cl_addr)) < 0)
     {
-        log_msg( LOG_ERROR, "Unable to connect server." );
-        exit( 1 );
+        log_msg(LOG_ERROR, "Unable to connect to server.");
+        exit(1);
     }
 
-    socklen_t l_lsa = sizeof( l_cl_addr );
+    socklen_t l_lsa = sizeof(l_cl_addr);
     // my IP
-    getsockname( l_sock_server, ( sockaddr * ) &l_cl_addr, &l_lsa );
-    log_msg( LOG_INFO, "My IP: '%s'  port: %d",
-             inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
+    getsockname(l_sock_server, (sockaddr*)&l_cl_addr, &l_lsa);
+    log_msg(LOG_INFO, "My IP: '%s'  port: %d",
+            inet_ntoa(l_cl_addr.sin_addr), ntohs(l_cl_addr.sin_port));
     // server IP
-    getpeername( l_sock_server, ( sockaddr * ) &l_cl_addr, &l_lsa );
-    log_msg( LOG_INFO, "Server IP: '%s'  port: %d",
-             inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
+    getpeername(l_sock_server, (sockaddr*)&l_cl_addr, &l_lsa);
+    log_msg(LOG_INFO, "Server IP: '%s'  port: %d",
+            inet_ntoa(l_cl_addr.sin_addr), ntohs(l_cl_addr.sin_port));
 
-    log_msg( LOG_INFO, "Enter 'close' to close application." );
+    // Send the season request to the server
+    size_t season_len = strlen(season);
+    char season_request[256];
+    snprintf(season_request, sizeof(season_request), "%s\n", season);
 
-    // Initialize random number generator
-    srand(time(NULL));
-
-    // list of fd sources
-    pollfd l_read_poll[ 2 ];
-
-    l_read_poll[0].fd = STDIN_FILENO;
-    l_read_poll[0].events = POLLIN;
-    l_read_poll[1].fd = l_sock_server;
-    l_read_poll[1].events = POLLIN;
-
-    // go!
-    while ( 1 )
+    ssize_t bytes_sent = write(l_sock_server, season_request, strlen(season_request));
+    if (bytes_sent < 0)
     {
-        // Set timeout to 15000 ms (15 seconds)
-        int timeout = 15000; // milliseconds
+        log_msg(LOG_ERROR, "Unable to send season request to server.");
+        close(l_sock_server);
+        exit(1);
+    }
+    else
+    {
+        log_msg(LOG_DEBUG, "Sent %ld bytes to server: %s", bytes_sent, season_request);
+    }
 
-        int poll_result = poll( l_read_poll, 2, timeout );
+    // Prepare to receive image data
+    pid_t pid = getpid();
+    char img_filename[256];
+    snprintf(img_filename, sizeof(img_filename), "%d.img", pid);
 
-        if ( poll_result < 0 ) {
-            log_msg( LOG_ERROR, "Poll failed." );
+    FILE* img_fp = fopen(img_filename, "wb");
+    if (!img_fp)
+    {
+        log_msg(LOG_ERROR, "Unable to create image file '%s'.", img_filename);
+        close(l_sock_server);
+        exit(1);
+    }
+
+    log_msg(LOG_INFO, "Receiving image data and saving to '%s'.", img_filename);
+
+    // Receive image data in chunks and write to file
+    char recv_buffer[1024];
+    ssize_t bytes_received;
+    while ((bytes_received = read(l_sock_server, recv_buffer, sizeof(recv_buffer))) > 0)
+    {
+        size_t bytes_written = fwrite(recv_buffer, 1, bytes_received, img_fp);
+        if (bytes_written < (size_t)bytes_received)
+        {
+            log_msg(LOG_ERROR, "Failed to write to image file.");
             break;
-        } else if ( poll_result == 0 ) {
-            // Timeout occurred, generate and send random expression
-            char expr[128];
-            generate_random_expression(expr, sizeof(expr));
-            log_msg( LOG_INFO, "No input detected. Sending random expression: %s", expr);
-            ssize_t bytes_sent = write( l_sock_server, expr, strlen(expr) );
-            if ( bytes_sent < 0 )
-                log_msg( LOG_ERROR, "Unable to send data to server." );
-            else
-                log_msg( LOG_DEBUG, "Sent %ld bytes to server.", bytes_sent );
-            continue; // Continue to next poll
-        }
-
-        // data on stdin?
-        if ( l_read_poll[0].revents & POLLIN )
-        {
-            //  read from stdin
-            char l_buf[128];
-            int l_len = read( STDIN_FILENO, l_buf, sizeof( l_buf ) );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to read from stdin." );
-            else
-                log_msg( LOG_DEBUG, "Read %d bytes from stdin.", l_len );
-
-            // send data to server
-            l_len = write( l_sock_server, l_buf, l_len );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to send data to server." );
-            else
-                log_msg( LOG_DEBUG, "Sent %d bytes to server.", l_len );
-        }
-
-        // data from server?
-        if ( l_read_poll[1].revents & POLLIN )
-        {
-            // read data from server
-            char l_buf[128];
-            int l_len = read( l_sock_server, l_buf, sizeof( l_buf ) );
-            if ( !l_len )
-            {
-                log_msg( LOG_DEBUG, "Server closed socket." );
-                break;
-            }
-            else if ( l_len < 0 )
-            {
-                log_msg( LOG_ERROR, "Unable to read data from server." );
-                break;
-            }
-            else
-                log_msg( LOG_DEBUG, "Read %d bytes from server.", l_len );
-
-            // display on stdout
-            l_len = write( STDOUT_FILENO, l_buf, l_len );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to write to stdout." );
-
-            // request to close?
-            if ( !strncasecmp( l_buf, STR_CLOSE, strlen( STR_CLOSE ) ) )
-            {
-                log_msg( LOG_INFO, "Connection will be closed..." );
-                break;
-            }
         }
     }
 
-    // close socket
-    close( l_sock_server );
+    if (bytes_received < 0)
+    {
+        log_msg(LOG_ERROR, "Error reading image data from server.");
+    }
+    else
+    {
+        log_msg(LOG_INFO, "Image data received successfully.");
+    }
+
+    fclose(img_fp);
+    close(l_sock_server);
+
+    // Fork a child process to display the image
+    pid_t child_pid = fork();
+    if (child_pid < 0)
+    {
+        log_msg(LOG_ERROR, "Failed to fork child process.");
+        exit(1);
+    }
+
+    if (child_pid == 0)
+    {
+        // Child process: execute the display command
+        execlp("magick", "magick", "display", img_filename, (char*)NULL);
+
+        // If execlp returns, an error occurred
+        log_msg(LOG_ERROR, "Failed to execute magick command.");
+        exit(1);
+    }
+    else
+    {
+        // Parent process: wait for the child to finish
+        int status;
+        waitpid(child_pid, &status, 0);
+        if (WIFEXITED(status))
+        {
+            log_msg(LOG_INFO, "Image display completed with exit code %d.", WEXITSTATUS(status));
+        }
+        else
+        {
+            log_msg(LOG_ERROR, "Image display terminated abnormally.");
+        }
+    }
 
     return 0;
 }
