@@ -7,7 +7,7 @@
 // Example of socket server.
 //
 // This program is example of socket server and it allows to connect and serve
-// multiple clients using separate processes.
+// the only one client.
 // The mandatory argument of program is port number for listening.
 //
 //***************************************************************************
@@ -25,10 +25,8 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #include <errno.h>
-#include <signal.h>
-#include <sys/wait.h>
-#include <ctype.h>
 
 #define STR_CLOSE   "close"
 #define STR_QUIT    "quit"
@@ -96,12 +94,6 @@ void help( int t_narg, char **t_args )
 }
 
 //***************************************************************************
-// Signal handler to reap zombie processes
-void sigchld_handler(int signo) {
-    while (waitpid(-1, NULL, WNOHANG) > 0);
-}
-
-//***************************************************************************
 
 int main( int t_narg, char **t_args )
 {
@@ -160,8 +152,8 @@ int main( int t_narg, char **t_args )
         exit( 1 );
     }
 
-    // listening on set port
-    if ( listen( l_sock_listen, 5 ) < 0 ) // Increased backlog for multiple clients
+    // listenig on set port
+    if ( listen( l_sock_listen, 1 ) < 0 )
     {
         log_msg( LOG_ERROR, "Unable to listen on given port!" );
         close( l_sock_listen );
@@ -170,50 +162,41 @@ int main( int t_narg, char **t_args )
 
     log_msg( LOG_INFO, "Enter 'quit' to quit server." );
 
-    // Set up signal handler for SIGCHLD to prevent zombie processes
-    struct sigaction sa;
-    sa.sa_handler = sigchld_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_RESTART;
-    if (sigaction(SIGCHLD, &sa, NULL) == -1) {
-        log_msg( LOG_ERROR, "Failed to set SIGCHLD handler!" );
-        exit(1);
-    }
-
-    // list of fd sources
-    pollfd l_read_poll[2];
-
-    l_read_poll[0].fd = STDIN_FILENO;
-    l_read_poll[0].events = POLLIN;
-    l_read_poll[1].fd = l_sock_listen;
-    l_read_poll[1].events = POLLIN;
-
     // go!
-    while (1)
+    while ( 1 )
     {
-        // select from fds
-        int l_poll = poll( l_read_poll, 2, -1 );
+        int l_sock_client = -1;
 
-        if ( l_poll < 0 )
-        {
-            log_msg( LOG_ERROR, "Function poll failed!" );
-            continue;
-        }
+        // list of fd sources
+        pollfd l_read_poll[ 2 ];
 
-        // data on stdin?
-        if ( l_read_poll[0].revents & POLLIN )
+        l_read_poll[ 0 ].fd = STDIN_FILENO;
+        l_read_poll[ 0 ].events = POLLIN;
+        l_read_poll[ 1 ].fd = l_sock_listen;
+        l_read_poll[ 1 ].events = POLLIN;
+
+        while ( 1 ) // wait for new client
         {
-            char buf[128];
-            int len = read( STDIN_FILENO, buf, sizeof(buf) );
-            if ( len < 0 )
+            // select from fds
+            int l_poll = poll( l_read_poll, 2, -1 );
+
+            if ( l_poll < 0 )
             {
-                log_msg( LOG_ERROR, "Unable to read from stdin!" );
+                log_msg( LOG_ERROR, "Function poll failed!" );
+                exit( 1 );
             }
-            else
-            {
-                buf[len] = '\0'; // Null-terminate the string
-                log_msg( LOG_DEBUG, "Read %d bytes from stdin: %s", len, buf );
 
+            if ( l_read_poll[ 0 ].revents & POLLIN )
+            { // data on stdin
+                char buf[ 128 ];
+                int len = read( STDIN_FILENO, buf, sizeof( buf) );
+                if ( len < 0 )
+                {
+                    log_msg( LOG_DEBUG, "Unable to read from stdin!" );
+                    exit( 1 );
+                }
+
+                log_msg( LOG_DEBUG, "Read %d bytes from stdin" );
                 // request to quit?
                 if ( !strncmp( buf, STR_QUIT, strlen( STR_QUIT ) ) )
                 {
@@ -222,129 +205,111 @@ int main( int t_narg, char **t_args )
                     exit( 0 );
                 }
             }
-        }
 
-        // data on listening socket?
-        if ( l_read_poll[1].revents & POLLIN )
-        { // new client?
-            sockaddr_in l_rsa;
-            socklen_t l_rsa_size = sizeof( l_rsa );
-            // new connection
-            int l_sock_client = accept( l_sock_listen, ( sockaddr * ) &l_rsa, &l_rsa_size );
-            if ( l_sock_client == -1 )
-            {
-                log_msg( LOG_ERROR, "Unable to accept new client." );
-                continue;
+            if ( l_read_poll[ 1 ].revents & POLLIN )
+            { // new client?
+                sockaddr_in l_rsa;
+                int l_rsa_size = sizeof( l_rsa );
+                // new connection
+                l_sock_client = accept( l_sock_listen, ( sockaddr * ) &l_rsa, ( socklen_t * ) &l_rsa_size );
+                if ( l_sock_client == -1 )
+                {
+                    log_msg( LOG_ERROR, "Unable to accept new client." );
+                    close( l_sock_listen );
+                    exit( 1 );
+                }
+                uint l_lsa = sizeof( l_srv_addr );
+                // my IP
+                getsockname( l_sock_client, ( sockaddr * ) &l_srv_addr, &l_lsa );
+                log_msg( LOG_INFO, "My IP: '%s'  port: %d",
+                                 inet_ntoa( l_srv_addr.sin_addr ), ntohs( l_srv_addr.sin_port ) );
+                // client IP
+                getpeername( l_sock_client, ( sockaddr * ) &l_srv_addr, &l_lsa );
+                log_msg( LOG_INFO, "Client IP: '%s'  port: %d",
+                                 inet_ntoa( l_srv_addr.sin_addr ), ntohs( l_srv_addr.sin_port ) );
+
+                break;
             }
 
-            pid_t pid = fork();
-            if ( pid < 0 )
+        } // while wait for client
+
+        // change source from sock_listen to sock_client
+        l_read_poll[ 1 ].fd = l_sock_client;
+
+        while ( 1  )
+        { // communication
+            char l_buf[ 256 ];
+
+            // select from fds
+            int l_poll = poll( l_read_poll, 2, -1 );
+
+            if ( l_poll < 0 )
             {
-                log_msg( LOG_ERROR, "Fork failed!");
-                close( l_sock_client );
-                continue;
+                log_msg( LOG_ERROR, "Function poll failed!" );
+                exit( 1 );
             }
 
-            if ( pid == 0 )
-            { // Child process
-                close( l_sock_listen ); // Close listening socket in child
-
-                // Log client information
-                sockaddr_in l_client_addr;
-                socklen_t l_client_len = sizeof(l_client_addr);
-                getpeername( l_sock_client, ( sockaddr * ) &l_client_addr, &l_client_len );
-                log_msg( LOG_INFO, "Client connected from '%s' port: %d",
-                                 inet_ntoa( l_client_addr.sin_addr ), ntohs( l_client_addr.sin_port ) );
-
-                // Read the season request
-                char season_buf[32];
-                memset(season_buf, 0, sizeof(season_buf));
-                int bytes_read = 0;
-                int total_read = 0;
-                while ((bytes_read = read(l_sock_client, season_buf + total_read, 1)) > 0)
-                {
-                    if (season_buf[total_read] == '\n') {
-                        season_buf[total_read] = '\0'; // Replace '\n' with null terminator
-                        break;
-                    }
-                    total_read += bytes_read;
-                    if (total_read >= sizeof(season_buf) - 1)
-                        break; // Prevent buffer overflow
-                }
-
-                if (bytes_read <= 0)
-                {
-                    log_msg( LOG_ERROR, "Failed to read season from client." );
-                    close( l_sock_client );
-                    exit(1);
-                }
-
-                log_msg( LOG_INFO, "Client requested season: %s", season_buf );
-
-                // Map season to image file
-                char image_path[256];
-                if (strcasecmp(season_buf, "jaro") == 0)
-                    strcpy(image_path, "images/jaro.jpg");
-                else if (strcasecmp(season_buf, "leto") == 0)
-                    strcpy(image_path, "images/leto.jpg");
-                else if (strcasecmp(season_buf, "podzim") == 0)
-                    strcpy(image_path, "images/podzim.jpg");
-                else if (strcasecmp(season_buf, "zima") == 0)
-                    strcpy(image_path, "images/zima.jpg");
+            // data on stdin?
+            if ( l_read_poll[ 0 ].revents & POLLIN )
+            {
+                // read data from stdin
+                int l_len = read( STDIN_FILENO, l_buf, sizeof( l_buf ) );
+                if ( l_len < 0 )
+                    log_msg( LOG_ERROR, "Unable to read data from stdin." );
                 else
+                    log_msg( LOG_DEBUG, "Read %d bytes from stdin.", l_len );
+
+                // send data to client
+                l_len = write( l_sock_client, l_buf, l_len );
+                if ( l_len < 0 )
+                    log_msg( LOG_ERROR, "Unable to send data to client." );
+                else
+                    log_msg( LOG_DEBUG, "Sent %d bytes to client.", l_len );
+            }
+            // data from client?
+            if ( l_read_poll[ 1 ].revents & POLLIN )
+            {
+                // read data from socket
+                int l_len = read( l_sock_client, l_buf, sizeof( l_buf ) );
+                if ( !l_len )
                 {
-                    log_msg( LOG_ERROR, "Unknown season requested: %s", season_buf );
+                    log_msg( LOG_DEBUG, "Client closed socket!" );
                     close( l_sock_client );
-                    exit(1);
+                    break;
                 }
-
-                // Open the image file
-                int image_fd = open(image_path, O_RDONLY);
-                if (image_fd < 0)
+                else if ( l_len < 0 )
                 {
-                    log_msg( LOG_ERROR, "Unable to open image file: %s", image_path );
+                    log_msg( LOG_ERROR, "Unable to read data from client." );
                     close( l_sock_client );
-                    exit(1);
+                    break;
                 }
+                else
+                    log_msg( LOG_DEBUG, "Read %d bytes from client.", l_len );
 
-                // Send the image in chunks with delays to simulate ~15 seconds
-                const int total_delay_ms = 15000; // 15 seconds
-                const int chunk_size = 1024; // 1 KB chunks
-                char send_buf[chunk_size];
-                ssize_t read_bytes;
-                while ( (read_bytes = read(image_fd, send_buf, chunk_size)) > 0 )
+                // write data to client
+                l_len = write( STDOUT_FILENO, l_buf, l_len );
+                if ( l_len < 0 )
+                    log_msg( LOG_ERROR, "Unable to write data to stdout." );
+
+                // close request?
+                if ( !strncasecmp( l_buf, "close", strlen( STR_CLOSE ) ) )
                 {
-                    ssize_t sent_bytes = 0;
-                    while (sent_bytes < read_bytes)
-                    {
-                        ssize_t n = write(l_sock_client, send_buf + sent_bytes, read_bytes - sent_bytes);
-                        if (n < 0)
-                        {
-                            log_msg( LOG_ERROR, "Error sending image data to client." );
-                            close(image_fd);
-                            close(l_sock_client);
-                            exit(1);
-                        }
-                        sent_bytes += n;
-                    }
-                    // Calculate delay based on chunk size and total image size
-                    // For simplicity, sleep a fixed time per chunk
-                    usleep( (total_delay_ms * 1000) / (read_bytes > 0 ? read_bytes : 1) ); // Adjust as needed
+                    log_msg( LOG_INFO, "Client sent 'close' request to close connection." );
+                    close( l_sock_client );
+                    log_msg( LOG_INFO, "Connection closed. Waiting for new client." );
+                    break;
                 }
-
-                close(image_fd);
-                log_msg( LOG_INFO, "Image sent to client. Closing connection." );
+            }
+            // request for quit
+            if ( !strncasecmp( l_buf, "quit", strlen( STR_QUIT ) ) )
+            {
+                close( l_sock_listen );
                 close( l_sock_client );
-                exit(0);
+                log_msg( LOG_INFO, "Request to 'quit' entered" );
+                exit( 0 );
             }
-            else
-            { // Parent process
-                close( l_sock_client ); // Close client socket in parent
-                // Continue to accept new clients
-            }
-        } // while (1)
-
-    } // main
+        } // while communication
+    } // while ( 1 )
 
     return 0;
 }
