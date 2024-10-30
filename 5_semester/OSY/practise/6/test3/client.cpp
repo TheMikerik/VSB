@@ -7,8 +7,8 @@
 // Example of socket server/client.
 //
 // This program is example of socket client.
-// The mandatory arguments of program is IP adress or name of server and
-// a port number.
+// The mandatory arguments of program are IP address or name of server, 
+// a port number, and a season request.
 //
 //***************************************************************************
 
@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <netdb.h>
+#include <sys/wait.h>
 
 #define STR_CLOSE               "close"
 
@@ -80,7 +81,7 @@ void help( int t_narg, char **t_args )
             "\n"
             "  Socket client example.\n"
             "\n"
-            "  Use: %s [-h -d] ip_or_name port_number\n"
+            "  Use: %s [-h -d] ip_or_name port_number season\n"
             "\n"
             "    -d  debug mode \n"
             "    -h  this help\n"
@@ -98,10 +99,11 @@ void help( int t_narg, char **t_args )
 int main( int t_narg, char **t_args )
 {
 
-    if ( t_narg <= 2 ) help( t_narg, t_args );
+    if ( t_narg <= 3 ) help( t_narg, t_args );
 
     int l_port = 0;
     char *l_host = nullptr;
+    char *l_season = nullptr;
 
     // parsing arguments
     for ( int i = 1; i < t_narg; i++ )
@@ -118,12 +120,14 @@ int main( int t_narg, char **t_args )
                 l_host = t_args[ i ];
             else if ( !l_port )
                 l_port = atoi( t_args[ i ] );
+            else if ( !l_season )
+                l_season = t_args[ i ];
         }
     }
 
-    if ( !l_host || !l_port )
+    if ( !l_host || !l_port || !l_season )
     {
-        log_msg( LOG_INFO, "Host or port is missing!" );
+        log_msg( LOG_INFO, "Host, port, or season is missing!" );
         help( t_narg, t_args );
         exit( 1 );
     }
@@ -171,76 +175,89 @@ int main( int t_narg, char **t_args )
     log_msg( LOG_INFO, "Server IP: '%s'  port: %d",
              inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
 
-    log_msg( LOG_INFO, "Enter 'close' to close application." );
+    // Send the season request to the server
+    size_t season_len = strlen(l_season);
+    char season_msg[season_len + 2]; // +1 for '\n' and +1 for '\0'
+    snprintf(season_msg, sizeof(season_msg), "%s\n", l_season);
 
-    // list of fd sources
-    pollfd l_read_poll[ 2 ];
-
-    l_read_poll[ 0 ].fd = STDIN_FILENO;
-    l_read_poll[ 0 ].events = POLLIN;
-    l_read_poll[ 1 ].fd = l_sock_server;
-    l_read_poll[ 1 ].events = POLLIN;
-
-    // go!
-    while ( 1 )
+    ssize_t sent = write(l_sock_server, season_msg, strlen(season_msg));
+    if (sent < 0)
     {
-        char l_buf[ 128 ];
+        log_msg( LOG_ERROR, "Unable to send season to server." );
+        close(l_sock_server);
+        exit(1);
+    }
+    else
+    {
+        log_msg( LOG_DEBUG, "Sent season '%s' to server.", l_season );
+    }
 
-        // select from fds
-        if ( poll( l_read_poll, 2, -1 ) < 0 ) break;
+    // Prepare to receive image data
+    pid_t pid = getpid();
+    char filename[64];
+    snprintf(filename, sizeof(filename), "%d.img", pid);
+    int img_fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+    if (img_fd < 0)
+    {
+        log_msg( LOG_ERROR, "Unable to open file '%s' for writing.", filename );
+        close(l_sock_server);
+        exit(1);
+    }
 
-        // data on stdin?
-        if ( l_read_poll[ 0 ].revents & POLLIN )
+    // Receive data from server and write to file
+    char recv_buf[1024];
+    ssize_t recv_len;
+    while ( (recv_len = read(l_sock_server, recv_buf, sizeof(recv_buf))) > 0 )
+    {
+        ssize_t written = 0;
+        while (written < recv_len)
         {
-            //  read from stdin
-            int l_len = read( STDIN_FILENO, l_buf, sizeof( l_buf ) );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to read from stdin." );
-            else
-                log_msg( LOG_DEBUG, "Read %d bytes from stdin.", l_len );
-
-            // send data to server
-            l_len = write( l_sock_server, l_buf, l_len );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to send data to server." );
-            else
-                log_msg( LOG_DEBUG, "Sent %d bytes to server.", l_len );
-        }
-
-        // data from server?
-        if ( l_read_poll[ 1 ].revents & POLLIN )
-        {
-            // read data from server
-            int l_len = read( l_sock_server, l_buf, sizeof( l_buf ) );
-            if ( !l_len )
+            ssize_t w = write(img_fd, recv_buf + written, recv_len - written);
+            if (w < 0)
             {
-                log_msg( LOG_DEBUG, "Server closed socket." );
-                break;
+                log_msg( LOG_ERROR, "Unable to write to file '%s'.", filename );
+                close(img_fd);
+                close(l_sock_server);
+                exit(1);
             }
-            else if ( l_len < 0 )
-            {
-                log_msg( LOG_ERROR, "Unable to read data from server." );
-                break;
-            }
-            else
-                log_msg( LOG_DEBUG, "Read %d bytes from server.", l_len );
-
-            // display on stdout
-            l_len = write( STDOUT_FILENO, l_buf, l_len );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to write to stdout." );
-
-            // request to close?
-            if ( !strncasecmp( l_buf, STR_CLOSE, strlen( STR_CLOSE ) ) )
-            {
-                log_msg( LOG_INFO, "Connection will be closed..." );
-                break;
-            }
+            written += w;
         }
     }
 
-    // close socket
-    close( l_sock_server );
+    if (recv_len < 0)
+    {
+        log_msg( LOG_ERROR, "Error reading data from server." );
+        close(img_fd);
+        close(l_sock_server);
+        exit(1);
+    }
+
+    log_msg( LOG_INFO, "Image received and saved to '%s'.", filename );
+
+    close(img_fd);
+    close(l_sock_server);
+
+    // Fork to display the image
+    pid_t child_pid = fork();
+    if (child_pid < 0)
+    {
+        log_msg( LOG_ERROR, "Fork failed for display process." );
+        exit(1);
+    }
+
+    if (child_pid == 0)
+    { // Child process
+        execlp("display", "display", filename, (char *)NULL);
+        // If execlp fails
+        log_msg( LOG_ERROR, "Failed to execute 'display' command." );
+        exit(1);
+    }
+    else
+    { // Parent process
+        // Wait for the child to finish
+        waitpid(child_pid, NULL, 0);
+        log_msg( LOG_INFO, "'display' command completed." );
+    }
 
     return 0;
-  }
+}

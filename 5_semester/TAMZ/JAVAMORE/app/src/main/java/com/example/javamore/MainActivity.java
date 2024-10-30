@@ -1,9 +1,16 @@
+// MainActivity.java
 package com.example.javamore;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-import android.graphics.Color;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView interestAmountTextView;
     private TextView depositLabel;
     private TextView interestLabel;
+    private TextView regularDepositLabel;
     private TextView periodLabel;
     private SeekBar depositSeekBar;
     private SeekBar interestSeekBar;
+    private SeekBar regularDepositSeekBar;
     private SeekBar periodSeekBar;
     private BarChart barChart;
 
@@ -35,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Views
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         totalAmountTextView = findViewById(R.id.total_amount);
         interestAmountTextView = findViewById(R.id.interest_amount);
         depositLabel = findViewById(R.id.deposit_label);
@@ -45,19 +56,36 @@ public class MainActivity extends AppCompatActivity {
         interestSeekBar = findViewById(R.id.interest_slider);
         periodSeekBar = findViewById(R.id.period_slider);
         barChart = findViewById(R.id.barChart);
+        regularDepositLabel = findViewById(R.id.regular_deposit_label);
+        regularDepositSeekBar = findViewById(R.id.regular_deposit_slider);
 
-        // Set SeekBar Change Listeners
         depositSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         interestSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         periodSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        regularDepositSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
-        // Initial Values and Chart Setup
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        int lastDeposit = prefs.getInt("last_deposit", 50000);
+        int lastInterest = prefs.getInt("last_interest", 5);
+        int lastPeriod = prefs.getInt("last_period", 5);
+        int regularDeposit = prefs.getInt("regular_deposit", 0);
+
+        depositSeekBar.setProgress(lastDeposit);
+        interestSeekBar.setProgress(lastInterest);
+        periodSeekBar.setProgress(lastPeriod);
+        regularDepositSeekBar.setProgress(regularDeposit);
+
+        depositLabel.setText("Deposit: " + lastDeposit);
+        interestLabel.setText("Interest: " + lastInterest + "%");
+        periodLabel.setText("Period: " + lastPeriod + " yrs");
+        regularDepositLabel.setText("Regular Deposit: " + regularDeposit);
+
         updateValues();
         setupBarChart();
         updateChartData();
     }
 
-    // SeekBar change listener
     private final SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -66,39 +94,65 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            // No action needed
-        }
+        public void onStartTrackingTouch(SeekBar seekBar) { }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // No action needed
-        }
+        public void onStopTrackingTouch(SeekBar seekBar) { }
     };
 
-    // Method to update values on the screen
     private void updateValues() {
         int deposit = depositSeekBar.getProgress();
         int interestRate = interestSeekBar.getProgress();
         int period = periodSeekBar.getProgress();
+        int regularDeposit = regularDepositSeekBar.getProgress();
 
-        // Ensure minimum values
         deposit = Math.max(deposit, 1000);
         interestRate = Math.max(interestRate, 1);
         period = Math.max(period, 1);
 
-        depositLabel.setText("Vklad: " + deposit);
-        interestLabel.setText("Úrok: " + interestRate + "%");
-        periodLabel.setText("Období: " + period + " let");
+        depositLabel.setText("Deposit: " + deposit);
+        interestLabel.setText("Interest: " + interestRate + "%");
+        periodLabel.setText("Period: " + period + " yrs");
+        regularDepositLabel.setText("Regular Deposit: " + regularDeposit);
 
-        int totalInterest = calculateCompoundInterest(deposit, (double) interestRate, period);
-        int totalAmount = deposit + totalInterest;
+        int totalInvested = deposit + (regularDeposit * period);
+        double totalInterest = calculateCompoundInterestWithRegularDeposit(deposit, interestRate, period, regularDeposit);
+        double totalAmount = totalInvested + totalInterest;
 
-        totalAmountTextView.setText("Napořená suma: " + totalAmount);
-        interestAmountTextView.setText("Z toho úroky: " + totalInterest);
+        totalAmountTextView.setText("Total Amount: " + (int) totalAmount);
+        interestAmountTextView.setText("Total Interest: " + (int) totalInterest);
+
+        saveToHistory(deposit, interestRate, period, (int) totalAmount, (int) totalInterest);
+        saveCurrentSettings(deposit, interestRate, period);
+        saveRegularDeposit(regularDeposit);
     }
 
-    // Setting up the BarChart
+    private void saveRegularDeposit(int regularDeposit) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit()
+                .putInt("regular_deposit", regularDeposit)
+                .apply();
+    }
+
+    private void saveCurrentSettings(int deposit, int interestRate, int period) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit()
+                .putInt("last_deposit", deposit)
+                .putInt("last_interest", interestRate)
+                .putInt("last_period", period)
+                .apply();
+    }
+
+    private void saveToHistory(int deposit, int interestRate, int period, int totalAmount, int totalInterest) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String history = prefs.getString("history", "");
+
+        String newEntry = deposit + "," + interestRate + "," + period + "," + totalAmount + "," + totalInterest + ";";
+        history += newEntry;
+
+        prefs.edit().putString("history", history).apply();
+    }
+
     private void setupBarChart() {
         barChart.setDrawBarShadow(false);
         barChart.setDrawValueAboveBar(true);
@@ -106,13 +160,11 @@ public class MainActivity extends AppCompatActivity {
         barChart.setPinchZoom(false);
         barChart.setDrawGridBackground(false);
 
-        // Description
         Description description = new Description();
-        description.setText("Invested vs. Interest");
+        description.setText("");
         description.setTextSize(14f);
         barChart.setDescription(description);
 
-        // Legend
         Legend legend = barChart.getLegend();
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
@@ -123,51 +175,47 @@ public class MainActivity extends AppCompatActivity {
         legend.setForm(Legend.LegendForm.CIRCLE);
     }
 
-    // Method to update chart data
     private void updateChartData() {
         int deposit = depositSeekBar.getProgress();
         int interestRate = interestSeekBar.getProgress();
         int period = periodSeekBar.getProgress();
+        int regularDeposit = regularDepositSeekBar.getProgress();
 
-        // Ensure minimum values
         deposit = Math.max(deposit, 1000);
         interestRate = Math.max(interestRate, 1);
         period = Math.max(period, 1);
 
-        // Calculate total interest
-        int totalInterest = calculateCompoundInterest(deposit, (double) interestRate, period);
+        int totalInvested = deposit + (regularDeposit * period);
 
-        // Prepare Bar Entries
+        double totalInterestDouble = calculateCompoundInterestWithRegularDeposit(deposit, interestRate, period, regularDeposit);
+        int totalInterest = (int) totalInterestDouble;
+
         List<BarEntry> investedEntries = new ArrayList<>();
         List<BarEntry> interestEntries = new ArrayList<>();
 
-        // Assign positions on X-axis
-        investedEntries.add(new BarEntry(1f, deposit));
+        investedEntries.add(new BarEntry(1f, totalInvested));
         interestEntries.add(new BarEntry(2f, totalInterest));
 
-        // Create BarDataSet
         BarDataSet investedDataSet = new BarDataSet(investedEntries, "Invested Amount");
-        investedDataSet.setColor(Color.BLUE);
-        investedDataSet.setValueTextColor(Color.BLACK);
+        investedDataSet.setColor(android.graphics.Color.argb(255, 172, 157, 209));
+        investedDataSet.setValueTextColor(android.graphics.Color.BLACK);
         investedDataSet.setValueTextSize(16f);
 
         BarDataSet interestDataSet = new BarDataSet(interestEntries, "Interest");
-        interestDataSet.setColor(Color.GREEN);
-        interestDataSet.setValueTextColor(Color.BLACK);
+        interestDataSet.setColor(android.graphics.Color.argb(255, 107, 79, 169));
+        interestDataSet.setValueTextColor(android.graphics.Color.BLACK);
         interestDataSet.setValueTextSize(16f);
 
-        // Add both datasets to BarData
         BarData barData = new BarData(investedDataSet, interestDataSet);
-        barData.setBarWidth(0.3f); // set custom bar width
+        barData.setBarWidth(0.3f);
 
         barChart.setData(barData);
 
-        // Configure XAxis
         List<String> labels = new ArrayList<>();
-        labels.add(""); // Placeholder for index 0
+        labels.add("");
         labels.add("Invested");
         labels.add("Interest");
-        labels.add(""); // Placeholder for index 3
+        labels.add("");
 
         barChart.getXAxis().setGranularity(1f);
         barChart.getXAxis().setCenterAxisLabels(true);
@@ -178,19 +226,61 @@ public class MainActivity extends AppCompatActivity {
         barChart.getXAxis().setAxisMaximum(3f);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
 
-        // Remove right YAxis
         barChart.getAxisRight().setEnabled(false);
 
-        // Animate the chart
         barChart.animateY(1000);
-
-        // Refresh the chart
         barChart.invalidate();
     }
 
-    // Compound interest formula calculation
     private int calculateCompoundInterest(int principal, double rate, int time) {
         double compoundInterest = principal * Math.pow((1 + rate / 100), time) - principal;
         return (int) compoundInterest;
+    }
+
+    private double calculateCompoundInterestWithRegularDeposit(int principal, double rate, int time, int regularDeposit) {
+        double amount = principal;
+        for (int i = 0; i < time; i++) {
+            amount = amount * (1 + rate / 100) + regularDeposit * (1 + rate / 100);
+        }
+        return amount - principal - (regularDeposit * time);
+    }
+
+    private void openChartTypeSelector() {
+        Intent intent = new Intent(this, ChartTypeActivity.class);
+        startActivity(intent); // Or use ActivityResultLauncher if needed
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void openHistory() {
+        Intent intent = new Intent(this, HistoryActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            // Uncomment and implement menu actions as needed
+            // case R.id.menu_chart_type:
+            //     openChartTypeSelector();
+            //     return true;
+            // case R.id.menu_settings:
+            //     openSettings();
+            //     return true;
+            // case R.id.menu_history:
+            //     openHistory();
+            //     return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

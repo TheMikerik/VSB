@@ -66,3 +66,32 @@
 ### First Request
 - We are sending this after the payment has not been made on time
 - Never assume that customer has no intention of paying
+
+## Lecture 6
+### Memorandum
+- Internal communication document
+- Used for:
+  - Informing staff
+  - Announcing policies
+  - Organizational updates
+- Structure:
+  - Header (To, From, Date, Subject)
+  - Introduction
+  - Body (detailed information)
+  - Conclusion (actions, deadlines, or next steps)
+- Tone:
+  - Formal but concise
+- Key points:
+  - Clear and focused
+  - One main topic per memo
+  - Can include bullet points for clarity
+
+### Agenda
+- Usualy distributed before meeting
+- Terms:
+  - call a meeting - svolat schuzi
+  - chair a meeting - vest schuzi
+  - chairperson - predsedajici
+  - minutes - zapisky ze schuze
+  - take minutes - delat zapisky
+  - 
