@@ -69,68 +69,68 @@
                 android:id="@+id/deposit_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Deposit: 50000"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/deposit_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:max="100000"
-                android:progress="50000"
-                android:layout_marginBottom="16dp" />
+                android:progress="50000" />
 
             <!-- Interest SeekBar -->
             <TextView
                 android:id="@+id/interest_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Interest: 5"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/interest_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:max="15"
-                android:progress="5"
-                android:layout_marginBottom="16dp" />
+                android:progress="5" />
 
             <!-- Period SeekBar -->
             <TextView
                 android:id="@+id/period_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Investment Length: 5"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/period_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:max="30"
-                android:progress="5"
-                android:layout_marginBottom="16dp" />
+                android:progress="5" />
 
             <!-- Regular Deposit SeekBar -->
             <TextView
                 android:id="@+id/regular_deposit_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Regular Deposit: 0"
-                android:textSize="16sp"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/regular_deposit_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:max="10000"
-                android:progress="0"
-                android:layout_marginBottom="16dp" />
+                android:progress="0" />
 
             <Button
                 android:id="@+id/show_barcode"

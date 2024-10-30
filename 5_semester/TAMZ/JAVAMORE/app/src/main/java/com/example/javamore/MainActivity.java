@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         depositLabel.setText("Deposit: " + lastDeposit);
         interestLabel.setText("Interest: " + lastInterest + "%");
         periodLabel.setText("Period: " + lastPeriod + " yrs");
-        regularDepositLabel.setText("Regular Deposit: " + regularDeposit);
+        regularDepositLabel.setText("Regular Yearly Deposit: " + regularDeposit);
 
         updateValues();
         setupBarChart();
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         depositLabel.setText("Deposit: " + deposit);
         interestLabel.setText("Interest: " + interestRate + "%");
         periodLabel.setText("Period: " + period + " yrs");
-        regularDepositLabel.setText("Regular Deposit: " + regularDeposit);
+        regularDepositLabel.setText("Regular Yearly Deposit: " + regularDeposit);
 
         int totalInvested = deposit + (regularDeposit * period);
         double totalInterest = calculateCompoundInterestWithRegularDeposit(deposit, interestRate, period, regularDeposit);
