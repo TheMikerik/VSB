@@ -1,0 +1,147 @@
+// Controller.cpp
+#include "Controller.h"
+#include <iostream>
+#include <cstdlib>
+#include <chrono>
+#include <thread>
+#include "Transformation.h"
+
+// Static instance pointer for callbacks
+static Controller* controllerInstance = nullptr;
+
+// Callback implementations
+void Controller::errorCallback(int error, const char* description) {
+    std::cerr << "GLFW Error (" << error << "): " << description << std::endl;
+}
+
+void Controller::framebufferSizeCallback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
+void Controller::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+    if (controllerInstance) {
+        if (controllerInstance->firstMouse) {
+            controllerInstance->lastX = static_cast<float>(xpos);
+            controllerInstance->lastY = static_cast<float>(ypos);
+            controllerInstance->firstMouse = false;
+        }
+
+        float xoffset = static_cast<float>(xpos) - controllerInstance->lastX;
+        float yoffset = controllerInstance->lastY - static_cast<float>(ypos); // reversed since y-coordinates go from bottom to top
+
+        controllerInstance->lastX = static_cast<float>(xpos);
+        controllerInstance->lastY = static_cast<float>(ypos);
+
+        controllerInstance->camera.ProcessMouseMovement(xoffset, yoffset);
+    }
+}
+
+void Controller::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    if (controllerInstance) {
+        controllerInstance->camera.ProcessMouseScroll(static_cast<float>(yoffset));
+    }
+}
+
+Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr<Scene>>& scns)
+    : window(win), camera(cam), scenes(scns),
+      selectedDrawableIndex(0), rotationEnabled(false),
+      lastX(400.0f), lastY(300.0f), firstMouse(true),
+      deltaTime(0.0f), lastFrame(0.0f)
+{
+    // Set the static instance pointer for callbacks
+    controllerInstance = this;
+
+    // Set GLFW callbacks to the Controller's callbacks
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    glfwSetScrollCallback(window, scrollCallback);
+}
+
+void Controller::handleInput(float deltaTimeInput) {
+    deltaTime = deltaTimeInput;
+    processKeyboardInput(deltaTime);
+    processTransformationInput();
+}
+
+void Controller::processKeyboardInput(float deltaTime) {
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, true);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.ProcessKeyboard(FORWARD, deltaTime * 2);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.ProcessKeyboard(BACKWARD, deltaTime * 2);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.ProcessKeyboard(LEFT, deltaTime * 2);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.ProcessKeyboard(RIGHT, deltaTime * 2);
+
+    // Scene switching
+    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        // Implement scene switching logic or notify Application
+    }
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        // Implement scene switching logic or notify Application
+    }
+}
+
+void Controller::processTransformationInput() {
+    if (scenes.empty()) return;
+
+    auto& currentScene = scenes.empty() ? nullptr : scenes[0]; // Adjust based on your scene management
+    if (!currentScene) return;
+
+    auto& drawables = currentScene->getDrawables();
+    if (drawables.empty()) return;
+
+    if (selectedDrawableIndex >= drawables.size())
+        selectedDrawableIndex = 0;
+
+    auto selectedDrawable = drawables[selectedDrawableIndex];
+
+    float translationStep = 0.05f;
+    float rotationStep = 5.0f;
+    float scaleStep = 0.05f;
+
+    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(translationStep, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated +X" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +X" << std::endl;
+        }
+    }
+    // Repeat for other keys (G, N, H, M, J, UP, DOWN, R, ENTER)
+    // To keep the example concise, implement similar logic for other keys as needed
+
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+        rotationEnabled = !rotationEnabled;
+        std::cout << "Rotation: " << rotationEnabled << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+        selectedDrawableIndex = (selectedDrawableIndex + 1) % drawables.size();
+        std::cout << "Switched to Drawable Index: " << selectedDrawableIndex << std::endl;
+    }
+}
+
+void Controller::setSelectedDrawable(size_t index) {
+    if (index < scenes.size()) {
+        selectedDrawableIndex = index;
+    }
+}
+
+void Controller::setRotationEnabled(bool enabled) {
+    rotationEnabled = enabled;
+}
+
+bool Controller::isRotationEnabled() const {
+    return rotationEnabled;
+}

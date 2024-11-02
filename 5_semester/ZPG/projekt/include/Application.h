@@ -6,6 +6,10 @@
 #include "Scene.h"
 #include "Camera.h"
 
+#include "Scenes/Scene1.h"
+#include "Scenes/Scene2.h"
+
+
 class Application {
 public:
     Application();

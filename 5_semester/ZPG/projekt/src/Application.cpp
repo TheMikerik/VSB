@@ -6,11 +6,13 @@
 #include "Transformation.h"
 #include "ICameraObserver.h"
 
+#include "Scenes/Scene2.h"
+#include "Scenes/Scene1.h"
+
 #include "../models/bushes.h"
 #include "../models/tree.h"
 #include "../models/triangle.h"
 #include "../models/platform.h"
-#include "../models/sphere.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -18,8 +20,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <chrono>
 #include <thread>
-
-
 
 Application* Application::instance = nullptr;
 
@@ -134,116 +134,11 @@ void Application::initialization()
 
 void Application::createScenes()
 {
-    std::srand(static_cast<unsigned int>(std::time(0)));
+    auto scene1 = std::make_shared<Scene1>(camera);
+    auto scene2 = std::make_shared<Scene2>(camera);
 
-    auto scene1 = std::make_shared<Scene>();
-    auto scene2 = std::make_shared<Scene>();
-    auto scene3 = std::make_shared<Scene>();
-
-    auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
-    auto shader_purple = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
-    auto shader_green = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_green.glsl");
-    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert_vertex.glsl", "./shaders/lambert_fragment.glsl");
-
-
-    // std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader_uni, shader_red, shader_purple, shader_green};
-    std::vector<std::shared_ptr<ShaderProgram>> shaders = {shader_lambert};
-
-    for(auto& shader : shaders)
-    {
-        camera.registerObserver(shader.get());
-    }
-
-    camera.notifyObservers();
-
-    std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
-    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
-    std::vector<float> triangleVertices(std::begin(triangle), std::end(triangle));
-    std::vector<float> platformVertices(std::begin(platform), std::end(platform));
-    std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
-
-    auto bushesModel = std::make_shared<Model>(bushesVertices);
-    auto treeModel = std::make_shared<Model>(treeVertices);
-    auto triangleModel = std::make_shared<Model>(triangleVertices);
-    auto platformModel = std::make_shared<Model>(platformVertices);
-    auto sphereModel = std::make_shared<Model>(sphereVertices);
-
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_uni);
-    scene1->addDrawable(platformDrawable);
-
-    for (int i = 0; i < 300; ++i)
-    {
-        auto randomShader = shaders[i % 4];
-        auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, randomShader);
-
-        Transformation bushesTrans;
-        bushesTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        bushesTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        bushesTrans.scale(glm::vec3(getRandom(1.0f, 3.0f)));
-        bushesDrawable->setTransformation(bushesTrans);
-
-        scene1->addDrawable(bushesDrawable);
-        
-    }
-
-    for (int i = 0; i < 100; ++i)
-    {
-        auto randomShader = shaders[i % 4];
-        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
-
-        Transformation treeTrans;
-        treeTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-        treeDrawable->setTransformation(treeTrans);
-
-        scene1->addDrawable(treeDrawable);
-    }
-
-
-
-    auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader_red);
-    auto tree2 = std::make_shared<DrawableObject>(treeModel, shader_red);
-
-    Transformation tree2Trans;
-    tree2Trans.translate(glm::vec3(0.0f, -0.9f, 1.0f));
-    tree2Trans.scale(glm::vec3(0.2f));
-    tree2->setTransformation(tree2Trans);
-
-    scene2->addDrawable(triangleDrawable);
-    scene2->addDrawable(tree2);
-
-
-    std::vector<glm::vec3> positions = {
-        glm::vec3(2.0f, 0.0f, 2.0f),
-        glm::vec3(-2.0f, 0.0f, 2.0f),
-        glm::vec3(2.0f, 0.0f, -2.0f),
-        glm::vec3(-2.0f, 0.0f, -2.0f)
-    };
-
-    for (auto position : positions){
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_uni);
-
-        Transformation sphereTrans;
-        sphereTrans.translate(position);
-        sphereDrawable->setTransformation(sphereTrans);
-        scene3->addDrawable(sphereDrawable);
-    }
-
-
-
-    scenes.push_back(scene1);
-    scenes.push_back(scene2);
-    scenes.push_back(scene3);
+    scenes.emplace_back(scene1);
+    scenes.emplace_back(scene2);
 }
 
 void Application::run()
@@ -427,9 +322,6 @@ void Application::handleInput()
     if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
         switchScene(1);
     }
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-        switchScene(2);
-    }
 }
 
 void Application::switchScene(int index)
@@ -437,7 +329,7 @@ void Application::switchScene(int index)
     if (index >=0 && index < scenes.size()) {
         currentSceneIndex = index;
         selectedDrawableIndex = 0;
-        std::cout << "Switched to Scene Index: " << currentSceneIndex + 1 << std::endl;
+        std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
     }

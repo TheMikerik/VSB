@@ -1,3 +1,4 @@
+// Scene.h
 #pragma once
 
 #include "DrawableObject.h"
@@ -7,12 +8,12 @@
 class Scene {
 public:
     Scene();
-    ~Scene();
+    virtual ~Scene();
 
-    void addDrawable(std::shared_ptr<DrawableObject> drawable);
-    const std::vector<std::shared_ptr<DrawableObject>>& getDrawables();
-    void render() const;
+    virtual void addDrawable(std::shared_ptr<DrawableObject> drawable);
+    virtual const std::vector<std::shared_ptr<DrawableObject>>& getDrawables() const;
+    virtual void render() const;
 
-private:
+protected:
     std::vector<std::shared_ptr<DrawableObject>> drawables;
 };
