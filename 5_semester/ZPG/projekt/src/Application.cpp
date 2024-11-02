@@ -115,19 +115,8 @@ void Application::run()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        controller->handleInput(deltaTime);
+        controller->handleInput(deltaTime, currentSceneIndex);
     }
 
     glDisable(GL_DEPTH_TEST);
 }
-
-// void Application::switchScene(int index)
-// {
-//     if (index >=0 && index < scenes.size()) {
-//         currentSceneIndex = index;
-//         selectedDrawableIndex = 0;
-//         std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
-//     } else {
-//         std::cerr << "Invalid scene index: " << index << std::endl;
-//     }
-// }

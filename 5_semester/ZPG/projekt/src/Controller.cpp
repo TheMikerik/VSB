@@ -57,10 +57,22 @@ Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr
     glfwSetScrollCallback(window, scrollCallback);
 }
 
-void Controller::handleInput(float deltaTimeInput) {
-    deltaTime = deltaTimeInput;
+void Controller::handleInput(float deltaTimeInput, int& currentSceneIndex) {
+    currentSceneIndex = this->currentSceneIndex;
+    deltaTime = deltaTimeInput - lastFrame;
+    lastFrame = deltaTimeInput;
     processKeyboardInput(deltaTime);
     processTransformationInput();
+}
+
+void Controller::switchScene(int index){
+  if (index >=0 && index < this->scenes.size()) {
+      currentSceneIndex = index;
+      selectedDrawableIndex = 0;
+      std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
+  } else {
+      std::cerr << "Invalid scene index: " << index << std::endl;
+  }
 }
 
 void Controller::processKeyboardInput(float deltaTime) {
@@ -69,27 +81,27 @@ void Controller::processKeyboardInput(float deltaTime) {
     }
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime * 2);
+        camera.ProcessKeyboard(FORWARD, deltaTime * 3);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime * 2);
+        camera.ProcessKeyboard(BACKWARD, deltaTime * 3);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime * 2);
+        camera.ProcessKeyboard(LEFT, deltaTime * 3);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime * 2);
+        camera.ProcessKeyboard(RIGHT, deltaTime * 3);
 
     // Scene switching
     if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-        // Implement scene switching logic or notify Application
+        switchScene(0);
     }
     if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-        // Implement scene switching logic or notify Application
+        switchScene(1);
     }
 }
 
 void Controller::processTransformationInput() {
     if (scenes.empty()) return;
 
-    auto& currentScene = scenes.empty() ? nullptr : scenes[0]; // Adjust based on your scene management
+    auto& currentScene = scenes[currentSceneIndex]; // Adjust based on your scene management
     if (!currentScene) return;
 
     auto& drawables = currentScene->getDrawables();
