@@ -1,10 +1,10 @@
 // Controller.h
 #pragma once
 
-#include <GLFW/glfw3.h>
 #include <memory>
 #include "Camera.h"
 #include "Scene.h"
+#include <GLFW/glfw3.h>
 
 class Controller {
 public:
@@ -26,6 +26,7 @@ private:
     GLFWwindow* window;
     Camera& camera;
     std::vector<std::shared_ptr<Scene>>& scenes;
+    auto& drawables;
 
     size_t selectedDrawableIndex;
     bool rotationEnabled;

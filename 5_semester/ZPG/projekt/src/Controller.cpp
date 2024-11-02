@@ -117,14 +117,93 @@ void Controller::processTransformationInput() {
             std::cout << "Rotated +X" << std::endl;
         }
     }
-    // Repeat for other keys (G, N, H, M, J, UP, DOWN, R, ENTER)
-    // To keep the example concise, implement similar logic for other keys as needed
+    if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(-translationStep, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated -X" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(-rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated -X" << std::endl;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, translationStep, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated +Y" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +Y" << std::endl;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, -translationStep, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated -Y" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(-rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +Y" << std::endl;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, 0.0f, translationStep));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated +Z" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated +Z" << std::endl;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+        if (!rotationEnabled){
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.translate(glm::vec3(0.0f, 0.0f, -translationStep));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Translated -Z" << std::endl;
+        } else {
+            Transformation trans = selectedDrawable->getTransformation();
+            trans.rotate(-rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
+            selectedDrawable->setTransformation(trans);
+            std::cout << "Rotated -Z" << std::endl;
+        }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.scale(glm::vec3(1.0f + scaleStep));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Scaled Up" << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        Transformation trans = selectedDrawable->getTransformation();
+        trans.scale(glm::vec3(1.0f - scaleStep));
+        selectedDrawable->setTransformation(trans);
+        std::cout << "Scaled Down" << std::endl;
+    }
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
         rotationEnabled = !rotationEnabled;
         std::cout << "Rotation: " << rotationEnabled << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
+    
 
     if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
         selectedDrawableIndex = (selectedDrawableIndex + 1) % drawables.size();

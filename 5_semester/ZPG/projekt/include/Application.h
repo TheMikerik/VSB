@@ -5,9 +5,10 @@
 #include <memory>
 #include "Scene.h"
 #include "Camera.h"
+#include "Controller.h"
 
-#include "Scenes/Scene1.h"
 #include "Scenes/Scene2.h"
+#include "Scenes/Scene1.h"
 
 
 class Application {
@@ -25,25 +26,6 @@ private:
     int currentSceneIndex;
 
     Camera camera;
-    float lastX;
-    float lastY;
-    bool firstMouse;
 
-    float deltaTime;
-    float lastFrame;
-
-    size_t selectedDrawableIndex;
-    bool rotationEnabled;
-
-    void handleInput();
-    void switchScene(int index);
-    float getRandom(float min, float max);
-
-    static void errorCallback(int error, const char* description);
-    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
-    static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-    static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-
-    // Pro pristup k instanci ze static callbacku
-    static Application* instance;
+    std::unique_ptr<Controller> controller;
 };
