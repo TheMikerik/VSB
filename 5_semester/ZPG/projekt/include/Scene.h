@@ -1,6 +1,7 @@
 // Scene.h
 #pragma once
 
+#include <glm/glm.hpp>
 #include "DrawableObject.h"
 #include <vector>
 #include <memory>
@@ -10,10 +11,13 @@ public:
     Scene();
     virtual ~Scene();
 
+    virtual void render() const;
     virtual void addDrawable(std::shared_ptr<DrawableObject> drawable);
     virtual const std::vector<std::shared_ptr<DrawableObject>>& getDrawables() const;
-    virtual void render() const;
+    void setBackgroundColor(const glm::vec4& color);
+    const glm::vec4& getBackgroundColor() const;
 
 protected:
     std::vector<std::shared_ptr<DrawableObject>> drawables;
+    glm::vec4 backgroundColor;
 };

@@ -17,6 +17,7 @@
 
 Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
     std::srand(static_cast<unsigned int>(std::time(0)));
+    setBackgroundColor(glm::vec4(0.59f, 0.76f, 0.92f, 1.0f));
 
     // Initialize shaders
     auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");

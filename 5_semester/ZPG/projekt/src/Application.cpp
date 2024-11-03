@@ -22,7 +22,7 @@
 Application::Application()
     : window(nullptr), currentSceneIndex(0),
       camera(glm::vec3(0.0f, 10.0f, 20.0f)),
-      pointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.3f))
+      pointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f))
 {
 
 }
@@ -100,13 +100,16 @@ void Application::createScenes()
 void Application::run()
 {
     glEnable(GL_DEPTH_TEST);
-
-    glClearColor(0.59f, 0.76f, 0.92f, 1.0f);
     createScenes();
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         float deltaTime = currentFrame;
+
+        if (currentSceneIndex >= 0 && currentSceneIndex < scenes.size()) {
+            const glm::vec4& bgColor = scenes[currentSceneIndex]->getBackgroundColor();
+            glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
+        }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

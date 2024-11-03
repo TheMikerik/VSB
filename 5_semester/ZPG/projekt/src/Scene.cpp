@@ -1,7 +1,7 @@
 // Scene.cpp
 #include "Scene.h"
 
-Scene::Scene() {}
+Scene::Scene() : backgroundColor(0.0f, 0.0f, 0.0f, 1.0f) {}
 
 Scene::~Scene() {}
 
@@ -17,4 +17,12 @@ void Scene::render() const {
     for (const auto& drawable : drawables) {
         drawable->render();
     }
+}
+
+void Scene::setBackgroundColor(const glm::vec4& color) {
+    backgroundColor = color;
+}
+
+const glm::vec4& Scene::getBackgroundColor() const {
+    return backgroundColor;
 }

@@ -12,6 +12,7 @@
 
 Scene2::Scene2(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
+    setBackgroundColor(glm::vec4(0.59f, 0.76f, 0.92f, 1.0f));
 
     // Initialize shaders
     auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
