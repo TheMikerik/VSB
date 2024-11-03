@@ -24,15 +24,15 @@ TARGET_PATH = build/$(TARGET)
 # Source files
 SRCS = \
     src/main.cpp \
-    src/Application.cpp \
-    src/Scene.cpp \
-    src/DrawableObject.cpp \
-    src/ShaderProgram.cpp \
-    src/Model.cpp \
-    src/Transformation.cpp \
-    src/Camera.cpp \
-    src/Controller.cpp \
-    src/Light.cpp \
+    src/Core/Application.cpp \
+    src/Core/Controller.cpp \
+    src/Core/Model.cpp \
+    src/Core/Transformation.cpp \
+    src/Graphics/Camera.cpp \
+    src/Graphics/DrawableObject.cpp \
+    src/Graphics/Light.cpp \
+    src/Shaders/ShaderProgram.cpp \
+    src/Scenes/Scene.cpp \
     src/Scenes/Scene1.cpp \
     src/Scenes/Scene2.cpp \
     src/Scenes/Scene3.cpp \

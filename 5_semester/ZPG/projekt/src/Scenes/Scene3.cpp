@@ -52,17 +52,14 @@ void Scene3::switchShader() {
         return;
     }
 
-    // Increment shader index and wrap around if necessary
     currentShader = (currentShader + 1) % shaders.size();
     std::cout << "Scene3: Switching to Shader Index: " << currentShader << std::endl;
 
-    // Update shader for all drawables
     for(auto& drawable : drawables) {
         drawable->setShader(shaders[currentShader]);
     }
 
-    // Notify observers if necessary (e.g., camera and light)
-    shaders[currentShader]->use(); // Activate the new shader
+    shaders[currentShader]->use();
     camera.notifyObservers();
     pointLight.notifyObservers();
 }

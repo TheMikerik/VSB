@@ -1,11 +1,11 @@
 // Scene2.h
 #pragma once
 
-#include "Scene.h"
-#include "ShaderProgram.h"
-#include "Model.h"
-#include "Transformation.h"
-#include "Camera.h"
+#include "Scenes/Scene.h"
+#include "Shaders/ShaderProgram.h"
+#include "Core/Model.h"
+#include "Core/Transformation.h"
+#include "Graphics/Camera.h"
 #include <memory>
 #include <vector>
 

@@ -1,6 +1,6 @@
 // Scene4.cpp
-#include "../include/Scenes/Scene4.h"
-#include "../include/Light.h"
+#include "Scenes/Scene4.h"
+#include "Graphics/Light.h"
 
 #include "../models/bushes.h"
 #include "../models/tree.h"
@@ -36,7 +36,6 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
     pointLight.notifyObservers();
     camera.notifyObservers();
 
-    // Load models
     std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     std::vector<float> platformVertices(std::begin(platform), std::end(platform));
@@ -51,11 +50,11 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
     auto sphereModel = std::make_shared<Model>(sphereVertices);
     auto suziModel = std::make_shared<Model>(suziVertices);
 
-    // Create platform drawable
+    // Platform
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_pl);
     addDrawable(platformDrawable);
 
-    // Create multiple bushes instances
+    // Bushes
     for (int i = 0; i < 100; ++i) {
         auto randomShader = shaders[i % shaders.size()];
         auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, randomShader);
@@ -73,10 +72,10 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         addDrawable(bushesDrawable);
     }
 
-    // Create multiple tree instances
+    // Trees
     for (int i = 0; i < 100; ++i) {
         auto randomShader = shaders[i % shaders.size()];
-        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
+        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
 
         Transformation treeTrans;
         treeTrans.translate(glm::vec3(
@@ -91,10 +90,10 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         addDrawable(treeDrawable);
     }
 
-    // Create multiple gift instances
+    // Gifts
     for (int i = 0; i < 100; ++i) {
         auto randomShader = shaders[i % shaders.size()];
-        auto giftDrawable = std::make_shared<DrawableObject>(giftModel, shader_blinn);
+        auto giftDrawable = std::make_shared<DrawableObject>(giftModel, randomShader);
 
         Transformation giftTrans;
         giftTrans.translate(glm::vec3(
@@ -112,7 +111,7 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
     // Create multiple sphere instances
     for (int i = 0; i < 20; ++i) {
         auto randomShader = shaders[i % shaders.size()];
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_lambert);
+        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, randomShader);
 
         Transformation sphereTrans;
         sphereTrans.translate(glm::vec3(

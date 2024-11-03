@@ -14,7 +14,6 @@ Scene2::Scene2(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
     setBackgroundColor(glm::vec4(0.59f, 0.76f, 0.92f, 1.0f));
 
-    // Initialize shaders
     auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
     auto shader_purple = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
@@ -28,7 +27,6 @@ Scene2::Scene2(Camera& cam) : camera(cam) {
 
     camera.notifyObservers();
 
-    // Load models
     std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     std::vector<float> platformVertices(std::begin(platform), std::end(platform));
@@ -37,11 +35,11 @@ Scene2::Scene2(Camera& cam) : camera(cam) {
     auto treeModel = std::make_shared<Model>(treeVertices);
     auto platformModel = std::make_shared<Model>(platformVertices);
 
-    // Create platform drawable
+    // Platform
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_uni);
     addDrawable(platformDrawable);
 
-    // Create multiple bushes instances
+    // Bushes
     for (int i = 0; i < 300; ++i) {
         auto randomShader = shaders[i % shaders.size()];
         auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, randomShader);
@@ -59,7 +57,7 @@ Scene2::Scene2(Camera& cam) : camera(cam) {
         addDrawable(bushesDrawable);
     }
 
-    // Create multiple tree instances
+    // Trees
     for (int i = 0; i < 100; ++i) {
         auto randomShader = shaders[i % shaders.size()];
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
