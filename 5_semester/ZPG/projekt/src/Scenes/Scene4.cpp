@@ -1,9 +1,10 @@
 // Scene4.cpp
 #include "../include/Scenes/Scene4.h"
+#include "../include/Light.h"
+
 #include "../models/bushes.h"
 #include "../models/tree.h"
 #include "../models/platform.h"
-
 #include "../models/gift.h"
 #include "../models/sphere.h"
 #include "../models/suzi_flat.h"
@@ -14,21 +15,20 @@
 #include <ctime>
 #include <iostream>
 
-Scene4::Scene4(Camera& cam) : camera(cam) {
+Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
     std::srand(static_cast<unsigned int>(std::time(0)));
 
     // Initialize shaders
-    auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
-    auto shader_purple = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_purple.glsl");
-    auto shader_green = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_green.glsl");
+    auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
 
-    shaders = {shader_uni, shader_red, shader_purple, shader_green};
+    shaders = {shader_pl};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
+        pointLight.registerObserver(shader.get());
     }
 
+    pointLight.notifyObservers();
     camera.notifyObservers();
 
     // Load models
@@ -47,7 +47,7 @@ Scene4::Scene4(Camera& cam) : camera(cam) {
     auto suziModel = std::make_shared<Model>(suziVertices);
 
     // Create platform drawable
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_uni);
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_pl);
     addDrawable(platformDrawable);
 
     // Create multiple bushes instances

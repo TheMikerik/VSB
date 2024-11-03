@@ -7,9 +7,9 @@
 #include <iostream>
 
 Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
-    auto shader_uni = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
+    auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
 
-    shaders = {shader_uni};
+    shaders = {shader_pl};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -30,7 +30,7 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
     };
 
     for(const auto& pos : spherePositions) {
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_uni);
+        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_pl);
 
         Transformation sphereTrans;
         sphereTrans.scale(glm::vec3(3.0f));
