@@ -24,7 +24,8 @@ Scene1::Scene1(Camera& cam) : camera(cam) {
     auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader_red);
 
     Transformation triangleTrans;
-    triangleTrans.scale(glm::vec3(10.0f));
+    triangleTrans.scale(glm::vec3(5.0f));
+    triangleTrans.translate(glm::vec3(0.0f, 2.0f, 0.0f));
     triangleDrawable->setTransformation(triangleTrans);
     addDrawable(triangleDrawable);
 }

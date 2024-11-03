@@ -22,7 +22,7 @@
 Application::Application()
     : window(nullptr), currentSceneIndex(0),
       camera(glm::vec3(0.0f, 10.0f, 20.0f)),
-      pointLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f))
+      pointLight(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(1.0f))
 {
 
 }

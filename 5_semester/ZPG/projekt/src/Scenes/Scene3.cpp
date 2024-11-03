@@ -7,9 +7,13 @@
 #include <iostream>
 
 Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
-    auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
 
-    shaders = {shader_pl};
+    setBackgroundColor(glm::vec4(0.59f, 0.76f, 0.92f, 1.0f));
+    auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
+    auto shader_const = std::make_shared<ShaderProgram>("./shaders/constant/vertex_constant.glsl", "./shaders/constant/fragment_constant.glsl");
+    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert/vertex_lambert.glsl", "./shaders/lambert/fragment_lambert.glsl");
+
+    shaders = {shader_const};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -30,7 +34,7 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
     };
 
     for(const auto& pos : spherePositions) {
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_pl);
+        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_const);
 
         Transformation sphereTrans;
         sphereTrans.scale(glm::vec3(3.0f));
