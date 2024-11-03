@@ -13,8 +13,9 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
     auto shader_const = std::make_shared<ShaderProgram>("./shaders/constant/vertex_constant.glsl", "./shaders/constant/fragment_constant.glsl");
     auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
     auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert/vertex_lambert.glsl", "./shaders/lambert/fragment_lambert.glsl");
+    auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/blinn/vertex_blinn.glsl", "./shaders/blinn/fragment_blinn.glsl");
 
-    shaders = {shader_lambert};
+    shaders = {shader_phong, shader_lambert, shader_blinn};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -31,11 +32,13 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
         glm::vec3( 2.0f,  2.0f,  0.0f),
         glm::vec3(-2.0f,  2.0f,  0.0f),
         glm::vec3( 2.0f, -2.0f,  0.0f),
-        glm::vec3(-2.0f, -2.0f,  0.0f)
+        glm::vec3(-2.0f, -2.0f,  0.0f),
     };
 
+    int i = 0;
+
     for(const auto& pos : spherePositions) {
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_lambert);
+        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shaders[i % shaders.size()]);
 
         Transformation sphereTrans;
         sphereTrans.scale(glm::vec3(3.0f));
@@ -44,5 +47,6 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
         sphereDrawable->setTransformation(sphereTrans);
 
         addDrawable(sphereDrawable);
+        i++;
     }
 }
