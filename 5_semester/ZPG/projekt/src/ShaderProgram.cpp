@@ -114,13 +114,9 @@ void ShaderProgram::onCameraUpdate(const glm::mat4& view, const glm::mat4& proje
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
     }
 
-    // Update camera position
-    // Assuming you have access to the camera's position. If not, modify the method to pass it.
-    // For this example, let's assume the camera's position is the translation part of the view matrix inverse.
-    // However, it's better to pass the camera position directly if available.
+    glm::mat4 inverseView = glm::inverse(view);
+    glm::vec3 cameraPos = glm::vec3(inverseView[3]);
     
-    // Placeholder: Replace with actual camera position retrieval
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // Update accordingly
     if (viewPosLoc != -1) {
         glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
     }
