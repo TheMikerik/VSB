@@ -17,6 +17,4 @@ public:
 private:
     Camera& camera;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
-
-    float getRandom(float min, float max);
 };
