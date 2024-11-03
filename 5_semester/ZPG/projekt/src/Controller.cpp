@@ -66,13 +66,13 @@ void Controller::handleInput(float deltaTimeInput, int& currentSceneIndex) {
 }
 
 void Controller::switchScene(int index){
-  if (index >=0 && index < this->scenes.size()) {
-      currentSceneIndex = index;
-      selectedDrawableIndex = 0;
-      std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
-  } else {
-      std::cerr << "Invalid scene index: " << index << std::endl;
-  }
+    if (index >=0 && index < static_cast<int>(scenes.size())) {
+        currentSceneIndex = index;
+        selectedDrawableIndex = 0;
+        std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
+    } else {
+        std::cerr << "Invalid scene index: " << index << std::endl;
+    }
 }
 
 void Controller::processKeyboardInput(float deltaTime) {
@@ -102,6 +102,17 @@ void Controller::processKeyboardInput(float deltaTime) {
     if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
         switchScene(3);
     }
+
+    static bool spacePressedLastFrame = false;
+    bool spacePressedThisFrame = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
+
+    if (spacePressedThisFrame && !spacePressedLastFrame) {
+        if (currentSceneIndex >= 0 && currentSceneIndex < static_cast<int>(scenes.size())) {
+            scenes[currentSceneIndex]->switchShader();
+        }
+    }
+
+    spacePressedLastFrame = spacePressedThisFrame;
 }
 
 void Controller::processTransformationInput() {
@@ -172,7 +183,7 @@ void Controller::processTransformationInput() {
             Transformation trans = selectedDrawable->getTransformation();
             trans.rotate(-rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
             selectedDrawable->setTransformation(trans);
-            std::cout << "Rotated +Y" << std::endl;
+            std::cout << "Rotated -Y" << std::endl;
         }
     }
 
@@ -221,7 +232,6 @@ void Controller::processTransformationInput() {
         std::cout << "Rotation: " << rotationEnabled << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
-    
 
     if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
         selectedDrawableIndex = (selectedDrawableIndex + 1) % drawables.size();

@@ -1,7 +1,7 @@
 // Scene.cpp
 #include "Scene.h"
 
-Scene::Scene() : backgroundColor(0.0f, 0.0f, 0.0f, 1.0f) {}
+Scene::Scene() : backgroundColor(0.0f, 0.0f, 0.0f, 1.0f), currentShader(0) {}
 
 Scene::~Scene() {}
 
@@ -25,4 +25,7 @@ void Scene::setBackgroundColor(const glm::vec4& color) {
 
 const glm::vec4& Scene::getBackgroundColor() const {
     return backgroundColor;
+}
+
+void Scene::switchShader() {
 }

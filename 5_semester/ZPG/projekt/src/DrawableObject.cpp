@@ -26,6 +26,10 @@ void DrawableObject::render() const
     model->unbind();
 }
 
+void DrawableObject::setShader(std::shared_ptr<ShaderProgram> shd) {
+    shaderProgram = shd;
+}
+
 void DrawableObject::setTransformation(const Transformation& trans)
 {
     transformation = trans;

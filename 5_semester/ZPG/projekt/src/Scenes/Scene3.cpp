@@ -8,14 +8,12 @@
 
 Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
 
-    setBackgroundColor(glm::vec4(0.59f, 0.76f, 0.92f, 1.0f));
-    auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
     auto shader_const = std::make_shared<ShaderProgram>("./shaders/constant/vertex_constant.glsl", "./shaders/constant/fragment_constant.glsl");
     auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
     auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert/vertex_lambert.glsl", "./shaders/lambert/fragment_lambert.glsl");
     auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/blinn/vertex_blinn.glsl", "./shaders/blinn/fragment_blinn.glsl");
 
-    shaders = {shader_phong, shader_lambert, shader_blinn};
+    shaders = {shader_const, shader_phong, shader_lambert, shader_blinn};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -35,10 +33,8 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
         glm::vec3(-2.0f, -2.0f,  0.0f),
     };
 
-    int i = 0;
-
     for(const auto& pos : spherePositions) {
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shaders[i % shaders.size()]);
+        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shaders[currentShader]);
 
         Transformation sphereTrans;
         sphereTrans.scale(glm::vec3(3.0f));
@@ -47,6 +43,26 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
         sphereDrawable->setTransformation(sphereTrans);
 
         addDrawable(sphereDrawable);
-        i++;
     }
+}
+
+void Scene3::switchShader() {
+    if (shaders.empty()) {
+        std::cerr << "No shaders available to switch." << std::endl;
+        return;
+    }
+
+    // Increment shader index and wrap around if necessary
+    currentShader = (currentShader + 1) % shaders.size();
+    std::cout << "Scene3: Switching to Shader Index: " << currentShader << std::endl;
+
+    // Update shader for all drawables
+    for(auto& drawable : drawables) {
+        drawable->setShader(shaders[currentShader]);
+    }
+
+    // Notify observers if necessary (e.g., camera and light)
+    shaders[currentShader]->use(); // Activate the new shader
+    camera.notifyObservers();
+    pointLight.notifyObservers();
 }

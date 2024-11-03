@@ -14,6 +14,7 @@ public:
     void render() const;
     void setTransformation(const Transformation& trans);
     Transformation& getTransformation();
+    void setShader(std::shared_ptr<ShaderProgram> shd);
 
 private:
     std::shared_ptr<Model> model;

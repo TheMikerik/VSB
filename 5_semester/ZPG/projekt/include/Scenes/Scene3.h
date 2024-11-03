@@ -14,6 +14,7 @@ class Scene3 : public Scene {
 public:
     Scene3(Camera& camera, Light& pointLight);
     ~Scene3() override = default;
+    virtual void switchShader() override;
 
 private:
     Camera& camera;
