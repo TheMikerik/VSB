@@ -1,3 +1,4 @@
+// lambert_vertex_shader.glsl
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
@@ -11,14 +12,12 @@ out vec3 Normal;
 
 void main()
 {
-    // Transform the vertex position to world space
-    vec4 worldPos = modelMatrix * vec4(aPos, 1.0);
-    FragPos = vec3(worldPos);
-
-    // Transform the normal to world space and normalize
+    // Calculate the position of the vertex in world space
+    FragPos = vec3(modelMatrix * vec4(aPos, 1.0));
+    
+    // Calculate the normal in world space and normalize it
     Normal = mat3(transpose(inverse(modelMatrix))) * aNormal;
-    Normal = normalize(Normal);
-
-    // Calculate the final vertex position in clip space
-    gl_Position = projectionMatrix * viewMatrix * worldPos;
+    
+    // Calculate the final position of the vertex in clip space
+    gl_Position = projectionMatrix * viewMatrix * vec4(FragPos, 1.0);
 }
