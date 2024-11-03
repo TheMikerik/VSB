@@ -33,7 +33,9 @@ SRCS = \
     src/Camera.cpp \
     src/Controller.cpp \
     src/Scenes/Scene1.cpp \
-    src/Scenes/Scene2.cpp
+    src/Scenes/Scene2.cpp \
+    src/Scenes/Scene3.cpp \
+    src/Scenes/Scene4.cpp
 
 # Object files
 OBJS = $(SRCS:src/%.cpp=build/%.o)

@@ -7,13 +7,10 @@
 #include "Transformation.h"
 #include "ICameraObserver.h"
 
-#include "Scenes/Scene2.h"
 #include "Scenes/Scene1.h"
-
-#include "../models/bushes.h"
-#include "../models/tree.h"
-#include "../models/triangle.h"
-#include "../models/platform.h"
+#include "Scenes/Scene2.h"
+#include "Scenes/Scene3.h"
+#include "Scenes/Scene4.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -90,9 +87,13 @@ void Application::createScenes()
 {
     auto scene1 = std::make_shared<Scene1>(camera);
     auto scene2 = std::make_shared<Scene2>(camera);
+    auto scene3 = std::make_shared<Scene3>(camera);
+    auto scene4 = std::make_shared<Scene4>(camera);
 
     scenes.emplace_back(scene1);
     scenes.emplace_back(scene2);
+    scenes.emplace_back(scene3);
+    scenes.emplace_back(scene4);
 }
 
 void Application::run()

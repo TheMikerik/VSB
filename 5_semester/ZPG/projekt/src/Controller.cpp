@@ -96,6 +96,12 @@ void Controller::processKeyboardInput(float deltaTime) {
     if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
         switchScene(1);
     }
+    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        switchScene(2);
+    }
+    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+        switchScene(3);
+    }
 }
 
 void Controller::processTransformationInput() {
