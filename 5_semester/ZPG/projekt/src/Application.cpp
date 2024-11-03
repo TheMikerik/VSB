@@ -21,7 +21,8 @@
 
 Application::Application()
     : window(nullptr), currentSceneIndex(0),
-      camera(glm::vec3(0.0f, 10.0f, 20.0f))
+      camera(glm::vec3(0.0f, 10.0f, 20.0f)),
+      pointLight(glm::vec3(1.2f, 1.0f, 2.0f), glm::vec3(1.0f))
 {
 
 }
@@ -46,7 +47,7 @@ void Application::initialization()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Create window
-    window = glfwCreateWindow(1450, 900, "OpenGL Application with Camera", nullptr, nullptr);
+    window = glfwCreateWindow(1450, 900, "OpenGL Application with Camera and Light", nullptr, nullptr);
     if (!window) {
         std::cerr << "ERROR: could not create GLFW window" << std::endl;
         glfwTerminate();
@@ -87,7 +88,7 @@ void Application::createScenes()
 {
     auto scene1 = std::make_shared<Scene1>(camera);
     auto scene2 = std::make_shared<Scene2>(camera);
-    auto scene3 = std::make_shared<Scene3>(camera);
+    auto scene3 = std::make_shared<Scene3>(camera, pointLight);
     auto scene4 = std::make_shared<Scene4>(camera);
 
     scenes.emplace_back(scene1);

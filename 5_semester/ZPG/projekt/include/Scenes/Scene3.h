@@ -6,15 +6,17 @@
 #include "Model.h"
 #include "Transformation.h"
 #include "Camera.h"
+#include "Light.h"
 #include <memory>
 #include <vector>
 
 class Scene3 : public Scene {
 public:
-    Scene3(Camera& camera);
+    Scene3(Camera& camera, Light& pointLight);
     ~Scene3() override = default;
 
 private:
     Camera& camera;
+    Light& pointLight;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
 };

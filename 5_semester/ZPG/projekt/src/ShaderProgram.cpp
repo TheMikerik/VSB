@@ -1,4 +1,3 @@
-// ShaderProgram.cpp
 #include "ShaderProgram.h"
 #include <fstream>
 #include <sstream>
@@ -7,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& fragmentPath)
-    : viewLoc(-1), projLoc(-1)
+    : viewLoc(-1), projLoc(-1), lightPosLoc(-1), lightColorLoc(-1), viewPosLoc(-1)
 {
     std::string vertexSource = loadShaderSource(vertexPath);
     std::string fragmentSource = loadShaderSource(fragmentPath);
@@ -24,13 +23,30 @@ ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& f
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    // Get uniform locations
     viewLoc = glGetUniformLocation(programID, "viewMatrix");
     if (viewLoc == -1) {
         std::cerr << "Warning: 'viewMatrix' uniform not found in shader." << std::endl;
     }
+
     projLoc = glGetUniformLocation(programID, "projectionMatrix");
     if (projLoc == -1) {
         std::cerr << "Warning: 'projectionMatrix' uniform not found in shader." << std::endl;
+    }
+
+    lightPosLoc = glGetUniformLocation(programID, "lightPos");
+    if (lightPosLoc == -1) {
+        std::cerr << "Warning: 'lightPos' uniform not found in shader." << std::endl;
+    }
+
+    lightColorLoc = glGetUniformLocation(programID, "lightColor");
+    if (lightColorLoc == -1) {
+        std::cerr << "Warning: 'lightColor' uniform not found in shader." << std::endl;
+    }
+
+    viewPosLoc = glGetUniformLocation(programID, "viewPos");
+    if (viewPosLoc == -1) {
+        std::cerr << "Warning: 'viewPos' uniform not found in shader." << std::endl;
     }
 }
 
@@ -96,5 +112,27 @@ void ShaderProgram::onCameraUpdate(const glm::mat4& view, const glm::mat4& proje
     }
     if (projLoc != -1) {
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    }
+
+    // Update camera position
+    // Assuming you have access to the camera's position. If not, modify the method to pass it.
+    // For this example, let's assume the camera's position is the translation part of the view matrix inverse.
+    // However, it's better to pass the camera position directly if available.
+    
+    // Placeholder: Replace with actual camera position retrieval
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f); // Update accordingly
+    if (viewPosLoc != -1) {
+        glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
+    }
+}
+
+void ShaderProgram::onLightUpdate(const glm::vec3& position, const glm::vec3& color)
+{
+    use();
+    if (lightPosLoc != -1) {
+        glUniform3fv(lightPosLoc, 1, glm::value_ptr(position));
+    }
+    if (lightColorLoc != -1) {
+        glUniform3fv(lightColorLoc, 1, glm::value_ptr(color));
     }
 }

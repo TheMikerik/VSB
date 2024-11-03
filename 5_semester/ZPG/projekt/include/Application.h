@@ -3,13 +3,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <memory>
+#include <vector>
 #include "Scene.h"
 #include "Camera.h"
 #include "Controller.h"
+#include "Light.h" // Include Light header
 
 #include "Scenes/Scene2.h"
 #include "Scenes/Scene1.h"
-
 
 class Application {
 public:
@@ -28,4 +29,6 @@ private:
     Camera camera;
 
     std::unique_ptr<Controller> controller;
+
+    Light pointLight; // Point light instance
 };

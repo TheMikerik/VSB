@@ -32,6 +32,7 @@ SRCS = \
     src/Transformation.cpp \
     src/Camera.cpp \
     src/Controller.cpp \
+    src/Light.cpp \
     src/Scenes/Scene1.cpp \
     src/Scenes/Scene2.cpp \
     src/Scenes/Scene3.cpp \

@@ -3,16 +3,21 @@
 #include <string>
 #include <GL/glew.h>
 #include "ICameraObserver.h"
+#include "ILightObserver.h"
 #include <glm/glm.hpp>
 
-class ShaderProgram : public ICameraObserver {
+class ShaderProgram : public ICameraObserver, public ILightObserver {
 public:
     ShaderProgram(const std::string& vertexPath, const std::string& fragmentPath);
     ~ShaderProgram();
 
     void use() const;
 
+    // ICameraObserver implementation
     void onCameraUpdate(const glm::mat4& view, const glm::mat4& projection) override;
+
+    // ILightObserver implementation
+    void onLightUpdate(const glm::vec3& position, const glm::vec3& color) override;
 
     GLuint getProgramID() const { return programID; }
 
@@ -25,4 +30,7 @@ private:
 
     GLint viewLoc;
     GLint projLoc;
+    GLint lightPosLoc;
+    GLint lightColorLoc;
+    GLint viewPosLoc; // Camera Position
 };
