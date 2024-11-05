@@ -13,114 +13,197 @@
 <body>
     <header>
         <div class="container">
-            <h1 class="logo">FlashMaster</h1>
+            <div class="branding">
+                <h1 class="logo">FlowBuddy:</h1>
+                <h2 class="subtitle">App Block for Focus</h2>
+            </div>
             <nav>
                 <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#testimonials">Testimonials</a></li>
                     <li><a href="#download">Download</a></li>
+                    <li><a href="#whats-new">What's new</a></li>
+                    <li><a href="#blog">Blog</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <section class="hero" id="hero">
-        <div class="container">
-            <h2>Master Any Subject with Ease</h2>
-            <p>Interactive flashcards to boost your learning and retention.</p>
-            <a href="#download" class="btn">Get Started</a>
+        <div class="hero-content container">
+            <div class="text-section">
+                <h2>Stop scrolling and find focus</h2>
+                <p>Block distracting apps and learn on every app open</p>
+                <a href="#download" class="btn download-btn">Download Now</a>
+            </div>
+            <div class="image-section">
+                <img src="assets/hero/phones.png" alt="Phones" class="phone-img">
+            </div>
         </div>
     </section>
 
     <section class="features" id="features">
         <div class="container">
-            <h2>Features</h2>
             <div class="features-grid">
                 <div class="feature-item">
-                    <i class="fas fa-sync-alt"></i>
-                    <h3>Spaced Repetition</h3>
-                    <p>Optimize your learning with scientifically-backed repetition intervals.</p>
+                    <h3>Daily Usage</h3>
+                    <p>Average phone usage is 3-4 hours daily, with heavy users exceeding 6-8 hours.</p>
+                    <span class="icon">⏱️</span>
                 </div>
                 <div class="feature-item">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Cloud Sync</h3>
-                    <p>Access your flashcards from any device, anytime.</p>
+                    <h3>Mental Health</h3>
+                    <p>Excessive phone use is linked to higher anxiety, depression, and disrupted sleep.</p>
+                    <span class="icon">😓</span>
                 </div>
                 <div class="feature-item">
-                    <i class="fas fa-users"></i>
-                    <h3>Community Sharing</h3>
-                    <p>Share and discover flashcard sets created by others.</p>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Progress Tracking</h3>
-                    <p>Monitor your learning progress with detailed analytics.</p>
+                    <h3>Social Impact</h3>
+                    <p>Reduces face-to-face communication, increasing loneliness.</p>
+                    <span class="icon">🧍</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <span class="step-number">1</span>
-                    <h3>Create or Choose a Deck</h3>
-                    <p>Select from a wide range of subjects or create your own flashcard decks.</p>
+    <section class="features-new" id="features-new">
+        <div class="container features-container">
+            <h2 class="features-title">Supercharge Your Focus with FlowBuddy</h2>
+            
+            <!-- App Blocking Feature -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>App Blocking</h3>
+                    <p>Easily take control by blocking distracting apps. FlowBuddy allows you to set up custom blocklists for apps that tend to derail your productivity. With just a few taps, you can create a distraction-free environment tailored to your needs.</p>
                 </div>
-                <div class="step">
-                    <span class="step-number">2</span>
-                    <h3>Study with Flashcards</h3>
-                    <p>Review your flashcards using our intuitive interface.</p>
+                <div class="feature-image">
+                    <img src="assets/features/stop.webp" alt="App blocking illustration">
                 </div>
-                <div class="step">
-                    <span class="step-number">3</span>
-                    <h3>Track Your Progress</h3>
-                    <p>Analyze your performance and focus on areas that need improvement.</p>
+            </div>
+
+            <!-- Unblock Feature -->
+            <div class="feature-row reverse">
+                <div class="feature-text">
+                    <h3>Unblock for 5 or 10 min</h3>
+                    <p>When you try to access a blocked app, you're offered a 5 or 10-minute unblock option. This brief window promotes mindful usage, helping you stay focused and achieve specific tasks without slipping into prolonged browsing. It balances productivity and flexibility, letting you use apps when needed while maintaining focus and digital well-being.</p>
+                </div>
+                <div class="feature-image">
+                    <img src="assets/features/unlock.webp" alt="Unblock feature illustration">
+                </div>
+            </div>
+
+            <!-- Learn Feature -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>Learn on every Open</h3>
+                    <p>Create Flashcards with AI and review them on every App open. Transform idle moments into learning opportunities. FlowBuddy's AI-powered flashcard system helps you retain information and make the most of your screen time, turning app opens into micro-learning sessions.</p>
+                </div>
+                <div class="feature-image">
+                    <img src="assets/features/learn.webp" alt="Learning feature illustration">
                 </div>
             </div>
         </div>
     </section>
 
     <section class="testimonials" id="testimonials">
-        <div class="container">
-            <h2>What Our Users Say</h2>
-            <div class="testimonial-grid">
-                <div class="testimonial">
-                    <p>"FlashMaster has revolutionized the way I study. My grades have improved dramatically!"</p>
-                    <h4>- Alex P.</h4>
+        <div class="container testimonials-container">
+            <h2 class="testimonials-title">Our community says</h2>
+            <div class="testimonials-grid">
+                <!-- Review 1 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <h3>Very impressive</h3>
+                    <p>Very well designed app. It works seamlessly with screen time and actually helps to focus. Love it</p>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">bennnn561</span>
+                        <span class="reviewer-location">Netherlands</span>
+                    </div>
                 </div>
-                <div class="testimonial">
-                    <p>"The spaced repetition feature is a game-changer. I retain information much better now."</p>
-                    <h4>- Jamie L.</h4>
+
+                <!-- Review 2 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <h3>Great so far!</h3>
+                    <p>Easy to use and really like the interface. I am hoping this will help me be more productive. It's already helped in the first 24 hours!</p>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">Chicago413</span>
+                        <span class="reviewer-location">United States</span>
+                    </div>
                 </div>
-                <div class="testimonial">
-                    <p>"Loved the community sharing aspect. I've found many useful decks that saved me hours of study time."</p>
-                    <h4>- Taylor M.</h4>
+
+                <!-- Review 3 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <h3>Helps with productivity!</h3>
+                    <p>I've been using this app for a day, and it has significantly improved my ability to stay focused for extended periods. Unlike other focus apps I've tried, this one stands out. I particularly appreciate the Breathing Exercise feature, which prompts you when you attempt to open a distracting app. It effectively helps you relax, curbing the impulse to open the app and prompting introspection about your actions. While the app is still in its early stages, I anticipate the developer will continue adding innovative features to enhance its functionality further!</p>
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">tsteven9</span>
+                        <span class="reviewer-location">Canada</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="download" id="download">
-        <div class="container">
-            <h2>Ready to Boost Your Learning?</h2>
-            <a href="#" class="btn">Download Now</a>
+    <section class="promo-banner" id="promo-banner">
+        <div class="banner-content">
+            <div class="banner-mascot">
+                <img src="assets/banner/megaphone.png" alt="FlowBuddy mascot with megaphone">
+            </div>
+            <h2 class="banner-title">First 100 Users Only!</h2>
+            <p class="banner-subtitle">Get 6 Months of FlowBuddy Pro for Free!</p>
+            <a href="#" class="banner-cta">Claim Your Free Access Now</a>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 FlashMaster. All rights reserved.</p>
-            <div class="socials">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    <section class="socials" id="socials">
+        <h4 class="socail_title">Let's connect ❤️</h4>
+        <div class="social-media">
+            <a href="#" class="social-link">
+                <img src="assets/socials/ig.svg" alt="Instagram">
+            </a>
+            <a href="#" class="social-link">
+                <img src="assets/socials/tiktok.svg" alt="Tiktok">
+            </a>
+            <a href="#" class="social-link">
+                <img src="assets/socials/yt.svg" alt="Youtube">
+            </a>
+            <a href="#" class="social-link">
+                <img src="assets/socials/x.svg" alt="X">
+            </a>
+            <a href="#" class="social-link">
+                <img src="assets/socials/linkedin.svg" alt="LinkedIn">
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/footer/footer.svg" alt="FlowBuddy mascot">
+                <p class="footer-copyright">© 2024 FlowBuddy</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3 class="footer-heading">Get Started</h3>
+                    <a href="#" class="footer-link">Download</a>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Support</h3>
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Affiliate</a>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">FlowBuddy</h3>
+                    <a href="#" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+            <div class="footer-logo invisible-box">
+                <img src="assets/footer/footer.svg" alt="FlowBuddy mascot">
+                <p class="footer-copyright">© 2024 FlowBuddy</p>
             </div>
         </div>
     </footer>
+
+
 </body>
 </html>
