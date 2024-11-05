@@ -69,10 +69,20 @@ header .branding {
   color: #444;
 }
 
+.logo a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .subtitle {
   font-size: 1.2em;
   font-weight: normal;
   color: #999;
+}
+
+.subtitle a {
+  text-decoration: none;
+  color: inherit;
 }
 
 nav ul {
@@ -140,6 +150,11 @@ nav ul li a:hover {
 
 .download-btn:hover {
   background-color: #555;
+}
+
+.apple-logo {
+  width: 1.2rem;
+  height: auto;
 }
 
 /* Image Section */
