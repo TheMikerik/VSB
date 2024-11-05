@@ -1,3 +1,30 @@
+/* TEMPLATE */
+/* Main Content Section */
+.main-content {
+  height: 70vh;
+  /* 80% of the viewport height */
+  background-color: #ffffff;
+  /* White background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Content Block */
+.content-block {
+  width: 90%;
+  max-width: 1200px;
+  height: 100%;
+  /* Optional: Add content styles or background if needed */
+  /* For example, to add a border: */
+  /* border: 2px solid #ccc; */
+}
+
+
+
+
+
+
 /* Reset some default styles */
 * {
   margin: 0;
