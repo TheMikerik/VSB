@@ -1,30 +1,32 @@
 ##############################################################################
 #
-# Simple Makefile example
-#
-# This Makefile will initiate compilation of all *.cpp files 
-# in current directory into individual executables. 
+# Makefile for multithreaded Socket Server and Client
 #
 ##############################################################################
 
-# Sources *.cpp can be changed to list of individual files
-SOURCES=$(wildcard *.cpp)
-OBJS=$(SOURCES:%.cpp=%.o)
-TARGETS=$(SOURCES:%.cpp=%)
+# Sources
+SOURCES_SERVER = server.cpp
+SOURCES_CLIENT = client.cpp
 
-CPPFLAGS += -g -pthread -std=c++11 -Wall 
-LDFLAGS += -pthread
-LDLIBS += -lrt
+# Targets
+TARGET_SERVER = server
+TARGET_CLIENT = client
 
-.PHONY: all clean 
+# Compiler and Flags
+CXX = g++
+CXXFLAGS = -g -pthread -std=c++11 -Wall
+LDFLAGS = -pthread
+LDLIBS = 
 
-all: $(TARGETS)
+.PHONY: all clean
 
-%.o: %.cpp
-	g++ -c $(CPPFLAGS) $^ -o $@
-	
-$(TARGETS): %: %.o
-	g++ $(LDFLAGS) $^ $(LDLIBS) -o $@ 
+all: $(TARGET_SERVER) $(TARGET_CLIENT)
+
+$(TARGET_SERVER): $(SOURCES_SERVER)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+
+$(TARGET_CLIENT): $(SOURCES_CLIENT)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
 
 clean:
-	rm -rf *.o $(TARGETS)
+	rm -rf *.o $(TARGET_SERVER) $(TARGET_CLIENT)
