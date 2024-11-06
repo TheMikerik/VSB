@@ -129,6 +129,7 @@ int main( int t_narg, char **t_args )
 
     int l_port = 0;
     char *l_host = nullptr;
+    std::string l_name;
 
     // parsing arguments
     for ( int i = 1; i < t_narg; i++ )
@@ -145,17 +146,21 @@ int main( int t_narg, char **t_args )
                 l_host = t_args[ i ];
             else if ( !l_port )
                 l_port = atoi( t_args[ i ] );
+            else if ( l_name.empty() )
+                l_name = t_args[ i ];
         }
     }
 
-    if ( !l_host || !l_port )
+    if ( !l_host || !l_port || l_name.empty() )
     {
-        log_msg( LOG_INFO, "Host or port is missing!" );
+        log_msg( LOG_INFO, "Host, port or name is missing!" );
+        log_msg( LOG_INFO, "The client has not been created!" );
         help( t_narg, t_args );
         exit( 1 );
     }
 
-    log_msg( LOG_INFO, "Connection to '%s':%d.", l_host, l_port );
+    log_msg(LOG_INFO, "-------------CLIENT: #%s-------------", l_name.c_str());
+    log_msg(LOG_INFO, "Connected to '%s' on port %d.", l_host, l_port);
 
     addrinfo l_ai_req, *l_ai_ans;
     memset( &l_ai_req, 0, sizeof( l_ai_req ) );
@@ -197,6 +202,8 @@ int main( int t_narg, char **t_args )
     getpeername( l_sock_server, ( sockaddr * ) &l_cl_addr, &l_lsa );
     log_msg( LOG_INFO, "Server IP: '%s'  port: %d",
              inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
+
+    log_msg(LOG_INFO, "---------------------------------------\n", l_name.c_str());
 
     // Vytvoření vlákna pro příjem zpráv od serveru
     pthread_t recv_thread;
