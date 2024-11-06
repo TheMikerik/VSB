@@ -8,7 +8,6 @@
 //
 // This program is example of socket client.
 // The mandatory arguments of program are IP address or name of server, port number,
-// and season.
 //
 //***************************************************************************
 
@@ -30,6 +29,7 @@
 #include <sys/wait.h>
 #include <pthread.h>
 #include <string>
+#include <algorithm>
 
 //***************************************************************************
 // log messages
@@ -56,7 +56,7 @@ void log_msg( int t_log_level, const char *t_form, ... )
     char l_buf[ 1024 ];
     va_list l_arg;
     va_start( l_arg, t_form );
-    vsprintf( l_buf, t_form, l_arg );
+    vsnprintf( l_buf, sizeof(l_buf), t_form, l_arg );
     va_end( l_arg );
 
     switch ( t_log_level )
@@ -83,11 +83,10 @@ void help( int t_narg, char **t_args )
             "\n"
             "  Socket client example.\n"
             "\n"
-            "  Use: %s [-h -d] ip_or_name port_number\n"
+            "  Use: %s [-h -d] ip_or_name port_number name\n"
             "\n"
             "    -d  debug mode \n"
             "    -h  this help\n"
-            "    Exemplary usage: send mathematical expressions in format 'a + b'\n"
             "\n", t_args[ 0 ] );
 
         exit( 0 );
@@ -205,6 +204,15 @@ int main( int t_narg, char **t_args )
 
     log_msg(LOG_INFO, "---------------------------------------\n");
 
+    std::string nick_message = l_name;
+    ssize_t nick_len = write(l_sock_server, nick_message.c_str(), nick_message.size());
+    if(nick_len < 0){
+        log_msg(LOG_ERROR, "Unable to send nickname to server.");
+        close(l_sock_server);
+        exit(1);
+    }
+    log_msg(LOG_DEBUG, "Sent nickname to server.");
+
     pthread_t recv_thread;
     if(pthread_create(&recv_thread, NULL, receive_thread, &l_sock_server) != 0){
         log_msg(LOG_ERROR, "Failed to create receive thread.");
@@ -214,17 +222,17 @@ int main( int t_narg, char **t_args )
 
     char input[256];
     while(1){
-        printf("Zadejte matematický příklad (např. 5 + 3): ");
+        printf("Zadejte příkaz (příklad nebo #list): ");
         if(fgets(input, sizeof(input), stdin) == NULL){
             log_msg(LOG_INFO, "Input closed.");
             break;
         }
 
-        std::string expr(input);
-        expr.erase(std::remove(expr.begin(), expr.end(), '\n'), expr.end());
-        expr += "\n";
+        std::string message(input);
+        message.erase(std::remove(message.begin(), message.end(), '\n'), message.end());
+        message += "\n";
 
-        ssize_t len = write(l_sock_server, expr.c_str(), expr.size());
+        ssize_t len = write(l_sock_server, message.c_str(), message.size());
         if(len < 0){
             log_msg(LOG_ERROR, "Unable to send data to server.");
             break;

@@ -33,6 +33,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <sstream>
 
 #define STR_QUIT    "quit"
 
@@ -59,7 +60,7 @@ void log_msg(int t_log_level, const char *t_form, ...)
     char l_buf[2048];
     va_list l_arg;
     va_start(l_arg, t_form);
-    vsprintf(l_buf, t_form, l_arg);
+    vsnprintf(l_buf, sizeof(l_buf), t_form, l_arg);
     va_end(l_arg);
 
     switch (t_log_level)
@@ -132,6 +133,13 @@ double evaluate_expression(const std::string& expr, std::string& error) {
 
 //***************************************************************************
 
+struct ClientInfo {
+    int socket;
+    std::string name;
+};
+
+//***************************************************************************
+
 int main(int t_narg, char **t_args)
 {
     if (t_narg <= 1) help(t_narg, t_args);
@@ -200,7 +208,7 @@ int main(int t_narg, char **t_args)
     log_msg(LOG_INFO, "Enter 'quit' to quit server.");
     log_msg(LOG_INFO, "---------------------------------------\n");
 
-    std::vector<int> clients;
+    std::vector<ClientInfo> clients;
 
     // Go!
     while (1)
@@ -216,9 +224,9 @@ int main(int t_narg, char **t_args)
         stdin_fd.events = POLLIN;
         poll_fds.push_back(stdin_fd);
 
-        for(auto client : clients){
+        for(auto &client : clients){
             pollfd pfd;
-            pfd.fd = client;
+            pfd.fd = client.socket;
             pfd.events = POLLIN;
             poll_fds.push_back(pfd);
         }
@@ -249,8 +257,8 @@ int main(int t_narg, char **t_args)
             if (!strncmp(buf, STR_QUIT, strlen(STR_QUIT)))
             {
                 log_msg(LOG_INFO, "Request to 'quit' entered.");
-                for(auto client : clients){
-                    close(client);
+                for(auto &client : clients){
+                    close(client.socket);
                 }
                 close(l_sock_listen);
                 exit(0);
@@ -264,56 +272,91 @@ int main(int t_narg, char **t_args)
             int l_sock_client = accept(l_sock_listen, (sockaddr *)&l_rsa, &l_rsa_size);
             if (l_sock_client < 0)
             {
-                if (errno == EINTR) continue; // Interrupted by signal
+                if (errno == EINTR) continue;
                 log_msg(LOG_ERROR, "Unable to accept new client.");
                 continue;
             }
 
-            clients.push_back(l_sock_client);
-            log_msg(LOG_INFO, "New client connected: %s:%d",
+            char nick_buffer[32];
+            ssize_t nick_bytes = read(l_sock_client, nick_buffer, sizeof(nick_buffer)-1);
+            if (nick_bytes <= 0)
+            {
+                log_msg(LOG_ERROR, "Failed to read nickname from client %d.", l_sock_client);
+                close(l_sock_client);
+                continue;
+            }
+            nick_buffer[nick_bytes] = '\0';
+            std::string nick_msg(nick_buffer);
+            nick_msg.erase(std::remove(nick_msg.begin(), nick_msg.end(), '\n'), nick_msg.end());
+
+            ClientInfo new_client;
+            new_client.socket = l_sock_client;
+            new_client.name = nick_msg;
+            clients.push_back(new_client);
+            log_msg(LOG_INFO, "New client connected: %s (%s:%d)",
+                    new_client.name.c_str(),
                     inet_ntoa(l_rsa.sin_addr), ntohs(l_rsa.sin_port));
         }
 
         for(size_t i = 2; i < poll_fds.size(); ++i){
             if(poll_fds[i].revents & POLLIN){
                 int client_fd = poll_fds[i].fd;
+                auto current_client = std::find_if(clients.begin(), clients.end(),
+                    [client_fd](const ClientInfo& c) { return c.socket == client_fd; });
+                if(current_client == clients.end()){
+                    log_msg(LOG_ERROR, "Unknown client with socket %d.", client_fd);
+                    close(client_fd);
+                    continue;
+                }
+
                 char buffer[1024];
                 ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer)-1);
                 if(bytes_read <= 0){
                     if(bytes_read < 0){
-                        log_msg(LOG_ERROR, "Error reading from client %d.", client_fd);
+                        log_msg(LOG_ERROR, "Error reading from client %d (%s).", client_fd, current_client->name.c_str());
                     } else {
-                        log_msg(LOG_INFO, "Client %d disconnected.", client_fd);
+                        log_msg(LOG_INFO, "Client %d (%s) disconnected.", client_fd, current_client->name.c_str());
                     }
                     close(client_fd);
-                    clients.erase(std::remove(clients.begin(), clients.end(), client_fd), clients.end());
+                    clients.erase(current_client);
+                    continue;
                 }
-                else{
-                    buffer[bytes_read] = '\0';
-                    std::string expr(buffer);
-                    // Odstranění případných znaků nového řádku
-                    expr.erase(std::remove(expr.begin(), expr.end(), '\n'), expr.end());
-                    log_msg(LOG_INFO, "Received expression from client %d: %s", client_fd, expr.c_str());
+                buffer[bytes_read] = '\0';
+                std::string msg(buffer);
+                msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
 
-                    // Vyhodnocení výrazu
+                if (msg == "#list") {
+                    std::string list_msg = "Connected clients:\n\t";
+                    for(const auto &client : clients) {
+                        list_msg += "- " + client.name + "\n\t";
+                    }
+                    ssize_t bytes_sent = write(client_fd, list_msg.c_str(), list_msg.size());
+                    if(bytes_sent < 0){
+                        log_msg(LOG_ERROR, "Error sending list to client %d (%s).", client_fd, current_client->name.c_str());
+                    } else {
+                        log_msg(LOG_INFO, "Sent client list to %s.", current_client->name.c_str());
+                    }
+                }
+                else {
                     std::string error;
-                    double result = evaluate_expression(expr, error);
+                    double result = evaluate_expression(msg, error);
                     std::string response;
                     if(error.empty()){
-                        response = expr + " = " + std::to_string(result) + "\n";
+                        response = msg + " = " + std::to_string(result) + "\n";
                     } else{
-                        response = expr + " = ERROR: " + error + "\n";
+                        response = msg + " = ERROR: " + error + "\n";
                     }
 
-                    // Rozeslání odpovědi všem klientům
-                    for(auto client : clients){
-                        ssize_t bytes_sent = write(client, response.c_str(), response.size());
+                    std::string broadcast_msg = current_client->name + ": " + response;
+
+                    for(auto &client : clients){
+                        ssize_t bytes_sent = write(client.socket, broadcast_msg.c_str(), broadcast_msg.size());
                         if(bytes_sent < 0){
-                            log_msg(LOG_ERROR, "Error sending to client %d.", client);
+                            log_msg(LOG_ERROR, "Error sending to client %d (%s).", client.socket, client.name.c_str());
                         }
                     }
 
-                    log_msg(LOG_INFO, "Broadcasted: %s", response.c_str());
+                    log_msg(LOG_INFO, "Broadcasted from %s: %s", current_client->name.c_str(), response.c_str());
                 }
             }
         }
