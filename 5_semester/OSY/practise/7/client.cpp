@@ -49,7 +49,7 @@ void log_msg( int t_log_level, const char *t_form, ... )
     const char *out_fmt[] = {
             "ERR: (%d-%s) %s\n",
             "INF: %s\n",
-            "DEB: %s\n" };
+            "DEB: %s\n"};
 
     if ( t_log_level && t_log_level > g_debug ) return;
 
@@ -114,7 +114,7 @@ void* receive_thread(void* arg){
             exit(0);
         }
         buffer[bytes_received] = '\0';
-        log_msg(LOG_INFO, "Broadcast: %s", buffer);
+        log_msg(LOG_INFO, "[CHAT] %s", buffer);
     }
     return NULL;
 }
@@ -225,7 +225,6 @@ int main( int t_narg, char **t_args )
 
     char input[256];
     while(1){
-        printf("Zadejte příkaz (příklad nebo #list): ");
         if(fgets(input, sizeof(input), stdin) == NULL){
             log_msg(LOG_INFO, "Input closed.");
             break;

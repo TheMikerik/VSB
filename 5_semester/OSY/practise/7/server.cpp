@@ -106,30 +106,30 @@ void help(int t_narg, char **t_args)
 // Simple mathematical expression evaluator
 // Note: For simplicity, this evaluator handles expressions like "a+b", "a-b", "a*b", "a/b"
 
-double evaluate_expression(const std::string& expr, std::string& error) {
-    double a, b, result;
-    char op;
-    if (sscanf(expr.c_str(), "%lf %c %lf", &a, &op, &b) != 3) {
-        error = "Invalid expression format.";
-        return 0.0;
-    }
+// double evaluate_expression(const std::string& expr, std::string& error) {
+//     double a, b, result;
+//     char op;
+//     if (sscanf(expr.c_str(), "%lf %c %lf", &a, &op, &b) != 3) {
+//         error = "Invalid expression format.";
+//         return 0.0;
+//     }
 
-    switch(op) {
-        case '+': result = a + b; break;
-        case '-': result = a - b; break;
-        case '*': result = a * b; break;
-        case '/':
-            if(b == 0){
-                error = "Division by zero.";
-                return 0.0;
-            }
-            result = a / b; break;
-        default:
-            error = "Unsupported operator.";
-            return 0.0;
-    }
-    return result;
-}
+//     switch(op) {
+//         case '+': result = a + b; break;
+//         case '-': result = a - b; break;
+//         case '*': result = a * b; break;
+//         case '/':
+//             if(b == 0){
+//                 error = "Division by zero.";
+//                 return 0.0;
+//             }
+//             result = a / b; break;
+//         default:
+//             error = "Unsupported operator.";
+//             return 0.0;
+//     }
+//     return result;
+// }
 
 //***************************************************************************
 
@@ -147,6 +147,7 @@ int main(int t_narg, char **t_args)
     int l_port = 0;
 
     int disconnector_pipe[2];
+    pipe(disconnector_pipe);
 
     for (int i = 1; i < t_narg; i++)
     {
@@ -336,7 +337,7 @@ int main(int t_narg, char **t_args)
                 std::string msg(buffer);  
                 msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
 
-                log_msg(LOG_ERROR, "Connected clients: %d.", clients.size());
+                // log_msg(LOG_ERROR, "Connected clients: %d.", clients.size());
 
                 if (msg == "#list") {
                     std::string list_msg = "Connected clients :\n\t";
@@ -351,16 +352,7 @@ int main(int t_narg, char **t_args)
                     }
                 }
                 else {
-                    std::string error;
-                    double result = evaluate_expression(msg, error);
-                    std::string response;
-                    if(error.empty()){
-                        response = msg + " = " + std::to_string(result) + "\n";
-                    } else{
-                        response = msg + " = ERROR: " + error + "\n";
-                    }
-
-                    std::string broadcast_msg = current_client->name + ": " + response;
+                    std::string broadcast_msg = current_client->name + ": " + msg;
 
                     for(auto &client : clients){
                         ssize_t bytes_sent = write(client.socket, broadcast_msg.c_str(), broadcast_msg.size());
@@ -369,7 +361,7 @@ int main(int t_narg, char **t_args)
                         }
                     }
 
-                    log_msg(LOG_INFO, "Broadcasted from %s: %s", current_client->name.c_str(), response.c_str());
+                    log_msg(LOG_INFO, "[CHAT] %s: %s", current_client->name.c_str(), msg.c_str());
                 }
             }
         }
