@@ -146,6 +146,8 @@ int main(int t_narg, char **t_args)
 
     int l_port = 0;
 
+    int disconnector_pipe[2];
+
     for (int i = 1; i < t_narg; i++)
     {
         if (!strcmp(t_args[i], "-d"))
@@ -224,6 +226,11 @@ int main(int t_narg, char **t_args)
         stdin_fd.events = POLLIN;
         poll_fds.push_back(stdin_fd);
 
+        pollfd pipe_fd;
+        pipe_fd.fd = disconnector_pipe[0];
+        pipe_fd.events = POLLIN;
+        poll_fds.push_back(pipe_fd);
+
         for(auto &client : clients){
             pollfd pfd;
             pfd.fd = client.socket;
@@ -253,7 +260,6 @@ int main(int t_narg, char **t_args)
             buf[len] = '\0';
             log_msg(LOG_DEBUG, "Read %d bytes from stdin: %s", len, buf);
 
-            // Check if the input is the "quit" command
             if (!strncmp(buf, STR_QUIT, strlen(STR_QUIT)))
             {
                 log_msg(LOG_INFO, "Request to 'quit' entered.");
@@ -261,6 +267,8 @@ int main(int t_narg, char **t_args)
                     close(client.socket);
                 }
                 close(l_sock_listen);
+                close(disconnector_pipe[0]);
+                close(disconnector_pipe[1]);
                 exit(0);
             }
         }
@@ -298,7 +306,7 @@ int main(int t_narg, char **t_args)
                     inet_ntoa(l_rsa.sin_addr), ntohs(l_rsa.sin_port));
         }
 
-        for(size_t i = 2; i < poll_fds.size(); ++i){
+        for(size_t i = 3; i < poll_fds.size(); ++i){
             if(poll_fds[i].revents & POLLIN){
                 int client_fd = poll_fds[i].fd;
                 auto current_client = std::find_if(clients.begin(), clients.end(),
@@ -318,15 +326,20 @@ int main(int t_narg, char **t_args)
                         log_msg(LOG_INFO, "Client %d (%s) disconnected.", client_fd, current_client->name.c_str());
                     }
                     close(client_fd);
-                    clients.erase(current_client);
+                    
+                    if(write(disconnector_pipe[1], &client_fd, sizeof(client_fd)) != sizeof(client_fd)){
+                        log_msg(LOG_ERROR, "Failed to write to pipe for client %d.", client_fd);
+                    }
                     continue;
                 }
                 buffer[bytes_read] = '\0';
-                std::string msg(buffer);
+                std::string msg(buffer);  
                 msg.erase(std::remove(msg.begin(), msg.end(), '\n'), msg.end());
 
+                log_msg(LOG_ERROR, "Connected clients: %d.", clients.size());
+
                 if (msg == "#list") {
-                    std::string list_msg = "Connected clients:\n\t";
+                    std::string list_msg = "Connected clients :\n\t";
                     for(const auto &client : clients) {
                         list_msg += "- " + client.name + "\n\t";
                     }
@@ -360,8 +373,26 @@ int main(int t_narg, char **t_args)
                 }
             }
         }
+
+        if(poll_fds[2].revents & POLLIN){
+            int disconnected_fd;
+            ssize_t n = read(disconnector_pipe[0], &disconnected_fd, sizeof(disconnected_fd));
+            if(n == sizeof(disconnected_fd)){
+                auto client_to_remove = std::find_if(clients.begin(), clients.end(),
+                    [disconnected_fd](const ClientInfo& c) { return c.socket == disconnected_fd; });
+                if(client_to_remove != clients.end()){
+                    log_msg(LOG_INFO, "Client %d (%s) removed by using pipe.", client_to_remove->socket, client_to_remove->name.c_str());
+                    clients.erase(client_to_remove);
+                }
+            }
+            else{
+                log_msg(LOG_ERROR, "Pipe not working");
+            }
+        }
     }
 
+    close(disconnector_pipe[0]);
+    close(disconnector_pipe[1]);
     close(l_sock_listen);
     return 0;
 }
