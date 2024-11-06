@@ -203,9 +203,8 @@ int main( int t_narg, char **t_args )
     log_msg( LOG_INFO, "Server IP: '%s'  port: %d",
              inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
 
-    log_msg(LOG_INFO, "---------------------------------------\n", l_name.c_str());
+    log_msg(LOG_INFO, "---------------------------------------\n");
 
-    // Vytvoření vlákna pro příjem zpráv od serveru
     pthread_t recv_thread;
     if(pthread_create(&recv_thread, NULL, receive_thread, &l_sock_server) != 0){
         log_msg(LOG_ERROR, "Failed to create receive thread.");
@@ -213,7 +212,6 @@ int main( int t_narg, char **t_args )
         exit(1);
     }
 
-    // Hlavní smyčka pro odesílání příkladů
     char input[256];
     while(1){
         printf("Zadejte matematický příklad (např. 5 + 3): ");
@@ -222,7 +220,6 @@ int main( int t_narg, char **t_args )
             break;
         }
 
-        // Odstranění znaku nového řádku
         std::string expr(input);
         expr.erase(std::remove(expr.begin(), expr.end(), '\n'), expr.end());
         expr += "\n";

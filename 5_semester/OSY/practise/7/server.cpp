@@ -159,6 +159,7 @@ int main(int t_narg, char **t_args)
         help(t_narg, t_args);
     }
 
+    log_msg(LOG_INFO, "---------------------------------------");
     log_msg(LOG_INFO, "Server will listen on port: %d.", l_port);
 
     // Socket creation
@@ -197,14 +198,13 @@ int main(int t_narg, char **t_args)
     }
 
     log_msg(LOG_INFO, "Enter 'quit' to quit server.");
+    log_msg(LOG_INFO, "---------------------------------------\n");
 
-    // Seznam klientů
     std::vector<int> clients;
 
     // Go!
     while (1)
     {
-        // Vytvoření listu pro poll
         std::vector<pollfd> poll_fds;
         pollfd server_fd;
         server_fd.fd = l_sock_listen;
@@ -216,7 +216,6 @@ int main(int t_narg, char **t_args)
         stdin_fd.events = POLLIN;
         poll_fds.push_back(stdin_fd);
 
-        // Přidání všech klientů do poll_fds
         for(auto client : clients){
             pollfd pfd;
             pfd.fd = client;
@@ -233,7 +232,6 @@ int main(int t_narg, char **t_args)
             break;
         }
 
-        // Kontrola stdin
         if (poll_fds[1].revents & POLLIN)
         { 
             char buf[128];
@@ -251,7 +249,6 @@ int main(int t_narg, char **t_args)
             if (!strncmp(buf, STR_QUIT, strlen(STR_QUIT)))
             {
                 log_msg(LOG_INFO, "Request to 'quit' entered.");
-                // Zakončení všech klientů
                 for(auto client : clients){
                     close(client);
                 }
@@ -260,7 +257,6 @@ int main(int t_narg, char **t_args)
             }
         }
 
-        // Kontrola server socketu
         if (poll_fds[0].revents & POLLIN)
         { 
             sockaddr_in l_rsa;
@@ -273,13 +269,11 @@ int main(int t_narg, char **t_args)
                 continue;
             }
 
-            // Přidání nového klienta do seznamu
             clients.push_back(l_sock_client);
             log_msg(LOG_INFO, "New client connected: %s:%d",
                     inet_ntoa(l_rsa.sin_addr), ntohs(l_rsa.sin_port));
         }
 
-        // Kontrola všech klientů
         for(size_t i = 2; i < poll_fds.size(); ++i){
             if(poll_fds[i].revents & POLLIN){
                 int client_fd = poll_fds[i].fd;
