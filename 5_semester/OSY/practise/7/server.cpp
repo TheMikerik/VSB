@@ -7,7 +7,7 @@
 // Example of socket server.
 //
 // This program is example of socket server and it allows to connect and serve
-// the only one client.
+// multiple clients.
 // The mandatory argument of program is port number for listening.
 //
 //***************************************************************************
@@ -30,8 +30,10 @@
 #include <sys/wait.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <vector>
+#include <string>
+#include <algorithm>
 
-#define STR_CLOSE   "close"
 #define STR_QUIT    "quit"
 
 //***************************************************************************
@@ -99,71 +101,33 @@ void help(int t_narg, char **t_args)
         g_debug = LOG_DEBUG;
 }
 
-void send_image(int client_sock, const char* season)
-{
-    char image_file[256];
-    if( strcmp( season, "jaro") == 0 || strcmp( season, "podzim") == 0){
-        snprintf(image_file, sizeof(image_file), "%s.jpg", season);
-    } else if( strcmp( season, "leto") == 0 || strcmp( season, "zima") == 0){
-        snprintf(image_file, sizeof(image_file), "%s.png", season);
+//***************************************************************************
+// Simple mathematical expression evaluator
+// Note: For simplicity, this evaluator handles expressions like "a+b", "a-b", "a*b", "a/b"
+
+double evaluate_expression(const std::string& expr, std::string& error) {
+    double a, b, result;
+    char op;
+    if (sscanf(expr.c_str(), "%lf %c %lf", &a, &op, &b) != 3) {
+        error = "Invalid expression format.";
+        return 0.0;
     }
 
-    int fd = open(image_file, O_RDONLY);
-    if (fd < 0)
-    {
-        log_msg(LOG_ERROR, "Unable to open image file: %s", image_file);
-        close(client_sock);
-        exit(1);
-    }
-
-    struct stat st;
-    if (fstat(fd, &st) < 0)
-    {
-        log_msg(LOG_ERROR, "Unable to get file size: %s", image_file);
-        close(fd);
-        close(client_sock);
-        exit(1);
-    }
-    off_t filesize = st.st_size;
-
-
-    size_t block = 1024;
-
-    int blocks = filesize / block;
-    if (filesize % block != 0) blocks += 1;
-    double block_delay = 15.0 / blocks;
-
-    char buffer[block];
-    ssize_t bytes_read, bytes_sent;
-
-    while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
-    {
-        ssize_t total_sent = 0;
-        while (total_sent < bytes_read)
-        {
-            bytes_sent = write(client_sock, buffer + total_sent, bytes_read - total_sent);
-            if (bytes_sent < 0)
-            {
-                log_msg(LOG_ERROR, "Unable to send data to client.");
-                close(fd);
-                close(client_sock);
-                exit(1);
+    switch(op) {
+        case '+': result = a + b; break;
+        case '-': result = a - b; break;
+        case '*': result = a * b; break;
+        case '/':
+            if(b == 0){
+                error = "Division by zero.";
+                return 0.0;
             }
-            total_sent += bytes_sent;
-        }
-
-        usleep(block_delay * 1000000);
+            result = a / b; break;
+        default:
+            error = "Unsupported operator.";
+            return 0.0;
     }
-
-    if (bytes_read < 0)
-    {
-        log_msg(LOG_ERROR, "Error reading image file: %s", image_file);
-    }
-
-    log_msg(LOG_INFO, "Finished sending image: %s", image_file);
-    close(fd);
-    close(client_sock);
-    exit(0);
+    return result;
 }
 
 //***************************************************************************
@@ -225,7 +189,7 @@ int main(int t_narg, char **t_args)
     }
 
     // Listening on set port
-    if (listen(l_sock_listen, 5) < 0) // Increased backlog to handle multiple clients
+    if (listen(l_sock_listen, 5) < 0)
     {
         log_msg(LOG_ERROR, "Unable to listen on given port!");
         close(l_sock_listen);
@@ -234,20 +198,33 @@ int main(int t_narg, char **t_args)
 
     log_msg(LOG_INFO, "Enter 'quit' to quit server.");
 
+    // Seznam klientů
+    std::vector<int> clients;
+
     // Go!
     while (1)
     {
-        int l_sock_client = -1;
+        // Vytvoření listu pro poll
+        std::vector<pollfd> poll_fds;
+        pollfd server_fd;
+        server_fd.fd = l_sock_listen;
+        server_fd.events = POLLIN;
+        poll_fds.push_back(server_fd);
 
-        // list of fd sources
-        pollfd l_read_poll[ 2 ];
+        pollfd stdin_fd;
+        stdin_fd.fd = STDIN_FILENO;
+        stdin_fd.events = POLLIN;
+        poll_fds.push_back(stdin_fd);
 
-        l_read_poll[ 0 ].fd = STDIN_FILENO;
-        l_read_poll[ 0 ].events = POLLIN;
-        l_read_poll[ 1 ].fd = l_sock_listen;
-        l_read_poll[ 1 ].events = POLLIN;
+        // Přidání všech klientů do poll_fds
+        for(auto client : clients){
+            pollfd pfd;
+            pfd.fd = client;
+            pfd.events = POLLIN;
+            poll_fds.push_back(pfd);
+        }
 
-        int l_poll = poll(l_read_poll, 2, -1);
+        int l_poll = poll(poll_fds.data(), poll_fds.size(), -1);
 
         if (l_poll < 0)
         {
@@ -256,9 +233,9 @@ int main(int t_narg, char **t_args)
             break;
         }
 
-        if (l_read_poll[0].revents & POLLIN)
+        // Kontrola stdin
+        if (poll_fds[1].revents & POLLIN)
         { 
-            
             char buf[128];
             int len = read(STDIN_FILENO, buf, sizeof(buf) - 1);
             if (len < 0)
@@ -274,12 +251,17 @@ int main(int t_narg, char **t_args)
             if (!strncmp(buf, STR_QUIT, strlen(STR_QUIT)))
             {
                 log_msg(LOG_INFO, "Request to 'quit' entered.");
+                // Zakončení všech klientů
+                for(auto client : clients){
+                    close(client);
+                }
                 close(l_sock_listen);
                 exit(0);
             }
         }
 
-        if (l_read_poll[1].revents & POLLIN)
+        // Kontrola server socketu
+        if (poll_fds[0].revents & POLLIN)
         { 
             sockaddr_in l_rsa;
             socklen_t l_rsa_size = sizeof(l_rsa);
@@ -291,36 +273,54 @@ int main(int t_narg, char **t_args)
                 continue;
             }
 
-            pid_t pid = fork();
-            if (pid == 0)
-            {
-                log_msg(LOG_DEBUG, "Forked child process with PID %d to handle client.", getpid());
-                close(l_sock_listen);
+            // Přidání nového klienta do seznamu
+            clients.push_back(l_sock_client);
+            log_msg(LOG_INFO, "New client connected: %s:%d",
+                    inet_ntoa(l_rsa.sin_addr), ntohs(l_rsa.sin_port));
+        }
 
-                char client_ip[INET_ADDRSTRLEN];
-                inet_ntop(AF_INET, &(l_rsa.sin_addr), client_ip, INET_ADDRSTRLEN);
-                log_msg(LOG_INFO, "Client connected from %s:%d", client_ip, ntohs(l_rsa.sin_port));
-
-                char season_buf[128];
-                ssize_t bytes_read = 0;
-                size_t total_read = 0;
-                log_msg(LOG_DEBUG, "Child process %d: Starting to read season request.", getpid());
-                while ((bytes_read = read(l_sock_client, season_buf + total_read, 1)) > 0)
-                {
-                    if (season_buf[total_read] == '\n') break;
-                    total_read += bytes_read;
-                    if (total_read >= sizeof(season_buf) - 1) break;
+        // Kontrola všech klientů
+        for(size_t i = 2; i < poll_fds.size(); ++i){
+            if(poll_fds[i].revents & POLLIN){
+                int client_fd = poll_fds[i].fd;
+                char buffer[1024];
+                ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer)-1);
+                if(bytes_read <= 0){
+                    if(bytes_read < 0){
+                        log_msg(LOG_ERROR, "Error reading from client %d.", client_fd);
+                    } else {
+                        log_msg(LOG_INFO, "Client %d disconnected.", client_fd);
+                    }
+                    close(client_fd);
+                    clients.erase(std::remove(clients.begin(), clients.end(), client_fd), clients.end());
                 }
-                season_buf[total_read] = '\0';
-                log_msg(LOG_INFO, "Received season request: %s", season_buf);
+                else{
+                    buffer[bytes_read] = '\0';
+                    std::string expr(buffer);
+                    // Odstranění případných znaků nového řádku
+                    expr.erase(std::remove(expr.begin(), expr.end(), '\n'), expr.end());
+                    log_msg(LOG_INFO, "Received expression from client %d: %s", client_fd, expr.c_str());
 
-                send_image(l_sock_client, season_buf);
-                exit(0);
-            }
-            else
-            {
-                log_msg(LOG_DEBUG, "Forked child process with PID %d to handle client.", pid);
-                close(l_sock_client);
+                    // Vyhodnocení výrazu
+                    std::string error;
+                    double result = evaluate_expression(expr, error);
+                    std::string response;
+                    if(error.empty()){
+                        response = expr + " = " + std::to_string(result) + "\n";
+                    } else{
+                        response = expr + " = ERROR: " + error + "\n";
+                    }
+
+                    // Rozeslání odpovědi všem klientům
+                    for(auto client : clients){
+                        ssize_t bytes_sent = write(client, response.c_str(), response.size());
+                        if(bytes_sent < 0){
+                            log_msg(LOG_ERROR, "Error sending to client %d.", client);
+                        }
+                    }
+
+                    log_msg(LOG_INFO, "Broadcasted: %s", response.c_str());
+                }
             }
         }
     }

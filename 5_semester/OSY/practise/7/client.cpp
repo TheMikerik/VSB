@@ -7,8 +7,8 @@
 // Example of socket server/client.
 //
 // This program is example of socket client.
-// The mandatory arguments of program is IP adress or name of server and
-// a port number.
+// The mandatory arguments of program are IP address or name of server, port number,
+// and season.
 //
 //***************************************************************************
 
@@ -28,8 +28,8 @@
 #include <netdb.h>
 #include <errno.h>
 #include <sys/wait.h>
-
-#define STR_CLOSE               "close"
+#include <pthread.h>
+#include <string>
 
 //***************************************************************************
 // log messages
@@ -77,17 +77,17 @@ void log_msg( int t_log_level, const char *t_form, ... )
 
 void help( int t_narg, char **t_args )
 {
-    if ( t_narg <= 2 || !strcmp( t_args[ 1 ], "-h" ) )
+    if ( t_narg <= 3 || !strcmp( t_args[ 1 ], "-h" ) )
     {
         printf(
             "\n"
             "  Socket client example.\n"
             "\n"
-            "  Use: %s [-h -d] ip_or_name port_number season\n"
+            "  Use: %s [-h -d] ip_or_name port_number\n"
             "\n"
             "    -d  debug mode \n"
             "    -h  this help\n"
-            "    season\n"
+            "    Exemplary usage: send mathematical expressions in format 'a + b'\n"
             "\n", t_args[ 0 ] );
 
         exit( 0 );
@@ -98,6 +98,30 @@ void help( int t_narg, char **t_args )
 }
 
 //***************************************************************************
+// Thread pro příjem zpráv od serveru
+
+void* receive_thread(void* arg){
+    int sock = *((int*)arg);
+    char buffer[1024];
+    while(1){
+        ssize_t bytes_received = read(sock, buffer, sizeof(buffer)-1);
+        if(bytes_received <= 0){
+            if(bytes_received < 0){
+                log_msg(LOG_ERROR, "Error reading from server.");
+            }
+            else{
+                log_msg(LOG_INFO, "Server disconnected.");
+            }
+            close(sock);
+            exit(0);
+        }
+        buffer[bytes_received] = '\0';
+        log_msg(LOG_INFO, "Broadcast: %s", buffer);
+    }
+    return NULL;
+}
+
+//***************************************************************************
 
 int main( int t_narg, char **t_args )
 {
@@ -105,7 +129,6 @@ int main( int t_narg, char **t_args )
 
     int l_port = 0;
     char *l_host = nullptr;
-    char *season = nullptr;
 
     // parsing arguments
     for ( int i = 1; i < t_narg; i++ )
@@ -122,19 +145,17 @@ int main( int t_narg, char **t_args )
                 l_host = t_args[ i ];
             else if ( !l_port )
                 l_port = atoi( t_args[ i ] );
-            else if ( !season )
-                season = t_args[ i ];
         }
     }
 
-    if ( !l_host || !l_port || !season )
+    if ( !l_host || !l_port )
     {
-        log_msg( LOG_INFO, "Host, port, or season is missing!" );
+        log_msg( LOG_INFO, "Host or port is missing!" );
         help( t_narg, t_args );
         exit( 1 );
     }
 
-    log_msg( LOG_INFO, "Connection to '%s':%d. Season: %s", l_host, l_port, season );
+    log_msg( LOG_INFO, "Connection to '%s':%d.", l_host, l_port );
 
     addrinfo l_ai_req, *l_ai_ans;
     memset( &l_ai_req, 0, sizeof( l_ai_req ) );
@@ -177,89 +198,36 @@ int main( int t_narg, char **t_args )
     log_msg( LOG_INFO, "Server IP: '%s'  port: %d",
              inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
 
-
-    char request[128];
-    snprintf(request, sizeof(request), "%s\n", season);
-    log_msg( LOG_INFO, "Sending season request: %s", season );
-
-
-    ssize_t len = write( l_sock_server, request, strlen(request) );
-    if ( len < 0 )
-    {
-        log_msg( LOG_ERROR, "Unable to send data to server." );
-        close(l_sock_server);
-        exit( 1 );
-    }
-    log_msg( LOG_DEBUG, "Sent %zd bytes to server.", len );
-
-    pid_t pid = getpid();
-    char filename[256];
-    snprintf(filename, sizeof(filename), "%d.img", pid);
-
-    int output_file = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-    if (output_file < 0)
-    {
-        log_msg(LOG_ERROR, "Unable to create file: %s", filename);
+    // Vytvoření vlákna pro příjem zpráv od serveru
+    pthread_t recv_thread;
+    if(pthread_create(&recv_thread, NULL, receive_thread, &l_sock_server) != 0){
+        log_msg(LOG_ERROR, "Failed to create receive thread.");
         close(l_sock_server);
         exit(1);
     }
 
-    log_msg(LOG_INFO, "Receiving image data and saving to %s", filename );
-
-    
-    char buffer[2048];
-    ssize_t bytes_received;
-    while ((bytes_received = read(l_sock_server, buffer, sizeof(buffer))) > 0)
-    {
-        ssize_t bytes_written = write(output_file, buffer, bytes_received);
-        if (bytes_written < 0)
-        {
-            log_msg(LOG_ERROR, "Unable to write to file: %s", filename);
-            close(output_file);
-            close(l_sock_server);
-            exit(1);
+    // Hlavní smyčka pro odesílání příkladů
+    char input[256];
+    while(1){
+        printf("Zadejte matematický příklad (např. 5 + 3): ");
+        if(fgets(input, sizeof(input), stdin) == NULL){
+            log_msg(LOG_INFO, "Input closed.");
+            break;
         }
-        log_msg(LOG_DEBUG, "Bytes recieved: %zd", bytes_received);
+
+        // Odstranění znaku nového řádku
+        std::string expr(input);
+        expr.erase(std::remove(expr.begin(), expr.end(), '\n'), expr.end());
+        expr += "\n";
+
+        ssize_t len = write(l_sock_server, expr.c_str(), expr.size());
+        if(len < 0){
+            log_msg(LOG_ERROR, "Unable to send data to server.");
+            break;
+        }
+        log_msg(LOG_DEBUG, "Sent %zd bytes to server.", len);
     }
 
-    if (bytes_received < 0)
-    {
-        log_msg(LOG_ERROR, "Error reading data from server.");
-        close(output_file);
-        close(l_sock_server);
-        exit(1);
-    }
-
-    log_msg(LOG_INFO, "Image received successfully.");
-
-    close(output_file);
     close(l_sock_server);
-
-
-    pid_t child_pid = fork();
-    if (child_pid < 0)
-    {
-        log_msg(LOG_ERROR, "Fork failed.");
-        exit(1);
-    }
-    else if (child_pid == 0)
-    {
-        execlp("display", "display", filename, (char *)NULL);
-        exit(1);
-    }
-    else
-    {
-        int status;
-        waitpid(child_pid, &status, 0);
-        if (WIFEXITED(status))
-        {
-            log_msg(LOG_INFO, "'display' command exited with status %d.", WEXITSTATUS(status));
-        }
-        else
-        {
-            log_msg(LOG_INFO, "'display' command terminated abnormally.");
-        }
-    }
-
     return 0;
 }
