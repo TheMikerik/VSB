@@ -27,7 +27,15 @@ Application::Application()
       camera(glm::vec3(0.0f, 10.0f, 20.0f)),
       pointLight(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(1.0f))
 {
-
+    for (int i = 0; i < 10; ++i) {
+        glm::vec3 position = glm::vec3(
+            static_cast<float>(rand() % 20 - 10),
+            static_cast<float>(rand() % 10 + 1),
+            static_cast<float>(rand() % 20 - 10)
+        );
+        glm::vec3 color = glm::vec3(1.0f);
+        fireflies.emplace_back(position, color);
+    }
 }
 
 Application::~Application()
@@ -93,7 +101,7 @@ void Application::createScenes()
     auto scene2 = std::make_shared<Scene2>(camera);
     auto scene3 = std::make_shared<Scene3>(camera, pointLight);
     auto scene4 = std::make_shared<Scene4>(camera, pointLight);
-    auto scene5 = std::make_shared<Scene5>(camera, pointLight);
+    auto scene5 = std::make_shared<Scene5>(camera, fireflies);
 
     scenes.emplace_back(scene1);
     scenes.emplace_back(scene2);
