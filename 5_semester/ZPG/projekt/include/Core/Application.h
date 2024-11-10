@@ -33,3 +33,5 @@ private:
 
     Light pointLight;
 };
+
+extern Application App;

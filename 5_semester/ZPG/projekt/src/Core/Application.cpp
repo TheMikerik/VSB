@@ -19,6 +19,8 @@
 #include <chrono>
 #include <thread>
 
+Application App;
+
 Application::Application()
     : window(nullptr), currentSceneIndex(0),
       camera(glm::vec3(0.0f, 10.0f, 20.0f)),

@@ -2,9 +2,8 @@
 
 int main()
 {
-    Application app;
-    app.initialization();
-    app.createScenes();
-    app.run();
+    App.initialization();
+    App.createScenes();
+    App.run();
     return 0;
 }
