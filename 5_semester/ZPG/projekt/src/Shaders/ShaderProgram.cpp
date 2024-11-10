@@ -25,29 +25,14 @@ ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& f
 
     // Get uniform locations
     viewLoc = glGetUniformLocation(programID, "viewMatrix");
-    if (viewLoc == -1) {
-        std::cerr << "Warning: 'viewMatrix' uniform not found in shader." << std::endl;
-    }
 
     projLoc = glGetUniformLocation(programID, "projectionMatrix");
-    if (projLoc == -1) {
-        std::cerr << "Warning: 'projectionMatrix' uniform not found in shader." << std::endl;
-    }
 
     lightPosLoc = glGetUniformLocation(programID, "lightPos");
-    if (lightPosLoc == -1) {
-        std::cerr << "Warning: 'lightPos' uniform not found in shader." << std::endl;
-    }
 
     lightColorLoc = glGetUniformLocation(programID, "lightColor");
-    if (lightColorLoc == -1) {
-        std::cerr << "Warning: 'lightColor' uniform not found in shader." << std::endl;
-    }
 
     viewPosLoc = glGetUniformLocation(programID, "viewPos");
-    if (viewPosLoc == -1) {
-        std::cerr << "Warning: 'viewPos' uniform not found in shader." << std::endl;
-    }
 }
 
 ShaderProgram::~ShaderProgram()

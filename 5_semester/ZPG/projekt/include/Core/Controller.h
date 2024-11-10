@@ -34,9 +34,6 @@ private:
     float lastY;
     bool firstMouse;
 
-    float deltaTime;
-    float lastFrame;
-
     void processKeyboardInput(float deltaTime);
     void processTransformationInput();
     void switchScene(int index);

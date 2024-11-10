@@ -43,8 +43,7 @@ void Controller::scrollCallback(GLFWwindow* window, double xoffset, double yoffs
 Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr<Scene>>& scns)
     : window(win), camera(cam), scenes(scns),
       selectedDrawableIndex(0), rotationEnabled(false),
-      lastX(400.0f), lastY(300.0f), firstMouse(true),
-      deltaTime(0.0f), lastFrame(0.0f)
+      lastX(400.0f), lastY(300.0f), firstMouse(true)
 {
     controllerInstance = this;
 
@@ -55,9 +54,7 @@ Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr
 
 void Controller::handleInput(float deltaTimeInput, int& currentSceneIndex) {
     currentSceneIndex = this->currentSceneIndex;
-    deltaTime = deltaTimeInput - lastFrame;
-    lastFrame = deltaTimeInput;
-    processKeyboardInput(deltaTime);
+    processKeyboardInput(deltaTimeInput);
     processTransformationInput();
 }
 

@@ -115,9 +115,12 @@ void Application::run()
     glEnable(GL_DEPTH_TEST);
     createScenes();
 
+    float lastFrameTime = static_cast<float>(glfwGetTime());
+
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
-        float deltaTime = currentFrame;
+        float deltaTime = currentFrame - lastFrameTime;
+        lastFrameTime = currentFrame;
 
         if (currentSceneIndex >= 0 && currentSceneIndex < scenes.size()) {
             const glm::vec4& bgColor = scenes[currentSceneIndex]->getBackgroundColor();
