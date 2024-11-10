@@ -37,31 +37,48 @@ Scene5::Scene5(Camera& cam, std::vector<Light>& ff) : camera(cam), fireflies(ff)
     camera.notifyObservers();
 
     std::vector<float> platformVertices(std::begin(platform), std::end(platform));
-    std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
+    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
 
     auto platformModel = std::make_shared<Model>(platformVertices);
-    auto sphereModel = std::make_shared<Model>(sphereVertices);
+    auto treeModel = std::make_shared<Model>(treeVertices);
 
     // Platform
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
     addDrawable(platformDrawable);
 
-    // Spheres
+    // // Spheres
+    // for (int i = 0; i < 100; ++i) {
+    //     auto randomShader = shaders[i % shaders.size()];
+    //     auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_phong);
+
+    //     Transformation sphereTrans;
+    //     sphereTrans.translate(glm::vec3(
+    //         getRandom(-15.0f, 15.0f),
+    //         getRandom(1.0f, 3.0f),
+    //         getRandom(-15.0f, 15.0f)
+    //     ));
+    //     sphereTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    //     sphereTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
+    //     sphereDrawable->setTransformation(sphereTrans);
+
+    //     addDrawable(sphereDrawable);
+    // }
+
     for (int i = 0; i < 100; ++i) {
         auto randomShader = shaders[i % shaders.size()];
-        auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_phong);
+        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
 
-        Transformation sphereTrans;
-        sphereTrans.translate(glm::vec3(
+        Transformation treeTrans;
+        treeTrans.translate(glm::vec3(
             getRandom(-15.0f, 15.0f),
-            getRandom(1.0f, 3.0f),
+            0.0f,
             getRandom(-15.0f, 15.0f)
         ));
-        sphereTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        sphereTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-        sphereDrawable->setTransformation(sphereTrans);
+        treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
+        treeDrawable->setTransformation(treeTrans);
 
-        addDrawable(sphereDrawable);
+        addDrawable(treeDrawable);
     }
 
     // Fireflies
