@@ -11,6 +11,7 @@
 #include "Scenes/Scene2.h"
 #include "Scenes/Scene3.h"
 #include "Scenes/Scene4.h"
+#include "Scenes/Scene5.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -92,11 +93,13 @@ void Application::createScenes()
     auto scene2 = std::make_shared<Scene2>(camera);
     auto scene3 = std::make_shared<Scene3>(camera, pointLight);
     auto scene4 = std::make_shared<Scene4>(camera, pointLight);
+    auto scene5 = std::make_shared<Scene5>(camera, pointLight);
 
     scenes.emplace_back(scene1);
     scenes.emplace_back(scene2);
     scenes.emplace_back(scene3);
     scenes.emplace_back(scene4);
+    scenes.emplace_back(scene5);
 }
 
 void Application::run()
