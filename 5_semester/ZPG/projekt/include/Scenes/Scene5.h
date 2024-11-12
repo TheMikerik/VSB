@@ -12,12 +12,11 @@
 
 class Scene5 : public Scene {
 public:
-    Scene5(Camera& camera, std::vector<Light>& fireflights);
+    Scene5(Camera& camera);
     ~Scene5() override = default;
 
 private:
     Camera& camera;
-    std::vector<Light>& fireflies;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
 
     float getRandom(float min, float max);

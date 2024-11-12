@@ -19,8 +19,18 @@
 #include <ctime>
 #include <iostream>
 
-Scene5::Scene5(Camera& cam, std::vector<Light>& ff) : camera(cam), fireflies(ff) {
+Scene5::Scene5(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
+
+    for (int i = 0; i < 10; ++i) {
+        glm::vec3 position = glm::vec3(
+            static_cast<float>(rand() % 20 - 10),
+            static_cast<float>(rand() % 10 + 1),
+            static_cast<float>(rand() % 20 - 10)
+        );
+        glm::vec3 color = glm::vec3(1.0f);
+        this->addLight(Light(position, color));
+    }
 
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
@@ -30,13 +40,13 @@ Scene5::Scene5(Camera& cam, std::vector<Light>& ff) : camera(cam), fireflies(ff)
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
-        for(auto& firefly : fireflies) {
-            firefly.registerObserver(shader.get());
+        for(auto& light : this->lights) {
+            light.registerObserver(shader.get());
         }
     }
 
-    for(auto& firefly : fireflies) {
-        firefly.notifyObservers();
+    for(auto& light : this->lights) {
+        light.notifyObservers();
     }
     camera.notifyObservers();
 
@@ -72,8 +82,8 @@ Scene5::Scene5(Camera& cam, std::vector<Light>& ff) : camera(cam), fireflies(ff)
         addDrawable(treeDrawable);
     }
 
-    // Fireflies
-    for(auto& firefly : fireflies) {
+
+    for(auto& firefly : this->getLights()) {
         std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
         auto sphereModel = std::make_shared<Model>(sphereVertices);
         auto lightShader = shader_white;

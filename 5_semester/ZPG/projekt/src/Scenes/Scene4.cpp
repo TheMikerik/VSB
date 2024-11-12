@@ -19,25 +19,33 @@
 #include <ctime>
 #include <iostream>
 
-Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
+Scene4::Scene4(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
 
+    this->addLight( Light(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(1.0f)) );
+    
     setBackgroundColor(glm::vec4(0.59f, 0.76f, 0.92f, 1.0f));
 
-    auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
-    auto shader_const = std::make_shared<ShaderProgram>("./shaders/constant/vertex_constant.glsl", "./shaders/constant/fragment_constant.glsl");
+    // auto shader_pl = std::make_shared<ShaderProgram>("./shaders/vertex_shader_pl.glsl", "./shaders/fragment_shader_pl.glsl");
+    // auto shader_const = std::make_shared<ShaderProgram>("./shaders/constant/vertex_constant.glsl", "./shaders/constant/fragment_constant.glsl");
     auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
-    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert/vertex_lambert.glsl", "./shaders/lambert/fragment_lambert.glsl");
-    auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/blinn/vertex_blinn.glsl", "./shaders/blinn/fragment_blinn.glsl");
+    // auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert/vertex_lambert.glsl", "./shaders/lambert/fragment_lambert.glsl");
+    // auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/blinn/vertex_blinn.glsl", "./shaders/blinn/fragment_blinn.glsl");
 
-    shaders = {shader_pl, shader_const, shader_phong, shader_lambert, shader_blinn};
+    // shaders = {shader_pl, shader_const, shader_phong, shader_lambert, shader_blinn};
+    shaders = {shader_phong};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
-        pointLight.registerObserver(shader.get());
+        for(auto& light : this->lights) {
+            light.registerObserver(shader.get());
+        }
     }
 
-    pointLight.notifyObservers();
+    for(auto& light : this->lights) {
+        light.notifyObservers();
+    }
+
     camera.notifyObservers();
 
     std::vector<float> bushesVertices(std::begin(bushes), std::end(bushes));

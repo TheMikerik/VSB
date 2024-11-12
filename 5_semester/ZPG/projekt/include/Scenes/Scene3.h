@@ -12,12 +12,11 @@
 
 class Scene3 : public Scene {
 public:
-    Scene3(Camera& camera, Light& pointLight);
+    Scene3(Camera& camera);
     ~Scene3() override = default;
     virtual void switchShader() override;
 
 private:
     Camera& camera;
-    Light& pointLight;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
 };

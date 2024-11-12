@@ -25,13 +25,9 @@ ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& f
 
     // Get uniform locations
     viewLoc = glGetUniformLocation(programID, "viewMatrix");
-
     projLoc = glGetUniformLocation(programID, "projectionMatrix");
-
     lightPosLoc = glGetUniformLocation(programID, "lightPos");
-
     lightColorLoc = glGetUniformLocation(programID, "lightColor");
-
     viewPosLoc = glGetUniformLocation(programID, "viewPos");
 }
 

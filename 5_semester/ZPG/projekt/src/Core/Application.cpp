@@ -99,9 +99,9 @@ void Application::createScenes()
 {
     auto scene1 = std::make_shared<Scene1>(camera);
     auto scene2 = std::make_shared<Scene2>(camera);
-    auto scene3 = std::make_shared<Scene3>(camera, pointLight);
-    auto scene4 = std::make_shared<Scene4>(camera, pointLight);
-    auto scene5 = std::make_shared<Scene5>(camera, fireflies);
+    auto scene3 = std::make_shared<Scene3>(camera);
+    auto scene4 = std::make_shared<Scene4>(camera);
+    auto scene5 = std::make_shared<Scene5>(camera);
 
     scenes.emplace_back(scene1);
     scenes.emplace_back(scene2);
