@@ -13,5 +13,6 @@ private:
 public:
     Transformation();
     void addOperation(const std::shared_ptr<ITransformationOperation>& operation);
+    void clearOperations();
     const glm::mat4& getModelMatrix() const;
 };

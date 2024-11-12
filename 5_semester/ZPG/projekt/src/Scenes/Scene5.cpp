@@ -102,6 +102,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         lightTrans.addOperation(scaleOp);
 
         lightDrawable->setTransformation(lightTrans);
+        lightDrawables.push_back(lightDrawable);
         addDrawable(lightDrawable);
     }
 }
@@ -127,5 +128,28 @@ void Scene5::render(float dt) const {
         treeDrawable->setTransformation(trans);
     }
 
+    int i = 0;
+    for (auto& lightDrawable : lightDrawables) {
+        
+        auto trans = lightDrawable->getTransformation();
+        glm::mat4 modelMatrix = trans.getModelMatrix();
+        glm::vec3 currentPosition = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
+
+
+        float newX = currentPosition.x + dt * (rand() % 2 == 0 ? 1 : -1) * (rand() % 10) * 0.1f;
+        float newY = currentPosition.y + dt * (rand() % 2 == 0 ? 1 : -1) * (rand() % 10) * 0.1f;
+        float newZ = currentPosition.z + dt * (rand() % 2 == 0 ? 1 : -1) * (rand() % 10) * 0.1f;
+
+        newX = glm::clamp(newX, -15.0f, 15.0f);
+        newY = glm::clamp(newY, 1.0f, 10.0f);
+        newZ = glm::clamp(newZ, -15.0f, 15.0f);
+        printf("%d: %f, %f, %f\n", i, newX, newY, newZ);
+
+        trans.clearOperations();
+        auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(newX, newY, newZ));
+        trans.addOperation(translateOp);
+        lightDrawable->setTransformation(trans);
+        i++;
+    }
     Scene::render(dt);
 }
