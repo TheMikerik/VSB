@@ -10,6 +10,13 @@
 #include <memory>
 #include <vector>
 
+struct LightDrawableWithDirection {
+    std::shared_ptr<DrawableObject> drawable;
+    glm::vec3 direction;
+    LightDrawableWithDirection(std::shared_ptr<DrawableObject> drawable, glm::vec3 direction) 
+        : drawable(drawable), direction(direction) {}
+};
+
 class Scene5 : public Scene {
 public:
     Scene5(Camera& camera);
@@ -17,7 +24,7 @@ public:
 
     virtual void addLight(const Light& light);
     virtual const std::vector<Light>& getLights() const;
-    virtual void render(float dt) const override;
+    virtual void render(float dt) override;
 
 private:
     Camera& camera;
@@ -25,5 +32,5 @@ private:
     float getRandom(float min, float max);
     std::vector<Light> lights;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
-    std::vector<std::shared_ptr<DrawableObject>> lightDrawables;
+    std::vector<LightDrawableWithDirection> lightDrawablesWithDirection;
 };

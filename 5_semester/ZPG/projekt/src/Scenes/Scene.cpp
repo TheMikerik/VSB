@@ -13,7 +13,7 @@ const std::vector<std::shared_ptr<DrawableObject>>& Scene::getDrawables() const 
     return drawables;
 }
 
-void Scene::render(float dt) const {
+void Scene::render(float dt) {
     for (const auto& drawable : drawables) {
         drawable->render();
     }

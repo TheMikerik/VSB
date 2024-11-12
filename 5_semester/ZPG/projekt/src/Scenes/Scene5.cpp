@@ -92,17 +92,18 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         auto lightShader = shader_white;
 
         auto lightDrawable = std::make_shared<DrawableObject>(sphereModel, lightShader);
-
         Transformation lightTrans;
 
         auto translateOp = std::make_shared<TranslateOperation>(firefly.getPosition());
         lightTrans.addOperation(translateOp);
-
         auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(0.2f));
         lightTrans.addOperation(scaleOp);
 
         lightDrawable->setTransformation(lightTrans);
-        lightDrawables.push_back(lightDrawable);
+
+        glm::vec3 initialDirection(getRandom(-1.0f, 1.0f), getRandom(-1.0f, 1.0f), getRandom(-1.0f, 1.0f));
+        lightDrawablesWithDirection.emplace_back(lightDrawable, glm::normalize(initialDirection));
+
         addDrawable(lightDrawable);
     }
 }
@@ -119,7 +120,7 @@ const std::vector<Light>& Scene5::getLights() const {
     return lights;
 }
 
-void Scene5::render(float dt) const {
+void Scene5::render(float dt) {
 
     for (auto& treeDrawable : treeDrawables) {
         auto trans = treeDrawable->getTransformation();
@@ -129,27 +130,24 @@ void Scene5::render(float dt) const {
     }
 
     int i = 0;
-    for (auto& lightDrawable : lightDrawables) {
-        
+    for (auto& item : lightDrawablesWithDirection) {
+        auto& lightDrawable = item.drawable;
+        auto& direction = item.direction;
+
         auto trans = lightDrawable->getTransformation();
         glm::mat4 modelMatrix = trans.getModelMatrix();
         glm::vec3 currentPosition = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
+        glm::vec3 newPosition = currentPosition + direction * dt;
 
-
-        float newX = currentPosition.x + dt * (rand() % 2 == 0 ? 1 : -1) * (rand() % 10) * 0.1f;
-        float newY = currentPosition.y + dt * (rand() % 2 == 0 ? 1 : -1) * (rand() % 10) * 0.1f;
-        float newZ = currentPosition.z + dt * (rand() % 2 == 0 ? 1 : -1) * (rand() % 10) * 0.1f;
-
-        newX = glm::clamp(newX, -15.0f, 15.0f);
-        newY = glm::clamp(newY, 1.0f, 10.0f);
-        newZ = glm::clamp(newZ, -15.0f, 15.0f);
-        printf("%d: %f, %f, %f\n", i, newX, newY, newZ);
+        // Boundary check and reverse direction if necessary
+        if (newPosition.x >= 15.0f || newPosition.x <= -15.0f) direction.x *= -1.0f;
+        if (newPosition.y >= 10.0f || newPosition.y <= 1.0f) direction.y *= -1.0f;
+        if (newPosition.z >= 15.0f || newPosition.z <= -15.0f) direction.z *= -1.0f;
 
         trans.clearOperations();
-        auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(newX, newY, newZ));
+        auto translateOp = std::make_shared<TranslateOperation>(newPosition);
         trans.addOperation(translateOp);
         lightDrawable->setTransformation(trans);
-        i++;
     }
     Scene::render(dt);
 }
