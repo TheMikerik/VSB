@@ -19,7 +19,7 @@
 #include <ctime>
 #include <iostream>
 
-Scene5::Scene5(Camera& cam) : camera(cam), elapsedTime(0.0f) { // Update this line
+Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     std::srand(static_cast<unsigned int>(std::time(0)));
 
     for (int i = 0; i < 10; ++i) {
@@ -118,15 +118,14 @@ const std::vector<Light>& Scene5::getLights() const {
     return lights;
 }
 
-void Scene5::render() const {
-    elapsedTime += 0.002f;
+void Scene5::render(float dt) const {
 
     for (auto& treeDrawable : treeDrawables) {
         auto trans = treeDrawable->getTransformation();
-        auto rotateOp = std::make_shared<RotateOperation>(elapsedTime, glm::vec3(0.0f, 1.0f, 0.0f)); // 10 degrees per second
+        auto rotateOp = std::make_shared<RotateOperation>(dt * 50, glm::vec3(0.0f, 1.0f, 0.0f));
         trans.addOperation(rotateOp);
         treeDrawable->setTransformation(trans);
     }
 
-    Scene::render();
+    Scene::render(dt);
 }

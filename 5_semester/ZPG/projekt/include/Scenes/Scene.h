@@ -12,7 +12,7 @@ public:
     Scene();
     virtual ~Scene();
 
-    virtual void render() const;
+    virtual void render(float dt) const;
     virtual void addDrawable(std::shared_ptr<DrawableObject> drawable);
     virtual const std::vector<std::shared_ptr<DrawableObject>>& getDrawables() const;
     void setBackgroundColor(const glm::vec4& color);

@@ -129,7 +129,7 @@ void Application::run()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (currentSceneIndex >= 0 && currentSceneIndex < scenes.size()) {
-            scenes[currentSceneIndex]->render();
+            scenes[currentSceneIndex]->render(deltaTime);
         }
 
         glfwSwapBuffers(window);

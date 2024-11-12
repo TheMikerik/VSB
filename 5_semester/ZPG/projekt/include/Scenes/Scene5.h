@@ -17,7 +17,7 @@ public:
 
     virtual void addLight(const Light& light);
     virtual const std::vector<Light>& getLights() const;
-    virtual void render() const override;
+    virtual void render(float dt) const override;
 
 private:
     Camera& camera;
@@ -25,5 +25,4 @@ private:
     float getRandom(float min, float max);
     std::vector<Light> lights;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
-    mutable float elapsedTime; // Add this line
 };
