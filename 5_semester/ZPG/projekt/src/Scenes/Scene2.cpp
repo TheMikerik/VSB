@@ -4,6 +4,10 @@
 #include "../models/tree.h"
 #include "../models/platform.h"
 
+#include "../include/Core/Transformation/ScaleOperation.h"
+#include "../include/Core/Transformation/TranslateOperation.h"
+#include "../include/Core/Transformation/RotateOperation.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
@@ -45,15 +49,20 @@ Scene2::Scene2(Camera& cam) : camera(cam) {
         auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, randomShader);
 
         Transformation bushesTrans;
-        bushesTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        bushesTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        bushesTrans.scale(glm::vec3(getRandom(1.0f, 3.0f)));
-        bushesDrawable->setTransformation(bushesTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+        bushesTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        bushesTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(getRandom(1.0f, 3.0f)));
+        bushesTrans.addOperation(scaleOp);
+
+        bushesDrawable->setTransformation(bushesTrans);
         addDrawable(bushesDrawable);
     }
 
@@ -63,15 +72,20 @@ Scene2::Scene2(Camera& cam) : camera(cam) {
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
 
         Transformation treeTrans;
-        treeTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-        treeDrawable->setTransformation(treeTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+        treeTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        treeTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(getRandom(0.2f, 0.8f)));
+        treeTrans.addOperation(scaleOp);
+
+        treeDrawable->setTransformation(treeTrans);
         addDrawable(treeDrawable);
     }
 }

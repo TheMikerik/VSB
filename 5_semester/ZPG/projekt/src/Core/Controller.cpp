@@ -5,6 +5,9 @@
 #include <chrono>
 #include <thread>
 #include "Core/Transformation.h"
+#include "Core/Transformation/TranslateOperation.h"
+#include "Core/Transformation/RotateOperation.h"
+#include "Core/Transformation/ScaleOperation.h"
 
 static Controller* controllerInstance = nullptr;
 
@@ -133,102 +136,106 @@ void Controller::processTransformationInput() {
     float scaleStep = 0.05f;
 
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
+        Transformation trans = selectedDrawable->getTransformation();
         if (!rotationEnabled){
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.translate(glm::vec3(translationStep, 0.0f, 0.0f));
-            selectedDrawable->setTransformation(trans);
+            auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(translationStep, 0.0f, 0.0f));
+            trans.addOperation(translateOp);
             std::cout << "Translated +X" << std::endl;
         } else {
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.rotate(rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
-            selectedDrawable->setTransformation(trans);
+            auto rotateOp = std::make_shared<RotateOperation>(rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+            trans.addOperation(rotateOp);
             std::cout << "Rotated +X" << std::endl;
         }
+        selectedDrawable->setTransformation(trans);
     }
     if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
+        Transformation trans = selectedDrawable->getTransformation();
         if (!rotationEnabled){
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.translate(glm::vec3(-translationStep, 0.0f, 0.0f));
-            selectedDrawable->setTransformation(trans);
+            auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(-translationStep, 0.0f, 0.0f));
+            trans.addOperation(translateOp);
             std::cout << "Translated -X" << std::endl;
         } else {
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.rotate(-rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
-            selectedDrawable->setTransformation(trans);
+            auto rotateOp = std::make_shared<RotateOperation>(-rotationStep, glm::vec3(1.0f, 0.0f, 0.0f));
+            trans.addOperation(rotateOp);
             std::cout << "Rotated -X" << std::endl;
         }
+        selectedDrawable->setTransformation(trans);
     }
 
     if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
-        if (!rotationEnabled){
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.translate(glm::vec3(0.0f, translationStep, 0.0f));
-            selectedDrawable->setTransformation(trans);
+        Transformation trans = selectedDrawable->getTransformation();
+        if (!rotationEnabled) {
+            auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(0.0f, translationStep, 0.0f));
+            trans.addOperation(translateOp);
             std::cout << "Translated +Y" << std::endl;
         } else {
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.rotate(rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
-            selectedDrawable->setTransformation(trans);
+            auto rotateOp = std::make_shared<RotateOperation>(rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
+            trans.addOperation(rotateOp);
             std::cout << "Rotated +Y" << std::endl;
         }
+        selectedDrawable->setTransformation(trans);
     }
+
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-        if (!rotationEnabled){
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.translate(glm::vec3(0.0f, -translationStep, 0.0f));
-            selectedDrawable->setTransformation(trans);
+        Transformation trans = selectedDrawable->getTransformation();
+        if (!rotationEnabled) {
+            auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(0.0f, -translationStep, 0.0f));
+            trans.addOperation(translateOp);
             std::cout << "Translated -Y" << std::endl;
         } else {
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.rotate(-rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
-            selectedDrawable->setTransformation(trans);
+            auto rotateOp = std::make_shared<RotateOperation>(-rotationStep, glm::vec3(0.0f, 1.0f, 0.0f));
+            trans.addOperation(rotateOp);
             std::cout << "Rotated -Y" << std::endl;
         }
+        selectedDrawable->setTransformation(trans);
     }
 
     if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-        if (!rotationEnabled){
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.translate(glm::vec3(0.0f, 0.0f, translationStep));
-            selectedDrawable->setTransformation(trans);
+        Transformation trans = selectedDrawable->getTransformation();
+        if (!rotationEnabled) {
+            auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(0.0f, 0.0f, translationStep));
+            trans.addOperation(translateOp);
             std::cout << "Translated +Z" << std::endl;
         } else {
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.rotate(rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
-            selectedDrawable->setTransformation(trans);
+            auto rotateOp = std::make_shared<RotateOperation>(rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
+            trans.addOperation(rotateOp);
             std::cout << "Rotated +Z" << std::endl;
         }
+        selectedDrawable->setTransformation(trans);
     }
+
     if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-        if (!rotationEnabled){
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.translate(glm::vec3(0.0f, 0.0f, -translationStep));
-            selectedDrawable->setTransformation(trans);
+        Transformation trans = selectedDrawable->getTransformation();
+        if (!rotationEnabled) {
+            auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(0.0f, 0.0f, -translationStep));
+            trans.addOperation(translateOp);
             std::cout << "Translated -Z" << std::endl;
         } else {
-            Transformation trans = selectedDrawable->getTransformation();
-            trans.rotate(-rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
-            selectedDrawable->setTransformation(trans);
+            auto rotateOp = std::make_shared<RotateOperation>(-rotationStep, glm::vec3(0.0f, 0.0f, 1.0f));
+            trans.addOperation(rotateOp);
             std::cout << "Rotated -Z" << std::endl;
         }
+        selectedDrawable->setTransformation(trans);
     }
 
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         Transformation trans = selectedDrawable->getTransformation();
-        trans.scale(glm::vec3(1.0f + scaleStep));
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(1.0f + scaleStep));
+        trans.addOperation(scaleOp);
         selectedDrawable->setTransformation(trans);
         std::cout << "Scaled Up" << std::endl;
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         Transformation trans = selectedDrawable->getTransformation();
-        trans.scale(glm::vec3(1.0f - scaleStep));
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(1.0f - scaleStep));
+        trans.addOperation(scaleOp);
         selectedDrawable->setTransformation(trans);
         std::cout << "Scaled Down" << std::endl;
     }
 
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
         rotationEnabled = !rotationEnabled;
-        std::cout << "Rotation: " << rotationEnabled << std::endl;
+        std::cout << "Rotation: " << (rotationEnabled ? "Enabled" : "Disabled") << std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(300));
     }
 

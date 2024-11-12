@@ -1,17 +1,17 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <memory>
+#include <vector>
+#include <glm/mat4x4.hpp>
+#include "Interfaces/ITransformationOperation.h"
 
 class Transformation {
+private:
+    std::vector<std::shared_ptr<ITransformationOperation>> operations;
+    glm::mat4 modelMatrix;
+
 public:
     Transformation();
-
-    void translate(const glm::vec3& translation);
-    void rotate(float angleDegrees, const glm::vec3& axis);
-    void scale(const glm::vec3& scaleVec);
-
+    void addOperation(const std::shared_ptr<ITransformationOperation>& operation);
     const glm::mat4& getModelMatrix() const;
-
-private:
-    glm::mat4 modelMatrix;
 };

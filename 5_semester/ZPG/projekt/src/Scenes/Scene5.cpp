@@ -9,6 +9,10 @@
 #include "../models/sphere.h"
 #include "../models/suzi_flat.h"
 
+#include "../include/Core/Transformation/ScaleOperation.h"
+#include "../include/Core/Transformation/TranslateOperation.h"
+#include "../include/Core/Transformation/RotateOperation.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
@@ -46,36 +50,23 @@ Scene5::Scene5(Camera& cam, std::vector<Light>& ff) : camera(cam), fireflies(ff)
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
     addDrawable(platformDrawable);
 
-    // // Spheres
-    // for (int i = 0; i < 100; ++i) {
-    //     auto randomShader = shaders[i % shaders.size()];
-    //     auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_phong);
-
-    //     Transformation sphereTrans;
-    //     sphereTrans.translate(glm::vec3(
-    //         getRandom(-15.0f, 15.0f),
-    //         getRandom(1.0f, 3.0f),
-    //         getRandom(-15.0f, 15.0f)
-    //     ));
-    //     sphereTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //     sphereTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-    //     sphereDrawable->setTransformation(sphereTrans);
-
-    //     addDrawable(sphereDrawable);
-    // }
-
     for (int i = 0; i < 100; ++i) {
-        auto randomShader = shaders[i % shaders.size()];
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
 
         Transformation treeTrans;
-        treeTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
+
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+        treeTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        treeTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(getRandom(0.2f, 0.8f)));
+        treeTrans.addOperation(scaleOp);
+
         treeDrawable->setTransformation(treeTrans);
 
         addDrawable(treeDrawable);
@@ -90,8 +81,12 @@ Scene5::Scene5(Camera& cam, std::vector<Light>& ff) : camera(cam), fireflies(ff)
         auto lightDrawable = std::make_shared<DrawableObject>(sphereModel, lightShader);
 
         Transformation lightTrans;
-        lightTrans.translate(firefly.getPosition());
-        lightTrans.scale(glm::vec3(0.2f));
+
+        auto translateOp = std::make_shared<TranslateOperation>(firefly.getPosition());
+        lightTrans.addOperation(translateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(0.2f));
+        lightTrans.addOperation(scaleOp);
 
         lightDrawable->setTransformation(lightTrans);
         addDrawable(lightDrawable);

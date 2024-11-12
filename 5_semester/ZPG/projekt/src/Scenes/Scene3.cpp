@@ -2,6 +2,9 @@
 #include "../include/Scenes/Scene3.h"
 #include "../models/sphere.h"
 
+#include "../include/Core/Transformation/ScaleOperation.h"
+#include "../include/Core/Transformation/TranslateOperation.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -37,8 +40,12 @@ Scene3::Scene3(Camera& cam, Light& light) : camera(cam), pointLight(light) {
         auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shaders[currentShader]);
 
         Transformation sphereTrans;
-        sphereTrans.scale(glm::vec3(3.0f));
-        sphereTrans.translate(pos);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(3.0f));
+        sphereTrans.addOperation(scaleOp);
+
+        auto translateOp = std::make_shared<TranslateOperation>(pos);
+        sphereTrans.addOperation(translateOp);
 
         sphereDrawable->setTransformation(sphereTrans);
 

@@ -1,23 +1,18 @@
-// Transformation.cpp
 #include "Core/Transformation.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 Transformation::Transformation()
-    : modelMatrix(1.0f)
+    : modelMatrix(glm::mat4(1.0f))
 {}
 
-void Transformation::translate(const glm::vec3& translation){
-    modelMatrix = glm::translate(modelMatrix, translation);
+void Transformation::addOperation(const std::shared_ptr<ITransformationOperation>& operation) {
+    operations.push_back(operation);
 }
 
-void Transformation::rotate(float angleDegrees, const glm::vec3& axis){
-    modelMatrix = glm::rotate(modelMatrix, glm::radians(angleDegrees), axis);
-}
-
-void Transformation::scale(const glm::vec3& scaleVec){
-    modelMatrix = glm::scale(modelMatrix, scaleVec);
-}
-
-const glm::mat4& Transformation::getModelMatrix() const{
-    return modelMatrix;
+const glm::mat4& Transformation::getModelMatrix() const {
+    glm::mat4 tempModelMatrix = glm::mat4(1.0f);
+    for (const auto& op : operations) {
+        op->apply(tempModelMatrix);
+    }
+    return tempModelMatrix;
 }

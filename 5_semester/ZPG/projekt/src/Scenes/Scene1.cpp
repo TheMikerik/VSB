@@ -2,6 +2,8 @@
 #include "../include/Scenes/Scene1.h"
 #include "../models/triangle.h"
 #include "../models/tree.h"
+#include "../include/Core/Transformation/ScaleOperation.h"
+#include "../include/Core/Transformation/TranslateOperation.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -24,8 +26,13 @@ Scene1::Scene1(Camera& cam) : camera(cam) {
     auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader_red);
 
     Transformation triangleTrans;
-    triangleTrans.scale(glm::vec3(5.0f));
-    triangleTrans.translate(glm::vec3(0.0f, 2.0f, 0.0f));
+
+    auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(5.0f));
+    triangleTrans.addOperation(scaleOp);
+    
+    auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(0.0f, 2.0f, 0.0f));
+    triangleTrans.addOperation(translateOp);
+
     triangleDrawable->setTransformation(triangleTrans);
     addDrawable(triangleDrawable);
 }

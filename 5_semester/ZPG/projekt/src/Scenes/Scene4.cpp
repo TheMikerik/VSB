@@ -9,6 +9,10 @@
 #include "../models/sphere.h"
 #include "../models/suzi_flat.h"
 
+#include "../include/Core/Transformation/ScaleOperation.h"
+#include "../include/Core/Transformation/TranslateOperation.h"
+#include "../include/Core/Transformation/RotateOperation.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
@@ -60,15 +64,19 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         auto bushesDrawable = std::make_shared<DrawableObject>(bushesModel, randomShader);
 
         Transformation bushesTrans;
-        bushesTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        bushesTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        bushesTrans.scale(glm::vec3(getRandom(1.0f, 3.0f)));
-        bushesDrawable->setTransformation(bushesTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+        bushesTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        bushesTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(getRandom(1.0f, 3.0f)));
+        bushesTrans.addOperation(scaleOp);
+
+        bushesDrawable->setTransformation(bushesTrans);
         addDrawable(bushesDrawable);
     }
 
@@ -78,15 +86,23 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, randomShader);
 
         Transformation treeTrans;
-        treeTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-        treeDrawable->setTransformation(treeTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f),
+            0.0f,
+            getRandom(-15.0f, 15.0f)));
+        treeTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), 
+            glm::vec3(0.0f, 1.0f, 0.0f));
+        treeTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(getRandom(0.2f, 0.8f)));
+        treeTrans.addOperation(scaleOp);
+
+        treeDrawable->setTransformation(treeTrans);
         addDrawable(treeDrawable);
     }
 
@@ -96,15 +112,19 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         auto giftDrawable = std::make_shared<DrawableObject>(giftModel, randomShader);
 
         Transformation giftTrans;
-        giftTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        giftTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        giftTrans.scale(glm::vec3(getRandom(0.2f, 1.8f)));
-        giftDrawable->setTransformation(giftTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+        giftTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        giftTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(getRandom(0.2f, 1.8f)));
+        giftTrans.addOperation(scaleOp);
+
+        giftDrawable->setTransformation(giftTrans);
         addDrawable(giftDrawable);
     }
 
@@ -114,15 +134,20 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, randomShader);
 
         Transformation sphereTrans;
-        sphereTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            getRandom(5.0f, 35.0f),
-            getRandom(-15.0f, 15.0f)
-        ));
-        sphereTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        sphereTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-        sphereDrawable->setTransformation(sphereTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), getRandom(5.0f, 35.0f), getRandom(-15.0f, 15.0f)));
+        sphereTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        sphereTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(getRandom(0.2f, 0.8f)));
+        sphereTrans.addOperation(scaleOp);
+
+        sphereDrawable->setTransformation(sphereTrans);
         addDrawable(sphereDrawable);
     }
 
@@ -132,15 +157,25 @@ Scene4::Scene4(Camera& cam, Light& pl) : camera(cam), pointLight(pl) {
         auto suziDrawable = std::make_shared<DrawableObject>(suziModel, randomShader);
 
         Transformation suziTrans;
-        suziTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            getRandom(5.0f, 35.0f),
-            getRandom(-15.0f, 15.0f)
-        ));
-        suziTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        suziTrans.scale(glm::vec3(getRandom(0.2f, 2.0f)));
-        suziDrawable->setTransformation(suziTrans);
 
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(
+                getRandom(-15.0f, 15.0f),
+                getRandom(5.0f, 35.0f),
+                getRandom(-15.0f, 15.0f)
+            ));
+        suziTrans.addOperation(translateOp);
+
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 360.0f),
+            glm::vec3(0.0f, 1.0f, 0.0f));
+        suziTrans.addOperation(rotateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(getRandom(0.2f, 2.0f)));
+        suziTrans.addOperation(scaleOp);
+
+        suziDrawable->setTransformation(suziTrans);
         addDrawable(suziDrawable);
     }
 }
