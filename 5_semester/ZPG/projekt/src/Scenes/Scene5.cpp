@@ -33,17 +33,16 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
     }
 
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_phong_multiple = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong_multiple.glsl");
+    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
     auto shader_white = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_white.glsl");
 
-    shaders = {shader_platform, shader_white};
+    shaders = {shader_platform, shader_phong, shader_white};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
-    }
-
-    for(auto& light : this->lights) {
-        light.registerObserver(shader_phong_multiple.get());
+        for(auto& light : this->lights) {
+            light.registerObserver(shader.get());
+        }
     }
 
     for(auto& light : this->lights) {
@@ -62,7 +61,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
     addDrawable(platformDrawable);
 
     for (int i = 0; i < 100; ++i) {
-        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_platform);
+        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
 
         Transformation treeTrans;
 
