@@ -113,7 +113,6 @@ void Application::createScenes()
 void Application::run()
 {
     glEnable(GL_DEPTH_TEST);
-    createScenes();
 
     float lastFrameTime = static_cast<float>(glfwGetTime());
 
