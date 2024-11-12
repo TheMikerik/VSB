@@ -80,3 +80,11 @@ void Scene3::switchShader() {
         light.notifyObservers();
     }
 }
+
+void Scene3::addLight(const Light& light) {
+    lights.push_back(light);
+}
+
+const std::vector<Light>& Scene3::getLights() const {
+    return lights;
+}

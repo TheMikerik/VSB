@@ -63,7 +63,7 @@ Scene4::Scene4(Camera& cam) : camera(cam) {
     auto suziModel = std::make_shared<Model>(suziVertices);
 
     // Platform
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_pl);
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_phong);
     addDrawable(platformDrawable);
 
     // Bushes
@@ -190,4 +190,12 @@ Scene4::Scene4(Camera& cam) : camera(cam) {
 
 float Scene4::getRandom(float min, float max) {
     return min + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+}
+
+void Scene4::addLight(const Light& light) {
+    lights.push_back(light);
+}
+
+const std::vector<Light>& Scene4::getLights() const {
+    return lights;
 }

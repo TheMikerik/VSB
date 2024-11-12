@@ -14,8 +14,6 @@ public:
 
     virtual void render() const;
     virtual void addDrawable(std::shared_ptr<DrawableObject> drawable);
-    virtual void addLight(const Light& light);
-    virtual const std::vector<Light>& getLights() const;
     virtual const std::vector<std::shared_ptr<DrawableObject>>& getDrawables() const;
     void setBackgroundColor(const glm::vec4& color);
     const glm::vec4& getBackgroundColor() const;
@@ -23,7 +21,6 @@ public:
 
 protected:
     std::vector<std::shared_ptr<DrawableObject>> drawables;
-    std::vector<Light> lights;
     glm::vec4 backgroundColor;
     int currentShader;
 };

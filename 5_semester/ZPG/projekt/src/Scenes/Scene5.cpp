@@ -106,3 +106,11 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
 float Scene5::getRandom(float min, float max) {
     return min + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (max - min)));
 }
+
+void Scene5::addLight(const Light& light) {
+    lights.push_back(light);
+}
+
+const std::vector<Light>& Scene5::getLights() const {
+    return lights;
+}

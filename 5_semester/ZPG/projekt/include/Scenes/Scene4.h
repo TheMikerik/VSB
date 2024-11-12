@@ -15,9 +15,13 @@ public:
     Scene4(Camera& camera);
     ~Scene4() override = default;
 
+    virtual void addLight(const Light& light);
+    virtual const std::vector<Light>& getLights() const;
+
 private:
     Camera& camera;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
+    std::vector<Light> lights;
 
     float getRandom(float min, float max);
 };
