@@ -17,11 +17,13 @@ public:
 
     virtual void addLight(const Light& light);
     virtual const std::vector<Light>& getLights() const;
+    virtual void render() const override;
 
 private:
     Camera& camera;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
-
     float getRandom(float min, float max);
     std::vector<Light> lights;
+    std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
+    mutable float elapsedTime; // Add this line
 };

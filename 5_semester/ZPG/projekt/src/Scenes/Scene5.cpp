@@ -19,14 +19,14 @@
 #include <ctime>
 #include <iostream>
 
-Scene5::Scene5(Camera& cam) : camera(cam) {
+Scene5::Scene5(Camera& cam) : camera(cam), elapsedTime(0.0f) { // Update this line
     std::srand(static_cast<unsigned int>(std::time(0)));
 
     for (int i = 0; i < 10; ++i) {
         glm::vec3 position = glm::vec3(
-            static_cast<float>(rand() % 20 - 10),
+            static_cast<float>(rand() % 30 - 15),
             static_cast<float>(rand() % 10 + 1),
-            static_cast<float>(rand() % 20 - 10)
+            static_cast<float>(rand() % 30 - 15)
         );
         glm::vec3 color = glm::vec3(1.0f);
         this->addLight(Light(position, color));
@@ -56,7 +56,6 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
     auto platformModel = std::make_shared<Model>(platformVertices);
     auto treeModel = std::make_shared<Model>(treeVertices);
 
-    // Platform
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
     addDrawable(platformDrawable);
 
@@ -69,16 +68,20 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
             glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
         treeTrans.addOperation(translateOp);
 
-        auto rotateOp = std::make_shared<RotateOperation>(
-            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        treeTrans.addOperation(rotateOp);
-
         auto scaleOp = std::make_shared<ScaleOperation>(
             glm::vec3(getRandom(0.2f, 0.8f)));
         treeTrans.addOperation(scaleOp);
 
+        // Initial rotation, just to set a base value
+        auto rotateOp = std::make_shared<RotateOperation>(
+            getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        treeTrans.addOperation(rotateOp);
+
         treeDrawable->setTransformation(treeTrans);
 
+        if (i % 9 == 0){
+            treeDrawables.push_back(treeDrawable);
+        }
         addDrawable(treeDrawable);
     }
 
@@ -113,4 +116,17 @@ void Scene5::addLight(const Light& light) {
 
 const std::vector<Light>& Scene5::getLights() const {
     return lights;
+}
+
+void Scene5::render() const {
+    elapsedTime += 0.002f;
+
+    for (auto& treeDrawable : treeDrawables) {
+        auto trans = treeDrawable->getTransformation();
+        auto rotateOp = std::make_shared<RotateOperation>(elapsedTime, glm::vec3(0.0f, 1.0f, 0.0f)); // 10 degrees per second
+        trans.addOperation(rotateOp);
+        treeDrawable->setTransformation(trans);
+    }
+
+    Scene::render();
 }
