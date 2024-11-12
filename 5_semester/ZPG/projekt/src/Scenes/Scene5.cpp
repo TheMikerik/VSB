@@ -59,7 +59,6 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
     addDrawable(platformDrawable);
 
-<<<<<<< HEAD
     for (int i = 0; i < 100; ++i) {
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
 
@@ -83,40 +82,6 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         if (i % 9 == 0){
             treeDrawables.push_back(treeDrawable);
         }
-=======
-    // // Spheres
-    // for (int i = 0; i < 100; ++i) {
-    //     auto randomShader = shaders[i % shaders.size()];
-    //     auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shader_phong);
-
-    //     Transformation sphereTrans;
-    //     sphereTrans.translate(glm::vec3(
-    //         getRandom(-15.0f, 15.0f),
-    //         getRandom(1.0f, 3.0f),
-    //         getRandom(-15.0f, 15.0f)
-    //     ));
-    //     sphereTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    //     sphereTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-    //     sphereDrawable->setTransformation(sphereTrans);
-
-    //     addDrawable(sphereDrawable);
-    // }
-
-    for (int i = 0; i < 100; ++i) {
-        auto randomShader = shaders[i % shaders.size()];
-        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
-
-        Transformation treeTrans;
-        treeTrans.translate(glm::vec3(
-            getRandom(-15.0f, 15.0f),
-            0.0f,
-            getRandom(-15.0f, 15.0f)
-        ));
-        treeTrans.rotate(getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        treeTrans.scale(glm::vec3(getRandom(0.2f, 0.8f)));
-        treeDrawable->setTransformation(treeTrans);
-
->>>>>>> 848e915609453aba26747fcc6703d358a53aae3e
         addDrawable(treeDrawable);
     }
 
