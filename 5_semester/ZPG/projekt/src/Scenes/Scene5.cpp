@@ -137,9 +137,8 @@ void Scene5::render(float dt) {
         auto trans = lightDrawable->getTransformation();
         glm::mat4 modelMatrix = trans.getModelMatrix();
         glm::vec3 currentPosition = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
-        glm::vec3 newPosition = currentPosition + direction * dt;
+        glm::vec3 newPosition = currentPosition + direction * dt * 1.5f;
 
-        // Boundary check and reverse direction if necessary
         if (newPosition.x >= 15.0f || newPosition.x <= -15.0f) direction.x *= -1.0f;
         if (newPosition.y >= 10.0f || newPosition.y <= 1.0f) direction.y *= -1.0f;
         if (newPosition.z >= 15.0f || newPosition.z <= -15.0f) direction.z *= -1.0f;
@@ -147,6 +146,10 @@ void Scene5::render(float dt) {
         trans.clearOperations();
         auto translateOp = std::make_shared<TranslateOperation>(newPosition);
         trans.addOperation(translateOp);
+
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(0.2f));
+        trans.addOperation(scaleOp);
+        
         lightDrawable->setTransformation(trans);
     }
     Scene::render(dt);
