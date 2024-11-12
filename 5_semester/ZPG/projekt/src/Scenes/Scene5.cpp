@@ -129,15 +129,15 @@ void Scene5::render(float dt) {
         treeDrawable->setTransformation(trans);
     }
 
-    int i = 0;
-    for (auto& item : lightDrawablesWithDirection) {
+    for (size_t i = 0; i < lightDrawablesWithDirection.size(); ++i) {
+        auto& item = lightDrawablesWithDirection[i];
         auto& lightDrawable = item.drawable;
         auto& direction = item.direction;
 
         auto trans = lightDrawable->getTransformation();
         glm::mat4 modelMatrix = trans.getModelMatrix();
         glm::vec3 currentPosition = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
-        glm::vec3 newPosition = currentPosition + direction * dt * 1.5f;
+        glm::vec3 newPosition = currentPosition + direction * dt * 4.0f;
 
         if (newPosition.x >= 15.0f || newPosition.x <= -15.0f) direction.x *= -1.0f;
         if (newPosition.y >= 10.0f || newPosition.y <= 1.0f) direction.y *= -1.0f;
@@ -151,6 +151,10 @@ void Scene5::render(float dt) {
         trans.addOperation(scaleOp);
         
         lightDrawable->setTransformation(trans);
+
+        if (i < this->lights.size()) {
+            this->lights[i].setPosition(newPosition);
+        }
     }
     Scene::render(dt);
 }
