@@ -27,6 +27,8 @@ void DrawableObject::render() const
     model->unbind();
 }
 
+
+// Drawable object by mel mit pouze set a get transf!! Editnout
 void DrawableObject::setShader(std::shared_ptr<ShaderProgram> shd) {
     shaderProgram = shd;
 }

@@ -46,3 +46,7 @@
 - [ ] ShaderLoader
 
 - Podcenil jsem narocnost ukolu - nestihl jsem
+
+
+
+

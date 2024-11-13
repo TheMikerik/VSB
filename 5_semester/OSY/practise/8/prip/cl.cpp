@@ -7,8 +7,7 @@
 // Example of socket server/client.
 //
 // This program is example of socket client.
-// The mandatory arguments of program is IP adress or name of server and
-// a port number.
+// The mandatory arguments of program are IP address or name of server, port number,
 //
 //***************************************************************************
 
@@ -25,11 +24,12 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h>
-#include <errno.h>
 #include <netdb.h>
-
-#define STR_CLOSE               "close"
+#include <errno.h>
+#include <sys/wait.h>
+#include <pthread.h>
+#include <string>
+#include <algorithm>
 
 //***************************************************************************
 // log messages
@@ -41,19 +41,22 @@
 // debug flag
 int g_debug = LOG_INFO;
 
+//***************************************************************************
+// Function to log messages
+
 void log_msg( int t_log_level, const char *t_form, ... )
 {
     const char *out_fmt[] = {
             "ERR: (%d-%s) %s\n",
             "INF: %s\n",
-            "DEB: %s\n" };
+            "DEB: %s\n"};
 
     if ( t_log_level && t_log_level > g_debug ) return;
 
     char l_buf[ 1024 ];
     va_list l_arg;
     va_start( l_arg, t_form );
-    vsprintf( l_buf, t_form, l_arg );
+    vsnprintf( l_buf, sizeof(l_buf), t_form, l_arg );
     va_end( l_arg );
 
     switch ( t_log_level )
@@ -70,17 +73,17 @@ void log_msg( int t_log_level, const char *t_form, ... )
 }
 
 //***************************************************************************
-// help
+// Function to display help
 
 void help( int t_narg, char **t_args )
 {
-    if ( t_narg <= 1 || !strcmp( t_args[ 1 ], "-h" ) )
+    if ( t_narg <= 3 || !strcmp( t_args[ 1 ], "-h" ) )
     {
         printf(
             "\n"
             "  Socket client example.\n"
             "\n"
-            "  Use: %s [-h -d] ip_or_name port_number\n"
+            "  Use: %s [-h -d] ip_or_name port_number name\n"
             "\n"
             "    -d  debug mode \n"
             "    -h  this help\n"
@@ -95,13 +98,40 @@ void help( int t_narg, char **t_args )
 
 //***************************************************************************
 
+void* receive_thread(void* arg){
+    int sock = *((int*)arg);
+    char buffer[1024];
+    while(1){
+        ssize_t bytes_received = read(sock, buffer, sizeof(buffer)-1);
+        if(bytes_received <= 0){
+            if(bytes_received < 0){
+                log_msg(LOG_ERROR, "Error reading from server.");
+            }
+            else{
+                log_msg(LOG_INFO, "Server disconnected.");
+            }
+            close(sock);
+            exit(0);
+        }
+        buffer[bytes_received] = '\0';
+        log_msg(LOG_INFO, "[CHAT] %s", buffer);
+    }
+    return NULL;
+}
+
+//***************************************************************************
+
+
+
+//***************************************************************************
+
 int main( int t_narg, char **t_args )
 {
-
-    if ( t_narg <= 2 ) help( t_narg, t_args );
+    if ( t_narg <= 3 ) help( t_narg, t_args );
 
     int l_port = 0;
     char *l_host = nullptr;
+    std::string l_name;
 
     // parsing arguments
     for ( int i = 1; i < t_narg; i++ )
@@ -118,24 +148,28 @@ int main( int t_narg, char **t_args )
                 l_host = t_args[ i ];
             else if ( !l_port )
                 l_port = atoi( t_args[ i ] );
+            else if ( l_name.empty() )
+                l_name = t_args[ i ];
         }
     }
 
-    if ( !l_host || !l_port )
+    if ( !l_host || !l_port || l_name.empty() )
     {
-        log_msg( LOG_INFO, "Host or port is missing!" );
+        log_msg( LOG_INFO, "Host, port or name is missing!" );
+        log_msg( LOG_INFO, "The client has not been created!" );
         help( t_narg, t_args );
         exit( 1 );
     }
 
-    log_msg( LOG_INFO, "Connection to '%s':%d.", l_host, l_port );
+    log_msg(LOG_INFO, "-------------CLIENT: #%s-------------", l_name.c_str());
+    log_msg(LOG_INFO, "Connected to '%s' on port %d.", l_host, l_port);
 
     addrinfo l_ai_req, *l_ai_ans;
-    bzero( &l_ai_req, sizeof( l_ai_req ) );
+    memset( &l_ai_req, 0, sizeof( l_ai_req ) );
     l_ai_req.ai_family = AF_INET;
     l_ai_req.ai_socktype = SOCK_STREAM;
 
-    int l_get_ai = getaddrinfo( l_host, nullptr, &l_ai_req, &l_ai_ans );
+    int l_get_ai = getaddrinfo( l_host, NULL, &l_ai_req, &l_ai_ans );
     if ( l_get_ai )
     {
         log_msg( LOG_ERROR, "Unknown host name!" );
@@ -146,7 +180,7 @@ int main( int t_narg, char **t_args )
     l_cl_addr.sin_port = htons( l_port );
     freeaddrinfo( l_ai_ans );
 
-    // socket creation
+    // Socket creation
     int l_sock_server = socket( AF_INET, SOCK_STREAM, 0 );
     if ( l_sock_server == -1 )
     {
@@ -157,7 +191,7 @@ int main( int t_narg, char **t_args )
     // connect to server
     if ( connect( l_sock_server, ( sockaddr * ) &l_cl_addr, sizeof( l_cl_addr ) ) < 0 )
     {
-        log_msg( LOG_ERROR, "Unable to connect server." );
+        log_msg( LOG_ERROR, "Unable to connect to server." );
         exit( 1 );
     }
 
@@ -171,76 +205,43 @@ int main( int t_narg, char **t_args )
     log_msg( LOG_INFO, "Server IP: '%s'  port: %d",
              inet_ntoa( l_cl_addr.sin_addr ), ntohs( l_cl_addr.sin_port ) );
 
-    log_msg( LOG_INFO, "Enter 'close' to close application." );
+    log_msg(LOG_INFO, "---------------------------------------\n");
 
-    // list of fd sources
-    pollfd l_read_poll[ 2 ];
+    std::string nick_message = l_name;
+    ssize_t nick_len = write(l_sock_server, nick_message.c_str(), nick_message.size());
+    if(nick_len < 0){
+        log_msg(LOG_ERROR, "Unable to send nickname to server.");
+        close(l_sock_server);
+        exit(1);
+    }
+    log_msg(LOG_DEBUG, "Sent nickname to server.");
 
-    l_read_poll[ 0 ].fd = STDIN_FILENO;
-    l_read_poll[ 0 ].events = POLLIN;
-    l_read_poll[ 1 ].fd = l_sock_server;
-    l_read_poll[ 1 ].events = POLLIN;
-
-    // go!
-    while ( 1 )
-    {
-        char l_buf[ 128 ];
-
-        // select from fds
-        if ( poll( l_read_poll, 2, -1 ) < 0 ) break;
-
-        // data on stdin?
-        if ( l_read_poll[ 0 ].revents & POLLIN )
-        {
-            //  read from stdin
-            int l_len = read( STDIN_FILENO, l_buf, sizeof( l_buf ) );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to read from stdin." );
-            else
-                log_msg( LOG_DEBUG, "Read %d bytes from stdin.", l_len );
-
-            // send data to server
-            l_len = write( l_sock_server, l_buf, l_len );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to send data to server." );
-            else
-                log_msg( LOG_DEBUG, "Sent %d bytes to server.", l_len );
-        }
-
-        // data from server?
-        if ( l_read_poll[ 1 ].revents & POLLIN )
-        {
-            // read data from server
-            int l_len = read( l_sock_server, l_buf, sizeof( l_buf ) );
-            if ( !l_len )
-            {
-                log_msg( LOG_DEBUG, "Server closed socket." );
-                break;
-            }
-            else if ( l_len < 0 )
-            {
-                log_msg( LOG_ERROR, "Unable to read data from server." );
-                break;
-            }
-            else
-                log_msg( LOG_DEBUG, "Read %d bytes from server.", l_len );
-
-            // display on stdout
-            l_len = write( STDOUT_FILENO, l_buf, l_len );
-            if ( l_len < 0 )
-                log_msg( LOG_ERROR, "Unable to write to stdout." );
-
-            // request to close?
-            if ( !strncasecmp( l_buf, STR_CLOSE, strlen( STR_CLOSE ) ) )
-            {
-                log_msg( LOG_INFO, "Connection will be closed..." );
-                break;
-            }
-        }
+    pthread_t recv_thread;
+    if(pthread_create(&recv_thread, NULL, receive_thread, &l_sock_server) != 0){
+        log_msg(LOG_ERROR, "Failed to create receive thread.");
+        close(l_sock_server);
+        exit(1);
     }
 
-    // close socket
-    close( l_sock_server );
+    char input[256];
+    while(1){
+        if(fgets(input, sizeof(input), stdin) == NULL){
+            log_msg(LOG_INFO, "Input closed.");
+            break;
+        }
 
+        std::string message(input);
+        message.erase(std::remove(message.begin(), message.end(), '\n'), message.end());
+        message += "\n";
+
+        ssize_t len = write(l_sock_server, message.c_str(), message.size());
+        if(len < 0){
+            log_msg(LOG_ERROR, "Unable to send data to server.");
+            break;
+        }
+        log_msg(LOG_DEBUG, "Sent %zd bytes to server.", len);
+    }
+
+    close(l_sock_server);
     return 0;
-  }
+}

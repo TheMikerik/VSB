@@ -1,0 +1,3 @@
+- DrawableObject by mel mit pouze set a get transformation
+- Upravit transformace aby byla kazda jednotliva transformace byla accesible a menitelna
+- 
