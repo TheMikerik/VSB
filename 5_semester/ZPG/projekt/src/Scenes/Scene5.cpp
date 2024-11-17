@@ -33,10 +33,13 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     }
 
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_phong.glsl");
     auto shader_const = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_constant.glsl");
 
-    shaders = {shader_platform, shader_phong, shader_const};
+    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_phong.glsl");
+    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_lambert.glsl");
+    auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_blinn.glsl");
+
+    shaders = {shader_platform, shader_const, shader_phong, shader_lambert, shader_blinn};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -62,11 +65,19 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     auto platformModel = std::make_shared<Model>(platformVertices);
     auto treeModel = std::make_shared<Model>(treeVertices);
 
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_phong);
     addDrawable(platformDrawable);
 
     for (int i = 0; i < 100; ++i) {
-        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_phong);
+        int shaderIndex = rand() % 3;
+        std::shared_ptr<ShaderProgram> selectedShader;
+        switch(shaderIndex) {
+            case 0: selectedShader = shader_phong; break;
+            case 1: selectedShader = shader_lambert; break;
+            case 2: selectedShader = shader_blinn; break;
+        }
+
+        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, selectedShader);
 
         Transformation treeTrans;
 
@@ -137,30 +148,29 @@ void Scene5::render(float dt) {
 
     for (size_t i = 0; i < lightDrawablesWithDirection.size(); ++i) {
         auto& item = lightDrawablesWithDirection[i];
-        auto& lightDrawable = item.drawable;
-        auto& direction = item.direction;
-
-        auto trans = lightDrawable->getTransformation();
-        glm::mat4 modelMatrix = trans.getModelMatrix();
-        glm::vec3 currentPosition = glm::vec3(modelMatrix[3][0], modelMatrix[3][1], modelMatrix[3][2]);
-        glm::vec3 newPosition = currentPosition + direction * dt * 4.0f;
-
-        if (newPosition.x >= 15.0f || newPosition.x <= -15.0f) direction.x *= -1.0f;
-        if (newPosition.y >= 10.0f || newPosition.y <= 1.0f) direction.y *= -1.0f;
-        if (newPosition.z >= 15.0f || newPosition.z <= -15.0f) direction.z *= -1.0f;
-
-        trans.clearOperations();
-        auto translateOp = std::make_shared<TranslateOperation>(newPosition);
-        trans.addOperation(translateOp);
-
-        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(0.2f));
-        trans.addOperation(scaleOp);
+        glm::vec3 newPosition = lights[i].getPosition() + item.direction * dt * 4.0f;
         
-        lightDrawable->setTransformation(trans);
-
-        if (i < this->lights.size()) {
-            this->lights[i].setPosition(newPosition);
+        // Check boundaries before updating position
+        if (newPosition.x >= 15.0f || newPosition.x <= -15.0f) {
+            item.direction.x *= -1.0f;
+            newPosition.x = glm::clamp(newPosition.x, -15.0f, 15.0f);
         }
+        if (newPosition.y >= 10.0f || newPosition.y <= 1.0f) {
+            item.direction.y *= -1.0f;
+            newPosition.y = glm::clamp(newPosition.y, 1.0f, 10.0f);
+        }
+        if (newPosition.z >= 15.0f || newPosition.z <= -15.0f) {
+            item.direction.z *= -1.0f;
+            newPosition.z = glm::clamp(newPosition.z, -15.0f, 15.0f);
+        }
+        
+        // Update position
+        lights[i].setPosition(newPosition);
+        
+        Transformation trans;
+        trans.addOperation(std::make_shared<TranslateOperation>(newPosition));
+        trans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.2f)));
+        item.drawable->setTransformation(trans);
     }
     Scene::render(dt);
 }
