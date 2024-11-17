@@ -15,6 +15,7 @@ public:
     void setTransformation(const Transformation& trans);
     Transformation& getTransformation();
     void setShader(std::shared_ptr<ShaderProgram> shd);
+    glm::vec3 getPosition() const;
 
 private:
     std::shared_ptr<Model> model;

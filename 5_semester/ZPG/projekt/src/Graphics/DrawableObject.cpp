@@ -42,3 +42,8 @@ Transformation& DrawableObject::getTransformation()
 {
     return transformation;
 }
+
+glm::vec3 DrawableObject::getPosition() const {
+    glm::mat4 modelMatrix = transformation.getModelMatrix();
+    return glm::vec3(modelMatrix[3]);
+}

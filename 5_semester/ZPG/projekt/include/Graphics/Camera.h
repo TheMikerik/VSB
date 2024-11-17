@@ -36,7 +36,8 @@ public:
             float yaw          = YAW,
             float pitch        = PITCH);
 
-    glm::mat4 GetViewMatrix();
+    glm::mat4 GetViewMatrix() const;
+    glm::mat4 getProjectionMatrix() const;
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);

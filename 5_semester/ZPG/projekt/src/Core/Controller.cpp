@@ -45,7 +45,31 @@ void Controller::scrollCallback(GLFWwindow* window, double xoffset, double yoffs
     }
 }
 
-
+void Controller::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (controllerInstance && button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        
+        int width, height;
+        glfwGetWindowSize(window, &width, &height);
+        
+        // Get normalized device coordinates
+        float x = (2.0f * xpos) / width - 1.0f;
+        float y = 1.0f - (2.0f * ypos) / height;
+        
+        glm::vec4 rayClip = glm::vec4(x, y, -1.0f, 1.0f);
+        glm::mat4 invProj = glm::inverse(controllerInstance->camera.getProjectionMatrix());
+        glm::mat4 invView = glm::inverse(controllerInstance->camera.GetViewMatrix());
+        
+        glm::vec4 rayEye = invProj * rayClip;
+        rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
+        
+        glm::vec4 rayWorld = invView * rayEye;
+        glm::vec3 rayDir = glm::normalize(glm::vec3(rayWorld));
+        
+        controllerInstance->handleRayIntersection(controllerInstance->camera.Position, rayDir);
+    }
+}
 
 Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr<Scene>>& scns)
     : window(win), camera(cam), scenes(scns),
@@ -57,6 +81,7 @@ Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetScrollCallback(window, scrollCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 }
 
 void Controller::handleInput(float deltaTimeInput, int& currentSceneIndex) {
@@ -72,6 +97,41 @@ void Controller::switchScene(int index){
         std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
+    }
+}
+
+void Controller::handleRayIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDir) {
+    float closestDist = std::numeric_limits<float>::max();
+    int closestIndex = -1;
+    
+    auto& currentScene = scenes[currentSceneIndex];
+    auto& drawables = currentScene->getDrawables();
+    
+    for (size_t i = 0; i < drawables.size(); i++) {
+        glm::vec3 objectPos = drawables[i]->getPosition();
+        auto selectedDrawable = drawables[selectedDrawableIndex];
+        float radius = 1.0f;
+        
+        glm::vec3 L = objectPos - rayOrigin;
+        float tca = glm::dot(L, rayDir);
+        if (tca < 0) continue;
+        
+        float d2 = glm::dot(L, L) - tca * tca;
+        float radius2 = radius * radius;
+        if (d2 > radius2) continue;
+        
+        float thc = sqrt(radius2 - d2);
+        float t0 = tca - thc;
+        
+        if (t0 < closestDist) {
+            closestDist = t0;
+            closestIndex = i;
+        }
+    }
+    
+    if (closestIndex != -1) {
+        selectedDrawableIndex = closestIndex;
+        std::cout << "Selected object " << closestIndex << std::endl;
     }
 }
 
