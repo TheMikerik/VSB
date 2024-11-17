@@ -21,19 +21,21 @@ void Controller::framebufferSizeCallback(GLFWwindow* window, int width, int heig
 
 void Controller::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
     if (controllerInstance) {
-        if (controllerInstance->firstMouse) {
+        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+            if (controllerInstance->firstMouse) {
+                controllerInstance->lastX = static_cast<float>(xpos);
+                controllerInstance->lastY = static_cast<float>(ypos);
+                controllerInstance->firstMouse = false;
+            }
+
+            float xoffset = static_cast<float>(xpos) - controllerInstance->lastX;
+            float yoffset = controllerInstance->lastY - static_cast<float>(ypos);
+
             controllerInstance->lastX = static_cast<float>(xpos);
             controllerInstance->lastY = static_cast<float>(ypos);
-            controllerInstance->firstMouse = false;
+
+            controllerInstance->camera.ProcessMouseMovement(xoffset, yoffset);
         }
-
-        float xoffset = static_cast<float>(xpos) - controllerInstance->lastX;
-        float yoffset = controllerInstance->lastY - static_cast<float>(ypos);
-
-        controllerInstance->lastX = static_cast<float>(xpos);
-        controllerInstance->lastY = static_cast<float>(ypos);
-
-        controllerInstance->camera.ProcessMouseMovement(xoffset, yoffset);
     }
 }
 
@@ -42,6 +44,8 @@ void Controller::scrollCallback(GLFWwindow* window, double xoffset, double yoffs
         controllerInstance->camera.ProcessMouseScroll(static_cast<float>(yoffset));
     }
 }
+
+
 
 Controller::Controller(GLFWwindow* win, Camera& cam, std::vector<std::shared_ptr<Scene>>& scns)
     : window(win), camera(cam), scenes(scns),
@@ -114,6 +118,16 @@ void Controller::processKeyboardInput(float deltaTime) {
         }
     }
 
+    static bool lPressedLastFrame = false;
+    bool lPressedThisFrame = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
+    
+    if (lPressedThisFrame && !lPressedLastFrame) {
+        bool cursorEnabled = glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL;
+        glfwSetInputMode(window, GLFW_CURSOR, cursorEnabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+        firstMouse = true;
+    }
+
+    lPressedLastFrame = lPressedThisFrame;
     spacePressedLastFrame = spacePressedThisFrame;
 }
 

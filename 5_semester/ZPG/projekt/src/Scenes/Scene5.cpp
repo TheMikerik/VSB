@@ -33,7 +33,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     }
 
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
+    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong_multiple.glsl");
     auto shader_white = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_white.glsl");
 
     shaders = {shader_platform, shader_phong, shader_white};
@@ -45,9 +45,15 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         }
     }
 
+    for(auto& shader : shaders) {
+        shader->use();
+        glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), lights.size());
+    }
+
     for(auto& light : this->lights) {
         light.notifyObservers();
     }
+    
     camera.notifyObservers();
 
     std::vector<float> platformVertices(std::begin(platform), std::end(platform));
