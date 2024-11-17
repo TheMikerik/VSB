@@ -21,6 +21,5 @@ private:
     Camera& camera;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
     float getRandom(float min, float max);
-    std::vector<Light> lights;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
 };
