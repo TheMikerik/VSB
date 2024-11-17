@@ -1,26 +1,22 @@
 // Scene6.cpp
 #include "Scenes/Scene6.h"
 #include "Graphics/Light.h"
-
 #include "../models/tree.h"
 #include "../models/platform.h"
 #include "../models/sphere.h"
-
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
 #include <iostream>
 
-Scene6::Scene6(Camera& cam) : camera(cam) {
+Scene6::Scene6(Camera& cam) : camera(cam), spotlightPos(5.0f, 4.0f, 5.0f), spotlightDir(1.0f, 0.0f, 1.0f) {
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_const = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_constant.glsl");
+    auto shader_sl = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f_l.glsl");
 
-
-    shaders = {shader_platform, shader_const};
+    shaders = {shader_platform, shader_sl};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -38,7 +34,7 @@ Scene6::Scene6(Camera& cam) : camera(cam) {
     addDrawable(platformDrawable);
 
     for (int i = 0; i < 100; ++i) {
-        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_platform);
+        auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_sl);
 
         Transformation treeTrans;
 
@@ -65,12 +61,7 @@ Scene6::Scene6(Camera& cam) : camera(cam) {
     }
 }
 
-float Scene6::getRandom(float min, float max) {
-    return min + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (max - min)));
-}
-
 void Scene6::render(float dt) {
-
     for (auto& treeDrawable : treeDrawables) {
         auto trans = treeDrawable->getTransformation();
         auto rotateOp = std::make_shared<RotateOperation>(dt * 50, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -78,5 +69,25 @@ void Scene6::render(float dt) {
         treeDrawable->setTransformation(trans);
     }
 
+    // Update spotlight position and direction to match the camera
+    spotlightPos = camera.getPosition();
+    spotlightDir = glm::normalize(camera.getFront());
+
+    for (auto& shader : shaders) {
+        shader->use();
+        GLint spotDirLoc = glGetUniformLocation(shader->getProgramID(), "spotDir");
+        if (spotDirLoc != -1) {
+            glUniform3fv(spotDirLoc, 1, glm::value_ptr(spotlightDir));
+        }
+        GLint lightPosLoc = glGetUniformLocation(shader->getProgramID(), "lightPos");
+        if (lightPosLoc != -1) {
+            glUniform3fv(lightPosLoc, 1, glm::value_ptr(spotlightPos));
+        }
+    }
+
     Scene::render(dt);
+}
+
+float Scene6::getRandom(float min, float max) {
+    return min + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (max - min)));
 }

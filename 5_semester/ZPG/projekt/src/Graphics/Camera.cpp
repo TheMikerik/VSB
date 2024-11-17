@@ -102,3 +102,11 @@ void Camera::notifyObservers()
         observer->onCameraUpdate(view, projection);
     }
 }
+
+glm::vec3 Camera::getPosition() const {
+    return Position;
+}
+
+glm::vec3 Camera::getFront() const {
+    return Front;
+}

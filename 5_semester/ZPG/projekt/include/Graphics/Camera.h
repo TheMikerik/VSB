@@ -47,6 +47,10 @@ public:
     void removeObserver(ICameraObserver* observer);
     void notifyObservers();
 
+    glm::vec3 getPosition() const;
+
+    glm::vec3 getFront() const;
+
 private:
     void updateCameraVectors();
 

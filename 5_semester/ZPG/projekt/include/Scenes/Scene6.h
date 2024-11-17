@@ -1,4 +1,4 @@
-// Scene5.h
+// Scene6.h
 #pragma once
 
 #include "Scenes/Scene.h"
@@ -22,4 +22,7 @@ private:
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
     float getRandom(float min, float max);
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
+
+    glm::vec3 spotlightPos;
+    glm::vec3 spotlightDir;
 };
