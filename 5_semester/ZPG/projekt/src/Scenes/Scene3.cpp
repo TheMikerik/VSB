@@ -32,11 +32,12 @@ Scene3::Scene3(Camera& cam) : camera(cam) {
         glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), lights.size());
     }
 
-    printf("Scene3: Lights size: %lu\n", lights.size());
-    for(auto& light : this->lights) {
-        light.notifyObservers();
+    for (size_t i = 0; i < this->lights.size(); ++i) {
+        for(auto& shader : shaders) {
+            shader->onLightUpdate(i, lights[i].getPosition(), lights[i].getColor());
+        }
+        lights[i].notifyObservers(i);
     }
-    printf("Scene3: Lights notified\n\n\n");
     
     camera.notifyObservers();
 
@@ -74,7 +75,7 @@ void Scene3::switchShader() {
     }
 
     currentShader = (currentShader + 1) % shaders.size();
-    std::cout << "Scene3: Switching to Shader Index: " << currentShader << std::endl;
+    std::cout << "CURRENT_SHADER::" << currentShader << std::endl;
 
     for(auto& drawable : drawables) {
         drawable->setShader(shaders[currentShader]);
@@ -83,7 +84,7 @@ void Scene3::switchShader() {
     shaders[currentShader]->use();
     camera.notifyObservers();
     for(auto& light : this->lights) {
-        light.notifyObservers();
+        light.notifyObservers(1);
     }
 }
 

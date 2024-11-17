@@ -6,8 +6,8 @@ in vec3 Normal;
 out vec4 frag_colour;
 
 uniform vec3 viewPos;
-uniform vec3 lightPos[10];
-uniform vec3 lightColor[10];
+uniform vec3 lightPos[30];
+uniform vec3 lightColor[30];
 uniform int numLights;
 
 void main()

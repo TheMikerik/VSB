@@ -17,7 +17,7 @@ public:
 
     void registerObserver(ILightObserver* observer);
     void removeObserver(ILightObserver* observer);
-    void notifyObservers();
+    void notifyObservers(int idx);
 
 private:
     glm::vec3 position;

@@ -34,9 +34,7 @@ SRCS = \
     src/Shaders/ShaderProgram.cpp \
     src/Scenes/Scene.cpp \
     src/Scenes/Scene1.cpp \
-    src/Scenes/Scene2.cpp \
     src/Scenes/Scene3.cpp \
-    src/Scenes/Scene4.cpp \
     src/Scenes/Scene5.cpp 
 
 # Object files

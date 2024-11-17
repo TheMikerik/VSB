@@ -2,12 +2,9 @@
 #include "Scenes/Scene5.h"
 #include "Graphics/Light.h"
 
-#include "../models/bushes.h"
 #include "../models/tree.h"
 #include "../models/platform.h"
-#include "../models/gift.h"
 #include "../models/sphere.h"
-#include "../models/suzi_flat.h"
 
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
@@ -22,7 +19,7 @@
 Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     std::srand(static_cast<unsigned int>(std::time(0)));
 
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 15; ++i) {
         glm::vec3 position = glm::vec3(
             static_cast<float>(rand() % 30 - 15),
             static_cast<float>(rand() % 10 + 1),
@@ -53,11 +50,12 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), lights.size());
     }
 
-    printf("Scene5: Lights size: %lu\n", lights.size());
-    for(auto& light : this->lights) {
-        light.notifyObservers();
+    for (size_t i = 0; i < this->lights.size(); ++i) {
+        for(auto& shader : shaders) {
+            shader->onLightUpdate(i, lights[i].getPosition(), lights[i].getColor());
+        }
+        lights[i].notifyObservers(i);
     }
-    printf("Scene5: Lights notified\n\n\n");
     
     camera.notifyObservers();
 
@@ -98,7 +96,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
 
         treeDrawable->setTransformation(treeTrans);
 
-        if (i % 9 == 0){
+        if (i % 6 == 0){
             treeDrawables.push_back(treeDrawable);
         }
         addDrawable(treeDrawable);
@@ -168,6 +166,7 @@ void Scene5::render(float dt) {
         
         // Update position
         lights[i].setPosition(newPosition);
+        lights[i].notifyObservers(i);
         
         Transformation trans;
         trans.addOperation(std::make_shared<TranslateOperation>(newPosition));

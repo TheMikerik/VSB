@@ -15,12 +15,10 @@ glm::vec3 Light::getColor() const {
 
 void Light::setPosition(const glm::vec3& pos) {
     position = pos;
-    notifyObservers();
 }
 
 void Light::setColor(const glm::vec3& col) {
     color = col;
-    notifyObservers();
 }
 
 void Light::registerObserver(ILightObserver* observer) {
@@ -31,8 +29,8 @@ void Light::removeObserver(ILightObserver* observer) {
     observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
 }
 
-void Light::notifyObservers() {
+void Light::notifyObservers(int lightIndex) {
     for(auto& observer : observers) {
-        observer->onLightUpdate(position, color);
+        observer->onLightUpdate(lightIndex, position, color);
     }
 }

@@ -94,7 +94,7 @@ void Controller::switchScene(int index){
     if (index >=0 && index < static_cast<int>(scenes.size())) {
         currentSceneIndex = index;
         selectedDrawableIndex = 0;
-        std::cout << "Switched to Scene Index: " << currentSceneIndex + 1 << std::endl;
+        std::cout << "Scene: " << currentSceneIndex + 1 << std::endl;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
     }

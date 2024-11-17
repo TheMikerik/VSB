@@ -14,7 +14,7 @@ public:
     void use() const;
 
     void onCameraUpdate(const glm::mat4& view, const glm::mat4& projection) override;
-    void onLightUpdate(const glm::vec3& position, const glm::vec3& color) override;
+    void onLightUpdate(int inx, const glm::vec3& position, const glm::vec3& color) override;
 
     GLuint getProgramID() const { return programID; }
 

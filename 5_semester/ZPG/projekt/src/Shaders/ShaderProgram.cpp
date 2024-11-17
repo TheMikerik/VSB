@@ -103,19 +103,12 @@ void ShaderProgram::onCameraUpdate(const glm::mat4& view, const glm::mat4& proje
     }
 }
 
-void ShaderProgram::onLightUpdate(const glm::vec3& position, const glm::vec3& color) {
-    static int lightIndex = 0;
+void ShaderProgram::onLightUpdate(int lightIndex, const glm::vec3& position, const glm::vec3& color) {
     use();
-
-    printf("ShaderProgram::onLightUpdate: lightIndex: %d\n", lightIndex);
-    
     std::string posArray = "lightPos[" + std::to_string(lightIndex) + "]";
     std::string colorArray = "lightColor[" + std::to_string(lightIndex) + "]";
     GLint posLoc = glGetUniformLocation(programID, posArray.c_str());
     GLint colorLoc = glGetUniformLocation(programID, colorArray.c_str());
-    
     if (posLoc != -1) glUniform3fv(posLoc, 1, glm::value_ptr(position));
     if (colorLoc != -1) glUniform3fv(colorLoc, 1, glm::value_ptr(color));
-    
-    lightIndex = (lightIndex + 1) % 10;  // Reset counter after 10 lights
 }
