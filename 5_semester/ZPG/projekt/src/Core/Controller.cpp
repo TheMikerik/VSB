@@ -178,16 +178,16 @@ void Controller::processKeyboardInput(float deltaTime) {
         }
     }
 
-    static bool lPressedLastFrame = false;
-    bool lPressedThisFrame = glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS;
+    static bool cPressedLastFrame = false;
+    bool lPressedThisFrame = glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS;
     
-    if (lPressedThisFrame && !lPressedLastFrame) {
+    if (lPressedThisFrame && !cPressedLastFrame) {
         bool cursorEnabled = glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL;
         glfwSetInputMode(window, GLFW_CURSOR, cursorEnabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
         firstMouse = true;
     }
 
-    lPressedLastFrame = lPressedThisFrame;
+    cPressedLastFrame = lPressedThisFrame;
     spacePressedLastFrame = spacePressedThisFrame;
 }
 
