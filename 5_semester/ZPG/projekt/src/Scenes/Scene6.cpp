@@ -14,7 +14,7 @@
 #include <iostream>
 
 Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>(glm::vec3(5.0f, 4.0f, 5.0f), glm::vec3(1.0f, 0.0f, 1.0f))) {
-    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
+    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f.glsl");
     auto shader_sl = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f_l.glsl");
 
     shaders = {shader_platform, shader_sl};
@@ -31,23 +31,26 @@ Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>
     auto platformModel = std::make_shared<Model>(platformVertices);
     auto treeModel = std::make_shared<Model>(treeVertices);
 
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
+    Transformation platformTrans;
+    auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(5.0f, 1.0f, 5.0f));
+    platformTrans.addOperation(scaleOp);
+
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, platformTrans);
     addDrawable(platformDrawable);
 
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 600; ++i) {
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_sl);
 
         Transformation treeTrans;
 
         auto translateOp = std::make_shared<TranslateOperation>(
-            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+            glm::vec3(getRandom(-75.0f, 75.0f), 0.0f, getRandom(-75.0f, 75.0f)));
         treeTrans.addOperation(translateOp);
 
         auto scaleOp = std::make_shared<ScaleOperation>(
-            glm::vec3(getRandom(0.2f, 0.8f)));
+            glm::vec3(getRandom(0.2f, 1.2f)));
         treeTrans.addOperation(scaleOp);
 
-        // Initial rotation, just to set a base value
         auto rotateOp = std::make_shared<RotateOperation>(
             getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         treeTrans.addOperation(rotateOp);
@@ -72,7 +75,6 @@ void Scene6::render(float dt) {
         treeDrawable->render();
     }
 
-    // Update spotlight position and direction to match the camera
     glm::vec3 spotlightPos = camera.getPosition();
     glm::vec3 spotlightDir = glm::normalize(camera.getFront());
     spotlight->update(spotlightPos, spotlightDir);
