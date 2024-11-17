@@ -8,10 +8,7 @@
 #include "Scenes/Scene.h"
 #include "Graphics/Camera.h"
 #include "Core/Controller.h"
-#include "Graphics/Light.h" 
-
-#include "Scenes/Scene2.h"
-#include "Scenes/Scene1.h"
+#include "Graphics/Light.h"
 
 class Application {
 public:

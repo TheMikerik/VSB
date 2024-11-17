@@ -11,12 +11,12 @@
 
 Scene3::Scene3(Camera& cam) : camera(cam) {
 
-    this->addLight( Light(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(1.0f)) );
+    this->addLight( Light(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f)) );
 
-    auto shader_const = std::make_shared<ShaderProgram>("./shaders/constant/vertex_constant.glsl", "./shaders/constant/fragment_constant.glsl");
-    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong.glsl");
-    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/lambert/vertex_lambert.glsl", "./shaders/lambert/fragment_lambert.glsl");
-    auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/blinn/vertex_blinn.glsl", "./shaders/blinn/fragment_blinn.glsl");
+    auto shader_const = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
+    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_phong.glsl");
+    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_lambert.glsl");
+    auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_blinn.glsl");
 
     shaders = {shader_const, shader_phong, shader_lambert, shader_blinn};
 
@@ -25,6 +25,11 @@ Scene3::Scene3(Camera& cam) : camera(cam) {
         for(auto& light : this->lights) {
             light.registerObserver(shader.get());
         }
+    }
+
+    for(auto& shader : shaders) {
+        shader->use();
+        glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), lights.size());
     }
 
     for(auto& light : this->lights) {

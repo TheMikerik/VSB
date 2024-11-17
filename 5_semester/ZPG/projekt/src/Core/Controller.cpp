@@ -94,7 +94,7 @@ void Controller::switchScene(int index){
     if (index >=0 && index < static_cast<int>(scenes.size())) {
         currentSceneIndex = index;
         selectedDrawableIndex = 0;
-        std::cout << "Switched to Scene Index: " << currentSceneIndex << std::endl;
+        std::cout << "Switched to Scene Index: " << currentSceneIndex + 1 << std::endl;
     } else {
         std::cerr << "Invalid scene index: " << index << std::endl;
     }
@@ -150,22 +150,19 @@ void Controller::processKeyboardInput(float deltaTime) {
         camera.ProcessKeyboard(RIGHT, deltaTime * 3);
 
 
+    static bool sceneKeyPressedLastFrame[3] = {false, false, false};
 
-    if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-        switchScene(0);
-    }
-    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-        switchScene(1);
-    }
-    if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-        switchScene(2);
-    }
-    if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-        switchScene(3);
-    }
-    if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
-        switchScene(4);
-    }
+    bool sceneKey1PressedThisFrame = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
+    bool sceneKey2PressedThisFrame = glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS;
+    bool sceneKey3PressedThisFrame = glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS;
+
+    if (sceneKey1PressedThisFrame && !sceneKeyPressedLastFrame[0]) switchScene(0);
+    if (sceneKey2PressedThisFrame && !sceneKeyPressedLastFrame[1]) switchScene(1);
+    if (sceneKey3PressedThisFrame && !sceneKeyPressedLastFrame[2]) switchScene(2);
+
+    sceneKeyPressedLastFrame[0] = sceneKey1PressedThisFrame;
+    sceneKeyPressedLastFrame[1] = sceneKey2PressedThisFrame;
+    sceneKeyPressedLastFrame[2] = sceneKey3PressedThisFrame;
 
 
 

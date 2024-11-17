@@ -9,9 +9,9 @@
 #include <iostream>
 
 Scene1::Scene1(Camera& cam) : camera(cam) {
-    auto shader_red = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_red.glsl");
+    auto shader_constant = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_constant.glsl");
 
-    shaders = {shader_red};
+    shaders = {shader_constant};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -23,7 +23,7 @@ Scene1::Scene1(Camera& cam) : camera(cam) {
 
     auto triangleModel = std::make_shared<Model>(triangleVertices);
 
-    auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader_red);
+    auto triangleDrawable = std::make_shared<DrawableObject>(triangleModel, shader_constant);
 
     Transformation triangleTrans;
 

@@ -118,5 +118,5 @@ void ShaderProgram::onLightUpdate(const glm::vec3& position, const glm::vec3& co
     if (posLoc != -1) glUniform3fv(posLoc, 1, glm::value_ptr(position));
     if (colorLoc != -1) glUniform3fv(colorLoc, 1, glm::value_ptr(color));
     
-    lightIndex = (lightIndex + 1) % 20;  // Reset counter after 10 lights
+    // lightIndex = (lightIndex + 1) % 10;  // Reset counter after 10 lights
 }

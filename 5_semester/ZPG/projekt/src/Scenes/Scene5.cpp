@@ -33,10 +33,10 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     }
 
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
-    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/phong/vertex_phong.glsl", "./shaders/phong/fragment_phong_multiple.glsl");
-    auto shader_white = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader_white.glsl");
+    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_phong.glsl");
+    auto shader_const = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_constant.glsl");
 
-    shaders = {shader_platform, shader_phong, shader_white};
+    shaders = {shader_platform, shader_phong, shader_const};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -95,7 +95,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     for(auto& firefly : this->getLights()) {
         std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
         auto sphereModel = std::make_shared<Model>(sphereVertices);
-        auto lightShader = shader_white;
+        auto lightShader = shader_const;
 
         auto lightDrawable = std::make_shared<DrawableObject>(sphereModel, lightShader);
         Transformation lightTrans;
