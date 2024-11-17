@@ -53,9 +53,11 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), lights.size());
     }
 
+    printf("Scene5: Lights size: %lu\n", lights.size());
     for(auto& light : this->lights) {
         light.notifyObservers();
     }
+    printf("Scene5: Lights notified\n\n\n");
     
     camera.notifyObservers();
 
