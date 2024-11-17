@@ -15,8 +15,6 @@ public:
     Scene6(Camera& camera);
     ~Scene6() override = default;
 
-    virtual void addLight(const Light& light);
-    virtual const std::vector<Light>& getLights() const;
     virtual void render(float dt) override;
 
 private:
