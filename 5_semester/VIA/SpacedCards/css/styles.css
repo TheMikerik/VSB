@@ -143,18 +143,20 @@ nav ul li a:hover {
   padding: 12px 30px;
   border-radius: 8px;
   font-weight: bold;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
   transition: background-color 0.3s ease;
-}
-
-.download-btn:hover {
-  background-color: #555;
 }
 
 .apple-logo {
   width: 1.2rem;
   height: auto;
+  margin-right: 8px;
+}
+
+.download-btn:hover {
+  background-color: #555;
 }
 
 /* Image Section */
@@ -660,7 +662,78 @@ nav ul li a:hover {
 }
 
 
+/* ------------------------------------------------------------------------------------- */
+/* ABOUT */
+/* ------------------------------------------------------------------------------------- */
 
+/* About Section */
+.about-section {
+  background-color: #f9f9f9;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.about-section h2 {
+  font-size: 2.5em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.about-section p {
+  font-size: 1.1em;
+  color: #666;
+  max-width: 800px;
+  margin: auto;
+  line-height: 1.6;
+}
+
+/* Friends Section */
+.friends-section {
+  background-color: #ffffff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.friends-section h3 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.friend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.friend-logo {
+  width: 50px;
+  height: 50px;
+}
+
+.friend-info h4 {
+  font-size: 1.5em;
+  color: #333;
+}
+
+.friend-info p {
+  font-size: 1em;
+  color: #666;
+}
+
+.friend-info a {
+  color: #007BFF;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.friend-info a:hover {
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------------------------- */
 
 
 
