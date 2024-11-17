@@ -1,28 +1,25 @@
 // Scene6.h
-#pragma once
+#ifndef SCENE6_H
+#define SCENE6_H
 
-#include "Scenes/Scene.h"
-#include "Shaders/ShaderProgram.h"
-#include "Core/Model.h"
-#include "Core/Transformation.h"
+#include "Scene.h"
 #include "Graphics/Camera.h"
-#include "Graphics/Light.h"
+#include "Graphics/Spotlight.h"    // Include the Spotlight header
 #include <memory>
 #include <vector>
 
 class Scene6 : public Scene {
 public:
-    Scene6(Camera& camera);
-    ~Scene6() override = default;
-
-    virtual void render(float dt) override;
+    Scene6(Camera& cam);
+    void render(float dt) override;
 
 private:
     Camera& camera;
+    std::shared_ptr<Spotlight> spotlight;    // Spotlight instance
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
-    float getRandom(float min, float max);
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
 
-    glm::vec3 spotlightPos;
-    glm::vec3 spotlightDir;
+    float getRandom(float min, float max);
 };
+
+#endif // SCENE6_H

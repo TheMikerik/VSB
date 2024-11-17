@@ -1,6 +1,7 @@
 // Scene6.cpp
 #include "Scenes/Scene6.h"
 #include "Graphics/Light.h"
+#include "Graphics/Spotlight.h"    // Include the Spotlight header
 #include "../models/tree.h"
 #include "../models/platform.h"
 #include "../models/sphere.h"
@@ -12,7 +13,7 @@
 #include <cstdlib>
 #include <iostream>
 
-Scene6::Scene6(Camera& cam) : camera(cam), spotlightPos(5.0f, 4.0f, 5.0f), spotlightDir(1.0f, 0.0f, 1.0f) {
+Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>(glm::vec3(5.0f, 4.0f, 5.0f), glm::vec3(1.0f, 0.0f, 1.0f))) {
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
     auto shader_sl = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f_l.glsl");
 
@@ -70,19 +71,12 @@ void Scene6::render(float dt) {
     }
 
     // Update spotlight position and direction to match the camera
-    spotlightPos = camera.getPosition();
-    spotlightDir = glm::normalize(camera.getFront());
+    glm::vec3 spotlightPos = camera.getPosition();
+    glm::vec3 spotlightDir = glm::normalize(camera.getFront());
+    spotlight->update(spotlightPos, spotlightDir);
 
     for (auto& shader : shaders) {
-        shader->use();
-        GLint spotDirLoc = glGetUniformLocation(shader->getProgramID(), "spotDir");
-        if (spotDirLoc != -1) {
-            glUniform3fv(spotDirLoc, 1, glm::value_ptr(spotlightDir));
-        }
-        GLint lightPosLoc = glGetUniformLocation(shader->getProgramID(), "lightPos");
-        if (lightPosLoc != -1) {
-            glUniform3fv(lightPosLoc, 1, glm::value_ptr(spotlightPos));
-        }
+        spotlight->applyToShader(shader);
     }
 
     Scene::render(dt);

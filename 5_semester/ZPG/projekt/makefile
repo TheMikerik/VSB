@@ -31,6 +31,7 @@ SRCS = \
     src/Graphics/Camera.cpp \
     src/Graphics/DrawableObject.cpp \
     src/Graphics/Light.cpp \
+    src/Graphics/Spotlight.cpp \
     src/Shaders/ShaderProgram.cpp \
     src/Scenes/Scene.cpp \
     src/Scenes/Scene1.cpp \
