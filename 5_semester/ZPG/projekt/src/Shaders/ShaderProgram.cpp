@@ -101,6 +101,7 @@ void ShaderProgram::onCameraUpdate(const glm::mat4& view, const glm::mat4& proje
     if (viewPosLoc != -1) {
         glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
     }
+    glUseProgram(0);
 }
 
 void ShaderProgram::onLightUpdate(int lightIndex, const glm::vec3& position, const glm::vec3& color) {
@@ -111,4 +112,5 @@ void ShaderProgram::onLightUpdate(int lightIndex, const glm::vec3& position, con
     GLint colorLoc = glGetUniformLocation(programID, colorArray.c_str());
     if (posLoc != -1) glUniform3fv(posLoc, 1, glm::value_ptr(position));
     if (colorLoc != -1) glUniform3fv(colorLoc, 1, glm::value_ptr(color));
+    glUseProgram(0);
 }

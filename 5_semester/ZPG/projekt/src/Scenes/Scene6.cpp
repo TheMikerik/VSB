@@ -68,6 +68,8 @@ void Scene6::render(float dt) {
         auto rotateOp = std::make_shared<RotateOperation>(dt * 50, glm::vec3(0.0f, 1.0f, 0.0f));
         trans.addOperation(rotateOp);
         treeDrawable->setTransformation(trans);
+
+        treeDrawable->render();
     }
 
     // Update spotlight position and direction to match the camera

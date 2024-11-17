@@ -25,10 +25,12 @@ void DrawableObject::render() const
     model->bind();
     glDrawArrays(GL_TRIANGLES, 0, model->getVertexCount());
     model->unbind();
+
+    glUseProgram(0);
 }
 
 
-// Drawable object by mel mit pouze set a get transf!! Editnout
+//TODO: Drawable object by mel mit pouze set a get transf!! Editnout
 void DrawableObject::setShader(std::shared_ptr<ShaderProgram> shd) {
     shaderProgram = shd;
 }
