@@ -2,12 +2,9 @@
 #include "Scenes/Scene6.h"
 #include "Graphics/Light.h"
 
-#include "../models/bushes.h"
 #include "../models/tree.h"
 #include "../models/platform.h"
-#include "../models/gift.h"
 #include "../models/sphere.h"
-#include "../models/suzi_flat.h"
 
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
@@ -20,13 +17,13 @@
 
 Scene6::Scene6(Camera& cam) : camera(cam) {
     glm::vec3 positions[4] = {
-        glm::vec3(-15.0f, 1.0f, -15.0f),
-        glm::vec3(15.0f, 1.0f, -15.0f),
-        glm::vec3(-15.0f, 1.0f, 15.0f),
-        glm::vec3(15.0f, 1.0f, 15.0f)
+        glm::vec3(-11.0f, 5.0f, -11.0f),
+        glm::vec3(11.0f, 5.0f, -11.0f),
+        glm::vec3(-11.0f, 5.0f, 11.0f),
+        glm::vec3(11.0f, 5.0f, 11.0f)
     };
     
-    glm::vec3 color = glm::vec3(1.0f);
+    glm::vec3 color = glm::vec3(4.0f);
     
     for (int i = 0; i < 4; ++i) {
         this->addLight(Light(positions[i], color));
@@ -98,6 +95,10 @@ Scene6::Scene6(Camera& cam) : camera(cam) {
         treeTrans.addOperation(rotateOp);
 
         treeDrawable->setTransformation(treeTrans);
+
+        if (i % 6 == 0){
+            treeDrawables.push_back(treeDrawable);
+        }
 
         addDrawable(treeDrawable);
     }

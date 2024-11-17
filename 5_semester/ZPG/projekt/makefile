@@ -35,7 +35,8 @@ SRCS = \
     src/Scenes/Scene.cpp \
     src/Scenes/Scene1.cpp \
     src/Scenes/Scene3.cpp \
-    src/Scenes/Scene5.cpp 
+    src/Scenes/Scene5.cpp \
+    src/Scenes/Scene6.cpp
 
 # Object files
 OBJS = $(SRCS:src/%.cpp=build/%.o)
