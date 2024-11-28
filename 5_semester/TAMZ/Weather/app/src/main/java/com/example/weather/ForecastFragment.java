@@ -39,6 +39,20 @@ public class ForecastFragment extends Fragment {
         return new ForecastFragment();
     }
 
+    // ForecastFragment.java
+    @Override
+    public void onResume(){
+        super.onResume();
+        // Fetch the current city whenever the fragment resumes
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null){
+            String currentCity = mainActivity.getCurrentCity();
+            if(!currentCity.isEmpty()){
+                getForecastData(getActivity(), currentCity, apiKey);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
