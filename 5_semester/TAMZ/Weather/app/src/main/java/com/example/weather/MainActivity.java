@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrentWeatherFragment currentWeatherFragment;
     private ForecastFragment forecastFragment;
+    private GraphFragment graphFragment; // New fragment
 
     private boolean isLandscape;
 
@@ -34,11 +35,14 @@ public class MainActivity extends AppCompatActivity {
         // Initialize fragments
         currentWeatherFragment = CurrentWeatherFragment.newInstance();
         forecastFragment = ForecastFragment.newInstance();
+        graphFragment = GraphFragment.newInstance(); // Initialize GraphFragment
 
         if (isLandscape) {
-            // In landscape, add both fragments
+            // In landscape, add CurrentWeatherFragment and ForecastFragment
             loadFragment(R.id.fragment_current_weather, currentWeatherFragment);
             loadFragment(R.id.fragment_forecast, forecastFragment);
+            // Optionally, add GraphFragment if you have a container
+            // loadFragment(R.id.fragment_graph, graphFragment);
         } else {
             // In portrait, set default fragment and setup BottomNavigationView
             loadFragment(R.id.fragment_container, currentWeatherFragment);
@@ -59,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = currentWeatherFragment;
                     } else if (itemId == R.id.navigation_forecast) {
                         selectedFragment = forecastFragment;
+                    } else if (itemId == R.id.navigation_graph) { // Handle Graph menu
+
                     }
 
                     return loadFragment(R.id.fragment_container, selectedFragment);
@@ -74,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    // Getter for ForecastFragment to access forecast data
+    public ForecastFragment getForecastFragment(){
+        return forecastFragment;
     }
 
     public String getCurrentCity(){

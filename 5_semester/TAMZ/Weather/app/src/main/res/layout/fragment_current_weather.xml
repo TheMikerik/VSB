@@ -13,14 +13,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:background="?attr/colorPrimary"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="Weather App" />
-
         <LinearLayout
             android:id="@+id/temperature_container"
             android:layout_width="match_parent"

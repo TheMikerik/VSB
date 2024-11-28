@@ -8,4 +8,8 @@
         android:id="@+id/navigation_forecast"
         android:icon="@drawable/ic_forecast"
         android:title="Forecast" />
+    <item
+        android:id="@+id/navigation_graph"
+        android:icon="@drawable/ic_graph"
+        android:title="Graph" />
 </menu>
