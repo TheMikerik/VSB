@@ -1,45 +1,62 @@
 package com.example.weather;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import androidx.fragment.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ArrayAdapter;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.LayoutInflater;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-public class ForecastActivity extends AppCompatActivity {
+public class ForecastFragment extends Fragment {
 
     private ArrayList<ForecastItem> forecastList = new ArrayList<>();
     private ForecastAdapter adapter;
+    private ListView listView;
+
+    private String apiKey = "0878489af83340fd9659bfa80bce5eba";
+    private String city = "London"; // Default city or you can make it dynamic
+
+    public ForecastFragment() {
+        // Required empty public constructor
+    }
+
+    public static ForecastFragment newInstance() {
+        return new ForecastFragment();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forecast);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState){
+        View view = inflater.inflate(R.layout.fragment_forecast, container, false);
 
-        ListView listView = findViewById(R.id.list_view);
-        adapter = new ForecastAdapter(this, forecastList);
+        listView = view.findViewById(R.id.list_view);
+        adapter = new ForecastAdapter(getActivity(), forecastList);
         listView.setAdapter(adapter);
 
-        Intent intent = getIntent();
-        String city = intent.getStringExtra("city");
-        String apiKey = intent.getStringExtra("apiKey");
+        // Fetch city from MainActivity
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null){
+            city = mainActivity.getCurrentCity();
+        }
 
-        getForecastData(this, city, apiKey);
+        getForecastData(getActivity(), city, apiKey);
+
+        return view;
     }
 
     private void getForecastData(final Context context, final String city, final String apiKey) {
@@ -53,7 +70,7 @@ public class ForecastActivity extends AppCompatActivity {
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder response = new StringBuilder();
                     String line;
-                    while ((line = br.readLine()) != null) {
+                    while ((line = br.readLine()) != null){
                         response.append(line);
                     }
                     br.close();
@@ -61,7 +78,7 @@ public class ForecastActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response.toString());
                     JSONArray list = jsonObject.getJSONArray("list");
 
-                    for (int i = 0; i < list.length(); i++) {
+                    for (int i = 0; i < list.length(); i++){
                         JSONObject item = list.getJSONObject(i);
                         String temp = item.getJSONObject("main").getString("temp");
                         String date = item.getString("dt_txt");
@@ -72,14 +89,14 @@ public class ForecastActivity extends AppCompatActivity {
                         forecastList.add(forecastItem);
                     }
 
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    new Handler(Looper.getMainLooper()).post(new Runnable(){
                         @Override
-                        public void run() {
+                        public void run(){
                             adapter.notifyDataSetChanged();
                         }
                     });
 
-                } catch (Exception e) {
+                } catch (Exception e){
                     e.printStackTrace();
                 }
             }
@@ -92,7 +109,7 @@ public class ForecastActivity extends AppCompatActivity {
         String description;
         String icon;
 
-        ForecastItem(String date, String temp, String description, String icon) {
+        ForecastItem(String date, String temp, String description, String icon){
             this.date = date;
             this.temp = temp;
             this.description = description;
@@ -102,13 +119,13 @@ public class ForecastActivity extends AppCompatActivity {
 
     private class ForecastAdapter extends ArrayAdapter<ForecastItem> {
 
-        public ForecastAdapter(Context context, ArrayList<ForecastItem> forecastItems) {
+        public ForecastAdapter(Context context, ArrayList<ForecastItem> forecastItems){
             super(context, 0, forecastItems);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
+        public View getView(int position, View convertView, ViewGroup parent){
+            if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_forecast, parent, false);
             }
 

@@ -1,54 +1,65 @@
 package com.example.weather;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText inputCity;
-    private TextView temperatureContainerText;
-    private TextView descriptionContainerText;
-    private ImageView iconContainerImage;
-    private CurrentWeatherAPI currentWeatherAPI;
+    private BottomNavigationView bottomNavigationView;
+
+    private CurrentWeatherFragment currentWeatherFragment;
+    private ForecastFragment forecastFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        inputCity = findViewById(R.id.input_city);
-        temperatureContainerText = findViewById(R.id.temperature_container_text);
-        descriptionContainerText = findViewById(R.id.description_container_text);
-        iconContainerImage = findViewById(R.id.icon_container_image);
-        Button okButton = findViewById(R.id.btn_ok);
-        Button forecastButton = findViewById(R.id.btn_forecast);
+        // Initialize fragments
+        currentWeatherFragment = CurrentWeatherFragment.newInstance();
+        forecastFragment = ForecastFragment.newInstance();
 
-        String apiKey = "0878489af83340fd9659bfa80bce5eba";
-        currentWeatherAPI = new CurrentWeatherAPI(this, apiKey);
+        // Set default fragment
+        loadFragment(currentWeatherFragment);
 
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String city = inputCity.getText().toString();
-                currentWeatherAPI.getWeatherData(city, temperatureContainerText, descriptionContainerText, iconContainerImage);
-            }
-        });
+        // Setup BottomNavigationView
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(navListener);
+    }
 
-        forecastButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String city = inputCity.getText().toString();
-                Intent intent = new Intent(MainActivity.this, ForecastActivity.class);
-                intent.putExtra("city", city);
-                intent.putExtra("apiKey", apiKey);
-                startActivity(intent);
-            }
-        });
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener(){
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item){
+                    Fragment selectedFragment = null;
+
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.navigation_current_weather) {
+                        selectedFragment = currentWeatherFragment;
+                    } else if (itemId == R.id.navigation_forecast) {
+                        selectedFragment = forecastFragment;
+                    }
+
+                    return loadFragment(selectedFragment);
+                }
+            };
+
+    private boolean loadFragment(Fragment fragment){
+        if(fragment != null){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    public String getCurrentCity(){
+        return currentWeatherFragment.getCity();
     }
 }
