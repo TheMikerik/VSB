@@ -24,27 +24,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Detect orientation using Configuration
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-        // Log the orientation for debugging
-        Log.d("MainActivity", "isLandscape: " + isLandscape);
 
         setContentView(R.layout.activity_main);
 
-        // Initialize fragments
         currentWeatherFragment = CurrentWeatherFragment.newInstance();
         forecastFragment = ForecastFragment.newInstance();
-        graphFragment = GraphFragment.newInstance(); // Initialize GraphFragment
+        graphFragment = GraphFragment.newInstance();
 
         if (isLandscape) {
-            // In landscape, add CurrentWeatherFragment and ForecastFragment
             loadFragment(R.id.fragment_current_weather, currentWeatherFragment);
             loadFragment(R.id.fragment_forecast, forecastFragment);
-            // Optionally, add GraphFragment if you have a container
-            // loadFragment(R.id.fragment_graph, graphFragment);
         } else {
-            // In portrait, set default fragment and setup BottomNavigationView
             loadFragment(R.id.fragment_container, currentWeatherFragment);
 
             bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -63,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = currentWeatherFragment;
                     } else if (itemId == R.id.navigation_forecast) {
                         selectedFragment = forecastFragment;
-                    } else if (itemId == R.id.navigation_graph) { // Handle Graph menu
+                    } else if (itemId == R.id.navigation_graph) {
 
                     }
 
@@ -82,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    // Getter for ForecastFragment to access forecast data
     public ForecastFragment getForecastFragment(){
         return forecastFragment;
     }
@@ -90,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     public String getCurrentCity(){
         String city = currentWeatherFragment.getCity();
         if(city == null || city.trim().isEmpty()){
-            return "Ostrava"; // Default city
+            return "Ostrava";
         }
         return city;
     }

@@ -29,21 +29,18 @@ public class ForecastFragment extends Fragment {
     private ListView listView;
 
     private String apiKey = "0878489af83340fd9659bfa80bce5eba";
-    private String city = "London"; // Default city or you can make it dynamic
+    private String city = "Ostrava";
 
     public ForecastFragment() {
-        // Required empty public constructor
     }
 
     public static ForecastFragment newInstance() {
         return new ForecastFragment();
     }
 
-    // ForecastFragment.java
     @Override
     public void onResume(){
         super.onResume();
-        // Fetch the current city whenever the fragment resumes
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity != null){
             String currentCity = mainActivity.getCurrentCity();
@@ -62,7 +59,6 @@ public class ForecastFragment extends Fragment {
         adapter = new ForecastAdapter(getActivity(), forecastList);
         listView.setAdapter(adapter);
 
-        // Fetch city from MainActivity
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity != null){
             city = mainActivity.getCurrentCity();

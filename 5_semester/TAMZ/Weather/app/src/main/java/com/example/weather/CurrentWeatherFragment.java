@@ -24,7 +24,6 @@ public class CurrentWeatherFragment extends Fragment {
     private String apiKey = "0878489af83340fd9659bfa80bce5eba";
 
     public CurrentWeatherFragment() {
-        // Required empty public constructor
     }
 
     public static CurrentWeatherFragment newInstance() {
@@ -34,7 +33,6 @@ public class CurrentWeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current_weather, container, false);
 
         inputCity = view.findViewById(R.id.input_city);
@@ -43,7 +41,6 @@ public class CurrentWeatherFragment extends Fragment {
         iconContainerImage = view.findViewById(R.id.icon_container_image);
         btnOk = view.findViewById(R.id.btn_ok);
 
-        // Initialize CurrentWeatherAPI
         currentWeatherAPI = new CurrentWeatherAPI(getActivity(), apiKey);
 
         btnOk.setOnClickListener(new View.OnClickListener() {
