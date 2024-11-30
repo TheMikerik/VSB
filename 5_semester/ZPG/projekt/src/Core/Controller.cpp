@@ -150,22 +150,25 @@ void Controller::processKeyboardInput(float deltaTime) {
         camera.ProcessKeyboard(RIGHT, deltaTime * 3);
 
 
-    static bool sceneKeyPressedLastFrame[4] = {false, false, false, false};
+    static bool sceneKeyPressedLastFrame[5] = {false, false, false, false, false};
 
     bool sceneKey1PressedThisFrame = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
     bool sceneKey2PressedThisFrame = glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS;
     bool sceneKey3PressedThisFrame = glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS;
     bool sceneKey4PressedThisFrame = glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS;
+    bool sceneKey5PressedThisFrame = glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS;
 
     if (sceneKey1PressedThisFrame && !sceneKeyPressedLastFrame[0]) switchScene(0);
     if (sceneKey2PressedThisFrame && !sceneKeyPressedLastFrame[1]) switchScene(1);
     if (sceneKey3PressedThisFrame && !sceneKeyPressedLastFrame[2]) switchScene(2);
     if (sceneKey4PressedThisFrame && !sceneKeyPressedLastFrame[3]) switchScene(3);
+    if (sceneKey5PressedThisFrame && !sceneKeyPressedLastFrame[4]) switchScene(4);
 
     sceneKeyPressedLastFrame[0] = sceneKey1PressedThisFrame;
     sceneKeyPressedLastFrame[1] = sceneKey2PressedThisFrame;
     sceneKeyPressedLastFrame[2] = sceneKey3PressedThisFrame;
     sceneKeyPressedLastFrame[3] = sceneKey4PressedThisFrame;
+    sceneKeyPressedLastFrame[4] = sceneKey5PressedThisFrame;
 
 
 

@@ -46,7 +46,7 @@ Scene6::Scene6(Camera& cam)
                                                              grassTexture);
 
     Transformation platformTrans;
-    auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(5.0f, 1.0f, 5.0f));
+    auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(75.0f, 1.0f, 75.0f));
     platformTrans.addOperation(scaleOp);
     platformDrawable->setTransformation(platformTrans);
 
