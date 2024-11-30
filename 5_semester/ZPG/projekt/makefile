@@ -5,6 +5,7 @@ CXXFLAGS = -std=c++11 -Wall -g -DGL_SILENCE_DEPRECATION
 # Update include and library paths based on Homebrew prefix and project structure
 INCLUDES = \
     -Iinclude \
+    -Iinclude/stb \
     -I/opt/homebrew/opt/glfw/include \
     -I/opt/homebrew/opt/glm/include \
     -I/opt/homebrew/opt/glew/include
