@@ -68,7 +68,6 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     std::vector<float> plainTextureVertices(std::begin(plain_texture), std::end(plain_texture));
     auto platformModel = std::make_shared<Model>(plainTextureVertices, true);
 
-    // Create the DrawableObject with texture
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, 
                                                              Transformation(), 
                                                              *materialManager.getMaterial("platform"),
