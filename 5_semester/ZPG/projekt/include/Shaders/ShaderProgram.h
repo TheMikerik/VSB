@@ -13,6 +13,8 @@ public:
 
     void use() const;
 
+    void setBool(const std::string &name, bool value) const;
+
     void onCameraUpdate(const glm::mat4& view, const glm::mat4& projection) override;
     void onLightUpdate(int inx, const glm::vec3& position, const glm::vec3& color) override;
 

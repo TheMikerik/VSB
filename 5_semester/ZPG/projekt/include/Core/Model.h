@@ -2,10 +2,11 @@
 
 #include <vector>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
 
 class Model {
 public:
-    Model(const std::vector<float>& vertices);
+    Model(const std::vector<float>& vertices, bool hasTexCoords = false);
     ~Model();
 
     void bind() const;
@@ -16,4 +17,5 @@ private:
     GLuint VAO;
     GLuint VBO;
     GLsizei vertexCount;
+    bool hasTexCoords;
 };

@@ -53,6 +53,11 @@ std::string ShaderProgram::loadShaderSource(const std::string& filePath) const
     return shaderStream.str();
 }
 
+void ShaderProgram::setBool(const std::string &name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(programID, name.c_str()), (int)value);
+}
+
 void ShaderProgram::compileShader(const std::string& source, GLuint shader, const std::string& shaderType) const
 {
     const char* shaderCode = source.c_str();

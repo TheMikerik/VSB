@@ -31,10 +31,12 @@ SRCS = \
     src/Core/Material.cpp \
     src/Core/MaterialManager.cpp \
     src/Core/Transformation.cpp \
+    src/Core/Texture.cpp \
     src/Graphics/Camera.cpp \
     src/Graphics/DrawableObject.cpp \
     src/Graphics/Light.cpp \
     src/Graphics/Spotlight.cpp \
+    src/Graphics/stb_image.cpp \
     src/Shaders/ShaderProgram.cpp \
     src/Scenes/Scene.cpp \
     src/Scenes/Scene1.cpp \

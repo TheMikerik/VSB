@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include <iostream>
 
-Model::Model(const std::vector<float>& vertices)
-    : VAO(0), VBO(0), vertexCount(0)
+Model::Model(const std::vector<float>& vertices, bool hasTexCoords)
+    : VAO(0), VBO(0), vertexCount(0), hasTexCoords(hasTexCoords)
 {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -12,16 +12,22 @@ Model::Model(const std::vector<float>& vertices)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0); // Pozice
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (hasTexCoords ? 8 : 6) * sizeof(float), (void*)0);
 
-    glEnableVertexAttribArray(1); // Normala
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (hasTexCoords ? 8 : 6) * sizeof(float), (void*)(3 * sizeof(float)));
+
+    if (hasTexCoords) {
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    }
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    vertexCount = static_cast<GLsizei>(vertices.size() / 6);
+    vertexCount = hasTexCoords ? static_cast<GLsizei>(vertices.size() / 8)
+                               : static_cast<GLsizei>(vertices.size() / 6);
 }
 
 Model::~Model()

@@ -3,9 +3,10 @@
 #include "Graphics/Light.h"
 
 #include "../models/tree.h"
-#include "../models/platform.h"
+#include "../models/plain_texture.h"
 #include "../models/sphere.h"
 
+#include "../include/Core/Texture.h"
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
@@ -32,7 +33,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         this->addLight(Light(position, color));
     }
 
-    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_shader.glsl");
+    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/texture_shaders/vertex_shader.glsl", "./shaders/texture_shaders/fragment_shader.glsl");
     auto shader_const = std::make_shared<ShaderProgram>("./shaders/vertex_shader.glsl", "./shaders/fragment_constant.glsl");
 
     auto shader_phong = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_phong.glsl");
@@ -62,17 +63,26 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     
     camera.notifyObservers();
 
-    std::vector<float> platformVertices(std::begin(platform), std::end(platform));
-    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
+    std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png", false);
 
-    auto platformModel = std::make_shared<Model>(platformVertices);
-    auto treeModel = std::make_shared<Model>(treeVertices);
+    std::vector<float> plainTextureVertices(std::begin(plain_texture), std::end(plain_texture));
+    auto platformModel = std::make_shared<Model>(plainTextureVertices, true);
 
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_phong);
-    auto platformMaterial = materialManager.getMaterial("platform");
-    platformDrawable->setMaterial(*platformMaterial);
+    // Create the DrawableObject with texture
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, 
+                                                             Transformation(), 
+                                                             *materialManager.getMaterial("platform"),
+                                                             grassTexture);
+
+    Transformation platformTrans;
+    auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(15.0f, 1.0f, 15.0f));
+    platformTrans.addOperation(scaleOp);
+    platformDrawable->setTransformation(platformTrans);
 
     addDrawable(platformDrawable);
+
+    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
+    auto treeModel = std::make_shared<Model>(treeVertices);
 
     for (int i = 0; i < 100; ++i) {
         int shaderIndex = rand() % 3;
@@ -122,7 +132,6 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         addDrawable(treeDrawable);
     }
 
-
     for(auto& firefly : this->getLights()) {
         std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
         auto sphereModel = std::make_shared<Model>(sphereVertices);
@@ -161,7 +170,6 @@ const std::vector<Light>& Scene5::getLights() const {
 }
 
 void Scene5::render(float dt) {
-
     for (auto& treeDrawable : treeDrawables) {
         auto trans = treeDrawable->getTransformation();
         auto rotateOp = std::make_shared<RotateOperation>(dt * 50, glm::vec3(0.0f, 1.0f, 0.0f));
