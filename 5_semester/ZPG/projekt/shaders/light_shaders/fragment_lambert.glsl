@@ -35,5 +35,5 @@ void main()
         result += (ambient + diffuse) * attenuation;
     }
     
-    frag_colour = vec4(result * vec3(1.0, 0.0, 0.0), 1.0);
+    frag_colour = vec4(result, 1.0);
 }

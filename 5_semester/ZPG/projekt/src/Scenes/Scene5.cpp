@@ -10,6 +10,7 @@
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
 #include "../include/Core/Material.h"
+#include "../include/Core/MaterialManager.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -19,6 +20,7 @@
 
 Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     std::srand(static_cast<unsigned int>(std::time(0)));
+    auto materialManager = MaterialManager::getInstance();
 
     for (int i = 0; i < 15; ++i) {
         glm::vec3 position = glm::vec3(
@@ -67,24 +69,28 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
     auto treeModel = std::make_shared<Model>(treeVertices);
 
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_phong);
-
-    Material platformMaterial(
-        glm::vec3(0.3f, 0.3f, 0.3f), // Ambient
-        glm::vec3(0.6f, 0.6f, 0.6f), // Diffuse
-        glm::vec3(0.8f, 0.8f, 0.8f), // Specular
-        64.0f                        // Shininess
-    );
-    platformDrawable->setMaterial(platformMaterial);
+    auto platformMaterial = materialManager.getMaterial("platform");
+    platformDrawable->setMaterial(*platformMaterial);
 
     addDrawable(platformDrawable);
 
     for (int i = 0; i < 100; ++i) {
         int shaderIndex = rand() % 3;
         std::shared_ptr<ShaderProgram> selectedShader;
+        std::shared_ptr<Material> treeMaterial; 
         switch(shaderIndex) {
-            case 0: selectedShader = shader_phong; break;
-            case 1: selectedShader = shader_lambert; break;
-            case 2: selectedShader = shader_blinn; break;
+            case 0: 
+                selectedShader = shader_phong; 
+                treeMaterial = materialManager.getMaterial("tree");
+                break;
+            case 1: 
+                selectedShader = shader_lambert;
+                treeMaterial = materialManager.getMaterial("tree-blueish");
+                break;
+            case 2: 
+                selectedShader = shader_blinn;
+                treeMaterial = materialManager.getMaterial("tree-brownish");
+                break;
         }
 
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, selectedShader);
@@ -105,15 +111,9 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         treeTrans.addOperation(rotateOp);
 
         treeDrawable->setTransformation(treeTrans);
-
-        // Define a unique material for each tree or use a common one
-        Material treeMaterial(
-            glm::vec3(0.2f, 0.2f, 0.2f), // Ambient
-            glm::vec3(0.5f, 0.5f, 0.5f), // Diffuse
-            glm::vec3(0.7f, 0.7f, 0.7f), // Specular
-            32.0f                        // Shininess
-        );
-        treeDrawable->setMaterial(treeMaterial);
+        if(treeMaterial) {
+            treeDrawable->setMaterial(*treeMaterial);
+        }
 
         if (i % 6 == 0){
             treeDrawables.push_back(treeDrawable);
@@ -141,14 +141,8 @@ Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
         glm::vec3 initialDirection(getRandom(-1.0f, 1.0f), getRandom(-1.0f, 1.0f), getRandom(-1.0f, 1.0f));
         lightDrawablesWithDirection.emplace_back(lightDrawable, glm::normalize(initialDirection));
 
-        // Define a material for the firefly
-        Material lightMaterial(
-            glm::vec3(0.1f, 0.1f, 0.1f), // Ambient
-            glm::vec3(0.5f, 0.5f, 0.5f), // Diffuse
-            glm::vec3(1.0f, 1.0f, 1.0f), // Specular
-            16.0f                        // Shininess
-        );
-        lightDrawable->setMaterial(lightMaterial);
+        auto lightMaterial = materialManager.getMaterial("light");
+        lightDrawable->setMaterial(*lightMaterial);
 
         addDrawable(lightDrawable);
     }

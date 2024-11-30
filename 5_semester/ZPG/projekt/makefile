@@ -28,6 +28,7 @@ SRCS = \
     src/Core/Controller.cpp \
     src/Core/Model.cpp \
     src/Core/Material.cpp \
+    src/Core/MaterialManager.cpp \
     src/Core/Transformation.cpp \
     src/Graphics/Camera.cpp \
     src/Graphics/DrawableObject.cpp \

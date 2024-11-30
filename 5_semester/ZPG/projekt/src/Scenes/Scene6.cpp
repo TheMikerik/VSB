@@ -9,12 +9,15 @@
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
 #include "../include/Core/Material.h"
+#include "../include/Core/MaterialManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
 #include <iostream>
 
 Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>(glm::vec3(5.0f, 4.0f, 5.0f), glm::vec3(1.0f, 0.0f, 1.0f))) {
+    auto materialManager = MaterialManager::getInstance();
+
     auto shader_platform = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f.glsl");
     auto shader_sl = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f_l.glsl");
 
@@ -33,14 +36,8 @@ Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>
     auto treeModel = std::make_shared<Model>(treeVertices);
 
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
-
-    Material platformMaterial(
-        glm::vec3(0.3f, 0.3f, 0.3f), // Ambient
-        glm::vec3(0.6f, 0.6f, 0.6f), // Diffuse
-        glm::vec3(0.8f, 0.8f, 0.8f), // Specular
-        64.0f                        // Shininess
-    );
-    platformDrawable->setMaterial(platformMaterial);
+    auto platformMaterial = materialManager.getMaterial("platform");
+    platformDrawable->setMaterial(*platformMaterial);
 
     Transformation platformTrans;
     auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(5.0f, 1.0f, 5.0f));
@@ -68,14 +65,8 @@ Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>
         treeTrans.addOperation(rotateOp);
 
         treeDrawable->setTransformation(treeTrans);
-
-        Material treeMaterial(
-            glm::vec3(0.2f, 0.2f, 0.2f), // Ambient
-            glm::vec3(0.5f, 0.5f, 0.5f), // Diffuse
-            glm::vec3(0.7f, 0.7f, 0.7f), // Specular
-            32.0f                        // Shininess
-        );
-        treeDrawable->setMaterial(treeMaterial);
+        auto treeMaterial = materialManager.getMaterial("tree");
+        treeDrawable->setMaterial(*treeMaterial);
 
         if (i % 6 == 0){
             treeDrawables.push_back(treeDrawable);

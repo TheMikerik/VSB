@@ -18,32 +18,10 @@ void Material::apply(const ShaderProgram& shader) const {
     GLint specularLoc = glGetUniformLocation(shader.getProgramID(), "materialSpecular");
     GLint shininessLoc = glGetUniformLocation(shader.getProgramID(), "materialShininess");
 
-    if (ambientLoc != -1) {
-        glUniform3fv(ambientLoc, 1, glm::value_ptr(ambient));
-    } else {
-        std::cerr << "Warning: 'materialAmbient' uniform not found in shader." << std::endl;
-    }
-
-    if (diffuseLoc != -1) {
-        glUniform3fv(diffuseLoc, 1, glm::value_ptr(diffuse));
-    } else {
-        std::cerr << "Warning: 'materialDiffuse' uniform not found in shader." << std::endl;
-    }
-
-    if (specularLoc != -1) {
-        glUniform3fv(specularLoc, 1, glm::value_ptr(specular));
-    } else {
-        std::cerr << "Warning: 'materialSpecular' uniform not found in shader." << std::endl;
-    }
-
-    if (shininessLoc != -1) {
-        glUniform1f(shininessLoc, shininess);
-    } else {
-        std::cerr << "Warning: 'materialShininess' uniform not found in shader." << std::endl;
-    }
-
-    // Optionally, unbind the shader if necessary
-    // glUseProgram(0);
+    glUniform3fv(ambientLoc, 1, glm::value_ptr(ambient));
+    glUniform3fv(diffuseLoc, 1, glm::value_ptr(diffuse));
+    glUniform3fv(specularLoc, 1, glm::value_ptr(specular));
+    glUniform1f(shininessLoc, shininess);
 }
 
 // Getters
