@@ -1,49 +1,54 @@
-// Scene6.cpp
 #include "Scenes/Scene6.h"
 #include "Graphics/Light.h"
-#include "Graphics/Spotlight.h"    // Include the Spotlight header
+#include "Graphics/Spotlight.h"    
 #include "../models/tree.h"
 #include "../models/platform.h"
-#include "../models/sphere.h"
+#include "../models/plain_texture.h" // Add this include
+#include "../include/Core/Material.h"
+#include "../include/Core/MaterialManager.h"
+#include "../include/Core/Texture.h" // Add this include
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
-#include "../include/Core/Material.h"
-#include "../include/Core/MaterialManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
 #include <iostream>
 
-Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>(glm::vec3(5.0f, 4.0f, 5.0f), glm::vec3(1.0f, 0.0f, 1.0f))) {
+Scene6::Scene6(Camera& cam) 
+    : camera(cam), 
+      spotlight(std::make_shared<Spotlight>(glm::vec3(5.0f, 4.0f, 5.0f), glm::vec3(1.0f, 0.0f, 1.0f)))
+{
     auto materialManager = MaterialManager::getInstance();
 
-    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f.glsl");
-    auto shader_sl = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f_l.glsl");
+    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/texture_shaders/v_f_l.glsl", "./shaders/texture_shaders/fragment_shader_flashlight.glsl"); 
+    auto shader_sl = std::make_shared<ShaderProgram>("./shaders/v_l.glsl", "./shaders/f.glsl");
 
     shaders = {shader_platform, shader_sl};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
     }
-    
+
     camera.notifyObservers();
 
-    std::vector<float> platformVertices(std::begin(platform), std::end(platform));
+    std::vector<float> plainTextureVertices(std::begin(plain_texture), std::end(plain_texture));
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
 
-    auto platformModel = std::make_shared<Model>(platformVertices);
+    auto platformModel = std::make_shared<Model>(plainTextureVertices, true);
     auto treeModel = std::make_shared<Model>(treeVertices);
 
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
-    auto platformMaterial = materialManager.getMaterial("platform");
-    platformDrawable->setMaterial(*platformMaterial);
+    std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png", false);
+
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, 
+                                                             Transformation(), 
+                                                             *materialManager.getMaterial("platform"),
+                                                             grassTexture);
 
     Transformation platformTrans;
     auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(5.0f, 1.0f, 5.0f));
     platformTrans.addOperation(scaleOp);
     platformDrawable->setTransformation(platformTrans);
-
 
     addDrawable(platformDrawable);
 

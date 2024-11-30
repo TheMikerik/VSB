@@ -40,7 +40,3 @@ void main() {
     vec3 finalColor = ambient + (diffuse + specular) * spot;
     fragColor = vec4(finalColor, 1.0);
 }
-
-// vec3 ambientColor = vec3(0.25, 0.15, 0.05);
-// vec3 diffuseColor = vec3(0.75, 0.50, 0.25); // Brighter brown for diffuse reflection
-// vec3 specularColor = vec3(1.0, 1.0, 1.0);

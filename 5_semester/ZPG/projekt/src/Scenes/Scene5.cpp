@@ -19,7 +19,7 @@
 #include <ctime>
 #include <iostream>
 
-Scene5::Scene5(Camera& cam) : camera(cam) { // Update this line
+Scene5::Scene5(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
     auto materialManager = MaterialManager::getInstance();
 
