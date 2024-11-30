@@ -4,6 +4,7 @@
 
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
+#include "../include/Core/MaterialManager.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -51,6 +52,9 @@ Scene3::Scene3(Camera& cam) : camera(cam) {
         glm::vec3(-2.0f, -2.0f,  0.0f),
     };
 
+    auto materialManager = MaterialManager::getInstance();
+    auto blueMaterial = materialManager.getMaterial("blue");
+
     for(const auto& pos : spherePositions) {
         auto sphereDrawable = std::make_shared<DrawableObject>(sphereModel, shaders[currentShader]);
 
@@ -63,6 +67,10 @@ Scene3::Scene3(Camera& cam) : camera(cam) {
         sphereTrans.addOperation(translateOp);
 
         sphereDrawable->setTransformation(sphereTrans);
+
+        if (blueMaterial) {
+            sphereDrawable->setMaterial(*blueMaterial);
+        }
 
         addDrawable(sphereDrawable);
     }

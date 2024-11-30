@@ -97,12 +97,12 @@ void Application::initialization()
 void Application::createScenes()
 {
     auto scene1 = std::make_shared<Scene1>(camera);
-    // auto scene3 = std::make_shared<Scene3>(camera);
+    auto scene3 = std::make_shared<Scene3>(camera);
     auto scene5 = std::make_shared<Scene5>(camera);
     auto scene6 = std::make_shared<Scene6>(camera);
 
     scenes.emplace_back(scene1);
-    // scenes.emplace_back(scene3);
+    scenes.emplace_back(scene3);
     scenes.emplace_back(scene5);
     scenes.emplace_back(scene6);
 }
