@@ -1,3 +1,4 @@
+// depth_fragment_blinn.glsl
 #version 330 core
 
 in vec3 FragPos;
@@ -11,10 +12,10 @@ uniform vec3 lightColor[30];
 uniform int numLights;
 
 // Material properties
-const vec3 materialAmbient  = vec3(0.2);
-const vec3 materialDiffuse  = vec3(0.5);
-const vec3 materialSpecular = vec3(1.0);
-const float materialShininess = 32.0;
+uniform vec3 materialAmbient;
+uniform vec3 materialDiffuse;
+uniform vec3 materialSpecular;
+uniform float materialShininess;
 
 void main()
 {

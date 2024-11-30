@@ -11,10 +11,10 @@ uniform vec3 lightColor[10];
 uniform int numLights;
 
 // Material properties
-const vec3 materialAmbient  = vec3(0.2);
-const vec3 materialDiffuse  = vec3(0.5);
-const vec3 materialSpecular = vec3(1.0);
-const float materialShininess = 32.0;
+const vec3 materialAmbient;
+const vec3 materialDiffuse;
+const vec3 materialSpecular;
+const float materialShininess;
 
 void main()
 {

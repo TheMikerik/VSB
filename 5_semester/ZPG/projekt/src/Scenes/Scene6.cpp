@@ -8,6 +8,7 @@
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
+#include "../include/Core/Material.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <cstdlib>
@@ -31,14 +32,25 @@ Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>
     auto platformModel = std::make_shared<Model>(platformVertices);
     auto treeModel = std::make_shared<Model>(treeVertices);
 
+    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform);
+
+    Material platformMaterial(
+        glm::vec3(0.3f, 0.3f, 0.3f), // Ambient
+        glm::vec3(0.6f, 0.6f, 0.6f), // Diffuse
+        glm::vec3(0.8f, 0.8f, 0.8f), // Specular
+        64.0f                        // Shininess
+    );
+    platformDrawable->setMaterial(platformMaterial);
+
     Transformation platformTrans;
     auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(5.0f, 1.0f, 5.0f));
     platformTrans.addOperation(scaleOp);
+    platformDrawable->setTransformation(platformTrans);
 
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, platformTrans);
+
     addDrawable(platformDrawable);
 
-    for (int i = 0; i < 600; ++i) {
+    for (int i = 0; i < 300; ++i) {
         auto treeDrawable = std::make_shared<DrawableObject>(treeModel, shader_sl);
 
         Transformation treeTrans;
@@ -56,6 +68,14 @@ Scene6::Scene6(Camera& cam) : camera(cam), spotlight(std::make_shared<Spotlight>
         treeTrans.addOperation(rotateOp);
 
         treeDrawable->setTransformation(treeTrans);
+
+        Material treeMaterial(
+            glm::vec3(0.2f, 0.2f, 0.2f), // Ambient
+            glm::vec3(0.5f, 0.5f, 0.5f), // Diffuse
+            glm::vec3(0.7f, 0.7f, 0.7f), // Specular
+            32.0f                        // Shininess
+        );
+        treeDrawable->setMaterial(treeMaterial);
 
         if (i % 6 == 0){
             treeDrawables.push_back(treeDrawable);

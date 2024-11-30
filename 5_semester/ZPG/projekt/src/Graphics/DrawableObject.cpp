@@ -1,17 +1,16 @@
 // DrawableObject.cpp
 #include "Graphics/DrawableObject.h"
-#include "Core/Transformation.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 DrawableObject::DrawableObject(std::shared_ptr<Model> model,
-                                std::shared_ptr<ShaderProgram> shaderProgram,
-                                const Transformation& transformation)
-    : model(model), shaderProgram(shaderProgram), transformation(transformation)
-{}
+                               std::shared_ptr<ShaderProgram> shaderProgram,
+                               const Transformation& transformation,
+                               const Material& material)
+    : model(model), shaderProgram(shaderProgram),
+      transformation(transformation), material(material) {}
 
-void DrawableObject::render() const
-{
+void DrawableObject::render() const {
     shaderProgram->use();
 
     GLint modelLoc = glGetUniformLocation(shaderProgram->getProgramID(), "modelMatrix");
@@ -22,6 +21,8 @@ void DrawableObject::render() const
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
     }
 
+    material.apply(*shaderProgram);
+
     model->bind();
     glDrawArrays(GL_TRIANGLES, 0, model->getVertexCount());
     model->unbind();
@@ -29,20 +30,24 @@ void DrawableObject::render() const
     glUseProgram(0);
 }
 
-
-//TODO: Drawable object by mel mit pouze set a get transf!! Editnout
 void DrawableObject::setShader(std::shared_ptr<ShaderProgram> shd) {
     shaderProgram = shd;
 }
 
-void DrawableObject::setTransformation(const Transformation& trans)
-{
+void DrawableObject::setTransformation(const Transformation& trans) {
     transformation = trans;
 }
 
-Transformation& DrawableObject::getTransformation()
-{
+Transformation& DrawableObject::getTransformation() {
     return transformation;
+}
+
+void DrawableObject::setMaterial(const Material& mat) {
+    material = mat;
+}
+
+const Material& DrawableObject::getMaterial() const {
+    return material;
 }
 
 glm::vec3 DrawableObject::getPosition() const {

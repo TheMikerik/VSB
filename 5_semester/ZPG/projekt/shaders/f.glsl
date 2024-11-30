@@ -6,6 +6,12 @@ uniform vec3 spotDir;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+// Material properties
+uniform vec3 materialAmbient;
+uniform vec3 materialDiffuse;
+uniform vec3 materialSpecular;
+uniform float materialShininess;
+
 out vec4 fragColor;
 
 void main() {
@@ -14,20 +20,15 @@ void main() {
     vec3 norm = normalize(worldNormal);
     vec3 reflectVector = reflect(-lightVector, norm);
 
-    // Dark brown color for the platform
-    vec3 ambientColor = vec3(0.25, 0.15, 0.05);
-    vec3 diffuseColor = vec3(0.75, 0.50, 0.25); // Brighter brown for diffuse reflection
-    vec3 specularColor = vec3(1.0, 1.0, 1.0);
-
     float ambientStrength = 0.1;
-    vec3 ambient = ambientStrength * ambientColor;
+    vec3 ambient = ambientStrength * materialAmbient;
 
     float diff = max(dot(norm, lightVector), 0.0);
-    vec3 diffuse = diff * diffuseColor;
+    vec3 diffuse = materialDiffuse * diff;
 
     float specularStrength = 0.5;
-    float spec = pow(max(dot(reflectVector, camVector), 0.0), 32);
-    vec3 specular = specularStrength * spec * specularColor;
+    float spec = pow(max(dot(reflectVector, camVector), 0.0), materialShininess);
+    vec3 specular = specularStrength * spec * materialSpecular;
 
     float spot = dot(normalize(spotDir), -lightVector);
     if (spot < 0.99) {
@@ -39,3 +40,7 @@ void main() {
     vec3 finalColor = ambient + (diffuse + specular) * spot;
     fragColor = vec4(finalColor, 1.0);
 }
+
+// vec3 ambientColor = vec3(0.25, 0.15, 0.05);
+// vec3 diffuseColor = vec3(0.75, 0.50, 0.25); // Brighter brown for diffuse reflection
+// vec3 specularColor = vec3(1.0, 1.0, 1.0);

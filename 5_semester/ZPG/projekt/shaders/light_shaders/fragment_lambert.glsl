@@ -10,6 +10,9 @@ uniform vec3 lightColor[10];
 uniform int numLights;
 uniform vec3 viewPos;
 
+uniform vec3 materialAmbient;
+uniform vec3 materialDiffuse;
+
 void main()
 {
     vec3 result = vec3(0.0);
@@ -20,12 +23,11 @@ void main()
     float quadratic = 0.0075;
 
     for (int i = 0; i < numLights; ++i) {
-        float ambientStrength = 0.1;
-        vec3 ambient = ambientStrength * lightColor[i];
+        vec3 ambient = materialAmbient * lightColor[i];
         
         vec3 lightDir = normalize(lightPos[i] - FragPos);
         float diff = max(dot(norm, lightDir), 0.0);
-        vec3 diffuse = diff * lightColor[i];
+        vec3 diffuse = materialDiffuse * diff * lightColor[i];
         
         float distance = length(lightPos[i] - FragPos);
         float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
