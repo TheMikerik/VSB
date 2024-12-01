@@ -23,11 +23,7 @@ public:
     void setShininess(float shininess);
 
 private:
-<<<<<<< HEAD
     glm::vec3 ambient;   
-=======
-    glm::vec3 ambient; 
->>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
     glm::vec3 diffuse; 
     glm::vec3 specular;
     float shininess;

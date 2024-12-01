@@ -249,7 +249,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     
     auto& loginTrans = loginDrawable->getTransformation();
     loginTrans.addOperation(std::make_shared<TranslateOperation>(glm::vec3(0.0f, 10.0f, -15.0f)));
-    loginTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.1f))); 
+    loginTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.2f))); 
 
     drawable3DObjects.push_back(loginDrawable);
 }

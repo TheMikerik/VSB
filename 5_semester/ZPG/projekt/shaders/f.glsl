@@ -6,6 +6,7 @@ uniform vec3 spotDir;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+// Material properties
 uniform vec3 materialAmbient;
 uniform vec3 materialDiffuse;
 uniform vec3 materialSpecular;

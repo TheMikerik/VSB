@@ -1,3 +1,4 @@
+// depth_fragment_blinn.glsl
 #version 330 core
 
 in vec3 FragPos;
@@ -10,6 +11,7 @@ uniform vec3 lightPos[30];
 uniform vec3 lightColor[30];
 uniform int numLights;
 
+// Material properties
 uniform vec3 materialAmbient;
 uniform vec3 materialDiffuse;
 uniform vec3 materialSpecular;
@@ -26,16 +28,20 @@ void main()
     float quadratic = 0.19;
 
     for (int i = 0; i < numLights; ++i) {
+        // Ambient
         vec3 ambient = materialAmbient * lightColor[i];
         
+        // Diffuse
         vec3 lightDir = normalize(lightPos[i] - FragPos);
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = materialDiffuse * diff * lightColor[i];
         
+        // Specular (Blinn-Phong)
         vec3 halfwayDir = normalize(lightDir + viewDir);
         float spec = pow(max(dot(norm, halfwayDir), 0.0), materialShininess);
         vec3 specular = materialSpecular * spec * lightColor[i];
         
+        // Attenuation
         float distance = length(lightPos[i] - FragPos);
         float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
         

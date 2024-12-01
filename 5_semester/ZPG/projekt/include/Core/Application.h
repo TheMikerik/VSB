@@ -29,6 +29,9 @@ private:
 
     std::unique_ptr<Controller> controller;
 
+    Light pointLight;
+    std::vector<Light> fireflies;
+
     std::unique_ptr<Skybox> skybox;
 };
 

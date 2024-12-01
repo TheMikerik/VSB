@@ -8,6 +8,7 @@ uniform vec3 spotDir;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+// Material properties
 uniform sampler2D texture_diffuse1;
 uniform bool hasTexture;
 

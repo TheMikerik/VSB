@@ -14,10 +14,7 @@ DrawableObject::DrawableObject(std::shared_ptr<Model> model,
 void DrawableObject::render() const {
     shaderProgram->use();
 
-<<<<<<< HEAD
     
-=======
->>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
     GLint modelLoc = glGetUniformLocation(shaderProgram->getProgramID(), "modelMatrix");
     if (modelLoc == -1) {
         std::cerr << "Could not find uniform 'modelMatrix' in shader program." << std::endl;
@@ -30,17 +27,10 @@ void DrawableObject::render() const {
 
     if (texture) {
         shaderProgram->setBool("hasTexture", true);
-<<<<<<< HEAD
         texture->bind(0); 
         GLint texLoc = glGetUniformLocation(shaderProgram->getProgramID(), "texture_diffuse1");
         if (texLoc != -1) {
             glUniform1i(texLoc, 0); 
-=======
-        texture->bind(0);
-        GLint texLoc = glGetUniformLocation(shaderProgram->getProgramID(), "texture_diffuse1");
-        if (texLoc != -1) {
-            glUniform1i(texLoc, 0);
->>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
         }
     } else {
         shaderProgram->setBool("hasTexture", false);
