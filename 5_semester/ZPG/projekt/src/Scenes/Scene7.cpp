@@ -182,7 +182,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         // Optionally add rotation
         auto rotateOp = std::make_shared<RotateOperation>(
             glm::radians(getRandom(0.0f, 360.0f)), 
-            glm::vec3(0.0f, 1.0f, 0.0f)
+            glm::vec3(1.0f, 0.0f, 1.0f)
         );
         trans.addOperation(rotateOp);
 
@@ -205,12 +205,12 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         // Apply transformations
         auto& trans = houseDrawable->getTransformation();
         auto translateOp = std::make_shared<TranslateOperation>(
-            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f))
+            glm::vec3(getRandom(-11.0f, 11.0f), 0.0f, getRandom(-11.0f, 11.0f))
         );
         trans.addOperation(translateOp);
 
         auto scaleOp = std::make_shared<ScaleOperation>(
-            glm::vec3(0.4f) // Adjust scale as needed
+            glm::vec3(0.3f) // Adjust scale as needed
         );
         trans.addOperation(scaleOp);
 
@@ -223,6 +223,62 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
         drawable3DObjects.push_back(houseDrawable);
     }
+
+    for (int i = 0; i < 10; ++i) {
+        auto wolfModel = std::make_shared<Model3D>("models/assimp/wolf/wolf.obj");
+        
+        // Create Drawable3DObject
+        auto wolfDrawable = std::make_shared<Drawable3DObject>(
+            wolfModel, 
+            shader_phong, 
+            Transformation(), 
+            *materialManager.getMaterial("wolf"),
+            nullptr
+        );
+
+        // Apply transformations
+        auto& trans = wolfDrawable->getTransformation();
+
+        // Random translation within the range (-15, 15)
+        auto translateOp = std::make_shared<TranslateOperation>(
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f))
+        );
+        trans.addOperation(translateOp);
+
+        // Scale to adjust size
+        auto scaleOp = std::make_shared<ScaleOperation>(
+            glm::vec3(1.4f) // Adjust scale as needed
+        );
+        trans.addOperation(scaleOp);
+
+        // Random rotation around the Y-axis (0 to 360 degrees)
+        auto rotateOp = std::make_shared<RotateOperation>(
+            glm::radians(getRandom(0.0f, 360.0f)), // Random angle in radians
+            glm::vec3(0.0f, 1.0f, 0.0f)           // Rotation around Y-axis
+        );
+        trans.addOperation(rotateOp);
+
+        drawable3DObjects.push_back(wolfDrawable);
+    }
+
+
+
+    auto loginModel = std::make_shared<Model3D>("models/assimp/login/login.obj");
+
+    auto loginDrawable = std::make_shared<Drawable3DObject>(
+        loginModel, 
+        shader_lambert, 
+        Transformation(), 
+        *materialManager.getMaterial("login"), // Assuming house material for login
+        nullptr  // No texture
+    );
+
+    // Apply transformations
+    auto& loginTrans = loginDrawable->getTransformation();
+    loginTrans.addOperation(std::make_shared<TranslateOperation>(glm::vec3(0.0f, 10.0f, -15.0f)));
+    loginTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.1f))); // Adjust scale as neededs
+
+    drawable3DObjects.push_back(loginDrawable);
 }
 
 float Scene7::getRandom(float min, float max) {
