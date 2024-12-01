@@ -9,6 +9,7 @@
 #include "Graphics/Camera.h"
 #include "Core/Controller.h"
 #include "Graphics/Light.h"
+#include "Core/Skybox.h"
 
 class Application {
 public:
@@ -30,6 +31,8 @@ private:
 
     Light pointLight;
     std::vector<Light> fireflies;
+
+    std::unique_ptr<Skybox> skybox;
 };
 
 extern Application App;

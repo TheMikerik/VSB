@@ -1,4 +1,3 @@
-// Application.cpp
 #include "Core/Application.h"
 #include "Shaders/ShaderProgram.h"
 #include "Core/Model.h"
@@ -92,6 +91,17 @@ void Application::initialization()
 
     controller = std::unique_ptr<Controller>(new Controller(window, camera, scenes));
 
+    // Initialize Skybox here
+    std::vector<std::string> faces = {
+        "./images/posx.jpg",
+        "./images/negx.jpg",
+        "./images/posy.jpg",
+        "./images/negy.jpg",
+        "./images/posz.jpg",
+        "./images/negz.jpg"
+    };
+    skybox = std::make_unique<Skybox>(faces);
+
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
@@ -133,6 +143,11 @@ void Application::run()
         if (currentSceneIndex >= 0 && currentSceneIndex < scenes.size()) {
             scenes[currentSceneIndex]->render(deltaTime);
         }
+
+        // Render the Skybox after the scene
+        glm::mat4 view = camera.GetViewMatrix();
+        glm::mat4 projection = camera.getProjectionMatrix();
+        skybox->render(view, projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

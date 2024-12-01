@@ -1,6 +1,6 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -g -DGL_SILENCE_DEPRECATION
+CXXFLAGS = -std=c++14 -Wall -g -DGL_SILENCE_DEPRECATION
 
 # Update include and library paths based on Homebrew prefix and project structure
 INCLUDES = \
@@ -31,6 +31,8 @@ SRCS = \
     src/Core/Material.cpp \
     src/Core/MaterialManager.cpp \
     src/Core/Transformation.cpp \
+    src/Core/Skybox.cpp \
+    src/Core/SkyboxModel.cpp \
     src/Core/Texture.cpp \
     src/Graphics/Camera.cpp \
     src/Graphics/DrawableObject.cpp \
