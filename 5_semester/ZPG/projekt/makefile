@@ -8,12 +8,14 @@ INCLUDES = \
     -Iinclude/stb \
     -I/opt/homebrew/opt/glfw/include \
     -I/opt/homebrew/opt/glm/include \
-    -I/opt/homebrew/opt/glew/include
+    -I/opt/homebrew/opt/glew/include \
+    -I/opt/homebrew/opt/assimp/include
 
 # Libraries
 LIBS = \
     -L/opt/homebrew/opt/glfw/lib \
     -L/opt/homebrew/opt/glew/lib \
+    -L/opt/homebrew/opt/assimp/lib \
     -lglfw \
     -lGLEW \
     -framework OpenGL
