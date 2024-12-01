@@ -18,6 +18,7 @@ LIBS = \
     -L/opt/homebrew/opt/assimp/lib \
     -lglfw \
     -lGLEW \
+    -lassimp \
     -framework OpenGL
 
 # Executable name
@@ -30,6 +31,8 @@ SRCS = \
     src/Core/Application.cpp \
     src/Core/Controller.cpp \
     src/Core/Model.cpp \
+    src/Core/Model3D.cpp \
+    src/Core/Model3DModel.cpp \
     src/Core/Material.cpp \
     src/Core/MaterialManager.cpp \
     src/Core/Transformation.cpp \

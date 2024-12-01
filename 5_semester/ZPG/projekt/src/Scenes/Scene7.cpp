@@ -23,6 +23,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
     auto materialManager = MaterialManager::getInstance();
 
+    // Initialize Lights
     for (int i = 0; i < 15; ++i) {
         glm::vec3 position = glm::vec3(
             static_cast<float>(rand() % 30 - 15),
@@ -33,14 +34,28 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         this->addLight(Light(position, color));
     }
 
-    auto shader_platform = std::make_shared<ShaderProgram>("./shaders/texture_shaders/vertex_shader.glsl", "./shaders/texture_shaders/fragment_shader.glsl");
+    // Initialize Shaders
+    auto shader_platform = std::make_shared<ShaderProgram>(
+        "./shaders/texture_shaders/vertex_shader.glsl",
+        "./shaders/texture_shaders/fragment_shader.glsl"
+    );
 
-    auto shader_phong = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_phong.glsl");
-    auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_lambert.glsl");
-    auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/depth_fragment_blinn.glsl");
+    auto shader_phong = std::make_shared<ShaderProgram>(
+        "./shaders/light_shaders/vertex_shader_with_lights.glsl",
+        "./shaders/light_shaders/depth_fragment_phong.glsl"
+    );
+    auto shader_lambert = std::make_shared<ShaderProgram>(
+        "./shaders/light_shaders/vertex_shader_with_lights.glsl",
+        "./shaders/light_shaders/depth_fragment_lambert.glsl"
+    );
+    auto shader_blinn = std::make_shared<ShaderProgram>(
+        "./shaders/light_shaders/vertex_shader_with_lights.glsl",
+        "./shaders/light_shaders/depth_fragment_blinn.glsl"
+    );
 
     shaders = {shader_platform, shader_phong, shader_lambert, shader_blinn};
 
+    // Register Cameras and Lights with Shaders
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
         for(auto& light : this->lights) {
@@ -48,30 +63,37 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         }
     }
 
+    // Set the number of lights in each shader
     for(auto& shader : shaders) {
         shader->use();
         glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), lights.size());
     }
 
+    // Initialize Lights in Shaders
     for (size_t i = 0; i < this->lights.size(); ++i) {
         for(auto& shader : shaders) {
             shader->onLightUpdate(i, lights[i].getPosition(), lights[i].getColor());
         }
         lights[i].notifyObservers(i);
     }
-    
+
     camera.notifyObservers();
 
+    // Initialize Platform
     std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png", false);
 
     std::vector<float> plainTextureVertices(std::begin(plain_texture), std::end(plain_texture));
     auto platformModel = std::make_shared<Model>(plainTextureVertices, true);
 
-    auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, 
-                                                             Transformation(), 
-                                                             *materialManager.getMaterial("platform"),
-                                                             grassTexture);
+    auto platformDrawable = std::make_shared<DrawableObject>(
+        platformModel, 
+        shader_platform, 
+        Transformation(), 
+        *materialManager.getMaterial("platform"),
+        grassTexture
+    );
 
+    // Apply transformations to the platform
     Transformation platformTrans;
     auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(15.0f, 1.0f, 15.0f));
     platformTrans.addOperation(scaleOp);
@@ -79,6 +101,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
     addDrawable(platformDrawable);
 
+    // Initialize Trees
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     auto treeModel = std::make_shared<Model>(treeVertices);
 
@@ -106,11 +129,13 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         Transformation treeTrans;
 
         auto translateOp = std::make_shared<TranslateOperation>(
-            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f)));
+            glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f))
+        );
         treeTrans.addOperation(translateOp);
 
         auto scaleOpTree = std::make_shared<ScaleOperation>(
-            glm::vec3(getRandom(0.2f, 0.8f)));
+            glm::vec3(getRandom(0.2f, 0.8f))
+        );
         treeTrans.addOperation(scaleOpTree);
 
         treeDrawable->setTransformation(treeTrans);
@@ -120,6 +145,17 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
         addDrawable(treeDrawable);
     }
+
+    // Initialize Zombie Model
+    zombieModel = std::make_shared<Model3D>("models/assimp/zombie/zombie.obj");
+
+    // Define zombie transformations
+    // You can adjust position, scale, and rotation as needed
+    zombieTransformation = glm::mat4(1.0f);
+    zombieTransformation = glm::translate(zombieTransformation, glm::vec3(0.0f, 0.0f, 0.0f)); // Position at origin
+    zombieTransformation = glm::scale(zombieTransformation, glm::vec3(1.0f)); // Original scale
+    // Optionally, apply rotation
+    zombieTransformation = glm::rotate(zombieTransformation, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 float Scene7::getRandom(float min, float max) {
@@ -135,5 +171,15 @@ const std::vector<Light>& Scene7::getLights() const {
 }
 
 void Scene7::render(float dt) {
+    // Call the base class render to handle existing DrawableObjects
     Scene::render(dt);
+
+    // Retrieve view and projection matrices from the camera
+    glm::mat4 view = camera.GetViewMatrix();
+    glm::mat4 projection = camera.getProjectionMatrix();
+
+    // Render the zombie model
+    if(zombieModel) {
+        zombieModel->render(view, projection, zombieTransformation);
+    }
 }

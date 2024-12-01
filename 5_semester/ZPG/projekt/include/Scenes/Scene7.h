@@ -1,8 +1,10 @@
+// Scene7.h
 #pragma once
 
 #include "Scenes/Scene.h"
 #include "Shaders/ShaderProgram.h"
 #include "Core/Model.h"
+#include "Core/Model3D.h"          // Include Model3D
 #include "Core/Transformation.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Light.h"
@@ -24,4 +26,7 @@ private:
     float getRandom(float min, float max);
     std::vector<Light> lights;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
+
+    std::shared_ptr<Model3D> zombieModel;
+    glm::mat4 zombieTransformation;
 };

@@ -20,6 +20,9 @@ public:
 
     GLuint getProgramID() const { return programID; }
 
+    void setInt(const std::string &name, int value) const;
+    void setMat4(const std::string &name, const glm::mat4 &mat) const;
+
 private:
     GLuint programID;
 
