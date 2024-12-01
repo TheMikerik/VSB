@@ -24,6 +24,13 @@ void MaterialManager::initializeMaterials() {
         16.0f  
     ));
 
+    addMaterial("house", std::make_shared<Material>(
+        glm::vec3(0.4, 0.4, 0.4),
+        glm::vec3(0.75f, 0.75f, 0.75f),
+        glm::vec3(1.0f, 1.0f, 1.0f),
+        16.0f  
+    ));
+
     addMaterial("tree", std::make_shared<Material>(
         glm::vec3(0.12f, 0.4f, 0.12f),
         glm::vec3(0.25f, 0.65f, 0.25),

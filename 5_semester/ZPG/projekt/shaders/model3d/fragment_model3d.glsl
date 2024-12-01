@@ -1,51 +1,56 @@
 #version 330 core
-out vec4 FragColor;
 
-in vec3 FragPos;  
-in vec3 Normal;  
-in vec2 TexCoords;
+in vec3 FragPos;
+in vec3 Normal;
+in vec2 TexCoords; // Received from vertex shader
 
-// Material parameters
-struct Material {
-    sampler2D texture_diffuse1;
-    sampler2D texture_specular1;
-    sampler2D texture_normal1;
-    sampler2D texture_height1;
-}; 
+out vec4 frag_colour;
 
-uniform Material material;
-
-// Lighting parameters
-struct Light {
-    vec3 position;
-    vec3 color;
-};
-
-uniform Light light;
 uniform vec3 viewPos;
+uniform vec3 lightPos[10];
+uniform vec3 lightColor[10];
+uniform int numLights;
+
+// Material properties
+uniform vec3 materialAmbient;
+uniform vec3 materialDiffuse;
+uniform vec3 materialSpecular;
+uniform float materialShininess;
+
+uniform sampler2D texture_diffuse1; // Default diffuse sampler
+uniform bool hasTexture; // Control variable for texturing
 
 void main()
 {
-    // Ambient
-    vec3 ambient = 0.1 * light.color;
-
-    // Diffuse 
+    vec3 result = vec3(0.0);
     vec3 norm = normalize(Normal);
-    vec3 lightDir = normalize(light.position - FragPos);
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * light.color;
-
-    // Specular
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = spec * light.color;  
-    
-    // Texture
-    vec4 texColor = texture(material.texture_diffuse1, TexCoords);
-    if(texColor.a < 0.1)
-        discard;
 
-    vec3 result = (ambient + diffuse + specular) * texColor.rgb;
-    FragColor = vec4(result, 1.0);
+    float constant = 1.0;
+    float linear = 0.045;
+    float quadratic = 0.0075;
+
+    for (int i = 0; i < numLights; ++i) {
+        vec3 ambient = materialAmbient * lightColor[i];
+        
+        vec3 lightDir = normalize(lightPos[i] - FragPos);
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec3 diffuse = materialDiffuse * diff * lightColor[i];
+        
+        vec3 reflectDir = reflect(-lightDir, norm);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), materialShininess);
+        vec3 specular = materialSpecular * spec * lightColor[i];
+        
+        float distance = length(lightPos[i] - FragPos);
+        float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
+        
+        result += (ambient + diffuse + specular) * attenuation;
+    }
+
+    if (hasTexture) {
+        vec3 texColor = texture(texture_diffuse1, TexCoords).rgb;
+        result *= texColor;
+    }
+
+    frag_colour = vec4(result, 1.0);
 }

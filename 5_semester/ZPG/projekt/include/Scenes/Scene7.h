@@ -1,13 +1,14 @@
-// Scene7.h
+// include/Scenes/Scene7.h
 #pragma once
 
 #include "Scenes/Scene.h"
 #include "Shaders/ShaderProgram.h"
 #include "Core/Model.h"
-#include "Core/Model3D.h"          // Include Model3D
+// Remove Model3D include since Drawable3DObject handles it
 #include "Core/Transformation.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Light.h"
+#include "Graphics/Drawable3DObject.h" // Include Drawable3DObject
 #include <memory>
 #include <vector>
 
@@ -27,6 +28,5 @@ private:
     std::vector<Light> lights;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
 
-    std::shared_ptr<Model3D> zombieModel;
-    glm::mat4 zombieTransformation;
+    std::vector<std::shared_ptr<Drawable3DObject>> drawable3DObjects; // Vector to store multiple Drawable3DObjects
 };

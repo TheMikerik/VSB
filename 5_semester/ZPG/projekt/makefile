@@ -41,6 +41,7 @@ SRCS = \
     src/Core/Texture.cpp \
     src/Graphics/Camera.cpp \
     src/Graphics/DrawableObject.cpp \
+    src/Graphics/Drawable3DObject.cpp \
     src/Graphics/Light.cpp \
     src/Graphics/Spotlight.cpp \
     src/Graphics/stb_image.cpp \

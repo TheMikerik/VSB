@@ -44,37 +44,24 @@ void Model3DModel::setupMesh() {
 }
 
 void Model3DModel::render(const std::shared_ptr<ShaderProgram>& shader) const {
-    // Bind appropriate textures
     unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
-    unsigned int normalNr = 1;
-    unsigned int heightNr = 1;
 
     for (unsigned int i = 0; i < textures.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i); // Activate proper texture unit before binding
-        // Retrieve texture number (the N in diffuse_textureN)
+        glActiveTexture(GL_TEXTURE0 + i); // Activate the texture unit
+
         std::string number;
-        std::string name = textures[i]->getID() ? "texture_diffuse" : "texture_specular"; // Simplified
+        std::string name = "texture_diffuse"; // Assuming 'texture_diffuse1' format
+
         if (name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
-        else if (name == "texture_specular")
-            number = std::to_string(specularNr++);
-        else if (name == "texture_normal")
-            number = std::to_string(normalNr++);
-        else if (name == "texture_height")
-            number = std::to_string(heightNr++);
-
-        // Set the sampler to the correct texture unit
-        shader->setBool(name + number, true);
-        // Bind the texture
+        
+        shader->setInt((name + number).c_str(), i);
         textures[i]->bind(i);
     }
 
-    // Draw the mesh
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    // Reset to default
     glActiveTexture(GL_TEXTURE0);
 }
