@@ -3,10 +3,10 @@
 #include "Graphics/Spotlight.h"    
 #include "../models/tree.h"
 #include "../models/platform.h"
-#include "../models/plain_texture.h" // Add this include
+#include "../models/plain_texture.h"
 #include "../include/Core/Material.h"
 #include "../include/Core/MaterialManager.h"
-#include "../include/Core/Texture.h" // Add this include
+#include "../include/Core/Texture.h"
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"

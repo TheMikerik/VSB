@@ -14,7 +14,6 @@ DrawableObject::DrawableObject(std::shared_ptr<Model> model,
 void DrawableObject::render() const {
     shaderProgram->use();
 
-    // Set the model matrix uniform
     GLint modelLoc = glGetUniformLocation(shaderProgram->getProgramID(), "modelMatrix");
     if (modelLoc == -1) {
         std::cerr << "Could not find uniform 'modelMatrix' in shader program." << std::endl;
@@ -23,21 +22,19 @@ void DrawableObject::render() const {
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMat));
     }
 
-    // Apply material properties
     material.apply(*shaderProgram);
 
     if (texture) {
         shaderProgram->setBool("hasTexture", true);
-        texture->bind(0); // Bind to texture unit 0
+        texture->bind(0);
         GLint texLoc = glGetUniformLocation(shaderProgram->getProgramID(), "texture_diffuse1");
         if (texLoc != -1) {
-            glUniform1i(texLoc, 0); // Set the sampler to texture unit 0
+            glUniform1i(texLoc, 0);
         }
     } else {
         shaderProgram->setBool("hasTexture", false);
     }
 
-    // Bind the model and draw
     model->bind();
     glDrawArrays(GL_TRIANGLES, 0, model->getVertexCount());
     model->unbind();

@@ -1,4 +1,3 @@
-// Spotlight.cpp
 #include "Graphics/Spotlight.h"
 #include <glm/gtc/type_ptr.hpp>
 

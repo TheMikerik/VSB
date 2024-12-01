@@ -23,18 +23,8 @@ Application App;
 
 Application::Application()
     : window(nullptr), currentSceneIndex(0),
-      camera(glm::vec3(0.0f, 10.0f, 20.0f)),
-      pointLight(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(1.0f))
+      camera(glm::vec3(0.0f, 10.0f, 20.0f))
 {
-    for (int i = 0; i < 10; ++i) {
-        glm::vec3 position = glm::vec3(
-            static_cast<float>(rand() % 20 - 10),
-            static_cast<float>(rand() % 10 + 1),
-            static_cast<float>(rand() % 20 - 10)
-        );
-        glm::vec3 color = glm::vec3(1.0f);
-        fireflies.emplace_back(position, color);
-    }
 }
 
 Application::~Application()
@@ -56,7 +46,6 @@ void Application::initialization()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Create window
     window = glfwCreateWindow(1450, 900, "OpenGL Application with Camera and Light", nullptr, nullptr);
     if (!window) {
         std::cerr << "ERROR: could not create GLFW window" << std::endl;
@@ -91,7 +80,6 @@ void Application::initialization()
 
     controller = std::unique_ptr<Controller>(new Controller(window, camera, scenes));
 
-    // Initialize Skybox here
     std::vector<std::string> faces = {
         "./images/posx.jpg",
         "./images/negx.jpg",
@@ -144,7 +132,6 @@ void Application::run()
             scenes[currentSceneIndex]->render(deltaTime);
         }
 
-        // Render the Skybox after the scene
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
         skybox->render(view, projection);

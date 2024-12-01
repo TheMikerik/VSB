@@ -23,8 +23,8 @@ public:
     void setShininess(float shininess);
 
 private:
-    glm::vec3 ambient;    // Ra
-    glm::vec3 diffuse;    // Rd
-    glm::vec3 specular;   // Rs
+    glm::vec3 ambient; 
+    glm::vec3 diffuse; 
+    glm::vec3 specular;
     float shininess;
 };

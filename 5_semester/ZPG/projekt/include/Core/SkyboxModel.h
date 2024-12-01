@@ -1,4 +1,3 @@
-// Core/SkyboxModel.h
 #pragma once
 
 #include <vector>

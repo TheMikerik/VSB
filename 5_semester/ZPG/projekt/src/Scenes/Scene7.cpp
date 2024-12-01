@@ -1,4 +1,3 @@
-// Scene7.cpp
 #include "Scenes/Scene7.h"
 #include "Graphics/Light.h"
 

@@ -1,4 +1,3 @@
-// Scene5.h
 #pragma once
 
 #include "Scenes/Scene.h"

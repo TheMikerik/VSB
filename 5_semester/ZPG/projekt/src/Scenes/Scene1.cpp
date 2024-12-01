@@ -1,4 +1,3 @@
-// Scene1.cpp
 #include "../include/Scenes/Scene1.h"
 #include "../models/triangle.h"
 #include "../models/tree.h"

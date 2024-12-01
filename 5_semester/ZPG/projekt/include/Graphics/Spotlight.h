@@ -1,7 +1,4 @@
-// Spotlight.h
-#ifndef SPOTLIGHT_H
-#define SPOTLIGHT_H
-
+#pragma once
 #include <glm/glm.hpp>
 #include <memory>
 #include "Shaders/ShaderProgram.h"
@@ -19,5 +16,3 @@ private:
     glm::vec3 position;
     glm::vec3 direction;
 };
-
-#endif // SPOTLIGHT_H

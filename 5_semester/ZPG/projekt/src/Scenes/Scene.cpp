@@ -1,4 +1,3 @@
-// Scene.cpp
 #include "Scenes/Scene.h"
 
 Scene::Scene() : backgroundColor(0.3f, 0.3f, 0.3f, 1.0f), currentShader(0) {}

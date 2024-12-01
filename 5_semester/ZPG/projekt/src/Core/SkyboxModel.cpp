@@ -1,4 +1,3 @@
-// Core/SkyboxModel.cpp
 #include "Core/SkyboxModel.h"
 #include <iostream>
 
@@ -12,7 +11,6 @@ SkyboxModel::SkyboxModel(const std::vector<float>& vertices)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // Position attribute
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 

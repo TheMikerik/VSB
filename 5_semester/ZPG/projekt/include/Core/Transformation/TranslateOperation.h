@@ -1,4 +1,3 @@
-// TranslateOperation.h
 #include "Interfaces/ITransformationOperation.h"
 
 class TranslateOperation : public ITransformationOperation {

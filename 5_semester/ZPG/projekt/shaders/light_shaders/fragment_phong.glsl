@@ -10,7 +10,6 @@ uniform vec3 lightPos[10];
 uniform vec3 lightColor[10];
 uniform int numLights;
 
-// Material properties
 uniform vec3 materialAmbient;
 uniform vec3 materialDiffuse;
 uniform vec3 materialSpecular;
