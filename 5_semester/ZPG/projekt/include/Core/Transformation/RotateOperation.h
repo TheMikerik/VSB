@@ -1,4 +1,3 @@
-// RotateOperation.h
 #include "Interfaces/ITransformationOperation.h"
 
 class RotateOperation : public ITransformationOperation {

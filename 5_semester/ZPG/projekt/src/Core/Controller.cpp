@@ -1,4 +1,3 @@
-// Controller.cpp
 #include "Core/Controller.h"
 #include <iostream>
 #include <cstdlib>
@@ -53,7 +52,6 @@ void Controller::mouseButtonCallback(GLFWwindow* window, int button, int action,
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         
-        // Get normalized device coordinates
         float x = (2.0f * xpos) / width - 1.0f;
         float y = 1.0f - (2.0f * ypos) / height;
         

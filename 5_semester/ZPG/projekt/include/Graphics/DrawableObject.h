@@ -34,5 +34,5 @@ private:
     std::shared_ptr<ShaderProgram> shaderProgram;
     Transformation transformation;
     Material material;
-    std::shared_ptr<Texture> texture; // Texture member
+    std::shared_ptr<Texture> texture;
 };

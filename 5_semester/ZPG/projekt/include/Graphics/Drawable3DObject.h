@@ -1,4 +1,3 @@
-// Graphics/Drawable3DObject.h
 #pragma once
 
 #include <memory>
@@ -18,7 +17,6 @@ public:
 
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
-    // Setters and Getters
     void setShader(std::shared_ptr<ShaderProgram> shd);
     void setTransformation(const Transformation& trans);
     Transformation& getTransformation();
@@ -34,5 +32,5 @@ private:
     std::shared_ptr<ShaderProgram> shaderProgram;
     Transformation transformation;
     Material material;
-    std::shared_ptr<Texture> texture; // Texture member
+    std::shared_ptr<Texture> texture; 
 };

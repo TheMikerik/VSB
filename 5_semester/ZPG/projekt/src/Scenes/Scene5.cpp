@@ -1,4 +1,3 @@
-// Scene5.cpp
 #include "Scenes/Scene5.h"
 #include "Graphics/Light.h"
 
@@ -114,7 +113,6 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
             glm::vec3(getRandom(0.2f, 0.8f)));
         treeTrans.addOperation(scaleOpTree);
 
-        // Initial rotation, just to set a base value
         auto rotateOp = std::make_shared<RotateOperation>(
             getRandom(0.0f, 30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         treeTrans.addOperation(rotateOp);
@@ -180,7 +178,6 @@ void Scene5::render(float dt) {
         auto& item = lightDrawablesWithDirection[i];
         glm::vec3 newPosition = lights[i].getPosition() + item.direction * dt * 4.0f;
         
-        // Check boundaries before updating position
         if (newPosition.x >= 15.0f || newPosition.x <= -15.0f) {
             item.direction.x *= -1.0f;
             newPosition.x = glm::clamp(newPosition.x, -15.0f, 15.0f);
@@ -194,7 +191,6 @@ void Scene5::render(float dt) {
             newPosition.z = glm::clamp(newPosition.z, -15.0f, 15.0f);
         }
         
-        // Update position
         lights[i].setPosition(newPosition);
         lights[i].notifyObservers(i);
         

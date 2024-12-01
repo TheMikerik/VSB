@@ -1,4 +1,3 @@
-// Graphics/Drawable3DObject.cpp
 #include "Graphics/Drawable3DObject.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -23,33 +22,31 @@ void Drawable3DObject::render(const glm::mat4& view, const glm::mat4& projection
 
     shaderProgram->use();
 
-    // Set transformation matrices
+    
     glm::mat4 modelMatrix = transformation.getModelMatrix();
     shaderProgram->setMat4("viewMatrix", view);
     shaderProgram->setMat4("projectionMatrix", projection);
     shaderProgram->setMat4("modelMatrix", modelMatrix);
 
-    // Apply material properties
     material.apply(*shaderProgram);
 
-    // Handle textures
+    
     if (texture) {
         shaderProgram->setBool("hasTexture", true);
-        texture->bind(0); // Bind to texture unit 0
+        texture->bind(0); 
 
-        // Assuming shader expects 'texture_diffuse1'
         shaderProgram->setInt("texture_diffuse1", 0);
     } else {
         shaderProgram->setBool("hasTexture", false);
     }
 
-    // Render the model
+    
     model->render(shaderProgram, view, projection, modelMatrix);
 
     glUseProgram(0);
 }
 
-// Setters and Getters
+
 
 void Drawable3DObject::setShader(std::shared_ptr<ShaderProgram> shd) {
     shaderProgram = std::move(shd);

@@ -1,4 +1,3 @@
-// Core/Model3DModel.cpp
 #include "Core/Model3DModel.h"
 #include <iostream>
 
@@ -15,13 +14,13 @@ Model3DModel::~Model3DModel() {
 }
 
 void Model3DModel::setupMesh() {
-    // Generate buffers/arrays
+    
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
-    // Load data into vertex buffers
+    
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);  
 
@@ -29,14 +28,14 @@ void Model3DModel::setupMesh() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), 
                  &indices[0], GL_STATIC_DRAW);
 
-    // Set the vertex attribute pointers
-    // Vertex Positions
+    
+    
     glEnableVertexAttribArray(0);	
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-    // Vertex Normals
+    
     glEnableVertexAttribArray(1);	
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-    // Vertex Texture Coords
+    
     glEnableVertexAttribArray(2);	
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
@@ -47,10 +46,10 @@ void Model3DModel::render(const std::shared_ptr<ShaderProgram>& shader) const {
     unsigned int diffuseNr = 1;
 
     for (unsigned int i = 0; i < textures.size(); i++) {
-        glActiveTexture(GL_TEXTURE0 + i); // Activate the texture unit
+        glActiveTexture(GL_TEXTURE0 + i); 
 
         std::string number;
-        std::string name = "texture_diffuse"; // Assuming 'texture_diffuse1' format
+        std::string name = "texture_diffuse"; 
 
         if (name == "texture_diffuse")
             number = std::to_string(diffuseNr++);

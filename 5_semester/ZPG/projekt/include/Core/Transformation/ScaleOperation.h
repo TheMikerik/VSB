@@ -1,4 +1,3 @@
-// ScaleOperation.h
 #include "Interfaces/ITransformationOperation.h"
 
 class ScaleOperation : public ITransformationOperation {

@@ -1,4 +1,3 @@
-// Material.cpp
 #include "Core/Material.h"
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,13 +23,11 @@ void Material::apply(const ShaderProgram& shader) const {
     glUniform1f(shininessLoc, shininess);
 }
 
-// Getters
 const glm::vec3& Material::getAmbient() const { return ambient; }
 const glm::vec3& Material::getDiffuse() const { return diffuse; }
 const glm::vec3& Material::getSpecular() const { return specular; }
 float Material::getShininess() const { return shininess; }
 
-// Setters
 void Material::setAmbient(const glm::vec3& ambient) { this->ambient = ambient; }
 void Material::setDiffuse(const glm::vec3& diffuse) { this->diffuse = diffuse; }
 void Material::setSpecular(const glm::vec3& specular) { this->specular = specular; }

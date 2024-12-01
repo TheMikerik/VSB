@@ -1,4 +1,3 @@
-// Scene3.cpp
 #include "../include/Scenes/Scene3.h"
 #include "../models/sphere.h"
 

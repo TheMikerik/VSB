@@ -39,12 +39,11 @@ void MaterialManager::initializeMaterials() {
     ));
 
     addMaterial("wolf", std::make_shared<Material>(
-        glm::vec3(0.2f, 0.25f, 0.3f),  // Ambient: subdued gray-blue
-        glm::vec3(0.3f, 0.4f, 0.5f),  // Diffuse: slightly brighter gray-blue
-        glm::vec3(1.0f, 1.0f, 1.0f),  // Specular: white for highlights
-        16.0f                         // Shininess: medium-level
+        glm::vec3(0.2f, 0.25f, 0.3f),
+        glm::vec3(0.3f, 0.4f, 0.5f),
+        glm::vec3(1.0f, 1.0f, 1.0f),
+        16.0f                       
     ));
-
 
     addMaterial("tree", std::make_shared<Material>(
         glm::vec3(0.12f, 0.4f, 0.12f),

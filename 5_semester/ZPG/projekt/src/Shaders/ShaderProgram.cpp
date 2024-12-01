@@ -23,7 +23,6 @@ ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& f
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    // Get uniform locations
     viewLoc = glGetUniformLocation(programID, "viewMatrix");
     projLoc = glGetUniformLocation(programID, "projectionMatrix");
     lightPosLoc = glGetUniformLocation(programID, "lightPos");

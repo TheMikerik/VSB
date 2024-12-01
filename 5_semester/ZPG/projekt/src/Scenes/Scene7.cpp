@@ -1,4 +1,3 @@
-// src/Scenes/Scene7.cpp
 #include "Scenes/Scene7.h"
 #include "Graphics/Light.h"
 
@@ -23,7 +22,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     std::srand(static_cast<unsigned int>(std::time(0)));
     auto materialManager = MaterialManager::getInstance();
 
-    // Initialize Lights
     for (int i = 0; i < 15; ++i) {
         glm::vec3 position = glm::vec3(
             static_cast<float>(rand() % 30 - 15),
@@ -34,7 +32,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         this->addLight(Light(position, color));
     }
 
-    // Initialize Shaders
     auto shader_platform = std::make_shared<ShaderProgram>(
         "./shaders/texture_shaders/vertex_shader.glsl",
         "./shaders/texture_shaders/fragment_shader.glsl"
@@ -60,7 +57,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
     shaders = {shader_platform, shader_phong, shader_lambert, shader_blinn, shader3D};
 
-    // Register Cameras and Lights with Shaders
     for (auto& shader : shaders) {
         camera.registerObserver(shader.get());
         for (auto& light : this->lights) {
@@ -68,14 +64,12 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         }
     }
 
-    // Set the number of lights in each shader
     for (auto& shader : shaders) {
         shader->use();
         glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), 
                     static_cast<GLint>(lights.size()));
     }
 
-    // Initialize Lights in Shaders
     for (size_t i = 0; i < this->lights.size(); ++i) {
         for (auto& shader : shaders) {
             shader->onLightUpdate(i, lights[i].getPosition(), lights[i].getColor());
@@ -85,7 +79,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
     camera.notifyObservers();
 
-    // Initialize Platform
     std::shared_ptr<Texture> grassTexture = 
         std::make_shared<Texture>("./images/grass.png", false);
 
@@ -100,7 +93,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         grassTexture
     );
 
-    // Apply transformations to the platform
     Transformation platformTrans;
     auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(15.0f, 1.0f, 15.0f));
     platformTrans.addOperation(scaleOp);
@@ -108,7 +100,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
     addDrawable(platformDrawable);
 
-    // Initialize Trees
     std::vector<float> treeVertices(std::begin(tree), std::end(tree));
     auto treeModel = std::make_shared<Model>(treeVertices);
 
@@ -153,21 +144,17 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         addDrawable(treeDrawable);
     }
 
-    // Initialize Multiple 3D Drawable Objects (Zombies and Houses)
-    // Zombies
     for (int i = 0; i < 10; ++i) {
         auto zombieModel = std::make_shared<Model3D>("models/assimp/zombie/zombie.obj");
         
-        // Create Drawable3DObject
         auto zombieDrawable = std::make_shared<Drawable3DObject>(
             zombieModel, 
-            shader3D, 
+            shader_lambert, 
             Transformation(), 
             *materialManager.getMaterial("platform"),
             std::make_shared<Texture>("models/assimp/zombie/zombie.png", false)
         );
 
-        // Apply transformations
         auto& trans = zombieDrawable->getTransformation();
         auto translateOp = std::make_shared<TranslateOperation>(
             glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f))
@@ -175,11 +162,10 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         trans.addOperation(translateOp);
 
         auto scaleOp = std::make_shared<ScaleOperation>(
-            glm::vec3(1.0f) // Adjust scale as needed
+            glm::vec3(1.0f)
         );
         trans.addOperation(scaleOp);
 
-        // Optionally add rotation
         auto rotateOp = std::make_shared<RotateOperation>(
             glm::radians(getRandom(0.0f, 360.0f)), 
             glm::vec3(1.0f, 0.0f, 1.0f)
@@ -189,32 +175,26 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         drawable3DObjects.push_back(zombieDrawable);
     }
 
-    // Houses
     for (int i = 0; i < 3; ++i) {
         auto houseModel = std::make_shared<Model3D>("models/assimp/house/house.obj");
         
-        // Create Drawable3DObject
         auto houseDrawable = std::make_shared<Drawable3DObject>(
             houseModel, 
             shader3D, 
             Transformation(), 
-            *materialManager.getMaterial("house"), // Assuming 'platform' material for houses
-            std::make_shared<Texture>("models/assimp/house/house.png", false) // Replace with actual texture path
+            *materialManager.getMaterial("house"),
+            std::make_shared<Texture>("models/assimp/house/house.png", false)
         );
 
-        // Apply transformations
         auto& trans = houseDrawable->getTransformation();
         auto translateOp = std::make_shared<TranslateOperation>(
             glm::vec3(getRandom(-11.0f, 11.0f), 0.0f, getRandom(-11.0f, 11.0f))
         );
         trans.addOperation(translateOp);
 
-        auto scaleOp = std::make_shared<ScaleOperation>(
-            glm::vec3(0.3f) // Adjust scale as needed
-        );
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(0.3f));
         trans.addOperation(scaleOp);
 
-        // Optionally add rotation
         auto rotateOp = std::make_shared<RotateOperation>(
             glm::radians(getRandom(0.0f, 360.0f)), 
             glm::vec3(0.0f, 1.0f, 0.0f)
@@ -227,7 +207,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     for (int i = 0; i < 10; ++i) {
         auto wolfModel = std::make_shared<Model3D>("models/assimp/wolf/wolf.obj");
         
-        // Create Drawable3DObject
         auto wolfDrawable = std::make_shared<Drawable3DObject>(
             wolfModel, 
             shader_phong, 
@@ -236,25 +215,19 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
             nullptr
         );
 
-        // Apply transformations
         auto& trans = wolfDrawable->getTransformation();
 
-        // Random translation within the range (-15, 15)
         auto translateOp = std::make_shared<TranslateOperation>(
             glm::vec3(getRandom(-15.0f, 15.0f), 0.0f, getRandom(-15.0f, 15.0f))
         );
         trans.addOperation(translateOp);
 
-        // Scale to adjust size
-        auto scaleOp = std::make_shared<ScaleOperation>(
-            glm::vec3(1.4f) // Adjust scale as needed
-        );
+        auto scaleOp = std::make_shared<ScaleOperation>(glm::vec3(1.4f));
         trans.addOperation(scaleOp);
 
-        // Random rotation around the Y-axis (0 to 360 degrees)
         auto rotateOp = std::make_shared<RotateOperation>(
-            glm::radians(getRandom(0.0f, 360.0f)), // Random angle in radians
-            glm::vec3(0.0f, 1.0f, 0.0f)           // Rotation around Y-axis
+            glm::radians(getRandom(0.0f, 360.0f)),
+            glm::vec3(0.0f, 1.0f, 0.0f)
         );
         trans.addOperation(rotateOp);
 
@@ -269,14 +242,14 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         loginModel, 
         shader_lambert, 
         Transformation(), 
-        *materialManager.getMaterial("login"), // Assuming house material for login
-        nullptr  // No texture
+        *materialManager.getMaterial("login"),
+        nullptr
     );
 
-    // Apply transformations
+    
     auto& loginTrans = loginDrawable->getTransformation();
     loginTrans.addOperation(std::make_shared<TranslateOperation>(glm::vec3(0.0f, 10.0f, -15.0f)));
-    loginTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.1f))); // Adjust scale as neededs
+    loginTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.1f))); 
 
     drawable3DObjects.push_back(loginDrawable);
 }
@@ -295,14 +268,11 @@ const std::vector<Light>& Scene7::getLights() const {
 }
 
 void Scene7::render(float dt) {
-    // Call the base class render to handle existing DrawableObjects
     Scene::render(dt);
 
-    // Retrieve view and projection matrices from the camera
     glm::mat4 view = camera.GetViewMatrix();
     glm::mat4 projection = camera.getProjectionMatrix();
 
-    // Render all 3D DrawableObjects
     for (const auto& drawable3D : drawable3DObjects) {
         drawable3D->render(view, projection);
     }

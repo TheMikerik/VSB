@@ -1,4 +1,3 @@
-// Core/Model3DModel.h
 #pragma once
 
 #include <vector>
@@ -8,7 +7,6 @@
 #include "Shaders/ShaderProgram.h"
 #include "Core/Texture.h"
 
-// Structure to represent a vertex
 struct Vertex {
     glm::vec3 Position;
     glm::vec3 Normal;
@@ -23,12 +21,10 @@ public:
     void render(const std::shared_ptr<ShaderProgram>& shader) const;
 
 private:
-    // Render data
     GLuint VAO, VBO, EBO;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<std::shared_ptr<Texture>> textures;
 
-    // Initializes all the buffer objects/arrays
     void setupMesh();
 };

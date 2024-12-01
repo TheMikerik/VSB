@@ -1,14 +1,13 @@
-// include/Scenes/Scene7.h
 #pragma once
 
 #include "Scenes/Scene.h"
 #include "Shaders/ShaderProgram.h"
 #include "Core/Model.h"
-// Remove Model3D include since Drawable3DObject handles it
+
 #include "Core/Transformation.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Light.h"
-#include "Graphics/Drawable3DObject.h" // Include Drawable3DObject
+#include "Graphics/Drawable3DObject.h" 
 #include <memory>
 #include <vector>
 
@@ -28,5 +27,5 @@ private:
     std::vector<Light> lights;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
 
-    std::vector<std::shared_ptr<Drawable3DObject>> drawable3DObjects; // Vector to store multiple Drawable3DObjects
+    std::vector<std::shared_ptr<Drawable3DObject>> drawable3DObjects; 
 };

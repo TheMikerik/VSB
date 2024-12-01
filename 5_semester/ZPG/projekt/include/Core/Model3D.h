@@ -1,4 +1,3 @@
-// Core/Model3D.h
 #pragma once
 
 #include <string>
@@ -11,18 +10,14 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
-class ShaderProgram; // Forward declaration to avoid circular dependencies
 
 class Model3D {
 public:
-    // Constructors
     explicit Model3D(const std::string& path);
     ~Model3D();
 
-    // Load the model and process it
     void loadModel(const std::string& path);
 
-    // Render the model with a given shader and transformation matrices
     void render(const std::shared_ptr<ShaderProgram>& shader, 
                 const glm::mat4& view, 
                 const glm::mat4& projection, 

@@ -1,10 +1,8 @@
-// Scene6.h
-#ifndef SCENE6_H
-#define SCENE6_H
+#pragma once
 
 #include "Scene.h"
 #include "Graphics/Camera.h"
-#include "Graphics/Spotlight.h"    // Include the Spotlight header
+#include "Graphics/Spotlight.h"
 #include <memory>
 #include <vector>
 
@@ -15,11 +13,9 @@ public:
 
 private:
     Camera& camera;
-    std::shared_ptr<Spotlight> spotlight;    // Spotlight instance
+    std::shared_ptr<Spotlight> spotlight;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
     std::vector<std::shared_ptr<DrawableObject>> treeDrawables;
 
     float getRandom(float min, float max);
 };
-
-#endif // SCENE6_H

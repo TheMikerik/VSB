@@ -56,7 +56,7 @@ void Application::initialization()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    // Create window
+
     window = glfwCreateWindow(1450, 900, "OpenGL Application with Camera and Light", nullptr, nullptr);
     if (!window) {
         std::cerr << "ERROR: could not create GLFW window" << std::endl;
@@ -91,7 +91,7 @@ void Application::initialization()
 
     controller = std::unique_ptr<Controller>(new Controller(window, camera, scenes));
 
-    // Initialize Skybox here
+
     std::vector<std::string> faces = {
         "./images/posx.jpg",
         "./images/negx.jpg",
@@ -144,7 +144,7 @@ void Application::run()
             scenes[currentSceneIndex]->render(deltaTime);
         }
 
-        // Render the Skybox after the scene
+
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
         skybox->render(view, projection);
