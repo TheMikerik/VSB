@@ -2,7 +2,10 @@
 #include "stb_image.h"
 #include <iostream>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
 Texture::Texture(const std::string& path, bool gammaCorrection)
     : textureID(0), width(0), height(0), nrChannels(0), isCubemap(false)
 {
@@ -26,13 +29,19 @@ Texture::Texture(const std::string& path, bool gammaCorrection)
         glGenTextures(1, &textureID);
         glBindTexture(GL_TEXTURE_2D, textureID);
 
+<<<<<<< HEAD
         
+=======
+>>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, 
                      (nrChannels == 1 ? GL_RED : (nrChannels == 3 ? GL_RGB : GL_RGBA)), 
                      GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
+<<<<<<< HEAD
         
+=======
+>>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
@@ -47,7 +56,10 @@ Texture::Texture(const std::string& path, bool gammaCorrection)
     }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
 Texture::Texture(const std::vector<std::string>& faces, bool gammaCorrection)
     : textureID(0), width(0), height(0), nrChannels(0), isCubemap(true)
 {
@@ -55,7 +67,11 @@ Texture::Texture(const std::vector<std::string>& faces, bool gammaCorrection)
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
     int width, height, nrChannels;
+<<<<<<< HEAD
     stbi_set_flip_vertically_on_load(false); 
+=======
+    stbi_set_flip_vertically_on_load(false);
+>>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
 
     for (unsigned int i = 0; i < faces.size(); i++) {
         unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);

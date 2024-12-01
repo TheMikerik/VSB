@@ -1,5 +1,8 @@
 #pragma once
+<<<<<<< HEAD
 
+=======
+>>>>>>> 783003c0f8698c5a6a0d2f713c85ebf89823a7c5
 #include <glm/glm.hpp>
 #include <memory>
 #include "Shaders/ShaderProgram.h"
