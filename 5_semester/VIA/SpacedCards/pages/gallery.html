@@ -21,7 +21,7 @@
             <nav>
                 <ul>
                     <li><a href="https://apps.apple.com/us/app/app-block-for-focus-flowbuddy/id6479961860" target="_blank" rel="noopener noreferrer">Download</a></li>
-                    <li><a href="whats-new.html">What's new</a></li>
+                    <li><a href="pages/gallery.html">Gallery</a></li>
                     <li><a href="blog.html">Blog</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
@@ -30,12 +30,44 @@
         </div>
     </header>
 
-    <!-- Main Content: 80vh White Block -->
-    <section class="main-content">
-        <div class="content-block">
-            <p>News</p>
-        </div>
+    <!-- IMPLEMENT CARUSEL HERE -->
+     <section class="gallery-section">
+        <div class="container">
+            <section class="gallery-header">
+                <h1 class="gallery-title">Showcase of our UI</h1>
+                <p class="gallery-subtitle">
+                    Explore the design that helps you stay focused and productive.
+                </p>
+            </section>
+       
+            <section class="image-carousel">
+                <div class="carousel">
+                    <button class="carousel-btn prev" aria-label="Previous slide">&#10094;</button>
+                    <div class="carousel-track-container">
+                        <ul class="carousel-track">
+                            <li class="carousel-slide">
+                                <img src="../assets/gallery/2.png" alt="Gallery Image 2">
+                            </li>
+                            <li class="carousel-slide">
+                                <img src="../assets/gallery/3.png" alt="Gallery Image 3">
+                            </li>
+                            <li class="carousel-slide">
+                                <img src="../assets/gallery/4.png" alt="Gallery Image 4">
+                            </li>
+                            <li class="carousel-slide">
+                                <img src="../assets/gallery/5.png" alt="Gallery Image 5">
+                            </li>
+                            <li class="carousel-slide">
+                                <img src="../assets/gallery/6.png" alt="Gallery Image 6">
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="carousel-btn next" aria-label="Next slide">&#10095;</button>
+                </div>
+            </section>
+         </div>
     </section>
+
 
     <!-- Footer Section -->
     <footer class="footer">
@@ -67,4 +99,5 @@
         </div>
     </footer>
 </body>
+<script src="../scripts/carusel.js"></script>
 </html>

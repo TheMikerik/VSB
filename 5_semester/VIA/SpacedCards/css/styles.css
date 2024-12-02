@@ -919,12 +919,119 @@ nav ul li a:hover {
 
 
 /* ------------------------------------------------------------------------------------- */
+/* GALLERY */
+/* ------------------------------------------------------------------------------------- */
+
+.gallery-section .container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: left;
+  flex-direction: column;
+}
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.gallery-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.gallery-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  line-height: 1.75;
+}
+
+/* Carousel Styles */
+.image-carousel {
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically if needed */
+  width: 100%;
+  /* Ensure it spans the full width of the parent container */
+  margin: 2rem 0;
+  /* Add vertical spacing */
+}
+
+.carousel {
+  position: relative;
+  width: 80%;
+  /* Adjust width as needed */
+  max-width: 400px;
+  /* Ensure it doesn't stretch too much */
+  margin: 0 auto;
+  /* Center the carousel within its container */
+  overflow: hidden;
+}
+
+.carousel-track-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+.carousel-slide {
+  min-width: 100%;
+}
+
+.carousel-slide img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  z-index: 10;
+  border-radius: 50%;
+}
+
+.carousel-btn.prev {
+  left: 10px;
+  /* Adjust for better alignment */
+}
+
+.carousel-btn.next {
+  right: 10px;
+  /* Adjust for better alignment */
+}
+
+.carousel-btn:focus {
+  outline: none;
+}
+
+
+
+
+
+/* ------------------------------------------------------------------------------------- */
 /* CONTACT */
 /* ------------------------------------------------------------------------------------- */
 
 .contact-section .container {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 30px auto;
   padding: 20px;
   text-align: left;
   flex-direction: column;
