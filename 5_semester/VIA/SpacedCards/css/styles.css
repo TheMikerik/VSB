@@ -684,7 +684,6 @@ nav ul li a:hover {
 
 /* About Section */
 .about-section {
-  background-color: #ffffff;
   padding: 60px 20px;
   text-align: center;
 }
@@ -920,8 +919,124 @@ nav ul li a:hover {
 
 
 /* ------------------------------------------------------------------------------------- */
+/* CONTACT */
+/* ------------------------------------------------------------------------------------- */
 
+.contact-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+  flex-direction: column;
+}
 
+.contact-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.contact-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.contact-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  line-height: 1.75;
+  margin-bottom: 2rem;
+}
+
+/* FORM STYLES */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #fadb5f;
+  background-color: #fff;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+input:invalid+.error-message,
+textarea:invalid+.error-message {
+  display: block;
+}
+
+.submit-btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #fadb5f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-btn:hover {
+  background-color: #e4c755;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contact-section .container {
+    padding: 15px;
+  }
+
+  .contact-title {
+    font-size: 2rem;
+  }
+
+  .contact-subtitle {
+    font-size: 1rem;
+  }
+
+  .contact-form {
+    min-width: 300px;
+  }
+
+  .submit-btn {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+}
 
 
 
