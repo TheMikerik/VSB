@@ -666,72 +666,258 @@ nav ul li a:hover {
 /* ABOUT */
 /* ------------------------------------------------------------------------------------- */
 
+.about-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+  flex-direction: column;
+}
+
+.friends-section .container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: left;
+  flex-direction: column;
+}
+
 /* About Section */
 .about-section {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   padding: 60px 20px;
   text-align: center;
 }
 
 .about-section h2 {
-  font-size: 2.5em;
-  color: #333;
-  margin-bottom: 20px;
+  font-size: 3em;
+  color: #000000;
+  font-weight: bold;
+  margin-bottom: 4rem;
 }
 
 .about-section p {
   font-size: 1.1em;
   color: #666;
+  line-height: 1.8;
   max-width: 800px;
-  margin: auto;
-  line-height: 1.6;
+  margin: 0 auto;
 }
 
-/* Friends Section */
-.friends-section {
-  background-color: #ffffff;
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.friends-section h3 {
-  font-size: 2em;
+.about-section h3 {
+  font-size: 1.5em;
   color: #333;
-  margin-bottom: 30px;
+  font-weight: 700;
+  text-align: left;
+  margin-top: 30px;
 }
 
 .friend {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  align-items: left;
+  flex-direction: column;
+  gap: 30px;
   max-width: 800px;
-  margin: 20px auto;
+  margin: 0 auto;
 }
 
 .friend-logo {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.friend-info {
+  text-align: left;
 }
 
 .friend-info h4 {
   font-size: 1.5em;
   color: #333;
+  margin-bottom: 2.5rem;
+  margin-bottom: 1.25;
+  font-weight: inherit;
 }
 
 .friend-info p {
-  font-size: 1em;
+  font-size: 1.1em;
   color: #666;
+  line-height: 1.5;
+  margin-bottom: 1rem;
 }
 
 .friend-info a {
-  color: #007BFF;
+  color: #000000;
   text-decoration: none;
-  font-size: 0.9em;
+  text-decoration-line: underline;
+  font-size: 1em;
 }
 
 .friend-info a:hover {
   text-decoration: underline;
 }
+
+
+/* ------------------------------------------------------------------------------------- */
+/* BLOG */
+/* ------------------------------------------------------------------------------------- */
+
+/* Productivity Tips Container */
+.productivity-tips-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  /* Vertical gap between components */
+  padding: 20px 0;
+  /* Optional padding for the container */
+}
+
+/* Blog Header Section */
+.blog-header {
+  text-align: center;
+  /* Center both title and subtitle */
+  /* margin-bottom: 2rem; */
+  /* Add spacing below the header */
+}
+
+.blog-title {
+  font-size: 3rem;
+  /* Larger font size for the title */
+  font-weight: 700;
+  /* Make the title bold */
+  color: #000;
+  /* Optional: Set a specific color for the title */
+  margin-bottom: 1rem;
+}
+
+.blog-subtitle {
+  font-size: 1.125rem;
+  /* Font size for the subtitle */
+  color: #555;
+  /* Slightly muted color for better contrast */
+  line-height: 1.75;
+  /* Improve readability */
+}
+
+.productivity-tip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Ensures even distribution */
+  gap: 2.5rem;
+  /* Add the desired gap between components */
+  padding: 0 100px;
+}
+
+.productivity-image {
+  flex: 1;
+  /* Take half of the space */
+  max-width: 50%;
+  /* Ensure no more than half of the width */
+  display: flex;
+  justify-content: center;
+  /* Center the image inside the container */
+  align-items: center;
+}
+
+.productivity-image img {
+  max-width: 100%;
+  /* Ensure the image scales properly */
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.productivity-content {
+  flex: 1;
+  /* Take half of the space */
+  max-width: 50%;
+  /* Ensure no more than half of the width */
+}
+
+.productivity-category {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4a90e2;
+  /* Blue text for category */
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.productivity-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.productivity-meta {
+  font-size: 1.1rem;
+  color: #888;
+}
+
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+
+  /* Blog Header Responsivity */
+  .blog-header {
+    text-align: center;
+    padding: 0 1rem;
+    /* Reduce horizontal padding */
+  }
+
+  .blog-title {
+    font-size: 3rem;
+    /* Adjust font size for smaller screens */
+  }
+
+  .blog-subtitle {
+    font-size: 1.1rem;
+    /* Adjust subtitle font size */
+  }
+
+  /* Productivity Tip Responsivity */
+  .productivity-tip {
+    flex-direction: column;
+    /* Stack items vertically */
+    text-align: center;
+    /* Center text in vertical layout */
+    gap: 1.5rem;
+    /* Adjust spacing between elements */
+    padding: 0;
+    /* Remove excess padding */
+    margin: 0 1rem;
+    /* Add margin for spacing without cutting edges */
+  }
+
+  .productivity-image img {
+    width: 100%;
+    /* Set a maximum width for better scaling */
+    margin: 0 auto;
+    /* Center the image */
+  }
+
+  .productivity-content {
+    text-align: left;
+    /* Ensure content aligns properly */
+    padding: 0;
+    /* Remove any excess padding */
+  }
+
+  .productivity-title {
+    font-size: 1.5rem;
+    /* Scale down the title font size */
+  }
+
+  .productivity-meta {
+    font-size: 0.9rem;
+    /* Scale down metadata */
+  }
+}
+
 
 /* ------------------------------------------------------------------------------------- */
 
