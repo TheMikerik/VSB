@@ -159,6 +159,29 @@ nav ul li a:hover {
   background-color: #555;
 }
 
+/* Countdown Section Styles */
+.countdown-container {
+  text-align: left;
+  margin-top: 30px;
+}
+
+.countdown-container h3 {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.countdown {
+  font-size: 1.4rem;
+  color: #000;
+  font-weight: normal;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
 /* Image Section */
 .image-section {
   display: flex;
@@ -297,6 +320,11 @@ nav ul li a:hover {
 
   .features-title {
     font-size: 2em;
+  }
+
+  .container {
+    display: block;
+
   }
 }
 
@@ -922,14 +950,18 @@ nav ul li a:hover {
 /* GALLERY */
 /* ------------------------------------------------------------------------------------- */
 
+/* General Container */
 .gallery-section .container {
   max-width: 900px;
   margin: 30px auto;
   padding: 20px;
-  text-align: left;
+  text-align: center;
+  display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
+/* Gallery Header */
 .gallery-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -952,24 +984,17 @@ nav ul li a:hover {
 .image-carousel {
   display: flex;
   justify-content: center;
-  /* Center horizontally */
   align-items: center;
-  /* Center vertically if needed */
   width: 100%;
-  /* Ensure it spans the full width of the parent container */
   margin: 2rem 0;
-  /* Add vertical spacing */
 }
 
 .carousel {
   position: relative;
   width: 80%;
-  /* Adjust width as needed */
   max-width: 400px;
-  /* Ensure it doesn't stretch too much */
-  margin: 0 auto;
-  /* Center the carousel within its container */
   overflow: hidden;
+  margin: 0 auto;
 }
 
 .carousel-track-container {
@@ -981,7 +1006,6 @@ nav ul li a:hover {
 .carousel-track {
   display: flex;
   transition: transform 0.5s ease-in-out;
-  will-change: transform;
 }
 
 .carousel-slide {
@@ -1009,19 +1033,125 @@ nav ul li a:hover {
 
 .carousel-btn.prev {
   left: 10px;
-  /* Adjust for better alignment */
 }
 
 .carousel-btn.next {
   right: 10px;
-  /* Adjust for better alignment */
 }
 
 .carousel-btn:focus {
   outline: none;
 }
 
+/* Thumbnail Gallery */
+.thumbnail-gallery {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  /* Allows wrapping for smaller screens */
+  margin-top: 1rem;
+  width: 100%;
+}
 
+.gallery-thumbnail {
+  width: calc(16.66% - 1rem);
+  /* 6 images per row with spacing */
+  max-width: 120px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-thumbnail:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure responsiveness for smaller screens */
+@media (max-width: 768px) {
+  .gallery-thumbnail {
+    width: calc(33.33% - 1rem);
+    /* 3 images per row */
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-thumbnail {
+    width: calc(50% - 1rem);
+    /* 2 images per row */
+  }
+}
+
+
+/* Modal Styles */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  /* Above other content */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+#caption {
+  margin: 15px auto;
+  text-align: center;
+  color: #ccc;
+  font-size: 1rem;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gallery-theme {
+  margin-bottom: 3rem;
+  /* Add spacing between sections */
+}
+
+.gallery-theme-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.gallery-theme-description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  line-height: 1.5;
+}
 
 
 
@@ -1159,7 +1289,6 @@ textarea:invalid+.error-message {
 /* Responsive Styles */
 @media (max-width: 768px) {
   nav ul {
-    flex-direction: column;
     align-items: center;
   }
 

@@ -21,7 +21,7 @@
             <nav>
                 <ul>
                     <li><a href="https://apps.apple.com/us/app/app-block-for-focus-flowbuddy/id6479961860" target="_blank" rel="noopener noreferrer">Download</a></li>
-                    <li><a href="pages/gallery.html">Gallery</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
                     <li><a href="blog.html">Blog</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
@@ -31,42 +31,89 @@
     </header>
 
     <!-- IMPLEMENT CARUSEL HERE -->
-     <section class="gallery-section">
+    <section class="gallery-section">
         <div class="container">
+            <!-- Gallery Header -->
             <section class="gallery-header">
                 <h1 class="gallery-title">Showcase of our UI</h1>
                 <p class="gallery-subtitle">
                     Explore the design that helps you stay focused and productive.
                 </p>
             </section>
-       
+
+            <!-- Carousel -->
             <section class="image-carousel">
                 <div class="carousel">
                     <button class="carousel-btn prev" aria-label="Previous slide">&#10094;</button>
                     <div class="carousel-track-container">
                         <ul class="carousel-track">
                             <li class="carousel-slide">
-                                <img src="../assets/gallery/2.png" alt="Gallery Image 2">
+                                <img src="../assets/gallery/d1.png" alt="Gallery Image 2">
                             </li>
                             <li class="carousel-slide">
-                                <img src="../assets/gallery/3.png" alt="Gallery Image 3">
+                                <img src="../assets/gallery/d2.png" alt="Gallery Image 2">
                             </li>
                             <li class="carousel-slide">
-                                <img src="../assets/gallery/4.png" alt="Gallery Image 4">
+                                <img src="../assets/gallery/d3.png" alt="Gallery Image 3">
                             </li>
                             <li class="carousel-slide">
-                                <img src="../assets/gallery/5.png" alt="Gallery Image 5">
+                                <img src="../assets/gallery/d4.png" alt="Gallery Image 4">
                             </li>
                             <li class="carousel-slide">
-                                <img src="../assets/gallery/6.png" alt="Gallery Image 6">
+                                <img src="../assets/gallery/d5.png" alt="Gallery Image 5">
+                            </li>
+                            <li class="carousel-slide">
+                                <img src="../assets/gallery/d6.png" alt="Gallery Image 6">
                             </li>
                         </ul>
                     </div>
                     <button class="carousel-btn next" aria-label="Next slide">&#10095;</button>
                 </div>
             </section>
-         </div>
+
+            <!-- Modal for Popup -->
+            <div id="image-modal" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" id="modal-image" alt="Enlarged View">
+                <div id="caption"></div>
+            </div>
+
+            <!-- White Theme Gallery -->
+            <section class="gallery-theme">
+                <h2 class="gallery-theme-title">White Theme</h2>
+                <p class="gallery-theme-description">
+                    A clean and minimalistic design featuring a bright and light color palette to enhance clarity and focus.
+                </p>
+                <section class="thumbnail-gallery">
+                    <img class="gallery-thumbnail" src="../assets/gallery/l1.png" alt="Thumbnail 2">
+                    <img class="gallery-thumbnail" src="../assets/gallery/l2.png" alt="Thumbnail 2">
+                    <img class="gallery-thumbnail" src="../assets/gallery/l3.png" alt="Thumbnail 3">
+                    <img class="gallery-thumbnail" src="../assets/gallery/l4.png" alt="Thumbnail 4">
+                    <img class="gallery-thumbnail" src="../assets/gallery/l5.png" alt="Thumbnail 5">
+                    <img class="gallery-thumbnail" src="../assets/gallery/l6.png" alt="Thumbnail 6">
+                </section>
+            </section>
+
+            <!-- Dark Theme Gallery -->
+            <section class="gallery-theme">
+                <h2 class="gallery-theme-title">Dark Theme</h2>
+                <p class="gallery-theme-description">
+                    A modern, elegant design featuring darker tones to reduce eye strain and create a professional atmosphere.
+                </p>
+                <section class="thumbnail-gallery">
+                    <img class="gallery-thumbnail" src="../assets/gallery/d1.png" alt="Thumbnail 2">
+                    <img class="gallery-thumbnail" src="../assets/gallery/d2.png" alt="Thumbnail 2">
+                    <img class="gallery-thumbnail" src="../assets/gallery/d3.png" alt="Thumbnail 3">
+                    <img class="gallery-thumbnail" src="../assets/gallery/d4.png" alt="Thumbnail 4">
+                    <img class="gallery-thumbnail" src="../assets/gallery/d5.png" alt="Thumbnail 5">
+                    <img class="gallery-thumbnail" src="../assets/gallery/d6.png" alt="Thumbnail 6">
+                </section>
+            </section>
+
+        </div>
     </section>
+
+
 
 
     <!-- Footer Section -->
@@ -100,4 +147,5 @@
     </footer>
 </body>
 <script src="../scripts/carusel.js"></script>
+<script src="../scripts/image_enlarger.js"></script>
 </html>
