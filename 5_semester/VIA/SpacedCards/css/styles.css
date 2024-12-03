@@ -2,9 +2,7 @@
 /* Main Content Section */
 .main-content {
   height: 70vh;
-  /* 80% of the viewport height */
   background-color: #ffffff;
-  /* White background */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,14 +13,7 @@
   width: 90%;
   max-width: 1200px;
   height: 100%;
-  /* Optional: Add content styles or background if needed */
-  /* For example, to add a border: */
-  /* border: 2px solid #ccc; */
 }
-
-
-
-
 
 
 /* Reset some default styles */
@@ -646,7 +637,6 @@ nav ul li a:hover {
   font-size: 1em;
   font-weight: bold;
   color: #333333;
-  /* Tmavá barva pro nadpisy */
   margin-bottom: 0.5rem;
 }
 
@@ -654,7 +644,6 @@ nav ul li a:hover {
   display: block;
   font-size: 0.9em;
   color: #666666;
-  /* Světlejší barva pro odkazy */
   text-decoration: none;
   margin: 0.2rem 0;
   transition: color 0.3s ease;
@@ -794,62 +783,45 @@ nav ul li a:hover {
   display: flex;
   flex-direction: column;
   gap: 4rem;
-  /* Vertical gap between components */
   padding: 20px 0;
-  /* Optional padding for the container */
 }
 
 /* Blog Header Section */
 .blog-header {
   text-align: center;
-  /* Center both title and subtitle */
-  /* margin-bottom: 2rem; */
-  /* Add spacing below the header */
 }
 
 .blog-title {
   font-size: 3rem;
-  /* Larger font size for the title */
   font-weight: 700;
-  /* Make the title bold */
   color: #000;
-  /* Optional: Set a specific color for the title */
   margin-bottom: 1rem;
 }
 
 .blog-subtitle {
   font-size: 1.125rem;
-  /* Font size for the subtitle */
   color: #555;
-  /* Slightly muted color for better contrast */
   line-height: 1.75;
-  /* Improve readability */
 }
 
 .productivity-tip {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Ensures even distribution */
   gap: 2.5rem;
-  /* Add the desired gap between components */
   padding: 0 100px;
 }
 
 .productivity-image {
   flex: 1;
-  /* Take half of the space */
   max-width: 50%;
-  /* Ensure no more than half of the width */
   display: flex;
   justify-content: center;
-  /* Center the image inside the container */
   align-items: center;
 }
 
 .productivity-image img {
   max-width: 100%;
-  /* Ensure the image scales properly */
   height: auto;
   border-radius: 12px;
   object-fit: cover;
@@ -857,16 +829,13 @@ nav ul li a:hover {
 
 .productivity-content {
   flex: 1;
-  /* Take half of the space */
   max-width: 50%;
-  /* Ensure no more than half of the width */
 }
 
 .productivity-category {
   font-size: 0.9rem;
   font-weight: 600;
   color: #4a90e2;
-  /* Blue text for category */
   margin-bottom: 8px;
   text-transform: uppercase;
 }
@@ -886,62 +855,45 @@ nav ul li a:hover {
 
 
 
-/* Responsive Styles */
 @media (max-width: 768px) {
 
-  /* Blog Header Responsivity */
   .blog-header {
     text-align: center;
     padding: 0 1rem;
-    /* Reduce horizontal padding */
   }
 
   .blog-title {
     font-size: 3rem;
-    /* Adjust font size for smaller screens */
   }
 
   .blog-subtitle {
     font-size: 1.1rem;
-    /* Adjust subtitle font size */
   }
 
-  /* Productivity Tip Responsivity */
   .productivity-tip {
     flex-direction: column;
-    /* Stack items vertically */
     text-align: center;
-    /* Center text in vertical layout */
     gap: 1.5rem;
-    /* Adjust spacing between elements */
     padding: 0;
-    /* Remove excess padding */
     margin: 0 1rem;
-    /* Add margin for spacing without cutting edges */
   }
 
   .productivity-image img {
     width: 100%;
-    /* Set a maximum width for better scaling */
     margin: 0 auto;
-    /* Center the image */
   }
 
   .productivity-content {
     text-align: left;
-    /* Ensure content aligns properly */
     padding: 0;
-    /* Remove any excess padding */
   }
 
   .productivity-title {
     font-size: 1.5rem;
-    /* Scale down the title font size */
   }
 
   .productivity-meta {
     font-size: 0.9rem;
-    /* Scale down metadata */
   }
 }
 
@@ -1050,14 +1002,12 @@ nav ul li a:hover {
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  /* Allows wrapping for smaller screens */
   margin-top: 1rem;
   width: 100%;
 }
 
 .gallery-thumbnail {
   width: calc(16.66% - 1rem);
-  /* 6 images per row with spacing */
   max-width: 120px;
   cursor: pointer;
   border-radius: 10px;
@@ -1069,29 +1019,23 @@ nav ul li a:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure responsiveness for smaller screens */
 @media (max-width: 768px) {
   .gallery-thumbnail {
     width: calc(33.33% - 1rem);
-    /* 3 images per row */
   }
 }
 
 @media (max-width: 480px) {
   .gallery-thumbnail {
     width: calc(50% - 1rem);
-    /* 2 images per row */
   }
 }
 
 
-/* Modal Styles */
 .modal {
   display: none;
-  /* Hidden by default */
   position: fixed;
   z-index: 1000;
-  /* Above other content */
   left: 0;
   top: 0;
   width: 100%;
@@ -1134,7 +1078,6 @@ nav ul li a:hover {
 
 .gallery-theme {
   margin-bottom: 3rem;
-  /* Add spacing between sections */
 }
 
 .gallery-theme-title {

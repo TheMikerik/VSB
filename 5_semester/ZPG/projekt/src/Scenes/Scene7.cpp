@@ -32,7 +32,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         this->addLight(Light(position, color));
     }
 
-    auto shader_platform = std::make_shared<ShaderProgram>(
+    auto shader_texture = std::make_shared<ShaderProgram>(
         "./shaders/texture_shaders/vertex_shader.glsl",
         "./shaders/texture_shaders/fragment_shader.glsl"
     );
@@ -50,12 +50,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         "./shaders/light_shaders/depth_fragment_blinn.glsl"
     );
 
-    auto shader3D = std::make_shared<ShaderProgram>(
-        "shaders/model3d/vertex_model3d.glsl",
-        "shaders/model3d/fragment_model3d.glsl"
-    );
-
-    shaders = {shader_platform, shader_phong, shader_lambert, shader_blinn, shader3D};
+    shaders = {shader_texture, shader_phong, shader_lambert, shader_blinn};
 
     for (auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -87,7 +82,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
     auto platformDrawable = std::make_shared<DrawableObject>(
         platformModel, 
-        shader_platform, 
+        shader_texture, 
         Transformation(), 
         *materialManager.getMaterial("platform"),
         grassTexture
@@ -149,9 +144,8 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         
         auto zombieDrawable = std::make_shared<Drawable3DObject>(
             zombieModel, 
-            shader3D, 
+            shader_texture, 
             Transformation(), 
-            *materialManager.getMaterial("platform"),
             std::make_shared<Texture>("models/assimp/zombie/zombie.png", false)
         );
 
@@ -180,8 +174,9 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         
         auto houseDrawable = std::make_shared<Drawable3DObject>(
             houseModel, 
-            shader3D, 
+            shader_texture, 
             Transformation(), 
+            *materialManager.getMaterial("house"),
             std::make_shared<Texture>("models/assimp/house/house.png", false)
         );
 

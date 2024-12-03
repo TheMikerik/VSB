@@ -7,8 +7,8 @@ const thumbnails = document.querySelectorAll('.gallery-thumbnail');
     thumbnails.forEach(thumbnail => {
         thumbnail.addEventListener('click', () => {
             modal.style.display = 'block';
-            modalImage.src = thumbnail.src; // Set the clicked image as modal content
-            caption.textContent = thumbnail.alt; // Set the alt text as caption
+            modalImage.src = thumbnail.src;
+            caption.textContent = thumbnail.alt;
         });
     });
 
@@ -16,7 +16,6 @@ const thumbnails = document.querySelectorAll('.gallery-thumbnail');
         modal.style.display = 'none';
     });
 
-    // Close modal when clicking outside the image
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
             modal.style.display = 'none';

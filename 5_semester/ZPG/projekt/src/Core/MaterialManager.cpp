@@ -25,10 +25,10 @@ void MaterialManager::initializeMaterials() {
     ));
 
     addMaterial("house", std::make_shared<Material>(
-        glm::vec3(0.4, 0.4, 0.4),
+        glm::vec3(0.6, 0.6, 0.6),
         glm::vec3(0.75f, 0.75f, 0.75f),
         glm::vec3(1.0f, 1.0f, 1.0f),
-        16.0f  
+        2.0f  
     ));
 
     addMaterial("login", std::make_shared<Material>(
