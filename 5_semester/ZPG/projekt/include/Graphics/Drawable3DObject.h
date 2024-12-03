@@ -15,6 +15,11 @@ public:
                      const Material& material = Material(),
                      std::shared_ptr<Texture> texture = nullptr);
 
+    Drawable3DObject(std::shared_ptr<Model3D> model,
+                     std::shared_ptr<ShaderProgram> shaderProgram,
+                     const Transformation& transformation = Transformation(),
+                     std::shared_ptr<Texture> texture = nullptr);
+
     void render(const glm::mat4& view, const glm::mat4& projection) const;
 
     void setShader(std::shared_ptr<ShaderProgram> shd);

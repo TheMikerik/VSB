@@ -14,6 +14,16 @@ Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
       texture(std::move(texture)) 
 {}
 
+Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
+                                   std::shared_ptr<ShaderProgram> shaderProgram,
+                                   const Transformation& transformation,
+                                   std::shared_ptr<Texture> texture)
+    : model(std::move(model)), 
+      shaderProgram(std::move(shaderProgram)),
+      transformation(transformation), 
+      texture(std::move(texture)) 
+{}
+
 void Drawable3DObject::render(const glm::mat4& view, const glm::mat4& projection) const {
     if (!shaderProgram || !model) {
         std::cerr << "ShaderProgram or Model3D is not set for Drawable3DObject." << std::endl;

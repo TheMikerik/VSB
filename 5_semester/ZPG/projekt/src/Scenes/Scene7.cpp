@@ -149,7 +149,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         
         auto zombieDrawable = std::make_shared<Drawable3DObject>(
             zombieModel, 
-            shader_lambert, 
+            shader3D, 
             Transformation(), 
             *materialManager.getMaterial("platform"),
             std::make_shared<Texture>("models/assimp/zombie/zombie.png", false)
@@ -182,7 +182,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
             houseModel, 
             shader3D, 
             Transformation(), 
-            *materialManager.getMaterial("house"),
             std::make_shared<Texture>("models/assimp/house/house.png", false)
         );
 

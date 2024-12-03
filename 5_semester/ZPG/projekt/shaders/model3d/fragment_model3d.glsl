@@ -17,7 +17,7 @@ uniform vec3 materialDiffuse;
 uniform vec3 materialSpecular;
 uniform float materialShininess;
 
-uniform sampler2D texture_diffuse1; // Default diffuse sampler
+uniform sampler2D texture_diffuse; // Default diffuse sampler
 uniform bool hasTexture; // Control variable for texturing
 
 void main()
@@ -48,9 +48,10 @@ void main()
     }
 
     if (hasTexture) {
-        vec3 texColor = texture(texture_diffuse1, TexCoords).rgb;
+        vec3 texColor = texture(texture_diffuse, TexCoords).rgb;
         result *= texColor;
     }
 
     frag_colour = vec4(result, 1.0);
+
 }
