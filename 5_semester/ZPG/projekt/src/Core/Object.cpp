@@ -18,13 +18,6 @@ void Object::loadModel(const std::string& path) {
     const aiScene* scene = importer.ReadFile(path, 
         aiProcess_Triangulate);
 
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cerr << "ERROR::ASSIMP::" 
-                  << importer.GetErrorString() 
-                  << std::endl;
-        return;
-    }
-
     directory = path.substr(0, path.find_last_of('/'));
 
     processNode(scene->mRootNode, scene);
@@ -81,32 +74,6 @@ std::shared_ptr<ObjectModel> Object::processMesh(aiMesh* mesh, const aiScene* sc
             indices.push_back(face.mIndices[j]);
         }
     }
-
-    
-    if (mesh->mMaterialIndex >= 0) {
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-        
-        std::vector<std::shared_ptr<Texture>> diffuseMaps = 
-            loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-        
-        std::vector<std::shared_ptr<Texture>> specularMaps = 
-            loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-
-        
-        std::vector<std::shared_ptr<Texture>> normalMaps = 
-            loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-
-        
-        std::vector<std::shared_ptr<Texture>> heightMaps = 
-            loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-        textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-    }
-
     return std::make_shared<ObjectModel>(vertices, indices, textures);
 }
 
