@@ -9,12 +9,10 @@ Texture::Texture(const std::string& path)
 
     unsigned char* data = stbi_load(path.c_str(), &width, &height, 0, STBI_rgb_alpha);
     if (data) {
-        GLenum format = GL_RGBA;
-
         glGenTextures(1, &textureID);
         glBindTexture(GL_TEXTURE_2D, textureID);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
@@ -24,10 +22,9 @@ Texture::Texture(const std::string& path)
 
         glBindTexture(GL_TEXTURE_2D, 0);
         stbi_image_free(data);
-    }
-    else {
+    } else {
         std::cerr << "Failed to load texture at path: " << path << std::endl;
-        stbi_image_free(data);
+        if(data) stbi_image_free(data);
     }
 }
 
@@ -42,14 +39,11 @@ Texture::Texture(const std::vector<std::string>& faces)
     for (unsigned int i = 0; i < faces.size(); i++) {
         unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, 0, STBI_rgb_alpha);
         if (data) {
-            GLenum format = GL_RGBA;
-
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
             stbi_image_free(data);
-        }
-        else {
+        } else {
             std::cerr << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-            stbi_image_free(data);
+            if(data) stbi_image_free(data);
         }
     }
 
@@ -75,10 +69,5 @@ void Texture::bind(GLuint unit) const
     }
 
     glActiveTexture(GL_TEXTURE0 + unit);
-    if (isCubemap) {
-        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-    }
-    else {
-        glBindTexture(GL_TEXTURE_2D, textureID);
-    }
+    glBindTexture(isCubemap ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D, textureID);
 }
