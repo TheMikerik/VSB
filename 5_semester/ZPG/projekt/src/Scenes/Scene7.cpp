@@ -37,8 +37,8 @@ Scene7::Scene7(Camera& cam)
     }
 
     auto shader_texture = std::make_shared<ShaderProgram>(
-        "./shaders/texture_shaders/v_f_l.glsl",
-        "./shaders/texture_shaders/fragment_shader_flashlight.glsl"
+        "./shaders/texture_shaders/vertex_shader.glsl",
+        "./shaders/texture_shaders/fragment_shader.glsl"
     );
 
     auto shader_phong = std::make_shared<ShaderProgram>(
