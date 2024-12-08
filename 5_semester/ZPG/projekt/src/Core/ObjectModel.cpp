@@ -4,17 +4,6 @@
 ObjectModel::ObjectModel(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<std::shared_ptr<Texture>>& textures)
     : vertices(vertices), indices(indices), textures(textures), VAO(0), VBO(0), EBO(0)
 {
-    setupMesh();
-}
-
-ObjectModel::~ObjectModel() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-}
-
-void ObjectModel::setupMesh() {
-    
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -40,6 +29,12 @@ void ObjectModel::setupMesh() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 
     glBindVertexArray(0);
+}
+
+ObjectModel::~ObjectModel() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 }
 
 void ObjectModel::render(const std::shared_ptr<ShaderProgram>& shader) const {
