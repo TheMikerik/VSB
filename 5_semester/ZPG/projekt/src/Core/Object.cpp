@@ -18,19 +18,9 @@ void Object::loadModel(const std::string& path) {
     const aiScene* scene = importer.ReadFile(path, 
         aiProcess_Triangulate);
 
-    processNode(scene->mRootNode, scene);
-}
-
-void Object::processNode(aiNode* node, const aiScene* scene) {
-    
-    for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+    for (unsigned int i = 0; i < scene->mNumMeshes; i++) {
+        aiMesh* mesh = scene->mMeshes[i];
         meshes.push_back(processMesh(mesh, scene));
-    }
-
-    
-    for (unsigned int i = 0; i < node->mNumChildren; i++) {
-        processNode(node->mChildren[i], scene);
     }
 }
 
@@ -39,7 +29,6 @@ std::shared_ptr<ObjectModel> Object::processMesh(aiMesh* mesh, const aiScene* sc
     std::vector<unsigned int> indices;
     std::vector<std::shared_ptr<Texture>> textures;
 
-    
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Vertex vertex;
         
@@ -64,10 +53,8 @@ std::shared_ptr<ObjectModel> Object::processMesh(aiMesh* mesh, const aiScene* sc
         vertices.push_back(vertex);
     }
 
-    
     for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
         aiFace face = mesh->mFaces[i];
-        
         for (unsigned int j = 0; j < face.mNumIndices; j++) {
             indices.push_back(face.mIndices[j]);
         }
@@ -100,12 +87,10 @@ void Object::render(const std::shared_ptr<ShaderProgram>& shader,
 
     shader->use();
 
-    
     shader->setMat4("viewMatrix", view);
     shader->setMat4("projectionMatrix", projection);
     shader->setMat4("modelMatrix", modelMatrix);
 
-    
     for (const auto& mesh : meshes) {
         mesh->render(shader);
     }

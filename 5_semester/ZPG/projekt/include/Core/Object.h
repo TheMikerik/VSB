@@ -24,7 +24,6 @@ public:
                 const glm::mat4& modelMatrix) const;
 
 private:
-    void processNode(aiNode* node, const aiScene* scene);
     std::shared_ptr<ObjectModel> processMesh(aiMesh* mesh, const aiScene* scene);
     std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial* mat, 
                                                                aiTextureType type, 
