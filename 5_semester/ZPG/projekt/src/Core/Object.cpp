@@ -18,8 +18,6 @@ void Object::loadModel(const std::string& path) {
     const aiScene* scene = importer.ReadFile(path, 
         aiProcess_Triangulate);
 
-    directory = path.substr(0, path.find_last_of('/'));
-
     processNode(scene->mRootNode, scene);
 }
 
@@ -85,7 +83,6 @@ std::vector<std::shared_ptr<Texture>> Object::loadMaterialTextures(aiMaterial* m
         aiString str;
         mat->GetTexture(type, i, &str);
         std::string filename = std::string(str.C_Str());
-        filename = directory + "/" + filename;
         textures.push_back(std::make_shared<Texture>(filename));
     }
     return textures;
