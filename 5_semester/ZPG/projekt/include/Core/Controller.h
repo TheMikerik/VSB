@@ -20,7 +20,6 @@ public:
     static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
     static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
     static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-    static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 private:
     GLFWwindow* window;
@@ -38,5 +37,4 @@ private:
     void processKeyboardInput(float deltaTime);
     void processTransformationInput();
     void switchScene(int index);
-    void handleRayIntersection(const glm::vec3& rayOrigin, const glm::vec3& rayDir);
 };
