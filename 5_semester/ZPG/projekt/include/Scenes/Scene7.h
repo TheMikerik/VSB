@@ -4,6 +4,8 @@
 #include "Shaders/ShaderProgram.h"
 #include "Core/Model.h"
 
+#include "Graphics/Spotlight.h"
+
 #include "Core/Transformation.h"
 #include "Graphics/Camera.h"
 #include "Graphics/Light.h"
@@ -22,6 +24,7 @@ public:
 
 private:
     Camera& camera;
+    std::shared_ptr<Spotlight> spotlight;
     std::vector<std::shared_ptr<ShaderProgram>> shaders;
     float getRandom(float min, float max);
     std::vector<Light> lights;

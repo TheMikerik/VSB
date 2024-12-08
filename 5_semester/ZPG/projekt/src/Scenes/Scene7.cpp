@@ -1,5 +1,6 @@
 #include "Scenes/Scene7.h"
 #include "Graphics/Light.h"
+#include "Graphics/Spotlight.h"
 
 #include "../models/tree.h"
 #include "../models/plain_texture.h"
@@ -18,7 +19,10 @@
 #include <ctime>
 #include <iostream>
 
-Scene7::Scene7(Camera& cam) : camera(cam) {
+Scene7::Scene7(Camera& cam) 
+    : camera(cam),
+    spotlight(std::make_shared<Spotlight>(glm::vec3(5.0f, 4.0f, 5.0f), glm::vec3(1.0f, 0.0f, 1.0f)))
+{
     std::srand(static_cast<unsigned int>(std::time(0)));
     auto materialManager = MaterialManager::getInstance();
 
@@ -33,8 +37,8 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     }
 
     auto shader_texture = std::make_shared<ShaderProgram>(
-        "./shaders/texture_shaders/vertex_shader.glsl",
-        "./shaders/texture_shaders/fragment_shader.glsl"
+        "./shaders/texture_shaders/v_f_l.glsl",
+        "./shaders/texture_shaders/fragment_shader_flashlight.glsl"
     );
 
     auto shader_phong = std::make_shared<ShaderProgram>(
@@ -258,12 +262,20 @@ const std::vector<Light>& Scene7::getLights() const {
 }
 
 void Scene7::render(float dt) {
-    Scene::render(dt);
-
     glm::mat4 view = camera.GetViewMatrix();
     glm::mat4 projection = camera.getProjectionMatrix();
 
     for (const auto& drawable3D : drawable3DObjects) {
         drawable3D->render(view, projection);
     }
+
+    glm::vec3 spotlightPos = camera.getPosition();
+    glm::vec3 spotlightDir = glm::normalize(camera.getFront());
+    spotlight->update(spotlightPos, spotlightDir);
+
+    for (auto& shader : shaders) {
+        spotlight->applyToShader(shader);
+    }
+
+    Scene::render(dt);
 }
