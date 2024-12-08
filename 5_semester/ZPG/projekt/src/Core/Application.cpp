@@ -48,7 +48,7 @@ void Application::initialization()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
-    window = glfwCreateWindow(1450, 900, "OpenGL Application with Camera and Light", nullptr, nullptr);
+    window = glfwCreateWindow(1450, 900, "ZPG - RUC0066", nullptr, nullptr);
     if (!window) {
         std::cerr << "ERROR: could not create GLFW window" << std::endl;
         glfwTerminate();
