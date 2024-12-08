@@ -26,15 +26,6 @@ Application::Application()
       camera(glm::vec3(0.0f, 10.0f, 20.0f)),
       pointLight(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(1.0f))
 {
-    for (int i = 0; i < 10; ++i) {
-        glm::vec3 position = glm::vec3(
-            static_cast<float>(rand() % 20 - 10),
-            static_cast<float>(rand() % 10 + 1),
-            static_cast<float>(rand() % 20 - 10)
-        );
-        glm::vec3 color = glm::vec3(1.0f);
-        fireflies.emplace_back(position, color);
-    }
 }
 
 Application::~Application()
