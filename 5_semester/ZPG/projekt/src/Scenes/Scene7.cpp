@@ -74,7 +74,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     camera.notifyObservers();
 
     std::shared_ptr<Texture> grassTexture = 
-        std::make_shared<Texture>("./images/grass.png", false);
+        std::make_shared<Texture>("./images/grass.png");
 
     std::vector<float> plainTextureVertices(std::begin(plain_texture), std::end(plain_texture));
     auto platformModel = std::make_shared<Model>(plainTextureVertices, true);
@@ -145,7 +145,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
             zombieModel, 
             shader_texture, 
             Transformation(), 
-            std::make_shared<Texture>("models/assimp/zombie/zombie.png", false)
+            std::make_shared<Texture>("models/assimp/zombie/zombie.png")
         );
 
         auto& trans = zombieDrawable->getTransformation();
@@ -176,7 +176,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
             shader_texture, 
             Transformation(), 
             *materialManager.getMaterial("house"),
-            std::make_shared<Texture>("models/assimp/house/house.png", false)
+            std::make_shared<Texture>("models/assimp/house/house.png")
         );
 
         auto& trans = houseDrawable->getTransformation();

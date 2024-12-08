@@ -6,8 +6,8 @@
 
 class Texture {
 public:
-    Texture(const std::string& path, bool gammaCorrection = false);
-    Texture(const std::vector<std::string>& faces, bool gammaCorrection = false);
+    Texture(const std::string& path);
+    Texture(const std::vector<std::string>& faces);
 
     ~Texture();
 
@@ -17,6 +17,6 @@ public:
 
 private:
     GLuint textureID;
-    int width, height, nrChannels;
+    int width, height;
     bool isCubemap;
 };

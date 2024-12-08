@@ -62,7 +62,7 @@ Scene5::Scene5(Camera& cam) : camera(cam) {
     
     camera.notifyObservers();
 
-    std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png", false);
+    std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png");
 
     std::vector<float> plainTextureVertices(std::begin(plain_texture), std::end(plain_texture));
     auto platformModel = std::make_shared<Model>(plainTextureVertices, true);

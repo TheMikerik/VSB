@@ -38,7 +38,7 @@ Scene6::Scene6(Camera& cam)
     auto platformModel = std::make_shared<Model>(plainTextureVertices, true);
     auto treeModel = std::make_shared<Model>(treeVertices);
 
-    std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png", false);
+    std::shared_ptr<Texture> grassTexture = std::make_shared<Texture>("./images/grass.png");
 
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, 
                                                              Transformation(), 

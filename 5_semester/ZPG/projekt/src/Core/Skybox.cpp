@@ -10,7 +10,7 @@ Skybox::Skybox(const std::vector<std::string>& faces) {
     skyboxModel = std::make_shared<SkyboxModel>(cubeVertices);
 
     
-    cubemapTexture = std::make_shared<Texture>(faces, true);
+    cubemapTexture = std::make_shared<Texture>(faces);
 
     
     skyboxShader = std::make_shared<ShaderProgram>(
