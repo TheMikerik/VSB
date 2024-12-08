@@ -1,19 +1,19 @@
-#include "Core/Model3DModel.h"
+#include "Core/ObjectModel.h"
 #include <iostream>
 
-Model3DModel::Model3DModel(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<std::shared_ptr<Texture>>& textures)
+ObjectModel::ObjectModel(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<std::shared_ptr<Texture>>& textures)
     : vertices(vertices), indices(indices), textures(textures), VAO(0), VBO(0), EBO(0)
 {
     setupMesh();
 }
 
-Model3DModel::~Model3DModel() {
+ObjectModel::~ObjectModel() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 }
 
-void Model3DModel::setupMesh() {
+void ObjectModel::setupMesh() {
     
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -42,7 +42,7 @@ void Model3DModel::setupMesh() {
     glBindVertexArray(0);
 }
 
-void Model3DModel::render(const std::shared_ptr<ShaderProgram>& shader) const {
+void ObjectModel::render(const std::shared_ptr<ShaderProgram>& shader) const {
     unsigned int diffuseNr = 1;
 
     for (unsigned int i = 0; i < textures.size(); i++) {

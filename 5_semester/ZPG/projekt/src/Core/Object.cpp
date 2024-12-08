@@ -1,19 +1,19 @@
-#include "Core/Model3D.h"
+#include "Core/Object.h"
 #include "Shaders/ShaderProgram.h" 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <iostream>
 #include <stb_image.h>
 
-Model3D::Model3D(const std::string& path) {
+Object::Object(const std::string& path) {
     loadModel(path);
 }
 
-Model3D::~Model3D() {
+Object::~Object() {
     
 }
 
-void Model3D::loadModel(const std::string& path) {
+void Object::loadModel(const std::string& path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, 
         aiProcess_Triangulate);
@@ -30,7 +30,7 @@ void Model3D::loadModel(const std::string& path) {
     processNode(scene->mRootNode, scene);
 }
 
-void Model3D::processNode(aiNode* node, const aiScene* scene) {
+void Object::processNode(aiNode* node, const aiScene* scene) {
     
     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -43,7 +43,7 @@ void Model3D::processNode(aiNode* node, const aiScene* scene) {
     }
 }
 
-std::shared_ptr<Model3DModel> Model3D::processMesh(aiMesh* mesh, const aiScene* scene) {
+std::shared_ptr<ObjectModel> Object::processMesh(aiMesh* mesh, const aiScene* scene) {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<std::shared_ptr<Texture>> textures;
@@ -107,10 +107,10 @@ std::shared_ptr<Model3DModel> Model3D::processMesh(aiMesh* mesh, const aiScene* 
         textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
     }
 
-    return std::make_shared<Model3DModel>(vertices, indices, textures);
+    return std::make_shared<ObjectModel>(vertices, indices, textures);
 }
 
-std::vector<std::shared_ptr<Texture>> Model3D::loadMaterialTextures(aiMaterial* mat, 
+std::vector<std::shared_ptr<Texture>> Object::loadMaterialTextures(aiMaterial* mat, 
                                                                    aiTextureType type, 
                                                                    const std::string& typeName) {
     std::vector<std::shared_ptr<Texture>> textures;
@@ -124,13 +124,13 @@ std::vector<std::shared_ptr<Texture>> Model3D::loadMaterialTextures(aiMaterial* 
     return textures;
 }
 
-void Model3D::render(const std::shared_ptr<ShaderProgram>& shader, 
+void Object::render(const std::shared_ptr<ShaderProgram>& shader, 
                      const glm::mat4& view, 
                      const glm::mat4& projection, 
                      const glm::mat4& modelMatrix) const 
 {
     if (!shader) {
-        std::cerr << "Shader program not provided for Model3D." << std::endl;
+        std::cerr << "Shader program not provided for Object." << std::endl;
         return;
     }
 

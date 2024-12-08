@@ -139,7 +139,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     }
 
     for (int i = 0; i < 10; ++i) {
-        auto zombieModel = std::make_shared<Model3D>("models/assimp/zombie/zombie.obj");
+        auto zombieModel = std::make_shared<Object>("models/assimp/zombie/zombie.obj");
         
         auto zombieDrawable = std::make_shared<Drawable3DObject>(
             zombieModel, 
@@ -169,7 +169,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     }
 
     for (int i = 0; i < 3; ++i) {
-        auto houseModel = std::make_shared<Model3D>("models/assimp/house/house.obj");
+        auto houseModel = std::make_shared<Object>("models/assimp/house/house.obj");
         
         auto houseDrawable = std::make_shared<Drawable3DObject>(
             houseModel, 
@@ -198,7 +198,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
     }
 
     for (int i = 0; i < 10; ++i) {
-        auto wolfModel = std::make_shared<Model3D>("models/assimp/wolf/wolf.obj");
+        auto wolfModel = std::make_shared<Object>("models/assimp/wolf/wolf.obj");
         
         auto wolfDrawable = std::make_shared<Drawable3DObject>(
             wolfModel, 
@@ -229,7 +229,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
 
 
-    auto loginModel = std::make_shared<Model3D>("models/assimp/login/login.obj");
+    auto loginModel = std::make_shared<Object>("models/assimp/login/login.obj");
 
     auto loginDrawable = std::make_shared<Drawable3DObject>(
         loginModel, 

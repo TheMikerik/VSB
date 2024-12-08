@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "Core/Model3DModel.h"
+#include "Core/ObjectModel.h"
 #include "Core/Texture.h"
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
@@ -11,10 +11,10 @@
 #include <assimp/postprocess.h>
 
 
-class Model3D {
+class Object {
 public:
-    explicit Model3D(const std::string& path);
-    ~Model3D();
+    explicit Object(const std::string& path);
+    ~Object();
 
     void loadModel(const std::string& path);
 
@@ -25,11 +25,11 @@ public:
 
 private:
     void processNode(aiNode* node, const aiScene* scene);
-    std::shared_ptr<Model3DModel> processMesh(aiMesh* mesh, const aiScene* scene);
+    std::shared_ptr<ObjectModel> processMesh(aiMesh* mesh, const aiScene* scene);
     std::vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial* mat, 
                                                                aiTextureType type, 
                                                                const std::string& typeName);
 
-    std::vector<std::shared_ptr<Model3DModel>> meshes;
+    std::vector<std::shared_ptr<ObjectModel>> meshes;
     std::string directory;
 };

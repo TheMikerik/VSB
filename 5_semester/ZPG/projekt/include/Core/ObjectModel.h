@@ -13,10 +13,10 @@ struct Vertex {
     glm::vec2 TexCoords;
 };
 
-class Model3DModel {
+class ObjectModel {
 public:
-    Model3DModel(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<std::shared_ptr<Texture>>& textures);
-    ~Model3DModel();
+    ObjectModel(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<std::shared_ptr<Texture>>& textures);
+    ~ObjectModel();
 
     void render(const std::shared_ptr<ShaderProgram>& shader) const;
 

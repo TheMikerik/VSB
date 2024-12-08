@@ -2,7 +2,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
+Drawable3DObject::Drawable3DObject(std::shared_ptr<Object> model,
                                    std::shared_ptr<ShaderProgram> shaderProgram,
                                    const Transformation& transformation,
                                    const Material& material,
@@ -14,7 +14,7 @@ Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
       texture(texture)
 {}
 
-Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
+Drawable3DObject::Drawable3DObject(std::shared_ptr<Object> model,
                                    std::shared_ptr<ShaderProgram> shaderProgram,
                                    const Transformation& transformation,
                                    std::shared_ptr<Texture> texture)
@@ -26,7 +26,7 @@ Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
 
 void Drawable3DObject::render(const glm::mat4& view, const glm::mat4& projection) const {
     if (!shaderProgram || !model) {
-        std::cerr << "ShaderProgram or Model3D is not set for Drawable3DObject." << std::endl;
+        std::cerr << "ShaderProgram or Object is not set for Drawable3DObject." << std::endl;
         return;
     }
 

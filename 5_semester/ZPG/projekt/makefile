@@ -31,8 +31,8 @@ SRCS = \
     src/Core/Application.cpp \
     src/Core/Controller.cpp \
     src/Core/Model.cpp \
-    src/Core/Model3D.cpp \
-    src/Core/Model3DModel.cpp \
+    src/Core/Object.cpp \
+    src/Core/ObjectModel.cpp \
     src/Core/Material.cpp \
     src/Core/MaterialManager.cpp \
     src/Core/Transformation.cpp \
