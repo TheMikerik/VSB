@@ -7,21 +7,21 @@ Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
                                    const Transformation& transformation,
                                    const Material& material,
                                    std::shared_ptr<Texture> texture)
-    : model(std::move(model)), 
-      shaderProgram(std::move(shaderProgram)),
+    : model(model), 
+      shaderProgram(shaderProgram),
       transformation(transformation), 
       material(material), 
-      texture(std::move(texture)) 
+      texture(texture)
 {}
 
 Drawable3DObject::Drawable3DObject(std::shared_ptr<Model3D> model,
                                    std::shared_ptr<ShaderProgram> shaderProgram,
                                    const Transformation& transformation,
                                    std::shared_ptr<Texture> texture)
-    : model(std::move(model)), 
-      shaderProgram(std::move(shaderProgram)),
+    : model(model), 
+      shaderProgram(shaderProgram),
       transformation(transformation), 
-      texture(std::move(texture)) 
+      texture(texture)
 {}
 
 void Drawable3DObject::render(const glm::mat4& view, const glm::mat4& projection) const {
@@ -59,7 +59,7 @@ void Drawable3DObject::render(const glm::mat4& view, const glm::mat4& projection
 
 
 void Drawable3DObject::setShader(std::shared_ptr<ShaderProgram> shd) {
-    shaderProgram = std::move(shd);
+    shaderProgram = shd;
 }
 
 void Drawable3DObject::setTransformation(const Transformation& trans) {
@@ -79,7 +79,7 @@ const Material& Drawable3DObject::getMaterial() const {
 }
 
 void Drawable3DObject::setTexture(std::shared_ptr<Texture> tex) {
-    texture = std::move(tex);
+    texture = tex;
 }
 
 std::shared_ptr<Texture> Drawable3DObject::getTexture() const {

@@ -61,8 +61,7 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
 
     for (auto& shader : shaders) {
         shader->use();
-        glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), 
-                    static_cast<GLint>(lights.size()));
+        glUniform1i(glGetUniformLocation(shader->getProgramID(), "numLights"), (lights.size()));
     }
 
     for (size_t i = 0; i < this->lights.size(); ++i) {

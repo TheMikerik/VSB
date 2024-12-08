@@ -127,8 +127,5 @@ void ShaderProgram::setInt(const std::string &name, int value) const
 void ShaderProgram::setMat4(const std::string &name, const glm::mat4 &mat) const
 {
     GLint loc = glGetUniformLocation(programID, name.c_str());
-    if(loc == -1){
-        std::cerr << "Warning: uniform '" << name << "' doesn't exist in shader program." << std::endl;
-    }
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
 }

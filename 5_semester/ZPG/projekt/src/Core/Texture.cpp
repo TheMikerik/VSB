@@ -2,37 +2,21 @@
 #include "stb_image.h"
 #include <iostream>
 
-
 Texture::Texture(const std::string& path, bool gammaCorrection)
-    : textureID(0), width(0), height(0), nrChannels(0), isCubemap(false)
+    : textureID(0), width(0), height(0), isCubemap(false)
 {
     stbi_set_flip_vertically_on_load(true);
 
-    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load(path.c_str(), &width, &height, 0, STBI_rgb_alpha);
     if (data) {
-        GLenum format;
-        if (nrChannels == 1)
-            format = GL_RED;
-        else if (nrChannels == 3)
-            format = gammaCorrection ? GL_SRGB : GL_RGB;
-        else if (nrChannels == 4)
-            format = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
-        else {
-            std::cerr << "Unsupported number of channels: " << nrChannels << std::endl;
-            stbi_image_free(data);
-            return;
-        }
+        GLenum format = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
 
         glGenTextures(1, &textureID);
         glBindTexture(GL_TEXTURE_2D, textureID);
 
-        
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, 
-                     (nrChannels == 1 ? GL_RED : (nrChannels == 3 ? GL_RGB : GL_RGBA)), 
-                     GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
-        
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
@@ -47,35 +31,20 @@ Texture::Texture(const std::string& path, bool gammaCorrection)
     }
 }
 
-
 Texture::Texture(const std::vector<std::string>& faces, bool gammaCorrection)
-    : textureID(0), width(0), height(0), nrChannels(0), isCubemap(true)
+    : textureID(0), width(0), height(0), isCubemap(true)
 {
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
-    int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(false); 
 
     for (unsigned int i = 0; i < faces.size(); i++) {
-        unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+        unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, 0, STBI_rgb_alpha);
         if (data) {
-            GLenum format;
-            if (nrChannels == 1)
-                format = GL_RED;
-            else if (nrChannels == 3)
-                format = gammaCorrection ? GL_SRGB : GL_RGB;
-            else if (nrChannels == 4)
-                format = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
-            else {
-                std::cerr << "Unsupported number of channels: " << nrChannels << " in cubemap texture." << std::endl;
-                stbi_image_free(data);
-                continue;
-            }
+            GLenum format = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
 
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, 
-                         (nrChannels == 1 ? GL_RED : (nrChannels == 3 ? GL_RGB : GL_RGBA)),
-                         GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
             stbi_image_free(data);
         }
         else {
