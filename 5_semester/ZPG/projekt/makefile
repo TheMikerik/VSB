@@ -45,6 +45,7 @@ SRCS = \
     src/Graphics/Light.cpp \
     src/Graphics/Spotlight.cpp \
     src/Graphics/stb_image.cpp \
+    src/Shaders/ShaderLoader.cpp \
     src/Shaders/ShaderProgram.cpp \
     src/Scenes/Scene.cpp \
     src/Scenes/Scene1.cpp \

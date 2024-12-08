@@ -1,4 +1,4 @@
-#include "ShaderLoader.h"
+#include "Shaders/ShaderLoader.h"
 
 string ShaderLoader::loadFile(const char *fname)
 {

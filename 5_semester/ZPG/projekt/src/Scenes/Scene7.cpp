@@ -227,8 +227,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         drawable3DObjects.push_back(wolfDrawable);
     }
 
-
-
     auto loginModel = std::make_shared<Object>("models/assimp/login/login.obj");
 
     auto loginDrawable = std::make_shared<Drawable3DObject>(
@@ -239,7 +237,6 @@ Scene7::Scene7(Camera& cam) : camera(cam) {
         nullptr
     );
 
-    
     auto& loginTrans = loginDrawable->getTransformation();
     loginTrans.addOperation(std::make_shared<TranslateOperation>(glm::vec3(0.0f, 10.0f, -15.0f)));
     loginTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(0.2f))); 

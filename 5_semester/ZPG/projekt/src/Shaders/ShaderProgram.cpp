@@ -1,27 +1,13 @@
 #include "Shaders/ShaderProgram.h"
-#include <fstream>
-#include <sstream>
+#include "Shaders/ShaderLoader.h"
 #include <iostream>
-#include <cstdlib>
 #include <glm/gtc/type_ptr.hpp>
 
 ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& fragmentPath)
     : viewLoc(-1), projLoc(-1), lightPosLoc(-1), lightColorLoc(-1), viewPosLoc(-1)
 {
-    std::string vertexSource = loadShaderSource(vertexPath);
-    std::string fragmentSource = loadShaderSource(fragmentPath);
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    compileShader(vertexSource, vertexShader, "VERTEX");
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    compileShader(fragmentSource, fragmentShader, "FRAGMENT");
-
-    programID = glCreateProgram();
-    linkProgram(vertexShader, fragmentShader);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    ShaderLoader shaderLoader;
+    this->programID = shaderLoader.loadShader(vertexPath.c_str(), fragmentPath.c_str());
 
     viewLoc = glGetUniformLocation(programID, "viewMatrix");
     projLoc = glGetUniformLocation(programID, "projectionMatrix");
@@ -38,55 +24,6 @@ ShaderProgram::~ShaderProgram()
 void ShaderProgram::use() const
 {
     glUseProgram(programID);
-}
-
-std::string ShaderProgram::loadShaderSource(const std::string& filePath) const
-{
-    std::ifstream shaderFile(filePath);
-    if (!shaderFile.is_open()) {
-        std::cerr << "Failed to open shader file: " << filePath << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    std::stringstream shaderStream;
-    shaderStream << shaderFile.rdbuf();
-    return shaderStream.str();
-}
-
-void ShaderProgram::setBool(const std::string &name, bool value) const
-{
-    glUniform1i(glGetUniformLocation(programID, name.c_str()), (int)value);
-}
-
-void ShaderProgram::compileShader(const std::string& source, GLuint shader, const std::string& shaderType) const
-{
-    const char* shaderCode = source.c_str();
-    glShaderSource(shader, 1, &shaderCode, nullptr);
-    glCompileShader(shader);
-
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[1024];
-        glGetShaderInfoLog(shader, sizeof(infoLog), nullptr, infoLog);
-        std::cerr << "ERROR::SHADER::" << shaderType << "::COMPILATION_FAILED\n" << infoLog << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-}
-
-void ShaderProgram::linkProgram(GLuint vertexShader, GLuint fragmentShader)
-{
-    glAttachShader(programID, vertexShader);
-    glAttachShader(programID, fragmentShader);
-    glLinkProgram(programID);
-
-    GLint success;
-    glGetProgramiv(programID, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[1024];
-        glGetProgramInfoLog(programID, sizeof(infoLog), nullptr, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
 }
 
 void ShaderProgram::onCameraUpdate(const glm::mat4& view, const glm::mat4& projection)
@@ -117,6 +54,11 @@ void ShaderProgram::onLightUpdate(int lightIndex, const glm::vec3& position, con
     if (posLoc != -1) glUniform3fv(posLoc, 1, glm::value_ptr(position));
     if (colorLoc != -1) glUniform3fv(colorLoc, 1, glm::value_ptr(color));
     glUseProgram(0);
+}
+
+void ShaderProgram::setBool(const std::string &name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(programID, name.c_str()), (int)value);
 }
 
 void ShaderProgram::setInt(const std::string &name, int value) const
