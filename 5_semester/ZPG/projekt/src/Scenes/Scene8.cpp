@@ -78,7 +78,7 @@ Scene8::Scene8(Camera& cam)
               planetModel, 
               shader_texture, 
               Transformation(), 
-              *materialManager.getMaterial("house"),
+              *materialManager.getMaterial("sun"),
               std::make_shared<Texture>("models/assimp/planet/sun.png")
           );
 
@@ -101,6 +101,7 @@ Scene8::Scene8(Camera& cam)
               planetModel, 
               shader_texture, 
               Transformation(), 
+              *materialManager.getMaterial("earth"),
               std::make_shared<Texture>("models/assimp/planet/earth.png")
           );
 
@@ -110,7 +111,7 @@ Scene8::Scene8(Camera& cam)
           trans.addOperation(translateOp);
 
           auto scaleOp = std::make_shared<ScaleOperation>(
-              glm::vec3(3.0f)
+              glm::vec3(1.0f)
           );
           trans.addOperation(scaleOp);
 
@@ -124,6 +125,7 @@ Scene8::Scene8(Camera& cam)
               planetModel, 
               shader_texture, 
               Transformation(), 
+              *materialManager.getMaterial("moon"),
               std::make_shared<Texture>("models/assimp/planet/moon.png")
           );
 
@@ -133,7 +135,7 @@ Scene8::Scene8(Camera& cam)
           trans.addOperation(translateOp);
 
           auto scaleOp = std::make_shared<ScaleOperation>(
-              glm::vec3(3.0f)
+              glm::vec3(0.5f)
           );
           trans.addOperation(scaleOp);
 
@@ -167,12 +169,32 @@ void Scene8::render(float dt) {
   glm::mat4 view = camera.GetViewMatrix();
   glm::mat4 projection = camera.getProjectionMatrix();
   
-    for (auto& planet : planetsDrawables) {
+  for( int i = 0; i < 3; i++ ) {
+    auto& planet = planetsDrawables[i];
+
+    if (i == 0) {
       auto trans = planet->getTransformation();
-      auto rotateOp = std::make_shared<RotateOperation>(dt * 50, glm::vec3(0.0f, 1.0f, 0.0f));
+      auto rotateOp = std::make_shared<RotateOperation>(dt * 50, glm::vec3(1.0f, 1.0f, 0.0f));
       trans.addOperation(rotateOp);
       planet->setTransformation(trans);
 
       planet->render(view, projection);
+    } else if (i == 1) {
+      auto trans = planet->getTransformation();
+
+      
+      auto rotateOp = std::make_shared<RotateOperation>(dt * 100, glm::vec3(1.0f, 1.0f, 0.0f));
+      trans.addOperation(rotateOp);
+      planet->setTransformation(trans);
+
+      planet->render(view, projection);
+    } else {
+      auto trans = planet->getTransformation();
+      auto rotateOp = std::make_shared<RotateOperation>(dt * 200, glm::vec3(1.0f, 1.0f, 0.0f));
+      trans.addOperation(rotateOp);
+      planet->setTransformation(trans);
+
+      planet->render(view, projection);
+    }
   }
 }

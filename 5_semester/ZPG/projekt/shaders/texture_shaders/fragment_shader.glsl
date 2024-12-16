@@ -39,10 +39,10 @@ void main()
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), materialShininess);
         vec3 specular = materialSpecular * spec * lightColor[i];
 
-        float distance = length(lightPos[i] - FragPos);
-        float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
+        // float distance = length(lightPos[i] - FragPos);
+        // float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance * distance));
         
-        result += (ambient + diffuse + specular) * attenuation;
+        result += (ambient + diffuse + specular);
     }
     
     vec3 textureColor = hasTexture ? texture(texture_diffuse1, TexCoord).rgb : vec3(1.0);
