@@ -52,7 +52,8 @@ SRCS = \
     src/Scenes/Scene3.cpp \
     src/Scenes/Scene5.cpp \
     src/Scenes/Scene6.cpp \
-    src/Scenes/Scene7.cpp
+    src/Scenes/Scene7.cpp \
+    src/Scenes/Scene8.cpp
 
 
 # Object files
