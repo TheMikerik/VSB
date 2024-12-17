@@ -107,7 +107,7 @@ Scene8::Scene8(Camera& cam)
 
           auto& trans = planetDrawable->getTransformation();
 
-          auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(-5.0f,  5.0f,  0.0f));
+          auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(2.5f,  0.0f,  2.5f));
           trans.addOperation(translateOp);
 
           auto scaleOp = std::make_shared<ScaleOperation>(
@@ -131,7 +131,7 @@ Scene8::Scene8(Camera& cam)
 
           auto& trans = planetDrawable->getTransformation();
 
-          auto translateOp = std::make_shared<TranslateOperation>(glm::vec3( 6.0f, -6.0f,  0.0f));
+          auto translateOp = std::make_shared<TranslateOperation>(glm::vec3( 0.0f, 0.0f,  0.0f));
           trans.addOperation(translateOp);
 
           auto scaleOp = std::make_shared<ScaleOperation>(
@@ -182,15 +182,33 @@ void Scene8::render(float dt) {
     } else if (i == 1) {
       auto trans = planet->getTransformation();
 
-      
-      auto rotateOp = std::make_shared<RotateOperation>(dt * 100, glm::vec3(1.0f, 1.0f, 0.0f));
-      trans.addOperation(rotateOp);
-      planet->setTransformation(trans);
+      float radius = 1.0f;
+      float angle = dt ;
+      auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(
+        radius * cos(angle), 
+        0.0f, 
+        radius * sin(angle)
+      ));
+      trans.addOperation(translateOp);
 
+      auto rotateOp = std::make_shared<RotateOperation>(dt * 200, glm::vec3(0.0f, 1.0f, 0.0f));
+      trans.addOperation(rotateOp);
+
+      planet->setTransformation(trans);
       planet->render(view, projection);
     } else {
       auto trans = planet->getTransformation();
-      auto rotateOp = std::make_shared<RotateOperation>(dt * 200, glm::vec3(1.0f, 1.0f, 0.0f));
+
+      float radius = 0.5f;
+      float angle = dt ;
+      auto translateOp = std::make_shared<TranslateOperation>(glm::vec3(
+        radius * cos(angle), 
+        0.0f, 
+        radius * sin(angle)
+      ));
+      trans.addOperation(translateOp);
+
+      auto rotateOp = std::make_shared<RotateOperation>(dt * 200, glm::vec3(0.0f, 1.0f, 0.0f));
       trans.addOperation(rotateOp);
       planet->setTransformation(trans);
 
