@@ -54,8 +54,7 @@
 #include "fsl_debug_console.h"
 #include "fsl_sysmpu.h"
 #include <cstdio>
-#include <unistd.h>
-#include <ctime>
+#include <cstdlib>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -71,40 +70,18 @@
 #define NORMAL_TASK_PRIORITY 	(configMAX_PRIORITIES - 1)
 #define HIGH_TASK_PRIORITY 		(configMAX_PRIORITIES)
 
-#define TASK_NAME_LED_PTA		"led_pta"
-#define TASK_NAME_SOCKET_SRV	"socket_srv"
-#define TASK_NAME_SOCKET_CLI	"socket_cli"
+#define TASK_NAME_LED_PTA			"led_pta"
+#define TASK_NAME_SOCKET_SRV		"socket_srv"
+#define TASK_NAME_SOCKET_CLI		"socket_cli"
+#define TASK_NAME_LED_BIT_SWITCH 	"led_bit_switch"
+#define TASK_NAME_BUTTON			"button"
 
-
-
-
-
-
-
-// TOTO PRIDAVAM JA
-#define TASK_NAME_SET_ONOFF "set_onoff"
-#define TASK_NAME_MONITOR_BUTTONS "monitor_buttons"
-#define TASK_NAME_PRINT_BUTTONS "print_buttons"
-
-
-xSocket_t l_sock_client;
-//
-
-
-
-
-
-
-
-
-
-#define SOCKET_SRV_TOUT			1000
+#define SOCKET_SRV_TOUT			100
 #define SOCKET_SRV_BUF_SIZE		256
 #define SOCKET_SRV_PORT			3333
 
 #define SOCKET_CLI_PORT			3333
 
-#define BUT_NUM 	    4
 #define LED_PTA_NUM 	2
 #define LED_PTC_NUM		8
 #define LED_PTB_NUM		9
@@ -112,19 +89,19 @@ xSocket_t l_sock_client;
 // pair of GPIO port and LED pin.
 struct LED_Data
 {
-	uint32_t pin;
-	GPIO_Type *gpio;
+	uint32_t m_led_pin;
+	GPIO_Type *m_led_gpio;
 };
 
 // all PTAx LEDs in array
-LED_Data pta[ LED_PTA_NUM ] =
+LED_Data g_led_pta[ LED_PTA_NUM ] =
 {
 		{ LED_PTA1_PIN, LED_PTA1_GPIO },
 		{ LED_PTA2_PIN, LED_PTA2_GPIO },
 };
 
 // all PTCx LEDs in array
-LED_Data ptc[ LED_PTC_NUM ] =
+LED_Data g_led_ptc[ LED_PTC_NUM ] =
 {
 		{ LED_PTC0_PIN, LED_PTC0_GPIO },
 		{ LED_PTC1_PIN, LED_PTC1_GPIO },
@@ -135,61 +112,6 @@ LED_Data ptc[ LED_PTC_NUM ] =
 		{ LED_PTC7_PIN, LED_PTC7_GPIO },
 		{ LED_PTC8_PIN, LED_PTC8_GPIO },
 };
-
-
-
-
-
-
-
-
-
-
-struct CUSTOM_LED {
-  bool state;
-  uint32_t pin;
-	GPIO_Type *gpio;
-};
-
-CUSTOM_LED ptc_bool[ LED_PTC_NUM ] =
-{
-		{ false, LED_PTC0_PIN, LED_PTC0_GPIO },
-		{ false, LED_PTC1_PIN, LED_PTC1_GPIO },
-		{ false, LED_PTC2_PIN, LED_PTC2_GPIO },
-		{ false, LED_PTC3_PIN, LED_PTC3_GPIO },
-		{ false, LED_PTC4_PIN, LED_PTC4_GPIO },
-		{ false, LED_PTC5_PIN, LED_PTC5_GPIO },
-		{ false, LED_PTC7_PIN, LED_PTC7_GPIO },
-		{ false, LED_PTC8_PIN, LED_PTC8_GPIO },
-};
-
-
-
-
-struct CUSTOM_BUT {
-  bool state;
-  bool change;
-  bool released;
-  unsigned int pin;
-	GPIO_Type *gpio;
-};
-
-CUSTOM_BUT but_bool[BUT_NUM] = {
-    {false, false, false, SW_PTC9_PIN, SW_PTC9_GPIO},
-		{false, false, false, SW_PTC10_PIN, SW_PTC10_GPIO},
-		{false, false, false, SW_PTC11_PIN, SW_PTC11_GPIO},
-		{false, false, false, SW_PTC12_PIN, SW_PTC12_GPIO}
-};
-
-
-
-
-
-
-
-
-
-
 
 
 // Random number generator for TCP/IP stack
@@ -210,150 +132,67 @@ void task_led_pta_blink( void *t_arg )
 
     while ( 1 )
     {
+    	//PRINTF("blink\n");
     	// switch LED on
-        GPIO_PinWrite( pta[ l_inx ].gpio, pta[ l_inx ].pin, 1 );
+        GPIO_PinWrite( g_led_pta[ l_inx ].m_led_gpio, g_led_pta[ l_inx ].m_led_pin, 1 );
         vTaskDelay( 200 );
         // switch LED off
-        GPIO_PinWrite( pta[ l_inx ].gpio, pta[ l_inx ].pin, 0 );
+        GPIO_PinWrite( g_led_pta[ l_inx ].m_led_gpio, g_led_pta[ l_inx ].m_led_pin, 0 );
         // next LED
         l_inx++;
         l_inx %= LED_PTA_NUM;
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// PRE SOCKET
-
-struct valid_direction {
-	bool fromLeft;
-	bool validString;
+bool ledStateArray[8] = {
+		false, false, false, false,
+		false, false, false, false
 };
 
-int get_position(int8_t *str){
-    int res = 0;
-
-    for (int i = 0; str[i] != '\0'; ++i) {
-      if (str[i] >= '0' && str[i] <= '9') {
-          res = str[i] - '0';
-          break;
-      }
-  }
-
-  return res;
-}
-
-
-valid_direction read_input_leds(int8_t* input_msg) {
-	valid_direction vd_result;
-	vd_result.fromLeft = false;
-	vd_result.validString = false;
-
-  char led_str_r[] = "LED R";
-	char led_str_l[] = "LED L";
-  int i = 0;
-
-  while (led_str_r[i] != '\0') {
-      if (input_msg[i] == '\0' || input_msg[i] != led_str_r[i]) {
-          break;
-      }
-      i++;
-  }
-	if (led_str_r[i] == '\0') {
-      vd_result.validString = true;
-      vd_result.fromLeft = false;
-      return vd_result;
-  }
-
-	i = 0;
-
-	while (led_str_l[i] != '\0') {
-      if (input_msg[i] == '\0' || input_msg[i] != led_str_l[i]) {
-          return vd_result;
-      }
-      i++;
-  }
-	if (led_str_l[i] == '\0') {
-      vd_result.validString = true;
-      vd_result.fromLeft = true;
-  }
-  return vd_result;
-}
-
-
-
-void snake_left() {
-	for (int i = 0; i < LED_PTC_NUM; i++) {
-		ptc_bool[i].state = false;
-	}
-
-	for (int i = 0; i < 13; i++) {
-		for (int j = 0; j < LED_PTC_NUM; j++) {
-			ptc_bool[j].state = false;
-		}
-		for(int display = 0; display < 3; display++) {
-			if (i - display >= 0 && i - display < LED_PTC_NUM) {
-				ptc_bool[i - display].state = true;
+void task_led_bit_switch( void *t_arg ) {
+	PRINTF("TASK LED BIT SWITCH UP AND RUNNING!!!!");
+	while ( 1 ) {
+		for (int i = 0; i < 8; i++) {
+			if (ledStateArray[i] == true) {
+				GPIO_PinWrite( g_led_ptc[ i ].m_led_gpio, g_led_ptc[ i ].m_led_pin, 1 );
+			} else {
+				GPIO_PinWrite( g_led_ptc[ i ].m_led_gpio, g_led_ptc[ i ].m_led_pin, 0 );
 			}
 		}
-
-		vTaskDelay(pdMS_TO_TICKS(500));
+		vTaskDelay( 200 );
 	}
 }
 
-void snake_right() {
-	for (int i = 0; i < LED_PTC_NUM; i++) {
-		ptc_bool[i].state = false;
-	}
+bool shouldSendSnake = false;
+xSocket_t global_sock_client = NULL;
 
-	for (int i = LED_PTC_NUM - 1; i >= -2; i--) {
-		for (int j = 0; j < LED_PTC_NUM; j++) {
-			ptc_bool[j].state = false;
-		}
-		for (int display = 0; display < 3; display++) {
-			if (i + display >= 0 && i + display < LED_PTC_NUM) {
-				ptc_bool[i + display].state = true;
-			}
-		}
 
-		vTaskDelay(pdMS_TO_TICKS(500));
+void task_button( void *t_arg ) {
+	PRINTF("TASK BUTTON RUNNING");
+	while ( 1 ) {
+		vTaskDelay(50);
+		if (GPIO_PinRead( SW_PTC9_GPIO, SW_PTC9_PIN ) == 0) { // Button pressed (active low)
+			shouldSendSnake = true;
+
+			char snakeCmd[7] = "SNAKE\n";
+			PRINTF("SENDING SNAKE!!!!\n");
+			BaseType_t l_len = FreeRTOS_send(global_sock_client, (void *)snakeCmd, 7, 0);
+
+			shouldSendSnake = false;
+
+		}
+		if (GPIO_PinRead( SW_PTC10_GPIO, SW_PTC10_PIN ) == 0) {
+			shouldSendSnake = true;
+
+			char snakeCmd[9] = "B_SNAKE\n";
+			PRINTF("SENDING BACKWARDS SNAKE!!");
+
+			BaseType_t l_len = FreeRTOS_send(global_sock_client, (void *)snakeCmd, 9, 0);
+
+			shouldSendSnake = false;
+		}
 	}
 }
-
-
-
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // task socket server
@@ -370,6 +209,7 @@ void task_socket_srv( void *tp_arg )
 	l_srv_address.sin_addr = FreeRTOS_inet_addr_quick( 0, 0, 0, 0 );
 
 	xSocket_t l_sock_listen;
+	xSocket_t l_sock_client;
 	xWinProperties_t l_win_props;
 	struct freertos_sockaddr from;
 	socklen_t fromSize = sizeof from;
@@ -398,7 +238,8 @@ void task_socket_srv( void *tp_arg )
 
 	FreeRTOS_listen( l_sock_listen, 2 );
 
-	PRINTF( "Socket servers started, listen port %u.\r\n", FreeRTOS_ntohs( l_srv_address.sin_port ) );
+	PRINTF( "Socket servers started, ip %u, listen port %u.\r\n", FreeRTOS_ntohs( l_srv_address.sin_addr ), FreeRTOS_ntohs( l_srv_address.sin_port ) );
+	FreeRTOS_debug_printf(( "Socket servers started, listen port %u.\r\n", FreeRTOS_ntohs( l_srv_address.sin_port ) ));
 	// go!
 	for( ;; )
 	{
@@ -407,6 +248,7 @@ void task_socket_srv( void *tp_arg )
 		do {
 			l_sock_client = FreeRTOS_accept( l_sock_listen, &from, &fromSize );
 			vTaskDelay( SOCKET_SRV_TOUT );
+			PRINTF("Waiting for client..\n");
 		} while ( l_sock_client == NULL );
 
 		if ( l_sock_client == FREERTOS_INVALID_SOCKET )
@@ -415,7 +257,11 @@ void task_socket_srv( void *tp_arg )
 			continue;
 		}
 
-		vTaskDelay( 100 );
+		if ( l_sock_client != NULL ) {
+			global_sock_client = l_sock_client;
+		}
+
+		vTaskDelay( 5 );
 
 		// Handle echo requests.
 		for ( l_reply_count = 0; pdTRUE; l_reply_count++ )
@@ -427,78 +273,41 @@ void task_socket_srv( void *tp_arg )
 			//
 			if( l_len > 0 )
 			{
+//				GPIO_PinWrite( g_led_ptc[ 0 ].m_led_gpio, g_led_ptc[ 0 ].m_led_pin, 1 );
+//				GPIO_PinWrite( g_led_ptc[ 1 ].m_led_gpio, g_led_ptc[ 1 ].m_led_pin, 1 );
+//				GPIO_PinWrite( g_led_ptc[ 2 ].m_led_gpio, g_led_ptc[ 2 ].m_led_pin, 1 );
+//				GPIO_PinWrite( g_led_ptc[ 3 ].m_led_gpio, g_led_ptc[ 3 ].m_led_pin, 1 );
+
+				vTaskDelay(5);
+
+//				GPIO_PinWrite( g_led_ptc[ 0 ].m_led_gpio, g_led_ptc[ 0 ].m_led_pin, 0 );
+//				GPIO_PinWrite( g_led_ptc[ 1 ].m_led_gpio, g_led_ptc[ 1 ].m_led_pin, 0 );
+//				GPIO_PinWrite( g_led_ptc[ 2 ].m_led_gpio, g_led_ptc[ 2 ].m_led_pin, 0 );
+//				GPIO_PinWrite( g_led_ptc[ 3 ].m_led_gpio, g_led_ptc[ 3 ].m_led_pin, 0 );
+
 				l_rx_buf[ l_len ] = 0;	// just for printing
+				PRINTF("%s", l_rx_buf);
 
+				if (strncmp((char*)l_rx_buf, "LED ", 4) == 0) {
+					int stride = 4;
 
-
-
-
-
-
-
-      // TADY DOPLNUJU
-
-        int position = get_position(l_rx_buf);
-        PRINTF("%s %d\n", l_rx_buf, get_position(l_rx_buf));
-
-				valid_direction vd = read_input_leds(l_rx_buf);
-
-				if( vd.validString ) {
-          // ptc_bool[position].state = !ptc_bool[position].state;
-          // if (ptc_bool[position].state) {
-          //     PRINTF("LED: %d ON\n", position);
-          // } else {
-          //     PRINTF("LED: %d OFF\n", position);
-          // }
-					if (vd.fromLeft) {
-						for (int i = 0; i < LED_PTC_NUM; i++) {
-							if ( i < position){
-								ptc_bool[i].state = true;
-							} else {
-								ptc_bool[i].state = false;
-							}
-							PRINTF("%d leds from left\n", position);
+					for (int i = 0; i < 8; i++) {
+						if (l_rx_buf[stride + i] == '1') {
+							ledStateArray[i] = true;
+						} else {
+							ledStateArray[i] = false;
 						}
 					}
-					else if (!vd.fromLeft) {
-						for (int i = LED_PTC_NUM; i > -1; i--) {
-							ptc_bool[i].state = !ptc_bool[i].state;
-							if ( i > (LED_PTC_NUM - position - 1) ){
-								ptc_bool[i].state = true;
-							} else {
-								ptc_bool[i].state = false;
-							}
-							PRINTF("%d leds from right\n", position);
-						}
-					} else {
-						printf("Invalid string\n");
-					}
-
 				}
 
 
+				//l_len = FreeRTOS_send( l_sock_client, ( void * ) l_rx_buf, l_len, 0 );
 
-
-      //
-
-
-
-
-
-
-
-
-
-
-
-
-				l_len = FreeRTOS_send( l_sock_client, ( void * ) l_rx_buf, l_len, 0 );
-
-				PRINTF( "Server forwarded %d bytes.\r\n", l_len );
+				//PRINTF( "Server forwarded %d bytes.\r\n", l_len );
 			}
 			if ( l_len < 0 )
 			{
-				// FreeRTOS_debug_printf( ( "FreeRTOS_recv: rc = %ld.\n", l_len ) );
+				PRINTF(  "FreeRTOS_recv: rc = %ld.\n", l_len  );
 				// Probably '-FREERTOS_ERRNO_ENOTCONN', see FreeRTOS_IP.h
 				break;
 			}
@@ -507,6 +316,10 @@ void task_socket_srv( void *tp_arg )
 				PRINTF( "Recv timeout.\r\n" );
 				//FreeRTOS_setsockopt( l_sock_listen, 0, FREERTOS_SO_RCVTIMEO, &l_receive_tout, sizeof( l_receive_tout ) );
 			}
+
+//			if (shouldSendSnake == true) {
+//
+//			}
 		}
 		PRINTF( "Socket server replied %d times.\r\n", l_reply_count );
 
@@ -587,110 +400,6 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t t_network_event )
     }
 }
 
-
-
-
-
-
-
-
-
-// DOPLNUJU FCE Z MAINU
-
-
-
-
-
-void task_set_onoff( void *tp_arg  ){
-  while(1) {
-		for(int i = 0; i < LED_PTC_NUM; i++) {
-			GPIO_PinWrite( ptc_bool[ i ].gpio, ptc_bool[ i ].pin, ptc_bool[i].state );
-
-		}
-
-		vTaskDelay( 5 );
-	}
-}
-
-
-void task_monitor_buttons(void *tp_arg) {
-  for (int i = 0; i < BUT_NUM; i++) {
-    but_bool[i].change = false;
-    but_bool[i].released = true;
-    but_bool[i].state = false;
-  }
-
-  while (1) {
-			for (int i = 0; i < BUT_NUM; i++) {
-					bool state = GPIO_PinRead(but_bool[i].gpio, but_bool[i].pin);
-					bool prev_state = but_bool[i].state;
-
-					but_bool[i].state = (state == 0);
-
-					if (but_bool[i].state != prev_state) {
-							but_bool[i].change = true;
-							but_bool[i].released = !but_bool[i].state;
-					} else {
-							but_bool[i].change = false;
-					}
-
-
-					if (but_bool[0].state && but_bool[0].change) {
-						snake_left();
-					}
-
-					if (but_bool[3].state && but_bool[3].change) {
-						snake_right();
-					}
-			}
-
-    vTaskDelay(1);
-    }
-}
-
-void task_print_buttons(void *tp_arg) {
-	bool enter = false;
-	char msg[64];
-
-	while (true) {
-		strcpy(msg, "BTN ");
-		for (int i = 0; i < BUT_NUM; ++i) {
-			sprintf(msg + strlen(msg), "%d", but_bool[i].state ? 1 : 0);
-			if (!enter && but_bool[i].change) {
-				enter = true;
-			}
-			but_bool[i].change = false;
-		}
-		strcat(msg, "\n");
-
-		if (enter) {
-			FreeRTOS_send(l_sock_client, (void *)msg, strlen(msg) + 1, 0);
-			enter = false;
-		}
-
-		vTaskDelay(1);
-	}
-}
-
-
-
-
-
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * @brief   Application entry point.
  */
@@ -706,6 +415,7 @@ int main(void) {
     SYSMPU_Enable( SYSMPU, false );
 
     PRINTF( "FreeRTOS+TCP started.\r\n" );
+    printf( "FreeRTOS+TCP started.\r\n" );
 
     // SET CORRECTLY MAC ADDRESS FOR USAGE IN LAB!
     //
@@ -713,7 +423,7 @@ int main(void) {
     // Set MAC to 5A FE C0 DE XXX YYY+21
     // IP address will be configured from DHCP
     //
-	uint8_t ucMAC[ ipMAC_ADDRESS_LENGTH_BYTES ] = { 0x5A, 0xFE, 0xC0, 0xDE, 142, 101 };
+	uint8_t ucMAC[ ipMAC_ADDRESS_LENGTH_BYTES ] = { 0x5A, 0xFE, 0xC0, 0xDE, 0x8E, 0x6C };
 
    	uint8_t ucIPAddress[ ipIP_ADDRESS_LENGTH_BYTES ] = { 10, 0, 0, 10 };
    	uint8_t ucIPMask[ ipIP_ADDRESS_LENGTH_BYTES ] = { 255, 255, 255, 0 };
@@ -725,55 +435,40 @@ int main(void) {
 	if ( xTaskCreate(
 	    		task_led_pta_blink,
 	    		TASK_NAME_LED_PTA,
-				configMINIMAL_STACK_SIZE + 100,
+				configMINIMAL_STACK_SIZE + 1000,
 				NULL,
-				NORMAL_TASK_PRIORITY,
+				LOW_TASK_PRIORITY,
 				NULL ) != pdPASS )
 	    {
 	        PRINTF( "Unable to create task '%s'.\r\n", TASK_NAME_LED_PTA );
 	    }
 
-  if ( xTaskCreate(
-	    		task_set_onoff,
-	    		TASK_NAME_SET_ONOFF,
-				configMINIMAL_STACK_SIZE + 100,
-				NULL,
-				NORMAL_TASK_PRIORITY,
-				NULL ) != pdPASS )
-	    {
-	        PRINTF( "Unable to create task '%s'.\r\n", TASK_NAME_SET_ONOFF );
-	    }
-  
-  if ( xTaskCreate(
-	    		task_monitor_buttons,
-	    		TASK_NAME_MONITOR_BUTTONS,
-				configMINIMAL_STACK_SIZE + 100,
-				NULL,
-				NORMAL_TASK_PRIORITY,
-				NULL ) != pdPASS )
-	    {
-	        PRINTF( "Unable to create task '%s'.\r\n", TASK_NAME_MONITOR_BUTTONS );
-	    }
+	if ( xTaskCreate(
+			task_led_bit_switch,
+			TASK_NAME_LED_BIT_SWITCH,
+			configMINIMAL_STACK_SIZE + 1000,
+			NULL,
+			NORMAL_TASK_PRIORITY,
+			NULL) != pdPASS )
+	{
+		PRINTF( "Unable to create task '%s'.\r\n", TASK_NAME_LED_BIT_SWITCH );
+	}
 
-  if ( xTaskCreate(
-	    		task_print_buttons,
-	    		TASK_NAME_PRINT_BUTTONS,
-				configMINIMAL_STACK_SIZE + 100,
+	if ( xTaskCreate(
+				task_button,
+				TASK_NAME_BUTTON,
+				configMINIMAL_STACK_SIZE + 1000,
 				NULL,
 				NORMAL_TASK_PRIORITY,
-				NULL ) != pdPASS )
-	    {
-	        PRINTF( "Unable to create task '%s'.\r\n", TASK_NAME_PRINT_BUTTONS );
-	    }
-		
+				NULL) != pdPASS )
+		{
+			PRINTF( "Unable to create task '%s'.\r\n", TASK_NAME_BUTTON );
+		}
+
+
 	vTaskStartScheduler();
 
     while ( 1 );
 
     return 0 ;
 }
-
-
-
-
-
