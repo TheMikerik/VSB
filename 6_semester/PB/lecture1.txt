@@ -1,0 +1,31 @@
+WEP CRACKING
+(0.50b) Jaké heslo bylo použito pro zabezpečení provozu v souboru WEP PCAP file ?
+aircrack-ng <file>
+
+(0.50b) V zachyceném provozu převládá ICMP provoz mezi dvěma stanicemi. Jaké jsou jejich IP adresy a MAC adresy ?
+wireshard -> preferences -> dle prednasky
+
+WPA CRACKING
+(0.50b) Jaké heslo bylo použito pro zabezpečení provozu v WPA PCAP file ?
+aircrack-ng -w <slovnik> <file>
+
+(1.00b) V zachyceném provozu se vyskytuje provoz některého z nešifrovaných protokolů POP3/SMTP/TELNET. Jaká je IP adresa klienta a serveru ?
+
+(1.00b) Proveďte analýzu zachyceného rozšifrovaného provozu a pokuste se nalézt citlivé údaje (přihlašovací jméno/heslo) a informaci, zda-li přihlášení bylo úspěšné.
+
+(0.50b) Jakou rychlostí byl Váš počítač schopen zkoušet WPA hesla ze slovníku darkc0de.lst ?
+
+(0.50b) Jakou dobu by na stejném počítači trvalo v nejhorším případě prolomení WPA hesla délky 8 znaků tvořeného malými znaky anglické abecedy (26 písmen) ? (připojte výpočet)
+
+Online WEP/WPA
+(0.25b) Jaké zabezpečení je použito na AP s ESSID TP-LINK_3 a na jakém kanálu vysílá ?
+
+(1.00b) Jaké je heslo pro zabezpečení provozu AP s ESSID TP-LINK_3 ?
+
+(0.50b) Jaké je IP adresa klienta připojeného k AP s ESSID TP-LINK_3?
+
+(0.25b) Jaké zabezpečení je použito na AP s ESSID TP-LINK_4 a na jakém kanálu vysílá ?
+
+(1.00b) Jaké je heslo pro zabezpečení provozu AP s ESSID TP-LINK_4 ?
+
+(0.50b) Jaké je IP adresa klienta připojeného k AP s ESSID TP-LINK_4?

@@ -95,7 +95,7 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #5B5AC3, #8A79F5, rgb(195, 177, 255));
+  background: linear-gradient(180deg, #5B5AC3, #7978d7, #a09ef4);
 
   height: 70vh;
   padding: 60px 0;
@@ -178,7 +178,7 @@ nav ul li a:hover {
 .feature-item {
   flex: 1 1 300px;
   padding: 30px;
-  background-color: #ededfc55;
+  background-color: #f3f3fd;
   border: 4px solid #5B5AC3;
   /* Yellow border */
   border-radius: 10px;
@@ -220,7 +220,7 @@ nav ul li a:hover {
 
 .features-container {
   flex-direction: column;
-  background-color: #f9fafb;
+  background-color: #f3f3fd;
   padding: 2rem;
   border-radius: 1rem;
   gap: 60px;
@@ -301,7 +301,7 @@ nav ul li a:hover {
 /* Testimonials Section */
 .testimonials {
   padding: 40px 0;
-  background-color: #f9fafb;
+  background-color: #f3f3fd;
 }
 
 .testimonials-container {
