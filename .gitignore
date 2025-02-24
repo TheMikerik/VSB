@@ -11,3 +11,6 @@
 # ZPG MODELS
 5_semester/ZPG/**/models/
 5_semester/ZPG/**/build/
+
+# ZAO
+6_semester/ZAO/template/env/
