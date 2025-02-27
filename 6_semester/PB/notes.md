@@ -17,4 +17,7 @@
       - Klient zkousi ruzna hesla ze slovniku
   
   - Online cracking vlan0
-    - 
+    -
+
+## 2
+- nmap, netcat/nc, openssl, socat
