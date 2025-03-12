@@ -1,7 +1,5 @@
 import 'dart:io';
 
-// skip: " ", "\r", "\t"
-
 List<String> tokenize(String expr) {
   List<String> tokens = [];
 
