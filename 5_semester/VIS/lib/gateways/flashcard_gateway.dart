@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:test_flutter/models/flashcard.dart';
 
 class FlashcardGateway {

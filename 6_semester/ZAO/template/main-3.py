@@ -1,4 +1,4 @@
-import cv2
+import cv2 # type: ignore
 import numpy as np
 import mss
 from pynput.mouse import Button, Controller
@@ -9,7 +9,7 @@ def main():
     w, h = template.shape[1], template.shape[0]
     mouse = Controller()
     
-    scaling_factor = 2.0
+    retina_display_scale = 2.0
     
     with mss.mss() as sct:
         monitor = sct.monitors[0]
@@ -28,7 +28,7 @@ def main():
             if max_val >= threshold:
                 center_x = max_loc[0] + w // 2
                 center_y = max_loc[1] + h // 2
-                mouse.position = (center_x / scaling_factor, center_y / scaling_factor)
+                mouse.position = (center_x / retina_display_scale, center_y / retina_display_scale)
                 time.sleep(0.02)
                 mouse.click(Button.left, 1)
                 time.sleep(0.1)

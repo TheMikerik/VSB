@@ -1,4 +1,4 @@
-import cv2 as cv
+import cv2 as cv # type: ignore
 import numpy as np
 import os
 import matplotlib.pyplot as plt
