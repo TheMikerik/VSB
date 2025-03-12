@@ -13,4 +13,8 @@
 5_semester/ZPG/**/build/
 
 # ZAO
+6_semester/ZAO/template/old/
 6_semester/ZAO/template/env/
+6_semester/ZAO/template/test-images/
+6_semester/ZAO/template/out-red/
+6_semester/ZAO/template/out-green/
