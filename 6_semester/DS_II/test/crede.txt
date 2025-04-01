@@ -1,0 +1,7 @@
+Přihlašovací jméno: RUC0066
+Přihlašovací heslo: N0RVAkpDh5ay5Xy9
+Adresa serveru: dbsys.cs.vsb.cz
+Port: 1521
+Kvóta: 256 MB
+SID: oracle
+Platnost do: 30.06.2025
