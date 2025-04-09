@@ -140,6 +140,10 @@ class Game2048:
                     return False
         return True
 
+    def get_highest_tile(self):
+        """Return the value of the highest tile on the board."""
+        return max(max(row) for row in self.board)
+
     def draw(self):
         """Draw the game board, tiles, and score."""
         self.screen.fill(BACKGROUND_COLOR)
@@ -193,7 +197,9 @@ class Game2048:
                     pygame.display.update()
 
                 if self.game_over():
+                    highest_tile = self.get_highest_tile()
                     print(f"FINAL_SCORE: {self.score}")
+                    print(f"HIGHEST_TILE: {highest_tile}")
                     running = False
             else:
                 # ruční ovládání přes šipky
@@ -220,4 +226,3 @@ if __name__ == "__main__":
         solver = importlib.import_module(solver_module_name)
     game = Game2048(solver=solver)
     game.run()
-
