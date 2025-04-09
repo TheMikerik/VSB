@@ -1,0 +1,9 @@
+U vsech outputu mi to ukazuje tutez lokaci:
+
+Ostrava, Czechia
+
+'GPSInfo': {0: b'\x02\x03\x00\x00',
+  1: 'N',
+  2: (49.0, 49.0, 59.73762010347376),
+  3: 'E',
+  4: (18.0, 9.0, 41.88144539179862)},

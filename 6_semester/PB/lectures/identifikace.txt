@@ -1,0 +1,10 @@
+----------- Output 0:
+gyroskopický modul
+
+
+----------- Output 1:
+analogový řídicí modul
+
+
+----------- Output 2:
+řízená raketa

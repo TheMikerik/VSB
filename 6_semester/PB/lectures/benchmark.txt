@@ -1,0 +1,2 @@
+Rychlost zpracování: 111.390583 MB/s
+Způsob měření: std::chrono + velikost bufferu / čas zpracování
