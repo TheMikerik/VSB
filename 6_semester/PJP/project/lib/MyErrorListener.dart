@@ -12,7 +12,7 @@ class MyErrorListener extends BaseErrorListener {
     String msg,
     RecognitionException? e,
   ) {
-    errors.add("Line ${line ?? 0}, charPos: $charPositionInLine -> $msg");
+    errors.add("Line ${line ?? 0}:$charPositionInLine -> $msg");
   }
 
   bool get hasErrors => errors.isNotEmpty;

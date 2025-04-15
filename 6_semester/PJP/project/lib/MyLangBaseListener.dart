@@ -52,6 +52,14 @@ class MyLangBaseListener implements MyLangListener {
 
   /// The default implementation does nothing.
   @override
+  void enterFwriteStatement(FwriteStatementContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
+  void exitFwriteStatement(FwriteStatementContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
   void enterIfStatement(IfStatementContext ctx) {}
 
   /// The default implementation does nothing.
@@ -113,6 +121,14 @@ class MyLangBaseListener implements MyLangListener {
   /// The default implementation does nothing.
   @override
   void exitWriteStmt(WriteStmtContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
+  void enterFwriteStmt(FwriteStmtContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
+  void exitFwriteStmt(FwriteStmtContext ctx) {}
 
   /// The default implementation does nothing.
   @override

@@ -50,6 +50,15 @@ abstract class MyLangListener extends ParseTreeListener {
   /// [ctx] the parse tree
   void exitWriteStatement(WriteStatementContext ctx);
 
+  /// Enter a parse tree produced by the [fwriteStatement]
+  /// labeled alternative in [file.parserName>.statement].
+  /// [ctx] the parse tree
+  void enterFwriteStatement(FwriteStatementContext ctx);
+  /// Exit a parse tree produced by the [fwriteStatement]
+  /// labeled alternative in [MyLangParser.statement].
+  /// [ctx] the parse tree
+  void exitFwriteStatement(FwriteStatementContext ctx);
+
   /// Enter a parse tree produced by the [ifStatement]
   /// labeled alternative in [file.parserName>.statement].
   /// [ctx] the parse tree
@@ -113,6 +122,13 @@ abstract class MyLangListener extends ParseTreeListener {
   /// Exit a parse tree produced by [MyLangParser.writeStmt].
   /// [ctx] the parse tree
   void exitWriteStmt(WriteStmtContext ctx);
+
+  /// Enter a parse tree produced by [MyLangParser.fwriteStmt].
+  /// [ctx] the parse tree
+  void enterFwriteStmt(FwriteStmtContext ctx);
+  /// Exit a parse tree produced by [MyLangParser.fwriteStmt].
+  /// [ctx] the parse tree
+  void exitFwriteStmt(FwriteStmtContext ctx);
 
   /// Enter a parse tree produced by [MyLangParser.ifStmt].
   /// [ctx] the parse tree

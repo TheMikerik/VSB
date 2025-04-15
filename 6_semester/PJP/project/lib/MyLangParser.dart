@@ -6,11 +6,11 @@ import 'MyLangListener.dart';
 import 'MyLangBaseListener.dart';
 const int RULE_program = 0, RULE_statement = 1, RULE_declarationStmt = 2, 
           RULE_variableList = 3, RULE_readStmt = 4, RULE_writeStmt = 5, 
-          RULE_ifStmt = 6, RULE_whileStmt = 7, RULE_blockStmt = 8, RULE_exprStmt = 9, 
-          RULE_exprList = 10, RULE_expression = 11, RULE_assignment = 12, 
-          RULE_logicOr = 13, RULE_logicAnd = 14, RULE_equality = 15, RULE_relational = 16, 
-          RULE_additive = 17, RULE_multiplicative = 18, RULE_unary = 19, 
-          RULE_primary = 20, RULE_type = 21;
+          RULE_fwriteStmt = 6, RULE_ifStmt = 7, RULE_whileStmt = 8, RULE_blockStmt = 9, 
+          RULE_exprStmt = 10, RULE_exprList = 11, RULE_expression = 12, 
+          RULE_assignment = 13, RULE_logicOr = 14, RULE_logicAnd = 15, RULE_equality = 16, 
+          RULE_relational = 17, RULE_additive = 18, RULE_multiplicative = 19, 
+          RULE_unary = 20, RULE_primary = 21, RULE_type = 22;
 class MyLangParser extends Parser {
   static final checkVersion = () => RuntimeMetaData.checkVersion('4.13.1', RuntimeMetaData.VERSION);
   static const int TOKEN_EOF = IntStream.EOF;
@@ -27,28 +27,28 @@ class MyLangParser extends Parser {
                    TOKEN_T__21 = 22, TOKEN_T__22 = 23, TOKEN_T__23 = 24, 
                    TOKEN_T__24 = 25, TOKEN_T__25 = 26, TOKEN_T__26 = 27, 
                    TOKEN_T__27 = 28, TOKEN_T__28 = 29, TOKEN_T__29 = 30, 
-                   TOKEN_BooleanLiteral = 31, TOKEN_IntegerLiteral = 32, 
-                   TOKEN_FloatLiteral = 33, TOKEN_StringLiteral = 34, TOKEN_FileLiteral = 35, 
-                   TOKEN_Identifier = 36, TOKEN_WS = 37, TOKEN_COMMENT = 38;
+                   TOKEN_T__30 = 31, TOKEN_BooleanLiteral = 32, TOKEN_IntegerLiteral = 33, 
+                   TOKEN_FloatLiteral = 34, TOKEN_StringLiteral = 35, TOKEN_FileLiteral = 36, 
+                   TOKEN_Identifier = 37, TOKEN_WS = 38, TOKEN_COMMENT = 39;
 
   @override
   final List<String> ruleNames = [
     'program', 'statement', 'declarationStmt', 'variableList', 'readStmt', 
-    'writeStmt', 'ifStmt', 'whileStmt', 'blockStmt', 'exprStmt', 'exprList', 
-    'expression', 'assignment', 'logicOr', 'logicAnd', 'equality', 'relational', 
-    'additive', 'multiplicative', 'unary', 'primary', 'type'
+    'writeStmt', 'fwriteStmt', 'ifStmt', 'whileStmt', 'blockStmt', 'exprStmt', 
+    'exprList', 'expression', 'assignment', 'logicOr', 'logicAnd', 'equality', 
+    'relational', 'additive', 'multiplicative', 'unary', 'primary', 'type'
   ];
 
   static final List<String?> _LITERAL_NAMES = [
-      null, "';'", "','", "'read'", "'write'", "'if'", "'('", "')'", "'else'", 
-      "'while'", "'{'", "'}'", "'='", "'||'", "'&&'", "'=='", "'!='", "'<'", 
-      "'>'", "'+'", "'-'", "'.'", "'*'", "'/'", "'%'", "'!'", "'int'", "'float'", 
-      "'bool'", "'string'", "'FILE'"
+      null, "';'", "','", "'read'", "'write'", "'fwrite'", "'if'", "'('", 
+      "')'", "'else'", "'while'", "'{'", "'}'", "'='", "'||'", "'&&'", "'=='", 
+      "'!='", "'<'", "'>'", "'+'", "'-'", "'.'", "'*'", "'/'", "'%'", "'!'", 
+      "'int'", "'float'", "'bool'", "'string'", "'file'"
   ];
   static final List<String?> _SYMBOLIC_NAMES = [
       null, null, null, null, null, null, null, null, null, null, null, 
       null, null, null, null, null, null, null, null, null, null, null, 
-      null, null, null, null, null, null, null, null, null, "BooleanLiteral", 
+      null, null, null, null, null, null, null, null, null, null, "BooleanLiteral", 
       "IntegerLiteral", "FloatLiteral", "StringLiteral", "FileLiteral", 
       "Identifier", "WS", "COMMENT"
   ];
@@ -80,17 +80,17 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 47;
+      state = 49;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 137406449274) != 0)) {
-        state = 44;
+      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 274812898554) != 0)) {
+        state = 46;
         statement();
-        state = 49;
+        state = 51;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
-      state = 50;
+      state = 52;
       match(TOKEN_EOF);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -106,58 +106,64 @@ class MyLangParser extends Parser {
     dynamic _localctx = StatementContext(context, state);
     enterRule(_localctx, 2, RULE_statement);
     try {
-      state = 60;
+      state = 63;
       errorHandler.sync(this);
       switch (tokenStream.LA(1)!) {
       case TOKEN_T__0:
         _localctx = EmptyStatementContext(_localctx);
         enterOuterAlt(_localctx, 1);
-        state = 52;
+        state = 54;
         match(TOKEN_T__0);
         break;
-      case TOKEN_T__25:
       case TOKEN_T__26:
       case TOKEN_T__27:
       case TOKEN_T__28:
       case TOKEN_T__29:
+      case TOKEN_T__30:
         _localctx = DeclarationStatementContext(_localctx);
         enterOuterAlt(_localctx, 2);
-        state = 53;
+        state = 55;
         declarationStmt();
         break;
       case TOKEN_T__2:
         _localctx = ReadStatementContext(_localctx);
         enterOuterAlt(_localctx, 3);
-        state = 54;
+        state = 56;
         readStmt();
         break;
       case TOKEN_T__3:
         _localctx = WriteStatementContext(_localctx);
         enterOuterAlt(_localctx, 4);
-        state = 55;
+        state = 57;
         writeStmt();
         break;
       case TOKEN_T__4:
-        _localctx = IfStatementContext(_localctx);
+        _localctx = FwriteStatementContext(_localctx);
         enterOuterAlt(_localctx, 5);
-        state = 56;
-        ifStmt();
-        break;
-      case TOKEN_T__8:
-        _localctx = WhileStatementContext(_localctx);
-        enterOuterAlt(_localctx, 6);
-        state = 57;
-        whileStmt();
-        break;
-      case TOKEN_T__9:
-        _localctx = BlockStatementContext(_localctx);
-        enterOuterAlt(_localctx, 7);
         state = 58;
-        blockStmt();
+        fwriteStmt();
         break;
       case TOKEN_T__5:
-      case TOKEN_T__19:
-      case TOKEN_T__24:
+        _localctx = IfStatementContext(_localctx);
+        enterOuterAlt(_localctx, 6);
+        state = 59;
+        ifStmt();
+        break;
+      case TOKEN_T__9:
+        _localctx = WhileStatementContext(_localctx);
+        enterOuterAlt(_localctx, 7);
+        state = 60;
+        whileStmt();
+        break;
+      case TOKEN_T__10:
+        _localctx = BlockStatementContext(_localctx);
+        enterOuterAlt(_localctx, 8);
+        state = 61;
+        blockStmt();
+        break;
+      case TOKEN_T__6:
+      case TOKEN_T__20:
+      case TOKEN_T__25:
       case TOKEN_BooleanLiteral:
       case TOKEN_IntegerLiteral:
       case TOKEN_FloatLiteral:
@@ -165,8 +171,8 @@ class MyLangParser extends Parser {
       case TOKEN_FileLiteral:
       case TOKEN_Identifier:
         _localctx = ExpressionStatementContext(_localctx);
-        enterOuterAlt(_localctx, 8);
-        state = 59;
+        enterOuterAlt(_localctx, 9);
+        state = 62;
         exprStmt();
         break;
       default:
@@ -187,11 +193,11 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 4, RULE_declarationStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 62;
+      state = 65;
       type();
-      state = 63;
+      state = 66;
       variableList();
-      state = 64;
+      state = 67;
       match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -209,17 +215,17 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 66;
+      state = 69;
       match(TOKEN_Identifier);
-      state = 71;
+      state = 74;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while (_la == TOKEN_T__1) {
-        state = 67;
+        state = 70;
         match(TOKEN_T__1);
-        state = 68;
+        state = 71;
         match(TOKEN_Identifier);
-        state = 73;
+        state = 76;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -238,11 +244,11 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 8, RULE_readStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 74;
+      state = 77;
       match(TOKEN_T__2);
-      state = 75;
+      state = 78;
       variableList();
-      state = 76;
+      state = 79;
       match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -259,11 +265,32 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 10, RULE_writeStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 78;
+      state = 81;
       match(TOKEN_T__3);
-      state = 79;
+      state = 82;
       exprList();
-      state = 80;
+      state = 83;
+      match(TOKEN_T__0);
+    } on RecognitionException catch (re) {
+      _localctx.exception = re;
+      errorHandler.reportError(this, re);
+      errorHandler.recover(this, re);
+    } finally {
+      exitRule();
+    }
+    return _localctx;
+  }
+
+  FwriteStmtContext fwriteStmt() {
+    dynamic _localctx = FwriteStmtContext(context, state);
+    enterRule(_localctx, 12, RULE_fwriteStmt);
+    try {
+      enterOuterAlt(_localctx, 1);
+      state = 85;
+      match(TOKEN_T__4);
+      state = 86;
+      exprList();
+      state = 87;
       match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -277,26 +304,26 @@ class MyLangParser extends Parser {
 
   IfStmtContext ifStmt() {
     dynamic _localctx = IfStmtContext(context, state);
-    enterRule(_localctx, 12, RULE_ifStmt);
+    enterRule(_localctx, 14, RULE_ifStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 82;
-      match(TOKEN_T__4);
-      state = 83;
-      match(TOKEN_T__5);
-      state = 84;
-      expression();
-      state = 85;
-      match(TOKEN_T__6);
-      state = 86;
-      statement();
       state = 89;
+      match(TOKEN_T__5);
+      state = 90;
+      match(TOKEN_T__6);
+      state = 91;
+      expression();
+      state = 92;
+      match(TOKEN_T__7);
+      state = 93;
+      statement();
+      state = 96;
       errorHandler.sync(this);
       switch (interpreter!.adaptivePredict(tokenStream, 3, context)) {
       case 1:
-        state = 87;
-        match(TOKEN_T__7);
-        state = 88;
+        state = 94;
+        match(TOKEN_T__8);
+        state = 95;
         statement();
         break;
       }
@@ -312,18 +339,18 @@ class MyLangParser extends Parser {
 
   WhileStmtContext whileStmt() {
     dynamic _localctx = WhileStmtContext(context, state);
-    enterRule(_localctx, 14, RULE_whileStmt);
+    enterRule(_localctx, 16, RULE_whileStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 91;
-      match(TOKEN_T__8);
-      state = 92;
-      match(TOKEN_T__5);
-      state = 93;
-      expression();
-      state = 94;
+      state = 98;
+      match(TOKEN_T__9);
+      state = 99;
       match(TOKEN_T__6);
-      state = 95;
+      state = 100;
+      expression();
+      state = 101;
+      match(TOKEN_T__7);
+      state = 102;
       statement();
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -337,24 +364,24 @@ class MyLangParser extends Parser {
 
   BlockStmtContext blockStmt() {
     dynamic _localctx = BlockStmtContext(context, state);
-    enterRule(_localctx, 16, RULE_blockStmt);
+    enterRule(_localctx, 18, RULE_blockStmt);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 97;
-      match(TOKEN_T__9);
-      state = 101;
+      state = 104;
+      match(TOKEN_T__10);
+      state = 108;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 137406449274) != 0)) {
-        state = 98;
+      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 274812898554) != 0)) {
+        state = 105;
         statement();
-        state = 103;
+        state = 110;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
-      state = 104;
-      match(TOKEN_T__10);
+      state = 111;
+      match(TOKEN_T__11);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
       errorHandler.reportError(this, re);
@@ -367,12 +394,12 @@ class MyLangParser extends Parser {
 
   ExprStmtContext exprStmt() {
     dynamic _localctx = ExprStmtContext(context, state);
-    enterRule(_localctx, 18, RULE_exprStmt);
+    enterRule(_localctx, 20, RULE_exprStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 106;
+      state = 113;
       expression();
-      state = 107;
+      state = 114;
       match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -386,21 +413,21 @@ class MyLangParser extends Parser {
 
   ExprListContext exprList() {
     dynamic _localctx = ExprListContext(context, state);
-    enterRule(_localctx, 20, RULE_exprList);
+    enterRule(_localctx, 22, RULE_exprList);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 109;
+      state = 116;
       expression();
-      state = 114;
+      state = 121;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while (_la == TOKEN_T__1) {
-        state = 110;
+        state = 117;
         match(TOKEN_T__1);
-        state = 111;
+        state = 118;
         expression();
-        state = 116;
+        state = 123;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -416,10 +443,10 @@ class MyLangParser extends Parser {
 
   ExpressionContext expression() {
     dynamic _localctx = ExpressionContext(context, state);
-    enterRule(_localctx, 22, RULE_expression);
+    enterRule(_localctx, 24, RULE_expression);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 117;
+      state = 124;
       assignment();
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -433,19 +460,19 @@ class MyLangParser extends Parser {
 
   AssignmentContext assignment() {
     dynamic _localctx = AssignmentContext(context, state);
-    enterRule(_localctx, 24, RULE_assignment);
+    enterRule(_localctx, 26, RULE_assignment);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 119;
+      state = 126;
       logicOr();
-      state = 122;
+      state = 129;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      if (_la == TOKEN_T__11) {
-        state = 120;
-        match(TOKEN_T__11);
-        state = 121;
+      if (_la == TOKEN_T__12) {
+        state = 127;
+        match(TOKEN_T__12);
+        state = 128;
         assignment();
       }
 
@@ -461,21 +488,21 @@ class MyLangParser extends Parser {
 
   LogicOrContext logicOr() {
     dynamic _localctx = LogicOrContext(context, state);
-    enterRule(_localctx, 26, RULE_logicOr);
+    enterRule(_localctx, 28, RULE_logicOr);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 124;
+      state = 131;
       logicAnd();
-      state = 129;
+      state = 136;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while (_la == TOKEN_T__12) {
-        state = 125;
-        match(TOKEN_T__12);
-        state = 126;
+      while (_la == TOKEN_T__13) {
+        state = 132;
+        match(TOKEN_T__13);
+        state = 133;
         logicAnd();
-        state = 131;
+        state = 138;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -491,21 +518,21 @@ class MyLangParser extends Parser {
 
   LogicAndContext logicAnd() {
     dynamic _localctx = LogicAndContext(context, state);
-    enterRule(_localctx, 28, RULE_logicAnd);
+    enterRule(_localctx, 30, RULE_logicAnd);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 132;
+      state = 139;
       equality();
-      state = 137;
+      state = 144;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while (_la == TOKEN_T__13) {
-        state = 133;
-        match(TOKEN_T__13);
-        state = 134;
+      while (_la == TOKEN_T__14) {
+        state = 140;
+        match(TOKEN_T__14);
+        state = 141;
         equality();
-        state = 139;
+        state = 146;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -521,28 +548,28 @@ class MyLangParser extends Parser {
 
   EqualityContext equality() {
     dynamic _localctx = EqualityContext(context, state);
-    enterRule(_localctx, 30, RULE_equality);
+    enterRule(_localctx, 32, RULE_equality);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 140;
+      state = 147;
       relational();
-      state = 145;
+      state = 152;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while (_la == TOKEN_T__14 || _la == TOKEN_T__15) {
-        state = 141;
+      while (_la == TOKEN_T__15 || _la == TOKEN_T__16) {
+        state = 148;
         _la = tokenStream.LA(1)!;
-        if (!(_la == TOKEN_T__14 || _la == TOKEN_T__15)) {
+        if (!(_la == TOKEN_T__15 || _la == TOKEN_T__16)) {
         errorHandler.recoverInline(this);
         } else {
           if ( tokenStream.LA(1)! == IntStream.EOF ) matchedEOF = true;
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 142;
+        state = 149;
         relational();
-        state = 147;
+        state = 154;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -558,28 +585,28 @@ class MyLangParser extends Parser {
 
   RelationalContext relational() {
     dynamic _localctx = RelationalContext(context, state);
-    enterRule(_localctx, 32, RULE_relational);
+    enterRule(_localctx, 34, RULE_relational);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 148;
+      state = 155;
       additive();
-      state = 153;
+      state = 160;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while (_la == TOKEN_T__16 || _la == TOKEN_T__17) {
-        state = 149;
+      while (_la == TOKEN_T__17 || _la == TOKEN_T__18) {
+        state = 156;
         _la = tokenStream.LA(1)!;
-        if (!(_la == TOKEN_T__16 || _la == TOKEN_T__17)) {
+        if (!(_la == TOKEN_T__17 || _la == TOKEN_T__18)) {
         errorHandler.recoverInline(this);
         } else {
           if ( tokenStream.LA(1)! == IntStream.EOF ) matchedEOF = true;
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 150;
+        state = 157;
         additive();
-        state = 155;
+        state = 162;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -595,28 +622,28 @@ class MyLangParser extends Parser {
 
   AdditiveContext additive() {
     dynamic _localctx = AdditiveContext(context, state);
-    enterRule(_localctx, 34, RULE_additive);
+    enterRule(_localctx, 36, RULE_additive);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 156;
+      state = 163;
       multiplicative();
-      state = 161;
+      state = 168;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 3670016) != 0)) {
-        state = 157;
+      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 7340032) != 0)) {
+        state = 164;
         _la = tokenStream.LA(1)!;
-        if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 3670016) != 0))) {
+        if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 7340032) != 0))) {
         errorHandler.recoverInline(this);
         } else {
           if ( tokenStream.LA(1)! == IntStream.EOF ) matchedEOF = true;
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 158;
+        state = 165;
         multiplicative();
-        state = 163;
+        state = 170;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -632,28 +659,28 @@ class MyLangParser extends Parser {
 
   MultiplicativeContext multiplicative() {
     dynamic _localctx = MultiplicativeContext(context, state);
-    enterRule(_localctx, 36, RULE_multiplicative);
+    enterRule(_localctx, 38, RULE_multiplicative);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 164;
+      state = 171;
       unary();
-      state = 169;
+      state = 176;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 29360128) != 0)) {
-        state = 165;
+      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 58720256) != 0)) {
+        state = 172;
         _la = tokenStream.LA(1)!;
-        if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 29360128) != 0))) {
+        if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 58720256) != 0))) {
         errorHandler.recoverInline(this);
         } else {
           if ( tokenStream.LA(1)! == IntStream.EOF ) matchedEOF = true;
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 166;
+        state = 173;
         unary();
-        state = 171;
+        state = 178;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -669,28 +696,28 @@ class MyLangParser extends Parser {
 
   UnaryContext unary() {
     dynamic _localctx = UnaryContext(context, state);
-    enterRule(_localctx, 38, RULE_unary);
+    enterRule(_localctx, 40, RULE_unary);
     int _la;
     try {
-      state = 175;
+      state = 182;
       errorHandler.sync(this);
       switch (tokenStream.LA(1)!) {
-      case TOKEN_T__19:
-      case TOKEN_T__24:
+      case TOKEN_T__20:
+      case TOKEN_T__25:
         enterOuterAlt(_localctx, 1);
-        state = 172;
+        state = 179;
         _la = tokenStream.LA(1)!;
-        if (!(_la == TOKEN_T__19 || _la == TOKEN_T__24)) {
+        if (!(_la == TOKEN_T__20 || _la == TOKEN_T__25)) {
         errorHandler.recoverInline(this);
         } else {
           if ( tokenStream.LA(1)! == IntStream.EOF ) matchedEOF = true;
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 173;
+        state = 180;
         unary();
         break;
-      case TOKEN_T__5:
+      case TOKEN_T__6:
       case TOKEN_BooleanLiteral:
       case TOKEN_IntegerLiteral:
       case TOKEN_FloatLiteral:
@@ -698,7 +725,7 @@ class MyLangParser extends Parser {
       case TOKEN_FileLiteral:
       case TOKEN_Identifier:
         enterOuterAlt(_localctx, 2);
-        state = 174;
+        state = 181;
         primary();
         break;
       default:
@@ -716,49 +743,49 @@ class MyLangParser extends Parser {
 
   PrimaryContext primary() {
     dynamic _localctx = PrimaryContext(context, state);
-    enterRule(_localctx, 40, RULE_primary);
+    enterRule(_localctx, 42, RULE_primary);
     try {
-      state = 187;
+      state = 194;
       errorHandler.sync(this);
       switch (tokenStream.LA(1)!) {
       case TOKEN_IntegerLiteral:
         enterOuterAlt(_localctx, 1);
-        state = 177;
+        state = 184;
         match(TOKEN_IntegerLiteral);
         break;
       case TOKEN_FloatLiteral:
         enterOuterAlt(_localctx, 2);
-        state = 178;
+        state = 185;
         match(TOKEN_FloatLiteral);
         break;
       case TOKEN_BooleanLiteral:
         enterOuterAlt(_localctx, 3);
-        state = 179;
+        state = 186;
         match(TOKEN_BooleanLiteral);
         break;
       case TOKEN_StringLiteral:
         enterOuterAlt(_localctx, 4);
-        state = 180;
+        state = 187;
         match(TOKEN_StringLiteral);
         break;
       case TOKEN_FileLiteral:
         enterOuterAlt(_localctx, 5);
-        state = 181;
+        state = 188;
         match(TOKEN_FileLiteral);
         break;
       case TOKEN_Identifier:
         enterOuterAlt(_localctx, 6);
-        state = 182;
+        state = 189;
         match(TOKEN_Identifier);
         break;
-      case TOKEN_T__5:
+      case TOKEN_T__6:
         enterOuterAlt(_localctx, 7);
-        state = 183;
-        match(TOKEN_T__5);
-        state = 184;
-        expression();
-        state = 185;
+        state = 190;
         match(TOKEN_T__6);
+        state = 191;
+        expression();
+        state = 192;
+        match(TOKEN_T__7);
         break;
       default:
         throw NoViableAltException(this);
@@ -775,13 +802,13 @@ class MyLangParser extends Parser {
 
   TypeContext type() {
     dynamic _localctx = TypeContext(context, state);
-    enterRule(_localctx, 42, RULE_type);
+    enterRule(_localctx, 44, RULE_type);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 189;
+      state = 196;
       _la = tokenStream.LA(1)!;
-      if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 2080374784) != 0))) {
+      if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 4160749568) != 0))) {
       errorHandler.recoverInline(this);
       } else {
         if ( tokenStream.LA(1)! == IntStream.EOF ) matchedEOF = true;
@@ -799,69 +826,72 @@ class MyLangParser extends Parser {
   }
 
   static const List<int> _serializedATN = [
-      4,1,38,192,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,
+      4,1,39,199,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,
       2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,
       14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,
-      2,21,7,21,1,0,5,0,46,8,0,10,0,12,0,49,9,0,1,0,1,0,1,1,1,1,1,1,1,1,
-      1,1,1,1,1,1,1,1,3,1,61,8,1,1,2,1,2,1,2,1,2,1,3,1,3,1,3,5,3,70,8,3,
-      10,3,12,3,73,9,3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,6,1,6,1,6,1,6,1,
-      6,1,6,1,6,3,6,90,8,6,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,5,8,100,8,8,10,
-      8,12,8,103,9,8,1,8,1,8,1,9,1,9,1,9,1,10,1,10,1,10,5,10,113,8,10,10,
-      10,12,10,116,9,10,1,11,1,11,1,12,1,12,1,12,3,12,123,8,12,1,13,1,13,
-      1,13,5,13,128,8,13,10,13,12,13,131,9,13,1,14,1,14,1,14,5,14,136,8,
-      14,10,14,12,14,139,9,14,1,15,1,15,1,15,5,15,144,8,15,10,15,12,15,147,
-      9,15,1,16,1,16,1,16,5,16,152,8,16,10,16,12,16,155,9,16,1,17,1,17,1,
-      17,5,17,160,8,17,10,17,12,17,163,9,17,1,18,1,18,1,18,5,18,168,8,18,
-      10,18,12,18,171,9,18,1,19,1,19,1,19,3,19,176,8,19,1,20,1,20,1,20,1,
-      20,1,20,1,20,1,20,1,20,1,20,1,20,3,20,188,8,20,1,21,1,21,1,21,0,0,
-      22,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,0,
-      6,1,0,15,16,1,0,17,18,1,0,19,21,1,0,22,24,2,0,20,20,25,25,1,0,26,30,
-      195,0,47,1,0,0,0,2,60,1,0,0,0,4,62,1,0,0,0,6,66,1,0,0,0,8,74,1,0,0,
-      0,10,78,1,0,0,0,12,82,1,0,0,0,14,91,1,0,0,0,16,97,1,0,0,0,18,106,1,
-      0,0,0,20,109,1,0,0,0,22,117,1,0,0,0,24,119,1,0,0,0,26,124,1,0,0,0,
-      28,132,1,0,0,0,30,140,1,0,0,0,32,148,1,0,0,0,34,156,1,0,0,0,36,164,
-      1,0,0,0,38,175,1,0,0,0,40,187,1,0,0,0,42,189,1,0,0,0,44,46,3,2,1,0,
-      45,44,1,0,0,0,46,49,1,0,0,0,47,45,1,0,0,0,47,48,1,0,0,0,48,50,1,0,
-      0,0,49,47,1,0,0,0,50,51,5,0,0,1,51,1,1,0,0,0,52,61,5,1,0,0,53,61,3,
-      4,2,0,54,61,3,8,4,0,55,61,3,10,5,0,56,61,3,12,6,0,57,61,3,14,7,0,58,
-      61,3,16,8,0,59,61,3,18,9,0,60,52,1,0,0,0,60,53,1,0,0,0,60,54,1,0,0,
-      0,60,55,1,0,0,0,60,56,1,0,0,0,60,57,1,0,0,0,60,58,1,0,0,0,60,59,1,
-      0,0,0,61,3,1,0,0,0,62,63,3,42,21,0,63,64,3,6,3,0,64,65,5,1,0,0,65,
-      5,1,0,0,0,66,71,5,36,0,0,67,68,5,2,0,0,68,70,5,36,0,0,69,67,1,0,0,
-      0,70,73,1,0,0,0,71,69,1,0,0,0,71,72,1,0,0,0,72,7,1,0,0,0,73,71,1,0,
-      0,0,74,75,5,3,0,0,75,76,3,6,3,0,76,77,5,1,0,0,77,9,1,0,0,0,78,79,5,
-      4,0,0,79,80,3,20,10,0,80,81,5,1,0,0,81,11,1,0,0,0,82,83,5,5,0,0,83,
-      84,5,6,0,0,84,85,3,22,11,0,85,86,5,7,0,0,86,89,3,2,1,0,87,88,5,8,0,
-      0,88,90,3,2,1,0,89,87,1,0,0,0,89,90,1,0,0,0,90,13,1,0,0,0,91,92,5,
-      9,0,0,92,93,5,6,0,0,93,94,3,22,11,0,94,95,5,7,0,0,95,96,3,2,1,0,96,
-      15,1,0,0,0,97,101,5,10,0,0,98,100,3,2,1,0,99,98,1,0,0,0,100,103,1,
-      0,0,0,101,99,1,0,0,0,101,102,1,0,0,0,102,104,1,0,0,0,103,101,1,0,0,
-      0,104,105,5,11,0,0,105,17,1,0,0,0,106,107,3,22,11,0,107,108,5,1,0,
-      0,108,19,1,0,0,0,109,114,3,22,11,0,110,111,5,2,0,0,111,113,3,22,11,
-      0,112,110,1,0,0,0,113,116,1,0,0,0,114,112,1,0,0,0,114,115,1,0,0,0,
-      115,21,1,0,0,0,116,114,1,0,0,0,117,118,3,24,12,0,118,23,1,0,0,0,119,
-      122,3,26,13,0,120,121,5,12,0,0,121,123,3,24,12,0,122,120,1,0,0,0,122,
-      123,1,0,0,0,123,25,1,0,0,0,124,129,3,28,14,0,125,126,5,13,0,0,126,
-      128,3,28,14,0,127,125,1,0,0,0,128,131,1,0,0,0,129,127,1,0,0,0,129,
-      130,1,0,0,0,130,27,1,0,0,0,131,129,1,0,0,0,132,137,3,30,15,0,133,134,
-      5,14,0,0,134,136,3,30,15,0,135,133,1,0,0,0,136,139,1,0,0,0,137,135,
-      1,0,0,0,137,138,1,0,0,0,138,29,1,0,0,0,139,137,1,0,0,0,140,145,3,32,
-      16,0,141,142,7,0,0,0,142,144,3,32,16,0,143,141,1,0,0,0,144,147,1,0,
-      0,0,145,143,1,0,0,0,145,146,1,0,0,0,146,31,1,0,0,0,147,145,1,0,0,0,
-      148,153,3,34,17,0,149,150,7,1,0,0,150,152,3,34,17,0,151,149,1,0,0,
-      0,152,155,1,0,0,0,153,151,1,0,0,0,153,154,1,0,0,0,154,33,1,0,0,0,155,
-      153,1,0,0,0,156,161,3,36,18,0,157,158,7,2,0,0,158,160,3,36,18,0,159,
-      157,1,0,0,0,160,163,1,0,0,0,161,159,1,0,0,0,161,162,1,0,0,0,162,35,
-      1,0,0,0,163,161,1,0,0,0,164,169,3,38,19,0,165,166,7,3,0,0,166,168,
-      3,38,19,0,167,165,1,0,0,0,168,171,1,0,0,0,169,167,1,0,0,0,169,170,
-      1,0,0,0,170,37,1,0,0,0,171,169,1,0,0,0,172,173,7,4,0,0,173,176,3,38,
-      19,0,174,176,3,40,20,0,175,172,1,0,0,0,175,174,1,0,0,0,176,39,1,0,
-      0,0,177,188,5,32,0,0,178,188,5,33,0,0,179,188,5,31,0,0,180,188,5,34,
-      0,0,181,188,5,35,0,0,182,188,5,36,0,0,183,184,5,6,0,0,184,185,3,22,
-      11,0,185,186,5,7,0,0,186,188,1,0,0,0,187,177,1,0,0,0,187,178,1,0,0,
-      0,187,179,1,0,0,0,187,180,1,0,0,0,187,181,1,0,0,0,187,182,1,0,0,0,
-      187,183,1,0,0,0,188,41,1,0,0,0,189,190,7,5,0,0,190,43,1,0,0,0,15,47,
-      60,71,89,101,114,122,129,137,145,153,161,169,175,187
+      2,21,7,21,2,22,7,22,1,0,5,0,48,8,0,10,0,12,0,51,9,0,1,0,1,0,1,1,1,
+      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,64,8,1,1,2,1,2,1,2,1,2,1,3,1,3,1,
+      3,5,3,73,8,3,10,3,12,3,76,9,3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,6,
+      1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,97,8,7,1,8,1,8,1,8,1,8,
+      1,8,1,8,1,9,1,9,5,9,107,8,9,10,9,12,9,110,9,9,1,9,1,9,1,10,1,10,1,
+      10,1,11,1,11,1,11,5,11,120,8,11,10,11,12,11,123,9,11,1,12,1,12,1,13,
+      1,13,1,13,3,13,130,8,13,1,14,1,14,1,14,5,14,135,8,14,10,14,12,14,138,
+      9,14,1,15,1,15,1,15,5,15,143,8,15,10,15,12,15,146,9,15,1,16,1,16,1,
+      16,5,16,151,8,16,10,16,12,16,154,9,16,1,17,1,17,1,17,5,17,159,8,17,
+      10,17,12,17,162,9,17,1,18,1,18,1,18,5,18,167,8,18,10,18,12,18,170,
+      9,18,1,19,1,19,1,19,5,19,175,8,19,10,19,12,19,178,9,19,1,20,1,20,1,
+      20,3,20,183,8,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,
+      3,21,195,8,21,1,22,1,22,1,22,0,0,23,0,2,4,6,8,10,12,14,16,18,20,22,
+      24,26,28,30,32,34,36,38,40,42,44,0,6,1,0,16,17,1,0,18,19,1,0,20,22,
+      1,0,23,25,2,0,21,21,26,26,1,0,27,31,202,0,49,1,0,0,0,2,63,1,0,0,0,
+      4,65,1,0,0,0,6,69,1,0,0,0,8,77,1,0,0,0,10,81,1,0,0,0,12,85,1,0,0,0,
+      14,89,1,0,0,0,16,98,1,0,0,0,18,104,1,0,0,0,20,113,1,0,0,0,22,116,1,
+      0,0,0,24,124,1,0,0,0,26,126,1,0,0,0,28,131,1,0,0,0,30,139,1,0,0,0,
+      32,147,1,0,0,0,34,155,1,0,0,0,36,163,1,0,0,0,38,171,1,0,0,0,40,182,
+      1,0,0,0,42,194,1,0,0,0,44,196,1,0,0,0,46,48,3,2,1,0,47,46,1,0,0,0,
+      48,51,1,0,0,0,49,47,1,0,0,0,49,50,1,0,0,0,50,52,1,0,0,0,51,49,1,0,
+      0,0,52,53,5,0,0,1,53,1,1,0,0,0,54,64,5,1,0,0,55,64,3,4,2,0,56,64,3,
+      8,4,0,57,64,3,10,5,0,58,64,3,12,6,0,59,64,3,14,7,0,60,64,3,16,8,0,
+      61,64,3,18,9,0,62,64,3,20,10,0,63,54,1,0,0,0,63,55,1,0,0,0,63,56,1,
+      0,0,0,63,57,1,0,0,0,63,58,1,0,0,0,63,59,1,0,0,0,63,60,1,0,0,0,63,61,
+      1,0,0,0,63,62,1,0,0,0,64,3,1,0,0,0,65,66,3,44,22,0,66,67,3,6,3,0,67,
+      68,5,1,0,0,68,5,1,0,0,0,69,74,5,37,0,0,70,71,5,2,0,0,71,73,5,37,0,
+      0,72,70,1,0,0,0,73,76,1,0,0,0,74,72,1,0,0,0,74,75,1,0,0,0,75,7,1,0,
+      0,0,76,74,1,0,0,0,77,78,5,3,0,0,78,79,3,6,3,0,79,80,5,1,0,0,80,9,1,
+      0,0,0,81,82,5,4,0,0,82,83,3,22,11,0,83,84,5,1,0,0,84,11,1,0,0,0,85,
+      86,5,5,0,0,86,87,3,22,11,0,87,88,5,1,0,0,88,13,1,0,0,0,89,90,5,6,0,
+      0,90,91,5,7,0,0,91,92,3,24,12,0,92,93,5,8,0,0,93,96,3,2,1,0,94,95,
+      5,9,0,0,95,97,3,2,1,0,96,94,1,0,0,0,96,97,1,0,0,0,97,15,1,0,0,0,98,
+      99,5,10,0,0,99,100,5,7,0,0,100,101,3,24,12,0,101,102,5,8,0,0,102,103,
+      3,2,1,0,103,17,1,0,0,0,104,108,5,11,0,0,105,107,3,2,1,0,106,105,1,
+      0,0,0,107,110,1,0,0,0,108,106,1,0,0,0,108,109,1,0,0,0,109,111,1,0,
+      0,0,110,108,1,0,0,0,111,112,5,12,0,0,112,19,1,0,0,0,113,114,3,24,12,
+      0,114,115,5,1,0,0,115,21,1,0,0,0,116,121,3,24,12,0,117,118,5,2,0,0,
+      118,120,3,24,12,0,119,117,1,0,0,0,120,123,1,0,0,0,121,119,1,0,0,0,
+      121,122,1,0,0,0,122,23,1,0,0,0,123,121,1,0,0,0,124,125,3,26,13,0,125,
+      25,1,0,0,0,126,129,3,28,14,0,127,128,5,13,0,0,128,130,3,26,13,0,129,
+      127,1,0,0,0,129,130,1,0,0,0,130,27,1,0,0,0,131,136,3,30,15,0,132,133,
+      5,14,0,0,133,135,3,30,15,0,134,132,1,0,0,0,135,138,1,0,0,0,136,134,
+      1,0,0,0,136,137,1,0,0,0,137,29,1,0,0,0,138,136,1,0,0,0,139,144,3,32,
+      16,0,140,141,5,15,0,0,141,143,3,32,16,0,142,140,1,0,0,0,143,146,1,
+      0,0,0,144,142,1,0,0,0,144,145,1,0,0,0,145,31,1,0,0,0,146,144,1,0,0,
+      0,147,152,3,34,17,0,148,149,7,0,0,0,149,151,3,34,17,0,150,148,1,0,
+      0,0,151,154,1,0,0,0,152,150,1,0,0,0,152,153,1,0,0,0,153,33,1,0,0,0,
+      154,152,1,0,0,0,155,160,3,36,18,0,156,157,7,1,0,0,157,159,3,36,18,
+      0,158,156,1,0,0,0,159,162,1,0,0,0,160,158,1,0,0,0,160,161,1,0,0,0,
+      161,35,1,0,0,0,162,160,1,0,0,0,163,168,3,38,19,0,164,165,7,2,0,0,165,
+      167,3,38,19,0,166,164,1,0,0,0,167,170,1,0,0,0,168,166,1,0,0,0,168,
+      169,1,0,0,0,169,37,1,0,0,0,170,168,1,0,0,0,171,176,3,40,20,0,172,173,
+      7,3,0,0,173,175,3,40,20,0,174,172,1,0,0,0,175,178,1,0,0,0,176,174,
+      1,0,0,0,176,177,1,0,0,0,177,39,1,0,0,0,178,176,1,0,0,0,179,180,7,4,
+      0,0,180,183,3,40,20,0,181,183,3,42,21,0,182,179,1,0,0,0,182,181,1,
+      0,0,0,183,41,1,0,0,0,184,195,5,33,0,0,185,195,5,34,0,0,186,195,5,32,
+      0,0,187,195,5,35,0,0,188,195,5,36,0,0,189,195,5,37,0,0,190,191,5,7,
+      0,0,191,192,3,24,12,0,192,193,5,8,0,0,193,195,1,0,0,0,194,184,1,0,
+      0,0,194,185,1,0,0,0,194,186,1,0,0,0,194,187,1,0,0,0,194,188,1,0,0,
+      0,194,189,1,0,0,0,194,190,1,0,0,0,195,43,1,0,0,0,196,197,7,5,0,0,197,
+      45,1,0,0,0,15,49,63,74,96,108,121,129,136,144,152,160,168,176,182,
+      194
   ];
 
   static final ATN _ATN =
@@ -954,6 +984,21 @@ class WriteStmtContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitWriteStmt(this);
+  }
+}
+
+class FwriteStmtContext extends ParserRuleContext {
+  ExprListContext? exprList() => getRuleContext<ExprListContext>(0);
+  FwriteStmtContext([ParserRuleContext? parent, int? invokingState]) : super(parent, invokingState);
+  @override
+  int get ruleIndex => RULE_fwriteStmt;
+  @override
+  void enterRule(ParseTreeListener listener) {
+    if (listener is MyLangListener) listener.enterFwriteStmt(this);
+  }
+  @override
+  void exitRule(ParseTreeListener listener) {
+    if (listener is MyLangListener) listener.exitFwriteStmt(this);
   }
 }
 
@@ -1276,6 +1321,19 @@ class BlockStatementContext extends StatementContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitBlockStatement(this);
+  }
+}
+
+class FwriteStatementContext extends StatementContext {
+  FwriteStmtContext? fwriteStmt() => getRuleContext<FwriteStmtContext>(0);
+  FwriteStatementContext(StatementContext ctx) { copyFrom(ctx); }
+  @override
+  void enterRule(ParseTreeListener listener) {
+    if (listener is MyLangListener) listener.enterFwriteStatement(this);
+  }
+  @override
+  void exitRule(ParseTreeListener listener) {
+    if (listener is MyLangListener) listener.exitFwriteStatement(this);
   }
 }
 
