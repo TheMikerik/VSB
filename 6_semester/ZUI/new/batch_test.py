@@ -1,7 +1,7 @@
 import subprocess
 import re
 
-NUM_RUNS = 30
+NUM_RUNS = 6
 SOLVERS = ['rand', 'minmax', 'monte']
 all_results = {}
 

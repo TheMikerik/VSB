@@ -35,10 +35,6 @@ class MyLangBaseVisitor<T> extends ParseTreeVisitor<T> implements MyLangVisitor<
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
   @override
-  T? visitFwriteStatement(FwriteStatementContext ctx) => visitChildren(ctx);
-  /// The default implementation returns the result of calling
-  /// [visitChildren] on [ctx].
-  @override
   T? visitIfStatement(IfStatementContext ctx) => visitChildren(ctx);
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
@@ -51,6 +47,10 @@ class MyLangBaseVisitor<T> extends ParseTreeVisitor<T> implements MyLangVisitor<
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
   @override
+  T? visitFopenStatement(FopenStatementContext ctx) => visitChildren(ctx);
+  /// The default implementation returns the result of calling
+  /// [visitChildren] on [ctx].
+  @override
   T? visitExpressionStatement(ExpressionStatementContext ctx) => visitChildren(ctx);
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
@@ -59,7 +59,7 @@ class MyLangBaseVisitor<T> extends ParseTreeVisitor<T> implements MyLangVisitor<
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
   @override
-  T? visitVariableList(VariableListContext ctx) => visitChildren(ctx);
+  T? visitFopenStmt(FopenStmtContext ctx) => visitChildren(ctx);
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
   @override
@@ -68,10 +68,6 @@ class MyLangBaseVisitor<T> extends ParseTreeVisitor<T> implements MyLangVisitor<
   /// [visitChildren] on [ctx].
   @override
   T? visitWriteStmt(WriteStmtContext ctx) => visitChildren(ctx);
-  /// The default implementation returns the result of calling
-  /// [visitChildren] on [ctx].
-  @override
-  T? visitFwriteStmt(FwriteStmtContext ctx) => visitChildren(ctx);
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
   @override
@@ -88,6 +84,10 @@ class MyLangBaseVisitor<T> extends ParseTreeVisitor<T> implements MyLangVisitor<
   /// [visitChildren] on [ctx].
   @override
   T? visitExprStmt(ExprStmtContext ctx) => visitChildren(ctx);
+  /// The default implementation returns the result of calling
+  /// [visitChildren] on [ctx].
+  @override
+  T? visitVariableList(VariableListContext ctx) => visitChildren(ctx);
   /// The default implementation returns the result of calling
   /// [visitChildren] on [ctx].
   @override

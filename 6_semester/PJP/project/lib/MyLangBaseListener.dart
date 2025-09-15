@@ -52,14 +52,6 @@ class MyLangBaseListener implements MyLangListener {
 
   /// The default implementation does nothing.
   @override
-  void enterFwriteStatement(FwriteStatementContext ctx) {}
-
-  /// The default implementation does nothing.
-  @override
-  void exitFwriteStatement(FwriteStatementContext ctx) {}
-
-  /// The default implementation does nothing.
-  @override
   void enterIfStatement(IfStatementContext ctx) {}
 
   /// The default implementation does nothing.
@@ -84,6 +76,14 @@ class MyLangBaseListener implements MyLangListener {
 
   /// The default implementation does nothing.
   @override
+  void enterFopenStatement(FopenStatementContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
+  void exitFopenStatement(FopenStatementContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
   void enterExpressionStatement(ExpressionStatementContext ctx) {}
 
   /// The default implementation does nothing.
@@ -100,11 +100,11 @@ class MyLangBaseListener implements MyLangListener {
 
   /// The default implementation does nothing.
   @override
-  void enterVariableList(VariableListContext ctx) {}
+  void enterFopenStmt(FopenStmtContext ctx) {}
 
   /// The default implementation does nothing.
   @override
-  void exitVariableList(VariableListContext ctx) {}
+  void exitFopenStmt(FopenStmtContext ctx) {}
 
   /// The default implementation does nothing.
   @override
@@ -121,14 +121,6 @@ class MyLangBaseListener implements MyLangListener {
   /// The default implementation does nothing.
   @override
   void exitWriteStmt(WriteStmtContext ctx) {}
-
-  /// The default implementation does nothing.
-  @override
-  void enterFwriteStmt(FwriteStmtContext ctx) {}
-
-  /// The default implementation does nothing.
-  @override
-  void exitFwriteStmt(FwriteStmtContext ctx) {}
 
   /// The default implementation does nothing.
   @override
@@ -161,6 +153,14 @@ class MyLangBaseListener implements MyLangListener {
   /// The default implementation does nothing.
   @override
   void exitExprStmt(ExprStmtContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
+  void enterVariableList(VariableListContext ctx) {}
+
+  /// The default implementation does nothing.
+  @override
+  void exitVariableList(VariableListContext ctx) {}
 
   /// The default implementation does nothing.
   @override

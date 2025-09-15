@@ -1,0 +1,21 @@
+push F 0.0
+save d
+push F 3.141592
+save d
+load d
+pop
+push S "d(3.141592): "
+load d
+print 2
+push I 0
+save n
+push I 500
+uminus I
+save n
+load n
+pop
+push S "n(-500): "
+load n
+print 2
+push S ""
+print 1

@@ -39,12 +39,6 @@ abstract class MyLangVisitor<T> extends ParseTreeVisitor<T> {
   /// Return the visitor result.
   T? visitWriteStatement(WriteStatementContext ctx);
 
-  /// Visit a parse tree produced by the {@code fwriteStatement}
-  /// labeled alternative in {@link MyLangParser#statement}.
-  /// [ctx] the parse tree.
-  /// Return the visitor result.
-  T? visitFwriteStatement(FwriteStatementContext ctx);
-
   /// Visit a parse tree produced by the {@code ifStatement}
   /// labeled alternative in {@link MyLangParser#statement}.
   /// [ctx] the parse tree.
@@ -63,6 +57,12 @@ abstract class MyLangVisitor<T> extends ParseTreeVisitor<T> {
   /// Return the visitor result.
   T? visitBlockStatement(BlockStatementContext ctx);
 
+  /// Visit a parse tree produced by the {@code fopenStatement}
+  /// labeled alternative in {@link MyLangParser#statement}.
+  /// [ctx] the parse tree.
+  /// Return the visitor result.
+  T? visitFopenStatement(FopenStatementContext ctx);
+
   /// Visit a parse tree produced by the {@code expressionStatement}
   /// labeled alternative in {@link MyLangParser#statement}.
   /// [ctx] the parse tree.
@@ -74,10 +74,10 @@ abstract class MyLangVisitor<T> extends ParseTreeVisitor<T> {
   /// Return the visitor result.
   T? visitDeclarationStmt(DeclarationStmtContext ctx);
 
-  /// Visit a parse tree produced by [MyLangParser.variableList].
+  /// Visit a parse tree produced by [MyLangParser.fopenStmt].
   /// [ctx] the parse tree.
   /// Return the visitor result.
-  T? visitVariableList(VariableListContext ctx);
+  T? visitFopenStmt(FopenStmtContext ctx);
 
   /// Visit a parse tree produced by [MyLangParser.readStmt].
   /// [ctx] the parse tree.
@@ -88,11 +88,6 @@ abstract class MyLangVisitor<T> extends ParseTreeVisitor<T> {
   /// [ctx] the parse tree.
   /// Return the visitor result.
   T? visitWriteStmt(WriteStmtContext ctx);
-
-  /// Visit a parse tree produced by [MyLangParser.fwriteStmt].
-  /// [ctx] the parse tree.
-  /// Return the visitor result.
-  T? visitFwriteStmt(FwriteStmtContext ctx);
 
   /// Visit a parse tree produced by [MyLangParser.ifStmt].
   /// [ctx] the parse tree.
@@ -113,6 +108,11 @@ abstract class MyLangVisitor<T> extends ParseTreeVisitor<T> {
   /// [ctx] the parse tree.
   /// Return the visitor result.
   T? visitExprStmt(ExprStmtContext ctx);
+
+  /// Visit a parse tree produced by [MyLangParser.variableList].
+  /// [ctx] the parse tree.
+  /// Return the visitor result.
+  T? visitVariableList(VariableListContext ctx);
 
   /// Visit a parse tree produced by [MyLangParser.exprList].
   /// [ctx] the parse tree.

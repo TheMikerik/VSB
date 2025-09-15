@@ -4,13 +4,15 @@ import 'package:antlr4/antlr4.dart';
 
 import 'MyLangListener.dart';
 import 'MyLangBaseListener.dart';
+import 'MyLangVisitor.dart';
+import 'MyLangBaseVisitor.dart';
 const int RULE_program = 0, RULE_statement = 1, RULE_declarationStmt = 2, 
-          RULE_variableList = 3, RULE_readStmt = 4, RULE_writeStmt = 5, 
-          RULE_fwriteStmt = 6, RULE_ifStmt = 7, RULE_whileStmt = 8, RULE_blockStmt = 9, 
-          RULE_exprStmt = 10, RULE_exprList = 11, RULE_expression = 12, 
-          RULE_assignment = 13, RULE_logicOr = 14, RULE_logicAnd = 15, RULE_equality = 16, 
-          RULE_relational = 17, RULE_additive = 18, RULE_multiplicative = 19, 
-          RULE_unary = 20, RULE_primary = 21, RULE_type = 22;
+          RULE_fopenStmt = 3, RULE_readStmt = 4, RULE_writeStmt = 5, RULE_ifStmt = 6, 
+          RULE_whileStmt = 7, RULE_blockStmt = 8, RULE_exprStmt = 9, RULE_variableList = 10, 
+          RULE_exprList = 11, RULE_expression = 12, RULE_assignment = 13, 
+          RULE_logicOr = 14, RULE_logicAnd = 15, RULE_equality = 16, RULE_relational = 17, 
+          RULE_additive = 18, RULE_multiplicative = 19, RULE_unary = 20, 
+          RULE_primary = 21, RULE_type = 22;
 class MyLangParser extends Parser {
   static final checkVersion = () => RuntimeMetaData.checkVersion('4.13.1', RuntimeMetaData.VERSION);
   static const int TOKEN_EOF = IntStream.EOF;
@@ -27,30 +29,29 @@ class MyLangParser extends Parser {
                    TOKEN_T__21 = 22, TOKEN_T__22 = 23, TOKEN_T__23 = 24, 
                    TOKEN_T__24 = 25, TOKEN_T__25 = 26, TOKEN_T__26 = 27, 
                    TOKEN_T__27 = 28, TOKEN_T__28 = 29, TOKEN_T__29 = 30, 
-                   TOKEN_T__30 = 31, TOKEN_BooleanLiteral = 32, TOKEN_IntegerLiteral = 33, 
-                   TOKEN_FloatLiteral = 34, TOKEN_StringLiteral = 35, TOKEN_FileLiteral = 36, 
-                   TOKEN_Identifier = 37, TOKEN_WS = 38, TOKEN_COMMENT = 39;
+                   TOKEN_T__30 = 31, TOKEN_BOOL = 32, TOKEN_INT = 33, TOKEN_FLOAT = 34, 
+                   TOKEN_STRING = 35, TOKEN_FILE = 36, TOKEN_Identifier = 37, 
+                   TOKEN_WS = 38, TOKEN_COMMENT = 39;
 
   @override
   final List<String> ruleNames = [
-    'program', 'statement', 'declarationStmt', 'variableList', 'readStmt', 
-    'writeStmt', 'fwriteStmt', 'ifStmt', 'whileStmt', 'blockStmt', 'exprStmt', 
+    'program', 'statement', 'declarationStmt', 'fopenStmt', 'readStmt', 
+    'writeStmt', 'ifStmt', 'whileStmt', 'blockStmt', 'exprStmt', 'variableList', 
     'exprList', 'expression', 'assignment', 'logicOr', 'logicAnd', 'equality', 
     'relational', 'additive', 'multiplicative', 'unary', 'primary', 'type'
   ];
 
   static final List<String?> _LITERAL_NAMES = [
-      null, "';'", "','", "'read'", "'write'", "'fwrite'", "'if'", "'('", 
-      "')'", "'else'", "'while'", "'{'", "'}'", "'='", "'||'", "'&&'", "'=='", 
+      null, "';'", "'fopen'", "'read'", "'write'", "'if'", "'('", "')'", 
+      "'else'", "'while'", "'{'", "'}'", "','", "'='", "'||'", "'&&'", "'=='", 
       "'!='", "'<'", "'>'", "'+'", "'-'", "'.'", "'*'", "'/'", "'%'", "'!'", 
       "'int'", "'float'", "'bool'", "'string'", "'file'"
   ];
   static final List<String?> _SYMBOLIC_NAMES = [
       null, null, null, null, null, null, null, null, null, null, null, 
       null, null, null, null, null, null, null, null, null, null, null, 
-      null, null, null, null, null, null, null, null, null, null, "BooleanLiteral", 
-      "IntegerLiteral", "FloatLiteral", "StringLiteral", "FileLiteral", 
-      "Identifier", "WS", "COMMENT"
+      null, null, null, null, null, null, null, null, null, null, "BOOL", 
+      "INT", "FLOAT", "STRING", "FILE", "Identifier", "WS", "COMMENT"
   ];
   static final Vocabulary VOCABULARY = VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -83,7 +84,7 @@ class MyLangParser extends Parser {
       state = 49;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 274812898554) != 0)) {
+      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 274812896894) != 0)) {
         state = 46;
         statement();
         state = 51;
@@ -138,37 +139,37 @@ class MyLangParser extends Parser {
         writeStmt();
         break;
       case TOKEN_T__4:
-        _localctx = FwriteStatementContext(_localctx);
+        _localctx = IfStatementContext(_localctx);
         enterOuterAlt(_localctx, 5);
         state = 58;
-        fwriteStmt();
-        break;
-      case TOKEN_T__5:
-        _localctx = IfStatementContext(_localctx);
-        enterOuterAlt(_localctx, 6);
-        state = 59;
         ifStmt();
         break;
-      case TOKEN_T__9:
+      case TOKEN_T__8:
         _localctx = WhileStatementContext(_localctx);
-        enterOuterAlt(_localctx, 7);
-        state = 60;
+        enterOuterAlt(_localctx, 6);
+        state = 59;
         whileStmt();
         break;
-      case TOKEN_T__10:
+      case TOKEN_T__9:
         _localctx = BlockStatementContext(_localctx);
-        enterOuterAlt(_localctx, 8);
-        state = 61;
+        enterOuterAlt(_localctx, 7);
+        state = 60;
         blockStmt();
         break;
-      case TOKEN_T__6:
+      case TOKEN_T__1:
+        _localctx = FopenStatementContext(_localctx);
+        enterOuterAlt(_localctx, 8);
+        state = 61;
+        fopenStmt();
+        break;
+      case TOKEN_T__5:
       case TOKEN_T__20:
       case TOKEN_T__25:
-      case TOKEN_BooleanLiteral:
-      case TOKEN_IntegerLiteral:
-      case TOKEN_FloatLiteral:
-      case TOKEN_StringLiteral:
-      case TOKEN_FileLiteral:
+      case TOKEN_BOOL:
+      case TOKEN_INT:
+      case TOKEN_FLOAT:
+      case TOKEN_STRING:
+      case TOKEN_FILE:
       case TOKEN_Identifier:
         _localctx = ExpressionStatementContext(_localctx);
         enterOuterAlt(_localctx, 9);
@@ -209,26 +210,19 @@ class MyLangParser extends Parser {
     return _localctx;
   }
 
-  VariableListContext variableList() {
-    dynamic _localctx = VariableListContext(context, state);
-    enterRule(_localctx, 6, RULE_variableList);
-    int _la;
+  FopenStmtContext fopenStmt() {
+    dynamic _localctx = FopenStmtContext(context, state);
+    enterRule(_localctx, 6, RULE_fopenStmt);
     try {
       enterOuterAlt(_localctx, 1);
       state = 69;
+      match(TOKEN_T__1);
+      state = 70;
       match(TOKEN_Identifier);
-      state = 74;
-      errorHandler.sync(this);
-      _la = tokenStream.LA(1)!;
-      while (_la == TOKEN_T__1) {
-        state = 70;
-        match(TOKEN_T__1);
-        state = 71;
-        match(TOKEN_Identifier);
-        state = 76;
-        errorHandler.sync(this);
-        _la = tokenStream.LA(1)!;
-      }
+      state = 71;
+      match(TOKEN_STRING);
+      state = 72;
+      match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
       errorHandler.reportError(this, re);
@@ -244,11 +238,11 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 8, RULE_readStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 77;
+      state = 74;
       match(TOKEN_T__2);
-      state = 78;
+      state = 75;
       variableList();
-      state = 79;
+      state = 76;
       match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -265,32 +259,11 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 10, RULE_writeStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 81;
+      state = 78;
       match(TOKEN_T__3);
-      state = 82;
+      state = 79;
       exprList();
-      state = 83;
-      match(TOKEN_T__0);
-    } on RecognitionException catch (re) {
-      _localctx.exception = re;
-      errorHandler.reportError(this, re);
-      errorHandler.recover(this, re);
-    } finally {
-      exitRule();
-    }
-    return _localctx;
-  }
-
-  FwriteStmtContext fwriteStmt() {
-    dynamic _localctx = FwriteStmtContext(context, state);
-    enterRule(_localctx, 12, RULE_fwriteStmt);
-    try {
-      enterOuterAlt(_localctx, 1);
-      state = 85;
-      match(TOKEN_T__4);
-      state = 86;
-      exprList();
-      state = 87;
+      state = 80;
       match(TOKEN_T__0);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -304,26 +277,26 @@ class MyLangParser extends Parser {
 
   IfStmtContext ifStmt() {
     dynamic _localctx = IfStmtContext(context, state);
-    enterRule(_localctx, 14, RULE_ifStmt);
+    enterRule(_localctx, 12, RULE_ifStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 89;
+      state = 82;
+      match(TOKEN_T__4);
+      state = 83;
       match(TOKEN_T__5);
-      state = 90;
-      match(TOKEN_T__6);
-      state = 91;
+      state = 84;
       expression();
-      state = 92;
-      match(TOKEN_T__7);
-      state = 93;
+      state = 85;
+      match(TOKEN_T__6);
+      state = 86;
       statement();
-      state = 96;
+      state = 89;
       errorHandler.sync(this);
-      switch (interpreter!.adaptivePredict(tokenStream, 3, context)) {
+      switch (interpreter!.adaptivePredict(tokenStream, 2, context)) {
       case 1:
-        state = 94;
-        match(TOKEN_T__8);
-        state = 95;
+        state = 87;
+        match(TOKEN_T__7);
+        state = 88;
         statement();
         break;
       }
@@ -339,18 +312,18 @@ class MyLangParser extends Parser {
 
   WhileStmtContext whileStmt() {
     dynamic _localctx = WhileStmtContext(context, state);
-    enterRule(_localctx, 16, RULE_whileStmt);
+    enterRule(_localctx, 14, RULE_whileStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 98;
-      match(TOKEN_T__9);
-      state = 99;
-      match(TOKEN_T__6);
-      state = 100;
+      state = 91;
+      match(TOKEN_T__8);
+      state = 92;
+      match(TOKEN_T__5);
+      state = 93;
       expression();
-      state = 101;
-      match(TOKEN_T__7);
-      state = 102;
+      state = 94;
+      match(TOKEN_T__6);
+      state = 95;
       statement();
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -364,24 +337,24 @@ class MyLangParser extends Parser {
 
   BlockStmtContext blockStmt() {
     dynamic _localctx = BlockStmtContext(context, state);
-    enterRule(_localctx, 18, RULE_blockStmt);
+    enterRule(_localctx, 16, RULE_blockStmt);
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 104;
-      match(TOKEN_T__10);
-      state = 108;
+      state = 97;
+      match(TOKEN_T__9);
+      state = 101;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 274812898554) != 0)) {
-        state = 105;
+      while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 274812896894) != 0)) {
+        state = 98;
         statement();
-        state = 110;
+        state = 103;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
-      state = 111;
-      match(TOKEN_T__11);
+      state = 104;
+      match(TOKEN_T__10);
     } on RecognitionException catch (re) {
       _localctx.exception = re;
       errorHandler.reportError(this, re);
@@ -394,13 +367,43 @@ class MyLangParser extends Parser {
 
   ExprStmtContext exprStmt() {
     dynamic _localctx = ExprStmtContext(context, state);
-    enterRule(_localctx, 20, RULE_exprStmt);
+    enterRule(_localctx, 18, RULE_exprStmt);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 113;
+      state = 106;
       expression();
-      state = 114;
+      state = 107;
       match(TOKEN_T__0);
+    } on RecognitionException catch (re) {
+      _localctx.exception = re;
+      errorHandler.reportError(this, re);
+      errorHandler.recover(this, re);
+    } finally {
+      exitRule();
+    }
+    return _localctx;
+  }
+
+  VariableListContext variableList() {
+    dynamic _localctx = VariableListContext(context, state);
+    enterRule(_localctx, 20, RULE_variableList);
+    int _la;
+    try {
+      enterOuterAlt(_localctx, 1);
+      state = 109;
+      match(TOKEN_Identifier);
+      state = 114;
+      errorHandler.sync(this);
+      _la = tokenStream.LA(1)!;
+      while (_la == TOKEN_T__11) {
+        state = 110;
+        match(TOKEN_T__11);
+        state = 111;
+        match(TOKEN_Identifier);
+        state = 116;
+        errorHandler.sync(this);
+        _la = tokenStream.LA(1)!;
+      }
     } on RecognitionException catch (re) {
       _localctx.exception = re;
       errorHandler.reportError(this, re);
@@ -417,17 +420,17 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 116;
+      state = 117;
       expression();
-      state = 121;
+      state = 122;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      while (_la == TOKEN_T__1) {
-        state = 117;
-        match(TOKEN_T__1);
+      while (_la == TOKEN_T__11) {
         state = 118;
+        match(TOKEN_T__11);
+        state = 119;
         expression();
-        state = 123;
+        state = 124;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -446,7 +449,7 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 24, RULE_expression);
     try {
       enterOuterAlt(_localctx, 1);
-      state = 124;
+      state = 125;
       assignment();
     } on RecognitionException catch (re) {
       _localctx.exception = re;
@@ -464,15 +467,15 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 126;
+      state = 127;
       logicOr();
-      state = 129;
+      state = 130;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       if (_la == TOKEN_T__12) {
-        state = 127;
-        match(TOKEN_T__12);
         state = 128;
+        match(TOKEN_T__12);
+        state = 129;
         assignment();
       }
 
@@ -492,17 +495,17 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 131;
+      state = 132;
       logicAnd();
-      state = 136;
+      state = 137;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while (_la == TOKEN_T__13) {
-        state = 132;
-        match(TOKEN_T__13);
         state = 133;
+        match(TOKEN_T__13);
+        state = 134;
         logicAnd();
-        state = 138;
+        state = 139;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -522,17 +525,17 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 139;
+      state = 140;
       equality();
-      state = 144;
+      state = 145;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while (_la == TOKEN_T__14) {
-        state = 140;
-        match(TOKEN_T__14);
         state = 141;
+        match(TOKEN_T__14);
+        state = 142;
         equality();
-        state = 146;
+        state = 147;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -552,13 +555,13 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 147;
+      state = 148;
       relational();
-      state = 152;
+      state = 153;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while (_la == TOKEN_T__15 || _la == TOKEN_T__16) {
-        state = 148;
+        state = 149;
         _la = tokenStream.LA(1)!;
         if (!(_la == TOKEN_T__15 || _la == TOKEN_T__16)) {
         errorHandler.recoverInline(this);
@@ -567,9 +570,9 @@ class MyLangParser extends Parser {
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 149;
+        state = 150;
         relational();
-        state = 154;
+        state = 155;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -589,13 +592,13 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 155;
+      state = 156;
       additive();
-      state = 160;
+      state = 161;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while (_la == TOKEN_T__17 || _la == TOKEN_T__18) {
-        state = 156;
+        state = 157;
         _la = tokenStream.LA(1)!;
         if (!(_la == TOKEN_T__17 || _la == TOKEN_T__18)) {
         errorHandler.recoverInline(this);
@@ -604,9 +607,9 @@ class MyLangParser extends Parser {
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 157;
+        state = 158;
         additive();
-        state = 162;
+        state = 163;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -626,13 +629,13 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 163;
+      state = 164;
       multiplicative();
-      state = 168;
+      state = 169;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 7340032) != 0)) {
-        state = 164;
+        state = 165;
         _la = tokenStream.LA(1)!;
         if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 7340032) != 0))) {
         errorHandler.recoverInline(this);
@@ -641,9 +644,9 @@ class MyLangParser extends Parser {
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 165;
+        state = 166;
         multiplicative();
-        state = 170;
+        state = 171;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -663,13 +666,13 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 171;
+      state = 172;
       unary();
-      state = 176;
+      state = 177;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
       while ((((_la) & ~0x3f) == 0 && ((1 << _la) & 58720256) != 0)) {
-        state = 172;
+        state = 173;
         _la = tokenStream.LA(1)!;
         if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 58720256) != 0))) {
         errorHandler.recoverInline(this);
@@ -678,9 +681,9 @@ class MyLangParser extends Parser {
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 173;
+        state = 174;
         unary();
-        state = 178;
+        state = 179;
         errorHandler.sync(this);
         _la = tokenStream.LA(1)!;
       }
@@ -699,13 +702,13 @@ class MyLangParser extends Parser {
     enterRule(_localctx, 40, RULE_unary);
     int _la;
     try {
-      state = 182;
+      state = 183;
       errorHandler.sync(this);
       switch (tokenStream.LA(1)!) {
       case TOKEN_T__20:
       case TOKEN_T__25:
         enterOuterAlt(_localctx, 1);
-        state = 179;
+        state = 180;
         _la = tokenStream.LA(1)!;
         if (!(_la == TOKEN_T__20 || _la == TOKEN_T__25)) {
         errorHandler.recoverInline(this);
@@ -714,18 +717,18 @@ class MyLangParser extends Parser {
           errorHandler.reportMatch(this);
           consume();
         }
-        state = 180;
+        state = 181;
         unary();
         break;
-      case TOKEN_T__6:
-      case TOKEN_BooleanLiteral:
-      case TOKEN_IntegerLiteral:
-      case TOKEN_FloatLiteral:
-      case TOKEN_StringLiteral:
-      case TOKEN_FileLiteral:
+      case TOKEN_T__5:
+      case TOKEN_BOOL:
+      case TOKEN_INT:
+      case TOKEN_FLOAT:
+      case TOKEN_STRING:
+      case TOKEN_FILE:
       case TOKEN_Identifier:
         enterOuterAlt(_localctx, 2);
-        state = 181;
+        state = 182;
         primary();
         break;
       default:
@@ -745,47 +748,47 @@ class MyLangParser extends Parser {
     dynamic _localctx = PrimaryContext(context, state);
     enterRule(_localctx, 42, RULE_primary);
     try {
-      state = 194;
+      state = 195;
       errorHandler.sync(this);
       switch (tokenStream.LA(1)!) {
-      case TOKEN_IntegerLiteral:
+      case TOKEN_INT:
         enterOuterAlt(_localctx, 1);
-        state = 184;
-        match(TOKEN_IntegerLiteral);
-        break;
-      case TOKEN_FloatLiteral:
-        enterOuterAlt(_localctx, 2);
         state = 185;
-        match(TOKEN_FloatLiteral);
+        match(TOKEN_INT);
         break;
-      case TOKEN_BooleanLiteral:
-        enterOuterAlt(_localctx, 3);
+      case TOKEN_FLOAT:
+        enterOuterAlt(_localctx, 2);
         state = 186;
-        match(TOKEN_BooleanLiteral);
+        match(TOKEN_FLOAT);
         break;
-      case TOKEN_StringLiteral:
-        enterOuterAlt(_localctx, 4);
+      case TOKEN_BOOL:
+        enterOuterAlt(_localctx, 3);
         state = 187;
-        match(TOKEN_StringLiteral);
+        match(TOKEN_BOOL);
         break;
-      case TOKEN_FileLiteral:
-        enterOuterAlt(_localctx, 5);
+      case TOKEN_STRING:
+        enterOuterAlt(_localctx, 4);
         state = 188;
-        match(TOKEN_FileLiteral);
+        match(TOKEN_STRING);
+        break;
+      case TOKEN_FILE:
+        enterOuterAlt(_localctx, 5);
+        state = 189;
+        match(TOKEN_FILE);
         break;
       case TOKEN_Identifier:
         enterOuterAlt(_localctx, 6);
-        state = 189;
+        state = 190;
         match(TOKEN_Identifier);
         break;
-      case TOKEN_T__6:
+      case TOKEN_T__5:
         enterOuterAlt(_localctx, 7);
-        state = 190;
-        match(TOKEN_T__6);
         state = 191;
-        expression();
+        match(TOKEN_T__5);
         state = 192;
-        match(TOKEN_T__7);
+        expression();
+        state = 193;
+        match(TOKEN_T__6);
         break;
       default:
         throw NoViableAltException(this);
@@ -806,7 +809,7 @@ class MyLangParser extends Parser {
     int _la;
     try {
       enterOuterAlt(_localctx, 1);
-      state = 196;
+      state = 197;
       _la = tokenStream.LA(1)!;
       if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 4160749568) != 0))) {
       errorHandler.recoverInline(this);
@@ -826,72 +829,72 @@ class MyLangParser extends Parser {
   }
 
   static const List<int> _serializedATN = [
-      4,1,39,199,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,
+      4,1,39,200,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,
       2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,
       14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,
       2,21,7,21,2,22,7,22,1,0,5,0,48,8,0,10,0,12,0,51,9,0,1,0,1,0,1,1,1,
       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,64,8,1,1,2,1,2,1,2,1,2,1,3,1,3,1,
-      3,5,3,73,8,3,10,3,12,3,76,9,3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,6,
-      1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,7,1,7,1,7,3,7,97,8,7,1,8,1,8,1,8,1,8,
-      1,8,1,8,1,9,1,9,5,9,107,8,9,10,9,12,9,110,9,9,1,9,1,9,1,10,1,10,1,
-      10,1,11,1,11,1,11,5,11,120,8,11,10,11,12,11,123,9,11,1,12,1,12,1,13,
-      1,13,1,13,3,13,130,8,13,1,14,1,14,1,14,5,14,135,8,14,10,14,12,14,138,
-      9,14,1,15,1,15,1,15,5,15,143,8,15,10,15,12,15,146,9,15,1,16,1,16,1,
-      16,5,16,151,8,16,10,16,12,16,154,9,16,1,17,1,17,1,17,5,17,159,8,17,
-      10,17,12,17,162,9,17,1,18,1,18,1,18,5,18,167,8,18,10,18,12,18,170,
-      9,18,1,19,1,19,1,19,5,19,175,8,19,10,19,12,19,178,9,19,1,20,1,20,1,
-      20,3,20,183,8,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,
-      3,21,195,8,21,1,22,1,22,1,22,0,0,23,0,2,4,6,8,10,12,14,16,18,20,22,
-      24,26,28,30,32,34,36,38,40,42,44,0,6,1,0,16,17,1,0,18,19,1,0,20,22,
-      1,0,23,25,2,0,21,21,26,26,1,0,27,31,202,0,49,1,0,0,0,2,63,1,0,0,0,
-      4,65,1,0,0,0,6,69,1,0,0,0,8,77,1,0,0,0,10,81,1,0,0,0,12,85,1,0,0,0,
-      14,89,1,0,0,0,16,98,1,0,0,0,18,104,1,0,0,0,20,113,1,0,0,0,22,116,1,
-      0,0,0,24,124,1,0,0,0,26,126,1,0,0,0,28,131,1,0,0,0,30,139,1,0,0,0,
-      32,147,1,0,0,0,34,155,1,0,0,0,36,163,1,0,0,0,38,171,1,0,0,0,40,182,
-      1,0,0,0,42,194,1,0,0,0,44,196,1,0,0,0,46,48,3,2,1,0,47,46,1,0,0,0,
-      48,51,1,0,0,0,49,47,1,0,0,0,49,50,1,0,0,0,50,52,1,0,0,0,51,49,1,0,
-      0,0,52,53,5,0,0,1,53,1,1,0,0,0,54,64,5,1,0,0,55,64,3,4,2,0,56,64,3,
-      8,4,0,57,64,3,10,5,0,58,64,3,12,6,0,59,64,3,14,7,0,60,64,3,16,8,0,
-      61,64,3,18,9,0,62,64,3,20,10,0,63,54,1,0,0,0,63,55,1,0,0,0,63,56,1,
-      0,0,0,63,57,1,0,0,0,63,58,1,0,0,0,63,59,1,0,0,0,63,60,1,0,0,0,63,61,
-      1,0,0,0,63,62,1,0,0,0,64,3,1,0,0,0,65,66,3,44,22,0,66,67,3,6,3,0,67,
-      68,5,1,0,0,68,5,1,0,0,0,69,74,5,37,0,0,70,71,5,2,0,0,71,73,5,37,0,
-      0,72,70,1,0,0,0,73,76,1,0,0,0,74,72,1,0,0,0,74,75,1,0,0,0,75,7,1,0,
-      0,0,76,74,1,0,0,0,77,78,5,3,0,0,78,79,3,6,3,0,79,80,5,1,0,0,80,9,1,
-      0,0,0,81,82,5,4,0,0,82,83,3,22,11,0,83,84,5,1,0,0,84,11,1,0,0,0,85,
-      86,5,5,0,0,86,87,3,22,11,0,87,88,5,1,0,0,88,13,1,0,0,0,89,90,5,6,0,
-      0,90,91,5,7,0,0,91,92,3,24,12,0,92,93,5,8,0,0,93,96,3,2,1,0,94,95,
-      5,9,0,0,95,97,3,2,1,0,96,94,1,0,0,0,96,97,1,0,0,0,97,15,1,0,0,0,98,
-      99,5,10,0,0,99,100,5,7,0,0,100,101,3,24,12,0,101,102,5,8,0,0,102,103,
-      3,2,1,0,103,17,1,0,0,0,104,108,5,11,0,0,105,107,3,2,1,0,106,105,1,
-      0,0,0,107,110,1,0,0,0,108,106,1,0,0,0,108,109,1,0,0,0,109,111,1,0,
-      0,0,110,108,1,0,0,0,111,112,5,12,0,0,112,19,1,0,0,0,113,114,3,24,12,
-      0,114,115,5,1,0,0,115,21,1,0,0,0,116,121,3,24,12,0,117,118,5,2,0,0,
-      118,120,3,24,12,0,119,117,1,0,0,0,120,123,1,0,0,0,121,119,1,0,0,0,
-      121,122,1,0,0,0,122,23,1,0,0,0,123,121,1,0,0,0,124,125,3,26,13,0,125,
-      25,1,0,0,0,126,129,3,28,14,0,127,128,5,13,0,0,128,130,3,26,13,0,129,
-      127,1,0,0,0,129,130,1,0,0,0,130,27,1,0,0,0,131,136,3,30,15,0,132,133,
-      5,14,0,0,133,135,3,30,15,0,134,132,1,0,0,0,135,138,1,0,0,0,136,134,
-      1,0,0,0,136,137,1,0,0,0,137,29,1,0,0,0,138,136,1,0,0,0,139,144,3,32,
-      16,0,140,141,5,15,0,0,141,143,3,32,16,0,142,140,1,0,0,0,143,146,1,
-      0,0,0,144,142,1,0,0,0,144,145,1,0,0,0,145,31,1,0,0,0,146,144,1,0,0,
-      0,147,152,3,34,17,0,148,149,7,0,0,0,149,151,3,34,17,0,150,148,1,0,
-      0,0,151,154,1,0,0,0,152,150,1,0,0,0,152,153,1,0,0,0,153,33,1,0,0,0,
-      154,152,1,0,0,0,155,160,3,36,18,0,156,157,7,1,0,0,157,159,3,36,18,
-      0,158,156,1,0,0,0,159,162,1,0,0,0,160,158,1,0,0,0,160,161,1,0,0,0,
-      161,35,1,0,0,0,162,160,1,0,0,0,163,168,3,38,19,0,164,165,7,2,0,0,165,
-      167,3,38,19,0,166,164,1,0,0,0,167,170,1,0,0,0,168,166,1,0,0,0,168,
-      169,1,0,0,0,169,37,1,0,0,0,170,168,1,0,0,0,171,176,3,40,20,0,172,173,
-      7,3,0,0,173,175,3,40,20,0,174,172,1,0,0,0,175,178,1,0,0,0,176,174,
-      1,0,0,0,176,177,1,0,0,0,177,39,1,0,0,0,178,176,1,0,0,0,179,180,7,4,
-      0,0,180,183,3,40,20,0,181,183,3,42,21,0,182,179,1,0,0,0,182,181,1,
-      0,0,0,183,41,1,0,0,0,184,195,5,33,0,0,185,195,5,34,0,0,186,195,5,32,
-      0,0,187,195,5,35,0,0,188,195,5,36,0,0,189,195,5,37,0,0,190,191,5,7,
-      0,0,191,192,3,24,12,0,192,193,5,8,0,0,193,195,1,0,0,0,194,184,1,0,
-      0,0,194,185,1,0,0,0,194,186,1,0,0,0,194,187,1,0,0,0,194,188,1,0,0,
-      0,194,189,1,0,0,0,194,190,1,0,0,0,195,43,1,0,0,0,196,197,7,5,0,0,197,
-      45,1,0,0,0,15,49,63,74,96,108,121,129,136,144,152,160,168,176,182,
-      194
+      3,1,3,1,3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,6,
+      1,6,3,6,90,8,6,1,7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,5,8,100,8,8,10,8,12,
+      8,103,9,8,1,8,1,8,1,9,1,9,1,9,1,10,1,10,1,10,5,10,113,8,10,10,10,12,
+      10,116,9,10,1,11,1,11,1,11,5,11,121,8,11,10,11,12,11,124,9,11,1,12,
+      1,12,1,13,1,13,1,13,3,13,131,8,13,1,14,1,14,1,14,5,14,136,8,14,10,
+      14,12,14,139,9,14,1,15,1,15,1,15,5,15,144,8,15,10,15,12,15,147,9,15,
+      1,16,1,16,1,16,5,16,152,8,16,10,16,12,16,155,9,16,1,17,1,17,1,17,5,
+      17,160,8,17,10,17,12,17,163,9,17,1,18,1,18,1,18,5,18,168,8,18,10,18,
+      12,18,171,9,18,1,19,1,19,1,19,5,19,176,8,19,10,19,12,19,179,9,19,1,
+      20,1,20,1,20,3,20,184,8,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,
+      1,21,1,21,3,21,196,8,21,1,22,1,22,1,22,0,0,23,0,2,4,6,8,10,12,14,16,
+      18,20,22,24,26,28,30,32,34,36,38,40,42,44,0,6,1,0,16,17,1,0,18,19,
+      1,0,20,22,1,0,23,25,2,0,21,21,26,26,1,0,27,31,203,0,49,1,0,0,0,2,63,
+      1,0,0,0,4,65,1,0,0,0,6,69,1,0,0,0,8,74,1,0,0,0,10,78,1,0,0,0,12,82,
+      1,0,0,0,14,91,1,0,0,0,16,97,1,0,0,0,18,106,1,0,0,0,20,109,1,0,0,0,
+      22,117,1,0,0,0,24,125,1,0,0,0,26,127,1,0,0,0,28,132,1,0,0,0,30,140,
+      1,0,0,0,32,148,1,0,0,0,34,156,1,0,0,0,36,164,1,0,0,0,38,172,1,0,0,
+      0,40,183,1,0,0,0,42,195,1,0,0,0,44,197,1,0,0,0,46,48,3,2,1,0,47,46,
+      1,0,0,0,48,51,1,0,0,0,49,47,1,0,0,0,49,50,1,0,0,0,50,52,1,0,0,0,51,
+      49,1,0,0,0,52,53,5,0,0,1,53,1,1,0,0,0,54,64,5,1,0,0,55,64,3,4,2,0,
+      56,64,3,8,4,0,57,64,3,10,5,0,58,64,3,12,6,0,59,64,3,14,7,0,60,64,3,
+      16,8,0,61,64,3,6,3,0,62,64,3,18,9,0,63,54,1,0,0,0,63,55,1,0,0,0,63,
+      56,1,0,0,0,63,57,1,0,0,0,63,58,1,0,0,0,63,59,1,0,0,0,63,60,1,0,0,0,
+      63,61,1,0,0,0,63,62,1,0,0,0,64,3,1,0,0,0,65,66,3,44,22,0,66,67,3,20,
+      10,0,67,68,5,1,0,0,68,5,1,0,0,0,69,70,5,2,0,0,70,71,5,37,0,0,71,72,
+      5,35,0,0,72,73,5,1,0,0,73,7,1,0,0,0,74,75,5,3,0,0,75,76,3,20,10,0,
+      76,77,5,1,0,0,77,9,1,0,0,0,78,79,5,4,0,0,79,80,3,22,11,0,80,81,5,1,
+      0,0,81,11,1,0,0,0,82,83,5,5,0,0,83,84,5,6,0,0,84,85,3,24,12,0,85,86,
+      5,7,0,0,86,89,3,2,1,0,87,88,5,8,0,0,88,90,3,2,1,0,89,87,1,0,0,0,89,
+      90,1,0,0,0,90,13,1,0,0,0,91,92,5,9,0,0,92,93,5,6,0,0,93,94,3,24,12,
+      0,94,95,5,7,0,0,95,96,3,2,1,0,96,15,1,0,0,0,97,101,5,10,0,0,98,100,
+      3,2,1,0,99,98,1,0,0,0,100,103,1,0,0,0,101,99,1,0,0,0,101,102,1,0,0,
+      0,102,104,1,0,0,0,103,101,1,0,0,0,104,105,5,11,0,0,105,17,1,0,0,0,
+      106,107,3,24,12,0,107,108,5,1,0,0,108,19,1,0,0,0,109,114,5,37,0,0,
+      110,111,5,12,0,0,111,113,5,37,0,0,112,110,1,0,0,0,113,116,1,0,0,0,
+      114,112,1,0,0,0,114,115,1,0,0,0,115,21,1,0,0,0,116,114,1,0,0,0,117,
+      122,3,24,12,0,118,119,5,12,0,0,119,121,3,24,12,0,120,118,1,0,0,0,121,
+      124,1,0,0,0,122,120,1,0,0,0,122,123,1,0,0,0,123,23,1,0,0,0,124,122,
+      1,0,0,0,125,126,3,26,13,0,126,25,1,0,0,0,127,130,3,28,14,0,128,129,
+      5,13,0,0,129,131,3,26,13,0,130,128,1,0,0,0,130,131,1,0,0,0,131,27,
+      1,0,0,0,132,137,3,30,15,0,133,134,5,14,0,0,134,136,3,30,15,0,135,133,
+      1,0,0,0,136,139,1,0,0,0,137,135,1,0,0,0,137,138,1,0,0,0,138,29,1,0,
+      0,0,139,137,1,0,0,0,140,145,3,32,16,0,141,142,5,15,0,0,142,144,3,32,
+      16,0,143,141,1,0,0,0,144,147,1,0,0,0,145,143,1,0,0,0,145,146,1,0,0,
+      0,146,31,1,0,0,0,147,145,1,0,0,0,148,153,3,34,17,0,149,150,7,0,0,0,
+      150,152,3,34,17,0,151,149,1,0,0,0,152,155,1,0,0,0,153,151,1,0,0,0,
+      153,154,1,0,0,0,154,33,1,0,0,0,155,153,1,0,0,0,156,161,3,36,18,0,157,
+      158,7,1,0,0,158,160,3,36,18,0,159,157,1,0,0,0,160,163,1,0,0,0,161,
+      159,1,0,0,0,161,162,1,0,0,0,162,35,1,0,0,0,163,161,1,0,0,0,164,169,
+      3,38,19,0,165,166,7,2,0,0,166,168,3,38,19,0,167,165,1,0,0,0,168,171,
+      1,0,0,0,169,167,1,0,0,0,169,170,1,0,0,0,170,37,1,0,0,0,171,169,1,0,
+      0,0,172,177,3,40,20,0,173,174,7,3,0,0,174,176,3,40,20,0,175,173,1,
+      0,0,0,176,179,1,0,0,0,177,175,1,0,0,0,177,178,1,0,0,0,178,39,1,0,0,
+      0,179,177,1,0,0,0,180,181,7,4,0,0,181,184,3,40,20,0,182,184,3,42,21,
+      0,183,180,1,0,0,0,183,182,1,0,0,0,184,41,1,0,0,0,185,196,5,33,0,0,
+      186,196,5,34,0,0,187,196,5,32,0,0,188,196,5,35,0,0,189,196,5,36,0,
+      0,190,196,5,37,0,0,191,192,5,6,0,0,192,193,3,24,12,0,193,194,5,7,0,
+      0,194,196,1,0,0,0,195,185,1,0,0,0,195,186,1,0,0,0,195,187,1,0,0,0,
+      195,188,1,0,0,0,195,189,1,0,0,0,195,190,1,0,0,0,195,191,1,0,0,0,196,
+      43,1,0,0,0,197,198,7,5,0,0,198,45,1,0,0,0,15,49,63,89,101,114,122,
+      130,137,145,153,161,169,177,183,195
   ];
 
   static final ATN _ATN =
@@ -911,6 +914,14 @@ class ProgramContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitProgram(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitProgram(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -939,21 +950,37 @@ class DeclarationStmtContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitDeclarationStmt(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitDeclarationStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
-class VariableListContext extends ParserRuleContext {
-  List<TerminalNode> Identifiers() => getTokens(MyLangParser.TOKEN_Identifier);
-  TerminalNode? Identifier(int i) => getToken(MyLangParser.TOKEN_Identifier, i);
-  VariableListContext([ParserRuleContext? parent, int? invokingState]) : super(parent, invokingState);
+class FopenStmtContext extends ParserRuleContext {
+  TerminalNode? Identifier() => getToken(MyLangParser.TOKEN_Identifier, 0);
+  TerminalNode? STRING() => getToken(MyLangParser.TOKEN_STRING, 0);
+  FopenStmtContext([ParserRuleContext? parent, int? invokingState]) : super(parent, invokingState);
   @override
-  int get ruleIndex => RULE_variableList;
+  int get ruleIndex => RULE_fopenStmt;
   @override
   void enterRule(ParseTreeListener listener) {
-    if (listener is MyLangListener) listener.enterVariableList(this);
+    if (listener is MyLangListener) listener.enterFopenStmt(this);
   }
   @override
   void exitRule(ParseTreeListener listener) {
-    if (listener is MyLangListener) listener.exitVariableList(this);
+    if (listener is MyLangListener) listener.exitFopenStmt(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitFopenStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -970,6 +997,14 @@ class ReadStmtContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitReadStmt(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitReadStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class WriteStmtContext extends ParserRuleContext {
@@ -985,20 +1020,13 @@ class WriteStmtContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitWriteStmt(this);
   }
-}
-
-class FwriteStmtContext extends ParserRuleContext {
-  ExprListContext? exprList() => getRuleContext<ExprListContext>(0);
-  FwriteStmtContext([ParserRuleContext? parent, int? invokingState]) : super(parent, invokingState);
   @override
-  int get ruleIndex => RULE_fwriteStmt;
-  @override
-  void enterRule(ParseTreeListener listener) {
-    if (listener is MyLangListener) listener.enterFwriteStmt(this);
-  }
-  @override
-  void exitRule(ParseTreeListener listener) {
-    if (listener is MyLangListener) listener.exitFwriteStmt(this);
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitWriteStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1017,6 +1045,14 @@ class IfStmtContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitIfStmt(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitIfStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class WhileStmtContext extends ParserRuleContext {
@@ -1032,6 +1068,14 @@ class WhileStmtContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitWhileStmt(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitWhileStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1049,6 +1093,14 @@ class BlockStmtContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitBlockStmt(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitBlockStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class ExprStmtContext extends ParserRuleContext {
@@ -1063,6 +1115,38 @@ class ExprStmtContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitExprStmt(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitExprStmt(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
+}
+
+class VariableListContext extends ParserRuleContext {
+  List<TerminalNode> Identifiers() => getTokens(MyLangParser.TOKEN_Identifier);
+  TerminalNode? Identifier(int i) => getToken(MyLangParser.TOKEN_Identifier, i);
+  VariableListContext([ParserRuleContext? parent, int? invokingState]) : super(parent, invokingState);
+  @override
+  int get ruleIndex => RULE_variableList;
+  @override
+  void enterRule(ParseTreeListener listener) {
+    if (listener is MyLangListener) listener.enterVariableList(this);
+  }
+  @override
+  void exitRule(ParseTreeListener listener) {
+    if (listener is MyLangListener) listener.exitVariableList(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitVariableList(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1080,6 +1164,14 @@ class ExprListContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitExprList(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitExprList(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class ExpressionContext extends ParserRuleContext {
@@ -1094,6 +1186,14 @@ class ExpressionContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitExpression(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitExpression(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1111,6 +1211,14 @@ class AssignmentContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitAssignment(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitAssignment(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class LogicOrContext extends ParserRuleContext {
@@ -1126,6 +1234,14 @@ class LogicOrContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitLogicOr(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitLogicOr(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1143,6 +1259,14 @@ class LogicAndContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitLogicAnd(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitLogicAnd(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class EqualityContext extends ParserRuleContext {
@@ -1158,6 +1282,14 @@ class EqualityContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitEquality(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitEquality(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1175,6 +1307,14 @@ class RelationalContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitRelational(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitRelational(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class AdditiveContext extends ParserRuleContext {
@@ -1190,6 +1330,14 @@ class AdditiveContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitAdditive(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitAdditive(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1207,6 +1355,14 @@ class MultiplicativeContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitMultiplicative(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitMultiplicative(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class UnaryContext extends ParserRuleContext {
@@ -1223,14 +1379,22 @@ class UnaryContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitUnary(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitUnary(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class PrimaryContext extends ParserRuleContext {
-  TerminalNode? IntegerLiteral() => getToken(MyLangParser.TOKEN_IntegerLiteral, 0);
-  TerminalNode? FloatLiteral() => getToken(MyLangParser.TOKEN_FloatLiteral, 0);
-  TerminalNode? BooleanLiteral() => getToken(MyLangParser.TOKEN_BooleanLiteral, 0);
-  TerminalNode? StringLiteral() => getToken(MyLangParser.TOKEN_StringLiteral, 0);
-  TerminalNode? FileLiteral() => getToken(MyLangParser.TOKEN_FileLiteral, 0);
+  TerminalNode? INT() => getToken(MyLangParser.TOKEN_INT, 0);
+  TerminalNode? FLOAT() => getToken(MyLangParser.TOKEN_FLOAT, 0);
+  TerminalNode? BOOL() => getToken(MyLangParser.TOKEN_BOOL, 0);
+  TerminalNode? STRING() => getToken(MyLangParser.TOKEN_STRING, 0);
+  TerminalNode? FILE() => getToken(MyLangParser.TOKEN_FILE, 0);
   TerminalNode? Identifier() => getToken(MyLangParser.TOKEN_Identifier, 0);
   ExpressionContext? expression() => getRuleContext<ExpressionContext>(0);
   PrimaryContext([ParserRuleContext? parent, int? invokingState]) : super(parent, invokingState);
@@ -1243,6 +1407,14 @@ class PrimaryContext extends ParserRuleContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitPrimary(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitPrimary(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1258,6 +1430,14 @@ class TypeContext extends ParserRuleContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitType(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitType(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class DeclarationStatementContext extends StatementContext {
@@ -1270,6 +1450,14 @@ class DeclarationStatementContext extends StatementContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitDeclarationStatement(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitDeclarationStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1284,6 +1472,14 @@ class WhileStatementContext extends StatementContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitWhileStatement(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitWhileStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class EmptyStatementContext extends StatementContext {
@@ -1295,6 +1491,14 @@ class EmptyStatementContext extends StatementContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitEmptyStatement(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitEmptyStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1309,6 +1513,14 @@ class WriteStatementContext extends StatementContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitWriteStatement(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitWriteStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class BlockStatementContext extends StatementContext {
@@ -1322,18 +1534,34 @@ class BlockStatementContext extends StatementContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitBlockStatement(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitBlockStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
-class FwriteStatementContext extends StatementContext {
-  FwriteStmtContext? fwriteStmt() => getRuleContext<FwriteStmtContext>(0);
-  FwriteStatementContext(StatementContext ctx) { copyFrom(ctx); }
+class FopenStatementContext extends StatementContext {
+  FopenStmtContext? fopenStmt() => getRuleContext<FopenStmtContext>(0);
+  FopenStatementContext(StatementContext ctx) { copyFrom(ctx); }
   @override
   void enterRule(ParseTreeListener listener) {
-    if (listener is MyLangListener) listener.enterFwriteStatement(this);
+    if (listener is MyLangListener) listener.enterFopenStatement(this);
   }
   @override
   void exitRule(ParseTreeListener listener) {
-    if (listener is MyLangListener) listener.exitFwriteStatement(this);
+    if (listener is MyLangListener) listener.exitFopenStatement(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitFopenStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }
 
@@ -1348,6 +1576,14 @@ class ReadStatementContext extends StatementContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitReadStatement(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitReadStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class ExpressionStatementContext extends StatementContext {
@@ -1361,6 +1597,14 @@ class ExpressionStatementContext extends StatementContext {
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitExpressionStatement(this);
   }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitExpressionStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
+  }
 }
 
 class IfStatementContext extends StatementContext {
@@ -1373,5 +1617,13 @@ class IfStatementContext extends StatementContext {
   @override
   void exitRule(ParseTreeListener listener) {
     if (listener is MyLangListener) listener.exitIfStatement(this);
+  }
+  @override
+  T? accept<T>(ParseTreeVisitor<T> visitor) {
+    if (visitor is MyLangVisitor<T>) {
+     return visitor.visitIfStatement(this);
+    } else {
+    	return visitor.visitChildren(this);
+    }
   }
 }

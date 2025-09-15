@@ -50,15 +50,6 @@ abstract class MyLangListener extends ParseTreeListener {
   /// [ctx] the parse tree
   void exitWriteStatement(WriteStatementContext ctx);
 
-  /// Enter a parse tree produced by the [fwriteStatement]
-  /// labeled alternative in [file.parserName>.statement].
-  /// [ctx] the parse tree
-  void enterFwriteStatement(FwriteStatementContext ctx);
-  /// Exit a parse tree produced by the [fwriteStatement]
-  /// labeled alternative in [MyLangParser.statement].
-  /// [ctx] the parse tree
-  void exitFwriteStatement(FwriteStatementContext ctx);
-
   /// Enter a parse tree produced by the [ifStatement]
   /// labeled alternative in [file.parserName>.statement].
   /// [ctx] the parse tree
@@ -86,6 +77,15 @@ abstract class MyLangListener extends ParseTreeListener {
   /// [ctx] the parse tree
   void exitBlockStatement(BlockStatementContext ctx);
 
+  /// Enter a parse tree produced by the [fopenStatement]
+  /// labeled alternative in [file.parserName>.statement].
+  /// [ctx] the parse tree
+  void enterFopenStatement(FopenStatementContext ctx);
+  /// Exit a parse tree produced by the [fopenStatement]
+  /// labeled alternative in [MyLangParser.statement].
+  /// [ctx] the parse tree
+  void exitFopenStatement(FopenStatementContext ctx);
+
   /// Enter a parse tree produced by the [expressionStatement]
   /// labeled alternative in [file.parserName>.statement].
   /// [ctx] the parse tree
@@ -102,12 +102,12 @@ abstract class MyLangListener extends ParseTreeListener {
   /// [ctx] the parse tree
   void exitDeclarationStmt(DeclarationStmtContext ctx);
 
-  /// Enter a parse tree produced by [MyLangParser.variableList].
+  /// Enter a parse tree produced by [MyLangParser.fopenStmt].
   /// [ctx] the parse tree
-  void enterVariableList(VariableListContext ctx);
-  /// Exit a parse tree produced by [MyLangParser.variableList].
+  void enterFopenStmt(FopenStmtContext ctx);
+  /// Exit a parse tree produced by [MyLangParser.fopenStmt].
   /// [ctx] the parse tree
-  void exitVariableList(VariableListContext ctx);
+  void exitFopenStmt(FopenStmtContext ctx);
 
   /// Enter a parse tree produced by [MyLangParser.readStmt].
   /// [ctx] the parse tree
@@ -122,13 +122,6 @@ abstract class MyLangListener extends ParseTreeListener {
   /// Exit a parse tree produced by [MyLangParser.writeStmt].
   /// [ctx] the parse tree
   void exitWriteStmt(WriteStmtContext ctx);
-
-  /// Enter a parse tree produced by [MyLangParser.fwriteStmt].
-  /// [ctx] the parse tree
-  void enterFwriteStmt(FwriteStmtContext ctx);
-  /// Exit a parse tree produced by [MyLangParser.fwriteStmt].
-  /// [ctx] the parse tree
-  void exitFwriteStmt(FwriteStmtContext ctx);
 
   /// Enter a parse tree produced by [MyLangParser.ifStmt].
   /// [ctx] the parse tree
@@ -157,6 +150,13 @@ abstract class MyLangListener extends ParseTreeListener {
   /// Exit a parse tree produced by [MyLangParser.exprStmt].
   /// [ctx] the parse tree
   void exitExprStmt(ExprStmtContext ctx);
+
+  /// Enter a parse tree produced by [MyLangParser.variableList].
+  /// [ctx] the parse tree
+  void enterVariableList(VariableListContext ctx);
+  /// Exit a parse tree produced by [MyLangParser.variableList].
+  /// [ctx] the parse tree
+  void exitVariableList(VariableListContext ctx);
 
   /// Enter a parse tree produced by [MyLangParser.exprList].
   /// [ctx] the parse tree

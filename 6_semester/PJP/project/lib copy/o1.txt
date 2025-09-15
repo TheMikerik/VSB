@@ -1,0 +1,4 @@
+push S ""
+save f
+fopen "testtesttest.txt"
+save f

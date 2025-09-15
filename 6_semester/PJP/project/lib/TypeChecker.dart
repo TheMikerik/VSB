@@ -8,13 +8,8 @@ enum VarType { intType, floatType, boolType, stringType, fileType }
 class SimpleTypeChecker extends MyLangBaseListener {
   final Map<String, VarType> symbolTable = {};
   final List<String> errors = [];
-
-  // Maps each expression node to its deduced type
   final Map<ParserRuleContext, VarType> _expressionTypes = {};
 
-  /* ----------------------------------------------------------------------
-   *  1. Declaration
-   * -------------------------------------------------------------------- */
   @override
   void exitDeclarationStmt(DeclarationStmtContext ctx) {
     final typeStr = ctx.type()?.text;
@@ -32,21 +27,18 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  2. Primary Expressions
-   * -------------------------------------------------------------------- */
   @override
   void exitPrimary(PrimaryContext ctx) {
     VarType? type;
-    if (ctx.IntegerLiteral() != null) {
+    if (ctx.INT() != null) {
       type = VarType.intType;
-    } else if (ctx.FloatLiteral() != null) {
+    } else if (ctx.FLOAT() != null) {
       type = VarType.floatType;
-    } else if (ctx.BooleanLiteral() != null) {
+    } else if (ctx.BOOL() != null) {
       type = VarType.boolType;
-    } else if (ctx.StringLiteral() != null) {
+    } else if (ctx.STRING() != null) {
       type = VarType.stringType;
-    } else if (ctx.FileLiteral() != null) {
+    } else if (ctx.FILE() != null) {
       type = VarType.fileType;
     } else if (ctx.Identifier() != null) {
       final varName = ctx.Identifier()!.text;
@@ -55,7 +47,6 @@ class SimpleTypeChecker extends MyLangBaseListener {
         errors.add("Error: Undefined variable '$varName'");
       }
     } else if (ctx.expression() != null) {
-      // Parenthesized expression: use child expression's type
       type = _expressionTypes[ctx.expression()!];
     }
 
@@ -64,13 +55,9 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  3. Unary Expressions
-   * -------------------------------------------------------------------- */
   @override
   void exitUnary(UnaryContext ctx) {
     if (ctx.primary() != null) {
-      // Inherit the primary expression's type
       final primaryCtx = ctx.primary()!;
       final primaryType = _expressionTypes[primaryCtx];
       if (primaryType != null) {
@@ -78,8 +65,6 @@ class SimpleTypeChecker extends MyLangBaseListener {
       }
       return;
     }
-
-    // It's a unary operator: '!' or '-'
     final opChild = ctx.getChild(0);
     if (opChild == null) return;
 
@@ -103,15 +88,11 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  4. Multiplicative & Additive
-   * -------------------------------------------------------------------- */
   @override
   void exitMultiplicative(MultiplicativeContext ctx) {
     final unaryCount = ctx.unarys().length;
     if (unaryCount == 0) return;
 
-    // Start from the type of the first unary
     VarType? type = _expressionTypes[ctx.unary(0)];
 
     for (int i = 1; i < unaryCount; i++) {
@@ -126,15 +107,12 @@ class SimpleTypeChecker extends MyLangBaseListener {
         }
         type = VarType.intType;
       } else {
-        // '*' or '/'
         if (!_isNumeric(type) || !_isNumeric(rightType)) {
           errors.add("Error: Operator '$op' requires numeric operands");
         }
-        // If either side is float -> result is float, else int
-        type =
-            (type == VarType.floatType || rightType == VarType.floatType)
-                ? VarType.floatType
-                : VarType.intType;
+        type = (type == VarType.floatType || rightType == VarType.floatType)
+            ? VarType.floatType
+            : VarType.intType;
       }
     }
 
@@ -157,17 +135,13 @@ class SimpleTypeChecker extends MyLangBaseListener {
       if (type == null || rightType == null) continue;
 
       if (op == '+' || op == '-') {
-        // numeric check
         if (!_isNumeric(type) || !_isNumeric(rightType)) {
           errors.add("Error: Operator '$op' requires numeric operands");
         }
-        // If either side is float -> result is float, else int
-        type =
-            (type == VarType.floatType || rightType == VarType.floatType)
-                ? VarType.floatType
-                : VarType.intType;
+        type = (type == VarType.floatType || rightType == VarType.floatType)
+            ? VarType.floatType
+            : VarType.intType;
       } else if (op == '.') {
-        // string concatenation
         if (type != VarType.stringType || rightType != VarType.stringType) {
           errors.add("Error: '.' requires string operands");
         }
@@ -180,9 +154,6 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  5. Relational & Equality
-   * -------------------------------------------------------------------- */
   @override
   void exitRelational(RelationalContext ctx) {
     final additives = ctx.additives();
@@ -230,12 +201,8 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  6. Assignment
-   * -------------------------------------------------------------------- */
   @override
   void exitAssignment(AssignmentContext ctx) {
-    // If it's just a single expression, propagate the type from its child.
     if (ctx.assignment() == null) {
       final childExpr = ctx.logicOr();
       if (childExpr != null && _expressionTypes.containsKey(childExpr)) {
@@ -244,17 +211,14 @@ class SimpleTypeChecker extends MyLangBaseListener {
       return;
     }
 
-    // Process assignments with '='
-    final lhs = ctx.logicOr()!; // left-hand side
-    final rhs = ctx.assignment()!; // right-hand side
+    final lhs = ctx.logicOr()!;
+    final rhs = ctx.assignment()!;
 
-    // Ensure LHS is a valid variable
     if (!_isVariable(lhs)) {
       errors.add("Error: Left-hand side must be a variable");
       return;
     }
 
-    // Extract the variable name from the LHS parse subtree
     final primaryCtx = _getPrimary(lhs);
     if (primaryCtx?.Identifier() == null) {
       errors.add("Error: Invalid assignment target");
@@ -270,17 +234,14 @@ class SimpleTypeChecker extends MyLangBaseListener {
       return;
     }
     if (exprType == null) {
-      // Expression type couldn't be determined; likely a previous error.
       return;
     }
 
-    // Check type compatibility (allow assigning int -> float)
     if (varType != exprType &&
         !(varType == VarType.floatType && exprType == VarType.intType)) {
       errors.add("Error: Type mismatch for '$varName'");
     }
 
-    // Propagate the type of the assignment (which is the type of the LHS)
     _expressionTypes[ctx] = varType;
   }
 
@@ -294,7 +255,6 @@ class SimpleTypeChecker extends MyLangBaseListener {
       return;
     }
 
-    // Multiple operands with logical OR
     bool allBool = true;
     for (var logicAnd in logicAnds) {
       final operandType = _expressionTypes[logicAnd];
@@ -320,10 +280,9 @@ class SimpleTypeChecker extends MyLangBaseListener {
       return;
     }
 
-    // Multiple operands with logical AND
     bool allBool = true;
-    for (var equality in equalities) {
-      final operandType = _expressionTypes[equality];
+    for (var part in equalities) {
+      final operandType = _expressionTypes[part];
       if (operandType != VarType.boolType) {
         errors.add("Error: '&&' requires boolean operands");
         allBool = false;
@@ -336,15 +295,11 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  7. Control Structures (if / while / read)
-   * -------------------------------------------------------------------- */
   @override
   void exitIfStmt(IfStmtContext ctx) {
     final condExpr = ctx.expression();
     if (condExpr == null) return;
 
-    // First make sure we propagate the type from the expression
     exitExpression(condExpr);
 
     final condType = _expressionTypes[condExpr];
@@ -358,7 +313,6 @@ class SimpleTypeChecker extends MyLangBaseListener {
     final condExpr = ctx.expression();
     if (condExpr == null) return;
 
-    // First make sure we propagate the type from the expression
     exitExpression(condExpr);
 
     final condType = _expressionTypes[condExpr];
@@ -367,7 +321,6 @@ class SimpleTypeChecker extends MyLangBaseListener {
     }
   }
 
-  // Helper method to ensure expression types are propagated
   @override
   void exitExpression(ExpressionContext ctx) {
     final assignment = ctx.assignment();
@@ -379,8 +332,8 @@ class SimpleTypeChecker extends MyLangBaseListener {
   @override
   void exitReadStmt(ReadStmtContext ctx) {
     final vars = ctx.variableList()!.Identifiers();
-    for (var varCtx in vars) {
-      final varName = varCtx.text;
+    for (var part in vars) {
+      final varName = part.text;
       if (!symbolTable.containsKey(varName)) {
         errors.add("Error: Variable '$varName' is not declared.");
       }
@@ -388,28 +341,15 @@ class SimpleTypeChecker extends MyLangBaseListener {
   }
 
   @override
-  void exitFwriteStmt(FwriteStmtContext ctx) {
-    final exprList = ctx.exprList();
-    if (exprList == null || exprList.expressions().isEmpty) {
-      errors.add("Error: fwrite requires at least one argument.");
-      return;
-    }
-
-    final firstExpr = exprList.expression(0);
-    if (firstExpr == null) return;
-
-    // Make sure we have the type correctly
-    exitExpression(firstExpr);
-
-    final fileExprType = _expressionTypes[firstExpr];
-    if (fileExprType != VarType.fileType) {
-      errors.add("Error: The first argument of fwrite must be of type file.");
+  void exitFopenStmt(FopenStmtContext ctx) {
+    final varName = ctx.Identifier()!.text;
+    if (!symbolTable.containsKey(varName)) {
+      errors.add("Error: Variable '$varName' not declared.");
+    } else if (symbolTable[varName] != VarType.fileType) {
+      errors.add("Error: Variable '$varName' must be of type 'file'.");
     }
   }
 
-  /* ----------------------------------------------------------------------
-   *  8. Helper Methods
-   * -------------------------------------------------------------------- */
   VarType _stringToType(String typeStr) {
     switch (typeStr) {
       case 'int':
@@ -424,27 +364,23 @@ class SimpleTypeChecker extends MyLangBaseListener {
         return VarType.fileType;
       default:
         errors.add("Error: Unknown type '$typeStr'.");
-        return VarType.intType; // fallback
+        return VarType.intType;
     }
   }
 
   bool _isNumeric(VarType? type) =>
       type == VarType.intType || type == VarType.floatType;
 
-  /// Returns true if the parse subtree eventually leads to a primary
-  /// with an Identifier, i.e., a simple variable reference.
   bool _isVariable(ParserRuleContext ctx) {
     final primaryCtx = _getPrimary(ctx);
     if (primaryCtx == null) return false;
     return primaryCtx.Identifier() != null;
   }
 
-  /// Recursively find the underlying PrimaryContext within an expression parse tree.
   MyLangParser.PrimaryContext? _getPrimary(ParserRuleContext ctx) {
     if (ctx is MyLangParser.PrimaryContext) {
       return ctx;
     }
-    // Check children one by one. We'll return the first PrimaryContext we find.
     for (int i = 0; i < ctx.childCount; i++) {
       final child = ctx.getChild(i);
       if (child is ParserRuleContext) {

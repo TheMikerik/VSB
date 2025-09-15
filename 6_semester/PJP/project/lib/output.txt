@@ -1,8 +1,0 @@
-push I 0
-save a
-push I 5
-push I 3
-add I
-save a
-load a
-pop
