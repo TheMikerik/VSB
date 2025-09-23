@@ -1,0 +1,38 @@
+//***************************************************************************
+//
+// Program example for subject Operating Systems
+//
+// Petr Olivka, Dept. of Computer Science, petr.olivka@vsb.cz, 2021
+//
+// Program vernum - verification of number sums
+//
+//***************************************************************************
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Header file for library
+#include "vernum_lib.h"
+
+int main()
+{
+    char line[1024];
+    int line_number = 0;
+    
+    while (fgets(line, sizeof(line), stdin)) {
+        line_number++;
+
+        line[strcspn(line, "\n")] = 0;
+        if (strlen(line) == 0) continue;
+        
+        int result = verify_sum(line);
+        
+        if (result == 0) {
+            printf("Radek %d: OK\n", line_number);
+        } else {
+            printf("Radek %d: NOK", line_number);
+        }
+    }
+    return 0;
+}
