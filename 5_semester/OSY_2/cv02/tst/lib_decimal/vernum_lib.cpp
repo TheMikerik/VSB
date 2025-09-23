@@ -1,13 +1,3 @@
-//***************************************************************************
-//
-// Program example for subject Operating Systems
-//
-// Petr Olivka, Dept. of Computer Science, petr.olivka@vsb.cz, 2021
-//
-// Library for verification of whole numbers
-//
-//***************************************************************************
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
