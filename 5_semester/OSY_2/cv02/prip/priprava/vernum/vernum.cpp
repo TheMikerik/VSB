@@ -1,18 +1,7 @@
-//***************************************************************************
-//
-// Program example for subject Operating Systems
-//
-// Petr Olivka, Dept. of Computer Science, petr.olivka@vsb.cz, 2021
-//
-// Program vernum - verification of number sums
-//
-//***************************************************************************
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Header file for library
 #include "vernum_lib.h"
 
 int main()

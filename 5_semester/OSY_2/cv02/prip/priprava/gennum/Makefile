@@ -13,7 +13,7 @@ clean:
 	rm -rf $(TARGET) $(LIBFILE) *.o
 
 # creating static library 
-$(LIBFILE): gennum_whole.o gennum_decimal.o
+$(LIBFILE): gennum_whole.o gennum_decimal.o gennum_bin.o
 	@echo "\nCreating static library...\n"
 	#rm -f $@
 	ar r $@ $^
@@ -31,3 +31,6 @@ gennum_whole.o: gennum_whole.cpp gennum_lib.h
 
 gennum_decimal.o: gennum_decimal.cpp gennum_lib.h
 	g++ $(CPPFLAGS) -c gennum_decimal.cpp -o gennum_decimal.o
+
+gennum_binary.o: gennum_binary.cpp gennum_lib.h
+	g++ $(CPPFLAGS) -c gennum_binary.cpp -o gennum_binary.o

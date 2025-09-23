@@ -2,12 +2,15 @@
 triple:          'arm64-apple-darwin'
 binary-path:     gennum
 relocations:
-  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003B54, symSize: 0x158 }
-  - { offset: 0x41, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003B54, symSize: 0x158 }
-  - { offset: 0xF4, size: 0x8, addend: 0x0, symName: __Z23generate_random_number2v, symObjAddr: 0x0, symBinAddr: 0x100003CAC, symSize: 0x58 }
-  - { offset: 0x10F, size: 0x8, addend: 0x0, symName: __Z23generate_random_number2v, symObjAddr: 0x0, symBinAddr: 0x100003CAC, symSize: 0x58 }
-  - { offset: 0x149, size: 0x8, addend: 0x0, symName: __Z26generate_random_whole_linei, symObjAddr: 0x58, symBinAddr: 0x100003D04, symSize: 0xEC }
-  - { offset: 0x1F2, size: 0x8, addend: 0x0, symName: __Z22generate_random_numberv, symObjAddr: 0x0, symBinAddr: 0x100003DF0, symSize: 0x58 }
-  - { offset: 0x20D, size: 0x8, addend: 0x0, symName: __Z22generate_random_numberv, symObjAddr: 0x0, symBinAddr: 0x100003DF0, symSize: 0x58 }
-  - { offset: 0x247, size: 0x8, addend: 0x0, symName: __Z28generate_random_decimal_linei, symObjAddr: 0x58, symBinAddr: 0x100003E48, symSize: 0xEC }
+  - { offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000039A4, symSize: 0x1B4 }
+  - { offset: 0x41, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x1000039A4, symSize: 0x1B4 }
+  - { offset: 0x102, size: 0x8, addend: 0x0, symName: __Z23generate_random_number2v, symObjAddr: 0x0, symBinAddr: 0x100003B58, symSize: 0x58 }
+  - { offset: 0x11D, size: 0x8, addend: 0x0, symName: __Z23generate_random_number2v, symObjAddr: 0x0, symBinAddr: 0x100003B58, symSize: 0x58 }
+  - { offset: 0x157, size: 0x8, addend: 0x0, symName: __Z26generate_random_whole_linei, symObjAddr: 0x58, symBinAddr: 0x100003BB0, symSize: 0xEC }
+  - { offset: 0x200, size: 0x8, addend: 0x0, symName: __Z22generate_random_numberv, symObjAddr: 0x0, symBinAddr: 0x100003C9C, symSize: 0x58 }
+  - { offset: 0x21B, size: 0x8, addend: 0x0, symName: __Z22generate_random_numberv, symObjAddr: 0x0, symBinAddr: 0x100003C9C, symSize: 0x58 }
+  - { offset: 0x255, size: 0x8, addend: 0x0, symName: __Z28generate_random_decimal_linei, symObjAddr: 0x58, symBinAddr: 0x100003CF4, symSize: 0xEC }
+  - { offset: 0x2FE, size: 0x8, addend: 0x0, symName: __Z23generate_random_number3v, symObjAddr: 0x0, symBinAddr: 0x100003DE0, symSize: 0x58 }
+  - { offset: 0x319, size: 0x8, addend: 0x0, symName: __Z23generate_random_number3v, symObjAddr: 0x0, symBinAddr: 0x100003DE0, symSize: 0x58 }
+  - { offset: 0x353, size: 0x8, addend: 0x0, symName: __Z27generate_random_binary_linei, symObjAddr: 0x58, symBinAddr: 0x100003E38, symSize: 0xEC }
 ...

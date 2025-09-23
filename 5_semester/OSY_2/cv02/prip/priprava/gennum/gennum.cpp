@@ -19,17 +19,20 @@
 
 int main(int argc, char* argv[]) {
     if (argc < 3 || argc > 4) {
-        printf("!! %s M N [-f]\n", argv[0]);
+        printf("!! %s M N [-f|-b]\n", argv[0]);
         return 1;
     }
     
     int M = atoi(argv[1]);
     int N = atoi(argv[2]);
     int use_decimal = 0;
+    int use_binary = 0;
     
     if (argc == 4) {
         if (strcmp(argv[3], "-f") == 0) {
             use_decimal = 1;
+        } else if (strcmp(argv[3], "-b") == 0) {
+            use_binary = 1;
         }
     }
     
@@ -38,6 +41,8 @@ int main(int argc, char* argv[]) {
     for (int line = 0; line < N; line++) {
         if (use_decimal) {
             generate_random_decimal_line(M);
+        } else if (use_binary) {
+            generate_random_binary_line(M);
         } else {
           generate_random_whole_line(M);
         }
