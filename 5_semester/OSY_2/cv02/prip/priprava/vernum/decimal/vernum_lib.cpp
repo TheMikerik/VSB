@@ -15,31 +15,25 @@
 
 int verify_sum(const char* line)
 {
-    printf("Library: decimal numbers - File: %s Function: %s Line: %d\n", 
-           __FILE__, __FUNCTION__, __LINE__);
+    printf("DECIMAL_LIB: ");
     
-    int count;
-    double sum = 0.0, expected_sum;
-    
-    if (sscanf(line, "%d", &count) != 1) return -1;
+    double sum = 0;
+    double expected_sum;
     
     char* line_copy = strdup(line);
-    char* token = strtok(line_copy, " ");
-    token = strtok(NULL, " ");
+    char* part = strtok(line_copy, " ");
     
-    for (int i = 0; i < count && token != NULL; i++) {
-        sum += atof(token);
-        token = strtok(NULL, " ");
-    }
-    
-    if (token != NULL) {
-        expected_sum = atof(token);
-    } else {
-        free(line_copy);
-        return -1;
+    while (part != NULL) {
+        double number = atoi(part);
+        part = strtok(NULL, " ");
+        
+        if (part != NULL) {
+            sum += number;
+        } else {
+            expected_sum = number;
+        }
     }
     
     free(line_copy);
-    
-    return (sum == expected_sum) ? 0 : 1;
+    return (sum == expected_sum) ? 1 : 0;
 }

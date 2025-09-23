@@ -16,7 +16,7 @@ clean:
 	rm -rf $(TARGET) $(LIBFILE) *.o
 
 $(LIBFILE): vernum_lib.o
-	gcc $(CFLAGS) $^ -shared -o $@
+	g++ $(CFLAGS) $^ -shared -o $@
 
 $(TARGET): ../vernum.cpp $(LIBFILE)
-	gcc $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+	g++ $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@

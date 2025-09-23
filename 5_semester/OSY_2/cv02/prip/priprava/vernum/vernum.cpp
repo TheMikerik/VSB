@@ -28,10 +28,10 @@ int main()
         
         int result = verify_sum(line);
         
-        if (result == 0) {
+        if (result == 1) {
             printf("Radek %d: OK\n", line_number);
         } else {
-            printf("Radek %d: NOK", line_number);
+            printf("Radek %d: NOK\n", line_number);
         }
     }
     return 0;
