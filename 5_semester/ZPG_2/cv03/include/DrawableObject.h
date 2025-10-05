@@ -4,6 +4,7 @@
 #include "ShaderProgram.h"
 #include "Transformation.h"
 #include <glm/glm.hpp>
+#include <memory>
 
 class DrawableObject {
 public:

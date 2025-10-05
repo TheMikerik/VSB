@@ -30,11 +30,10 @@ SRCS = \
     src/DrawableObject.cpp \
     src/ShaderProgram.cpp \
     src/Model.cpp \
-    src/Transformation/Transformation.cpp \
-    src/Transformation/Translate.cpp \
-    src/Transformation/Rotate.cpp \
-    src/Transformation/Scale.cpp \
-    src/Transformation/DynamicRotation.cpp
+    src/Transformation.cpp \
+    src/Translate.cpp \
+    src/Rotate.cpp \
+    src/Scale.cpp
 
 # Object files
 OBJS = $(SRCS:src/%.cpp=build/%.o)

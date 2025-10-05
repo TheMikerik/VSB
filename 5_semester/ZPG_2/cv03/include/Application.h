@@ -14,7 +14,6 @@ public:
     ~Application();
 
     void initialization();
-
     void createScenes();
     void switchScene(int index);
 
