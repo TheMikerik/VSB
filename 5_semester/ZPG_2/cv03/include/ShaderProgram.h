@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHADERPROGRAM_H
+#define SHADERPROGRAM_H
 
 #include <string>
 #include <GL/glew.h>
@@ -18,3 +19,5 @@ private:
     void compileShader(const std::string& source, GLuint shader, const std::string& shaderType) const;
     void linkProgram(GLuint vertexShader, GLuint fragmentShader);
 };
+
+#endif // SHADERPROGRAM_H

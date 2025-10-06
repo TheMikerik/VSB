@@ -4,19 +4,25 @@
 #include <iostream>
 #include <cstdlib>
 
-ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& fragmentPath) {
+ShaderProgram::ShaderProgram(const std::string& vertexPath, const std::string& fragmentPath)
+{
+    // Load shader sources
     std::string vertexSource = loadShaderSource(vertexPath);
     std::string fragmentSource = loadShaderSource(fragmentPath);
 
+    // Compile vertex shader
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     compileShader(vertexSource, vertexShader, "VERTEX");
 
+    // Compile fragment shader
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     compileShader(fragmentSource, fragmentShader, "FRAGMENT");
 
+    // Link shaders into program
     programID = glCreateProgram();
     linkProgram(vertexShader, fragmentShader);
 
+    // Clean up shaders as they are now linked into the program
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }
@@ -49,6 +55,7 @@ void ShaderProgram::compileShader(const std::string& source, GLuint shader, cons
     glShaderSource(shader, 1, &shaderCode, nullptr);
     glCompileShader(shader);
 
+    // Check for compilation errors
     GLint success;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -65,6 +72,7 @@ void ShaderProgram::linkProgram(GLuint vertexShader, GLuint fragmentShader)
     glAttachShader(programID, fragmentShader);
     glLinkProgram(programID);
 
+    // Check for linking errors
     GLint success;
     glGetProgramiv(programID, GL_LINK_STATUS, &success);
     if (!success) {

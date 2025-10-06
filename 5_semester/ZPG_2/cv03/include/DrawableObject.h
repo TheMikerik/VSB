@@ -1,10 +1,12 @@
-#pragma once
+// DrawableObject.h
+#ifndef DRAWABLEOBJECT_H
+#define DRAWABLEOBJECT_H
 
 #include "Model.h"
 #include "ShaderProgram.h"
 #include "Transformation.h"
-#include <glm/glm.hpp>
 #include <memory>
+#include <glm/glm.hpp>
 
 class DrawableObject {
 public:
@@ -22,3 +24,5 @@ private:
     std::shared_ptr<ShaderProgram> shaderProgram;
     Transformation transformation;
 };
+
+#endif // DRAWABLEOBJECT_H

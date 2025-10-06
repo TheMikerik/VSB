@@ -1,4 +1,6 @@
-#pragma once
+// Transformation.h
+#ifndef TRANSFORMATION_H
+#define TRANSFORMATION_H
 
 #include <glm/glm.hpp>
 
@@ -15,3 +17,5 @@ public:
 private:
     glm::mat4 modelMatrix;
 };
+
+#endif // TRANSFORMATION_H

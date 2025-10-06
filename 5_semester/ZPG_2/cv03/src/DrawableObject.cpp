@@ -12,6 +12,7 @@ void DrawableObject::render() const
 {
     shaderProgram->use();
 
+    // Set the model matrix uniform
     GLint modelLoc = glGetUniformLocation(shaderProgram->getProgramID(), "modelMatrix");
     if (modelLoc == -1) {
         std::cerr << "Could not find uniform 'modelMatrix' in shader program." << std::endl;

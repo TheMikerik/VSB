@@ -26,28 +26,31 @@ SRCS = \
     src/main.cpp \
     src/Application.cpp \
     src/Scene.cpp \
-    src/Scene1.cpp \
     src/DrawableObject.cpp \
     src/ShaderProgram.cpp \
     src/Model.cpp \
-    src/Transformation.cpp \
-    src/Translate.cpp \
-    src/Rotate.cpp \
-    src/Scale.cpp
+    src/Transformation.cpp
 
 # Object files
 OBJS = $(SRCS:src/%.cpp=build/%.o)
 
-# Makefile rules
+# Default target: build and run the application
 all: $(TARGET_PATH)
+	@echo "Running the application..."
 	./$(TARGET_PATH)
 
+# Linking the executable
 $(TARGET_PATH): $(OBJS)
+	@echo "Linking..."
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET_PATH) $(LIBS)
 
+# Compiling source files to object files
 build/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
+	@echo "Compiling $<..."
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-clean:
+# Clean up build artifacts
+clear:
+	@echo "Cleaning up..."
 	rm -f $(TARGET_PATH) $(OBJS)
