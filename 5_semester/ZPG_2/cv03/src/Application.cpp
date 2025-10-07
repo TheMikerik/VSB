@@ -197,6 +197,19 @@ void Application::run()
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Update rotation for all objects in scene2
+        if (currentSceneIndex == 1 && scenes.size() > 1) {
+            float time = glfwGetTime();
+            float rotationAngle = time * 45.0f; // Rotate 45 degrees per second
+            
+            auto& drawables = scenes[1]->getDrawables();
+            for (auto& drawable : drawables) {
+                Transformation triangleTrans;
+                triangleTrans.rotate(rotationAngle, glm::vec3(0.0f, 0.0f, 1.0f)); // Rotate around Z-axis
+                drawable->setTransformation(triangleTrans);
+            }
+        }
+
         if (currentSceneIndex >= 0 && currentSceneIndex < scenes.size()) {
             scenes[currentSceneIndex]->render();
         }

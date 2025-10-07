@@ -1,4 +1,3 @@
-// Application.cpp
 #include "Application.h"
 #include <fstream>
 #include <sstream>
@@ -6,8 +5,10 @@
 #include <cstdlib>
 #include <vector>
 #include "Scene1.cpp"
+#include "Scene2.cpp"
 
 Scene* createScene1();
+Scene* createScene2();
 
 Application::Application() : window(nullptr) {}
 
@@ -83,6 +84,7 @@ void Application::initialization() {
 
 void Application::createScenes() {
     scenes.push_back(createScene1());
+    scenes.push_back(createScene2());
 }
 
 void Application::run() {

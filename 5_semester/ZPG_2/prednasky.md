@@ -8,9 +8,9 @@
 # Prednaska 3
 Promitani
   - Rovnobezne
-    - Nedeformuje modely, zachovava jejich realne velikosti
+    - Nedeformuje modely, zachovava jejich realne delky
     - Napr v krychli josu vsechny hrany stejne dlouhe
-  - Stredove
-    - Deformuje modely
+  - Stredove (Perspektivni)
+    - Zkresluje modely
     - Pracuje s perspektivou
     - Casti modelu, ktere jsou dale, vypadaji mensi

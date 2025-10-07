@@ -60,7 +60,7 @@ void Application::scrollCallback(GLFWwindow* window, double xoffset, double yoff
 
 Application::Application()
     : window(nullptr), currentSceneIndex(0),
-        camera(glm::vec3(0.0f, 10.0f, 20.0f)),
+        camera(glm::vec3(0.0f, 2.0f, 2.0f)),
         lastX(400.0f), lastY(300.0f), firstMouse(true),
         deltaTime(0.0f), lastFrame(0.0f),
         selectedDrawableIndex(0),
