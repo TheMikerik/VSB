@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
     close(pipe4[ 1 ]);
 
     char p_buffer[256];
-    while ( read(pipe4[0], p_buffer, sizeof(p_buffer)+1) > 0){
+    while (read(pipe4[0], p_buffer, sizeof(p_buffer)+1) > 0){
       char output_buffer[256];
 
       

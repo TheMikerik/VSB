@@ -11,6 +11,8 @@
 # ZPG MODELS
 5_semester/ZPG/**/models/
 5_semester/ZPG/**/build/
+5_semester/ZPG_2/**/models/
+5_semester/ZPG_2/**/build/
 
 # ZAO
 6_semester/ZAO/template/old/
