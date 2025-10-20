@@ -61,6 +61,10 @@ Promitani
         - cos uhlu mezi odrazenym uhlem ke kamre
   - Blinn
     - Upraveny phong
+    - Half vector a normaly
+
+# Prednaska 5
+- Mame trojuhelnik o vrcholech V1, V2, V3, ktery ma v kazdem vrcholu normalovy vektor n1, n2, n3. Prevedte objekt z local space do world space. Jak prevedeme vrcholy a jak normaly?
 
 
 # Random fakta
@@ -70,3 +74,5 @@ Promitani
 - Suzi smooth vs flat
   - Flat ma vsechny 3 normaly v trojuhelniku jdouci stejnym smerem
   - Smooth ma kazdou normalu v trojuhelniku vypocitanou dle okolnihc trojuhleniku
+- Camera space
+  - vime kde je kamera [0, 0, 0] - tudiz nemusime posilat pozici kamery a updatovat ji

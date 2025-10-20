@@ -41,3 +41,8 @@ close( roura[0] );
 wait (NULL);
 
 ```
+
+
+# Prednaska 5
+- ./socket_srv <port> (vyssi nez 1024)
+- ./socket_cl localhost <port>
