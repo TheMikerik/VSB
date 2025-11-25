@@ -94,21 +94,18 @@ void Controller::processKeyboardInput(float deltaTime) {
     bool sceneKey3PressedThisFrame = glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS;
     bool sceneKey4PressedThisFrame = glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS;
     bool sceneKey5PressedThisFrame = glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS;
-    bool sceneKey6PressedThisFrame = glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS;
 
     if (sceneKey1PressedThisFrame && !sceneKeyPressedLastFrame[0]) switchScene(0);
     if (sceneKey2PressedThisFrame && !sceneKeyPressedLastFrame[1]) switchScene(1);
     if (sceneKey3PressedThisFrame && !sceneKeyPressedLastFrame[2]) switchScene(2);
     if (sceneKey4PressedThisFrame && !sceneKeyPressedLastFrame[3]) switchScene(3);
     if (sceneKey5PressedThisFrame && !sceneKeyPressedLastFrame[4]) switchScene(4);
-    if (sceneKey6PressedThisFrame && !sceneKeyPressedLastFrame[5]) switchScene(5);
 
     sceneKeyPressedLastFrame[0] = sceneKey1PressedThisFrame;
     sceneKeyPressedLastFrame[1] = sceneKey2PressedThisFrame;
     sceneKeyPressedLastFrame[2] = sceneKey3PressedThisFrame;
     sceneKeyPressedLastFrame[3] = sceneKey4PressedThisFrame;
     sceneKeyPressedLastFrame[4] = sceneKey5PressedThisFrame;
-    sceneKeyPressedLastFrame[5] = sceneKey5PressedThisFrame;
 
 
 

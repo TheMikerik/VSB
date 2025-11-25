@@ -66,6 +66,8 @@ Promitani
 # Prednaska 5
 - Mame trojuhelnik o vrcholech V1, V2, V3, ktery ma v kazdem vrcholu normalovy vektor n1, n2, n3. Prevedte objekt z local space do world space. Jak prevedeme vrcholy a jak normaly?
 
+# Prednaska 6
+
 
 # Random fakta
 - Ma normala pozici?

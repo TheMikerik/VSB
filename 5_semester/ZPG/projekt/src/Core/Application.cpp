@@ -11,7 +11,6 @@
 #include "Scenes/Scene5.h"
 #include "Scenes/Scene6.h"
 #include "Scenes/Scene7.h"
-#include "Scenes/Scene8.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -104,14 +103,12 @@ void Application::createScenes()
     auto scene5 = std::make_shared<Scene5>(camera);
     auto scene6 = std::make_shared<Scene6>(camera);
     auto scene7 = std::make_shared<Scene7>(camera);
-    auto scene8 = std::make_shared<Scene8>(camera);
 
     scenes.emplace_back(scene1);
     scenes.emplace_back(scene3);
     scenes.emplace_back(scene5);
     scenes.emplace_back(scene6);
     scenes.emplace_back(scene7);
-    scenes.emplace_back(scene8);
 }
 
 void Application::run()
@@ -141,7 +138,7 @@ void Application::run()
 
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
-        // skybox->render(view, projection);
+        skybox->render(view, projection);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

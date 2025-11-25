@@ -1,0 +1,46 @@
+1)
+V projektu jsem otestoval modifikaci w-komponenty dvěma způsoby
+  - v shaderu pomocí uniform float w = 500
+  - pomocí CustomOperation třídy s maticí kde matrix[3][3] = 20
+Správnost jsem ověřil porovnáním velikostí koulí. Normální koule jsou velké. Ty které používají modifikované w jsou 20× menší.
+CustomOperation je ukázal jakožto vhodnější (správný) přístup, protože zachovává perspektivu, kdežto přímá změna w v shaderu kazí perspektivitu (depth buffer).
+
+
+2)
+Náhodné generování:
+- Metoda generateRandomPath() vytváří náhodnou lomenou čáru se 3-5 body
+- Každý objekt má náhodnou rychlost (0.05-0.15), velikost (1.0-2.0) a rotaci
+
+Pohyb po lomené čáře:
+- Zhotoven pomocí třídy PathFollowOperation
+- Třída obsahuje jednotlivé body a parametr progress (díky tomu jsem mohl implementovat náhodnou rychlost)
+- Interpolate:
+  - Pro samotný pohyb jsem využil metodu interpolate(), která postupně prochází body lomené čáry
+  - Parametr progress se vynásobí počtem segmentů, čímž zjistím, na kterém úseku mezi dvěma body se objekt právě nachází
+  - Z výsledku pak celá část říká číslo segmentu a zbytek za desetinnou čárkou určuje, jak daleko po tom úseku už se objekt nachází
+  - Na konkrétní pozici pak použiju glm::mix(), která udělá lineární interpolaci mezi dvěma sousedními body
+
+Typy objektů:
+- V projektu mám 3 typy objektů, kde každý má určitou pravděpodobnost na spawn
+  - Strom (50%, 1 bod)
+  - Shrek (35%, 5 bodů)
+  - Záchod (15%, 10 bodů)
+  - Objekty se automaticky spawnují každých 0.5s (max 8 najednou) a po 20s se despawnou
+
+
+3)
+Dynamická rotace:
+  - Pozice planety se vypočítá pomocí aktuální pozice její přidělené planety
+  - Každý frame se inkrementuje úhel position o speed * dt, čímž se planeta posune po kruhové dráze
+  - Pomocí cos a sin se pak vypočítá konkrétní pozice na kružnici s poloměrem distanceFromParent
+
+    planet.position += planet.speed * dt;
+    float x = planet.distanceFromParent * std::cos(planet.position);
+    float z = planet.distanceFromParent * std::sin(planet.position);
+    planet.worldPosition = glm::vec3(x, 0.0f, z);
+
+Pohyb země a měsíce:
+  - Země obíhá kolem slunce pomocí dynamické rotace popsané výše
+  - Měsíc využívá DynamicRotationOperation s pointerem na worldPosition země
+  - Protože měsíc počítá svou pozici relativně k zemi a země se zároveň pohybuje, tak měsíc automaticky opisuje dráhu jak kolem slunce, tak kolem země
+

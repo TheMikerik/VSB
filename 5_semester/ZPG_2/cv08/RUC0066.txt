@@ -1,0 +1,1 @@
+Projektivní prostor se v počítačové grafice používá hlavně proto, že díky homogenním souřadnicím můžeme snadno popsat perspektivu a převádět 3D scénu do 2D. Umožňuje nám sjednotit různé transformace do matic, takže se s nimi dobře pracuje. Zjednodušuje také počítání s nekonečně vzdálenými body a pomáhá vyhnout se různým speciálním případům, které by jinak komplikovaly výpočty.

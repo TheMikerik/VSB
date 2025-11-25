@@ -72,27 +72,6 @@ void MaterialManager::initializeMaterials() {
         glm::vec3(1.0f, 1.0f, 1.0f),
         16.0f
     ));
-
-    addMaterial("sun", std::make_shared<Material>(
-        glm::vec3(1.0f, 1.0f, 1.0f),  
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        16.0f
-    ));
-
-    addMaterial("earth", std::make_shared<Material>(
-        glm::vec3(0.1f, 0.1f, 0.1f),  
-        glm::vec3(0.5f, 0.5f, 0.5f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        16.0f
-    ));
-
-    addMaterial("moon", std::make_shared<Material>(
-        glm::vec3(0.1f, 0.1f, 0.1f),  
-        glm::vec3(0.5f, 0.5f, 0.5f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        16.0f
-    ));
 }
 
 std::shared_ptr<Material> MaterialManager::getMaterial(const std::string& name) {
