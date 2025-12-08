@@ -30,6 +30,9 @@ void main() {
     vec3 specular = specularStrength * spec * specularColor;
 
     float baseLighting = 0.1;
+    const float constant  = 1.0;
+    const float linear    = 0.18;
+    const float quadratic = 0.19;
 
     float spot = dot(normalize(spotDir), -lightVector);
     if (spot < 0.97) {
@@ -38,6 +41,10 @@ void main() {
         spot = 0.0;
     } else {
         spot = (spot - 0.97) / (1.0 - 0.97);
+
+        float spotDistance = length(lightPos - worldPosition);
+        float spotAttenuation = 1.0 / (constant + linear * spotDistance + quadratic * spotDistance * spotDistance);
+        spot *= spotAttenuation;
     }
 
     vec3 finalColor = ambient + (diffuse + specular) * max(spot, baseLighting);

@@ -79,7 +79,10 @@ void main()
         
         if (spotAngle > spotCutoff) {
             float spotIntensity = (spotAngle - spotCutoff) / (1.0 - spotCutoff);
-            finalColor += (spotDiffuse + spotSpecular) * spotIntensity * 0.6;
+            float spotDistance = length(spotLightPosition - FragPos);
+            float spotAttenuation = 1.0 / (constant + linear * spotDistance + quadratic * spotDistance * spotDistance);
+
+            finalColor += (spotDiffuse + spotSpecular) * spotIntensity * spotAttenuation;
         }
     }
     
