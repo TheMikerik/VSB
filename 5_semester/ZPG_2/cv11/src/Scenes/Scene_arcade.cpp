@@ -2,7 +2,6 @@
 #include "Scenes/Scene_arcade.h"
 #include "Graphics/Light.h"
 #include "Graphics/Spotlight.h"
-#include "../models/tree.h"
 #include "../models/platform.h"
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/RotateOperation.h"
@@ -53,14 +52,14 @@ Scene_arcade::Scene_arcade(Camera& cam) : camera(cam),
     auto platformDrawable = std::make_shared<DrawableObject>(platformModel, shader_platform, platformTrans);
     addDrawable(platformDrawable);
 
-    std::vector<float> treeVertices(std::begin(tree), std::end(tree));
-    treeModel = std::make_shared<Model>(treeVertices);
     
     shrekModel = std::make_shared<Model>("shrek.obj");
     toiledModel = std::make_shared<Model>("toiled.obj");
+    fionaModel = std::make_shared<Model>("fiona.obj");
     
     shrekTexture = std::make_shared<Texture>("./models/shrek.png");
     toiledTexture = std::make_shared<Texture>("./models/toiled.jpg");
+    fionaTexture = std::make_shared<Texture>("./models/fiona.png"); 
 }
 
 void Scene_arcade::toggleFlashlight() {
@@ -149,8 +148,9 @@ void Scene_arcade::spawnObject() {
 
     if (objectType == 0) {
         objectValue = 1;
-        selectedShader = shaders[1];
-        objectDrawable = std::make_shared<DrawableObject>(treeModel, selectedShader);
+        selectedShader = shaders[2];
+        objectDrawable = std::make_shared<DrawableObject>(fionaModel, selectedShader);
+        objectDrawable->addTexture(fionaTexture, 0, "texture_diffuse1");
     } 
     else if (objectType == 1) {
         objectValue = 5;

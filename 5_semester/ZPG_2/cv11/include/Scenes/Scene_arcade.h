@@ -33,10 +33,11 @@ private:
     bool flashlightEnabled;
     int score;
 
-    std::shared_ptr<Model> treeModel;
+    std::shared_ptr<Model> fionaModel; 
     std::shared_ptr<Model> shrekModel;
     std::shared_ptr<Model> toiledModel;
 
+    std::shared_ptr<Texture> fionaTexture; 
     std::shared_ptr<Texture> shrekTexture;
     std::shared_ptr<Texture> toiledTexture;
 
