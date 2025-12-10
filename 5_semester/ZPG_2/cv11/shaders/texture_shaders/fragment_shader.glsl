@@ -30,8 +30,8 @@ void main()
     vec3 viewDir = normalize(viewPos - FragPos);
 
     const float constant  = 1.0;
-    const float linear    = 0.18;
-    const float quadratic = 0.19;
+    const float linear    = 0.05;
+    const float quadratic = 0.03;
 
     float baseAmbientStrength = 0.1;
     vec3 baseAmbient = baseAmbientStrength * vec3(1.0);

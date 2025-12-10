@@ -5,6 +5,7 @@
 #include "../include/Core/Transformation/ScaleOperation.h"
 #include "../include/Core/Transformation/TranslateOperation.h"
 
+#include "Core/Texture.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -18,7 +19,12 @@ Scene3::Scene3(Camera& cam) : camera(cam) {
     auto shader_lambert = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_lambert.glsl");
     auto shader_blinn = std::make_shared<ShaderProgram>("./shaders/light_shaders/vertex_shader_with_lights.glsl", "./shaders/light_shaders/fragment_blinn.glsl");
 
-    shaders = {shader_const, shader_phong, shader_lambert, shader_blinn};
+    auto shader_texture = std::make_shared<ShaderProgram>(
+        "./shaders/texture_shaders/vertex_shader.glsl",
+        "./shaders/texture_shaders/fragment_shader.glsl"
+    );
+
+    shaders = {shader_phong, shader_const, shader_lambert, shader_blinn, shader_texture};
 
     for(auto& shader : shaders) {
         camera.registerObserver(shader.get());
@@ -39,14 +45,34 @@ Scene3::Scene3(Camera& cam) : camera(cam) {
         }
         lights[i].notifyObservers(i);
     }
+
+    shader_texture->use();
+    glUniform1i(glGetUniformLocation(shader_texture->getProgramID(), "texture_diffuse1"), 0);
+    glUniform1i(glGetUniformLocation(shader_texture->getProgramID(), "hasTexture"), 1);
+    glUniform3f(glGetUniformLocation(shader_texture->getProgramID(), "materialAmbient"), 0.3f, 0.3f, 0.3f);
+    glUniform3f(glGetUniformLocation(shader_texture->getProgramID(), "materialDiffuse"), 0.8f, 0.8f, 0.8f);
+    glUniform3f(glGetUniformLocation(shader_texture->getProgramID(), "materialSpecular"), 0.5f, 0.5f, 0.5f);
+    glUniform1f(glGetUniformLocation(shader_texture->getProgramID(), "materialShininess"), 32.0f);
+    glUseProgram(0);
     
     camera.notifyObservers();
+
+    auto planetModel = std::make_shared<Model>("planet.obj");
+    auto planetTexture = std::make_shared<Texture>("./models/earth.jpeg");
+    auto planetDrawable = std::make_shared<DrawableObject>(planetModel, shader_texture);
+    planetDrawable->addTexture(planetTexture, 0, "texture_diffuse1");
+    Transformation planetTrans;
+    planetTrans.addOperation(std::make_shared<ScaleOperation>(glm::vec3(3.0f)));
+    planetTrans.addOperation(std::make_shared<TranslateOperation>(glm::vec3(2.0f, 2.0f, 0.0f)));
+    planetDrawable->setTransformation(planetTrans);
+
+    addDrawable(planetDrawable);
+
 
     std::vector<float> sphereVertices(std::begin(sphere), std::end(sphere));
     auto sphereModel = std::make_shared<Model>(sphereVertices);
 
     std::vector<glm::vec3> spherePositions = {
-        glm::vec3( 2.0f,  2.0f,  0.0f),
         glm::vec3(-2.0f,  2.0f,  0.0f),
         glm::vec3( 2.0f, -2.0f,  0.0f),
         glm::vec3(-2.0f, -2.0f,  0.0f),
